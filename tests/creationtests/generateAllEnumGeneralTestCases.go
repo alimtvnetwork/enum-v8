@@ -11,7 +11,7 @@ import (
 	"github.com/alimtvnetwork/core-v8/coredata/corestr"
 	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
 	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
-	"https://github.com/alimtvnetwork/enum-v1/quotes"
+	"github.com/alimtvnetwork/enum-v1/quotes"
 )
 
 func generateAllEnumGeneralTestCases(

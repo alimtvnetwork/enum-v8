@@ -10,11 +10,11 @@ import (
 	"github.com/alimtvnetwork/core-v8/coredata/corejson"
 	"github.com/alimtvnetwork/core-v8/iserror"
 	"github.com/alimtvnetwork/core-v8/issetter"
-	"https://github.com/alimtvnetwork/enum-v1/brackets"
-	"https://github.com/alimtvnetwork/enum-v1/dbaction"
-	"https://github.com/alimtvnetwork/enum-v1/instructiontype"
-	"https://github.com/alimtvnetwork/enum-v1/osdetect"
-	"https://github.com/alimtvnetwork/enum-v1/strtype"
+	"github.com/alimtvnetwork/enum-v1/brackets"
+	"github.com/alimtvnetwork/enum-v1/dbaction"
+	"github.com/alimtvnetwork/enum-v1/instructiontype"
+	"github.com/alimtvnetwork/enum-v1/osdetect"
+	"github.com/alimtvnetwork/enum-v1/strtype"
 )
 
 func main() {

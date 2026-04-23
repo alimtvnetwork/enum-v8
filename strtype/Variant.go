@@ -18,7 +18,7 @@ import (
 	"github.com/alimtvnetwork/core-v8/coreutils/stringutil"
 	"github.com/alimtvnetwork/core-v8/coreversion"
 	"github.com/alimtvnetwork/core-v8/errcore"
-	"https://github.com/alimtvnetwork/enum-v1/inttype"
+	"github.com/alimtvnetwork/enum-v1/inttype"
 )
 
 type Variant string

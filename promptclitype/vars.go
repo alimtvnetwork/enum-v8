@@ -5,7 +5,7 @@ import (
 	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
 	"github.com/alimtvnetwork/core-v8/errcore"
 	"github.com/alimtvnetwork/core-v8/issetter"
-	"https://github.com/alimtvnetwork/enum-v1/onofftype"
+	"github.com/alimtvnetwork/enum-v1/onofftype"
 )
 
 var (
