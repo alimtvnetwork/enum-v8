@@ -235,10 +235,6 @@ github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9de
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
-gitlab.com/auk-go/core v1.4.3 h1:L4uvkdqtl1tuatXz1YdrzyG5WPV58MX9KurJzBJeYlg=
-gitlab.com/auk-go/core v1.4.3/go.mod h1:DdE8tvmZiHg8Rk7muRHphkReoTWh6xelEVqB0z0bGXQ=
-gitlab.com/auk-go/core v1.4.4 h1:5jL1u4CAFXPHL5snFI0BG0/XW3VKbEN9xBXNrq/xxLU=
-gitlab.com/auk-go/core v1.4.4/go.mod h1:DdE8tvmZiHg8Rk7muRHphkReoTWh6xelEVqB0z0bGXQ=
 go.etcd.io/etcd/api/v3 v3.5.0/go.mod h1:cbVKeC6lCfl7j/8jBhAK6aIYO9XOjdptoxU/nLQcPvs=
 go.etcd.io/etcd/client/pkg/v3 v3.5.0/go.mod h1:IJHfcCEKxYu1Os13ZdwCwIUTUVGYTSAM3YSwc9/Ac1g=
 go.etcd.io/etcd/client/v2 v2.305.0/go.mod h1:h9puh54ZTgAKtEbut2oe9P4L/oqKCVB6xsXlzd7alYQ=

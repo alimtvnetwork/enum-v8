@@ -1,10 +1,10 @@
-module gitlab.com/auk-go/enum
+module https://github.com/alimtvnetwork/enum-v1
 
 go 1.17.8
 
 require (
 	github.com/smartystreets/goconvey v1.8.1
-	gitlab.com/auk-go/core v1.4.4
+	github.com/alimtvnetwork/core-v8 v1.5.5
 	golang.org/x/sys v0.13.0
 )
 
