@@ -1,9 +1,9 @@
 package servicestate
 
 import (
-	"gitlab.com/auk-go/core/coredata/coredynamic"
-	"gitlab.com/auk-go/core/coreimpl/enumimpl"
-	"gitlab.com/auk-go/core/reqtype"
+	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v8/reqtype"
 )
 
 var (

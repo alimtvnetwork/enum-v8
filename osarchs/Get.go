@@ -1,7 +1,7 @@
 package osarchs
 
 import (
-	"gitlab.com/auk-go/core/osconsts"
+	"github.com/alimtvnetwork/core-v8/osconsts"
 )
 
 func Get(rawGoArch string) Architecture {

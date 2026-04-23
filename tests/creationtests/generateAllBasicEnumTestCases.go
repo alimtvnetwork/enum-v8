@@ -3,8 +3,8 @@ package creationtests
 import (
 	"fmt"
 
-	"gitlab.com/auk-go/core/codestack"
-	"gitlab.com/auk-go/core/constants"
+	"github.com/alimtvnetwork/core-v8/codestack"
+	"github.com/alimtvnetwork/core-v8/constants"
 )
 
 func generateAllBasicEnumTestCases() {

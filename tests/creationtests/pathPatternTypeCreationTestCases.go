@@ -1,6 +1,6 @@
 package creationtests
 
-import "gitlab.com/auk-go/enum/pathpatterntype"
+import "https://github.com/alimtvnetwork/enum-v1/pathpatterntype"
 
 var pathPatternTypeCreationTestCases = [...]PathPatternTypeCreationTestWrapper{
 	pathpatterntype.Invalid: {

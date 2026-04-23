@@ -1,8 +1,8 @@
 package osdetect
 
 import (
-	"gitlab.com/auk-go/core/constants/regkeysconsts"
-	"gitlab.com/auk-go/core/filemode"
+	"github.com/alimtvnetwork/core-v8/constants/regkeysconsts"
+	"github.com/alimtvnetwork/core-v8/filemode"
 )
 
 const (

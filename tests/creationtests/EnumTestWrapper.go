@@ -1,8 +1,8 @@
 package creationtests
 
 import (
-	"gitlab.com/auk-go/core/coredata/corerange"
-	"gitlab.com/auk-go/core/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v8/coredata/corerange"
+	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
 )
 
 type EnumTestWrapper struct {

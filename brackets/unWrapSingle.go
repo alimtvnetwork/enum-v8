@@ -1,7 +1,7 @@
 package brackets
 
 import (
-	"gitlab.com/auk-go/core/constants"
+	"github.com/alimtvnetwork/core-v8/constants"
 )
 
 // Assumption here, s has single bracket and s it is not empty

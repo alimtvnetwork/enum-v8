@@ -1,9 +1,9 @@
 package taskpriority
 
 import (
-	"gitlab.com/auk-go/core/converters"
-	"gitlab.com/auk-go/core/coredata/coredynamic"
-	"gitlab.com/auk-go/core/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v8/converters"
+	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
 )
 
 var (

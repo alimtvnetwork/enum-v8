@@ -3,9 +3,9 @@ package quotes
 import (
 	"strings"
 
-	"gitlab.com/auk-go/core/converters"
-	"gitlab.com/auk-go/core/coreinterface/enuminf"
-	"gitlab.com/auk-go/enum/internal/consts"
+	"github.com/alimtvnetwork/core-v8/converters"
+	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
+	"https://github.com/alimtvnetwork/enum-v1/internal/consts"
 )
 
 type Quote byte

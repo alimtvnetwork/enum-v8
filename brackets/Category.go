@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"strings"
 
-	"gitlab.com/auk-go/core/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
 )
 
 type Category byte

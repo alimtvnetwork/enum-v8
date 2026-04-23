@@ -1,14 +1,14 @@
 package osdetect
 
 import (
-	"gitlab.com/auk-go/core/codestack"
-	"gitlab.com/auk-go/core/converters"
-	"gitlab.com/auk-go/core/coreversion"
-	"gitlab.com/auk-go/core/errcore"
-	"gitlab.com/auk-go/core/ostype"
-	"gitlab.com/auk-go/enum/inttype"
-	"gitlab.com/auk-go/enum/osarchs"
-	"gitlab.com/auk-go/enum/strtype"
+	"github.com/alimtvnetwork/core-v8/codestack"
+	"github.com/alimtvnetwork/core-v8/converters"
+	"github.com/alimtvnetwork/core-v8/coreversion"
+	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v8/ostype"
+	"https://github.com/alimtvnetwork/enum-v1/inttype"
+	"https://github.com/alimtvnetwork/enum-v1/osarchs"
+	"https://github.com/alimtvnetwork/enum-v1/strtype"
 	"golang.org/x/sys/windows/registry"
 )
 
@@ -73,7 +73,7 @@ func (it windowsSystemDetailGenerator) CompiledErrorWithStackTraces() error {
 
 // SystemDetail
 //
-//	Reference : https://gitlab.com/auk-go/enum/-/issues/4
+//	Reference : https://https://github.com/alimtvnetwork/enum-v1/-/issues/4
 func (it windowsSystemDetailGenerator) SystemDetail() (*OperatingSystemDetail, error) {
 	buildBranch := it.Value(winRegistryKeyNames.buildBranch)
 	productName := it.Value(winRegistryKeyNames.productName)

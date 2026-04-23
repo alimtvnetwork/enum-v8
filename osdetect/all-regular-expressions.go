@@ -1,7 +1,7 @@
 package osdetect
 
 import (
-	"gitlab.com/auk-go/core/regexnew"
+	"github.com/alimtvnetwork/core-v8/regexnew"
 )
 
 var (

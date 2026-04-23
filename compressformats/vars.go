@@ -1,7 +1,7 @@
 package compressformats
 
 import (
-	"gitlab.com/auk-go/core/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
 )
 
 var (

@@ -1,8 +1,8 @@
 package dbdrivertype
 
 import (
-	"gitlab.com/auk-go/core/constants"
-	"gitlab.com/auk-go/core/coreutils/stringutil"
+	"github.com/alimtvnetwork/core-v8/constants"
+	"github.com/alimtvnetwork/core-v8/coreutils/stringutil"
 )
 
 type ConnectionOptions struct {

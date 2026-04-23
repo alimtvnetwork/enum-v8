@@ -1,7 +1,7 @@
 package quotes
 
 import (
-	"gitlab.com/auk-go/core/constants"
+	"github.com/alimtvnetwork/core-v8/constants"
 )
 
 // Assumption here, s has single quotes and s it is not empty

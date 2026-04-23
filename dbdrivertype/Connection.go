@@ -1,9 +1,9 @@
 package dbdrivertype
 
 import (
-	"gitlab.com/auk-go/core/constants"
-	"gitlab.com/auk-go/core/coreutils/stringutil"
-	"gitlab.com/auk-go/core/errcore"
+	"github.com/alimtvnetwork/core-v8/constants"
+	"github.com/alimtvnetwork/core-v8/coreutils/stringutil"
+	"github.com/alimtvnetwork/core-v8/errcore"
 )
 
 type Connection struct {

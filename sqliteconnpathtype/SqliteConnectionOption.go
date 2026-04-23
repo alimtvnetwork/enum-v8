@@ -1,8 +1,8 @@
 package sqliteconnpathtype
 
 import (
-	"gitlab.com/auk-go/core/coredata/corejson"
-	"gitlab.com/auk-go/core/coreutils/stringutil"
+	"github.com/alimtvnetwork/core-v8/coredata/corejson"
+	"github.com/alimtvnetwork/core-v8/coreutils/stringutil"
 )
 
 type SqliteConnectionOption struct {

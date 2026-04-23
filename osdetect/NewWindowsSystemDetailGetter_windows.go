@@ -1,8 +1,8 @@
 package osdetect
 
 import (
-	"gitlab.com/auk-go/core/codestack"
-	"gitlab.com/auk-go/core/errcore"
+	"github.com/alimtvnetwork/core-v8/codestack"
+	"github.com/alimtvnetwork/core-v8/errcore"
 	"golang.org/x/sys/windows/registry"
 )
 

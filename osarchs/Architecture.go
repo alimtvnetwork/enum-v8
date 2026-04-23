@@ -1,8 +1,8 @@
 package osarchs
 
 import (
-	"gitlab.com/auk-go/core/coreinterface/enuminf"
-	"gitlab.com/auk-go/enum/internal/consts"
+	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
+	"https://github.com/alimtvnetwork/enum-v1/internal/consts"
 )
 
 type Architecture byte

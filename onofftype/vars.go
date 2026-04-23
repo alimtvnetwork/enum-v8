@@ -1,10 +1,10 @@
 package onofftype
 
 import (
-	"gitlab.com/auk-go/core/coredata/coredynamic"
-	"gitlab.com/auk-go/core/coreimpl/enumimpl"
-	"gitlab.com/auk-go/core/errcore"
-	"gitlab.com/auk-go/core/issetter"
+	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v8/issetter"
 )
 
 var (

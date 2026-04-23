@@ -3,7 +3,7 @@ package scripttype
 import (
 	"fmt"
 
-	"gitlab.com/auk-go/core/converters"
+	"github.com/alimtvnetwork/core-v8/converters"
 )
 
 type ScriptDefault struct {

@@ -1,6 +1,6 @@
 package scripttype
 
-import "gitlab.com/auk-go/core/osconsts"
+import "github.com/alimtvnetwork/core-v8/osconsts"
 
 func DefaultOsScript() *ScriptDefault {
 	if osconsts.IsWindows {

@@ -1,11 +1,11 @@
 package promptclitype
 
 import (
-	"gitlab.com/auk-go/core/coredata/coredynamic"
-	"gitlab.com/auk-go/core/coreimpl/enumimpl"
-	"gitlab.com/auk-go/core/errcore"
-	"gitlab.com/auk-go/core/issetter"
-	"gitlab.com/auk-go/enum/onofftype"
+	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v8/issetter"
+	"https://github.com/alimtvnetwork/enum-v1/onofftype"
 )
 
 var (

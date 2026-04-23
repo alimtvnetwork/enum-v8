@@ -1,8 +1,8 @@
 package osdetect
 
 import (
-	"gitlab.com/auk-go/core/corecsv"
-	"gitlab.com/auk-go/core/errcore"
+	"github.com/alimtvnetwork/core-v8/corecsv"
+	"github.com/alimtvnetwork/core-v8/errcore"
 )
 
 func CurrentOsTypesNotContainsError(items ...Variant) error {

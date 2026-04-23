@@ -3,9 +3,9 @@ package osdetect
 import (
 	"fmt"
 	
-	"gitlab.com/auk-go/core/coreversion"
-	"gitlab.com/auk-go/enum/inttype"
-	"gitlab.com/auk-go/enum/strtype"
+	"github.com/alimtvnetwork/core-v8/coreversion"
+	"https://github.com/alimtvnetwork/enum-v1/inttype"
+	"https://github.com/alimtvnetwork/enum-v1/strtype"
 )
 
 type WindowsSystemDetail struct {

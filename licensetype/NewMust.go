@@ -1,6 +1,6 @@
 package licensetype
 
-import "gitlab.com/auk-go/core/errcore"
+import "github.com/alimtvnetwork/core-v8/errcore"
 
 func NewMust(name string) Variant {
 	exitCode, err := New(name)

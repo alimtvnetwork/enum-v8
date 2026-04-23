@@ -3,8 +3,8 @@ package rootcmdnames
 import (
 	"strings"
 
-	"gitlab.com/auk-go/core/coredata/corejson"
-	"gitlab.com/auk-go/core/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v8/coredata/corejson"
+	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
 )
 
 type Variant byte

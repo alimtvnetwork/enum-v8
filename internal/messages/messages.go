@@ -1,8 +1,8 @@
 package messages
 
 import (
-	"gitlab.com/auk-go/core/corecomparator"
-	"gitlab.com/auk-go/core/errcore"
+	"github.com/alimtvnetwork/core-v8/corecomparator"
+	"github.com/alimtvnetwork/core-v8/errcore"
 )
 
 var (

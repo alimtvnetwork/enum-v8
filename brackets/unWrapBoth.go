@@ -1,7 +1,7 @@
 package brackets
 
 import (
-	"gitlab.com/auk-go/core/constants"
+	"github.com/alimtvnetwork/core-v8/constants"
 )
 
 // Assumption here, both brackets exists and s it is not empty

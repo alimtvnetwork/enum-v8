@@ -1,8 +1,8 @@
 package osdetect
 
 import (
-	"gitlab.com/auk-go/enum/inttype"
-	"gitlab.com/auk-go/enum/strtype"
+	"https://github.com/alimtvnetwork/enum-v1/inttype"
+	"https://github.com/alimtvnetwork/enum-v1/strtype"
 )
 
 type windowsSysDetailDefiner interface {

@@ -3,13 +3,13 @@ package linuxvendortype
 import (
 	"strings"
 
-	"gitlab.com/auk-go/core/coredata/corejson"
-	"gitlab.com/auk-go/core/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v8/coredata/corejson"
+	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
 )
 
 type Variant byte
 
-// https://gitlab.com/auk-go/enum/-/issues/4
+// https://https://github.com/alimtvnetwork/enum-v1/-/issues/4
 // https://t.ly/wSF1,
 // https://github.com/zcalusic/sysinfo : https://t.ly/D5U3
 const (

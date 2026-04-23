@@ -1,9 +1,9 @@
 package onofftype
 
 import (
-	"gitlab.com/auk-go/core/coredata/coredynamic"
-	"gitlab.com/auk-go/core/errcore"
-	"gitlab.com/auk-go/core/issetter"
+	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v8/issetter"
 )
 
 func NewUsingSetter(value issetter.Value) (Variant, error) {

@@ -3,10 +3,10 @@ package strtype
 import (
 	"sync"
 
-	"gitlab.com/auk-go/core/coredata/coredynamic"
-	"gitlab.com/auk-go/core/coredata/corejson"
-	"gitlab.com/auk-go/core/ostype"
-	"gitlab.com/auk-go/enum/osarchs"
+	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v8/coredata/corejson"
+	"github.com/alimtvnetwork/core-v8/ostype"
+	"https://github.com/alimtvnetwork/enum-v1/osarchs"
 )
 
 var (

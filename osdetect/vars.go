@@ -3,10 +3,10 @@ package osdetect
 import (
 	"path/filepath"
 	
-	"gitlab.com/auk-go/core/chmodhelper"
-	"gitlab.com/auk-go/core/coredata/coreonce"
-	"gitlab.com/auk-go/core/coreimpl/enumimpl"
-	"gitlab.com/auk-go/core/errcore"
+	"github.com/alimtvnetwork/core-v8/chmodhelper"
+	"github.com/alimtvnetwork/core-v8/coredata/coreonce"
+	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v8/errcore"
 )
 
 var (
@@ -84,7 +84,7 @@ var (
 	// Detect Windows version : https://stackoverflow.com/questions/44363911/detect-windows-version-in-go
 	// Operating System Version : https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version?redirectedfrom=MSDN
 	//
-	// Issue : https://gitlab.com/auk-go/enum/-/issues/4
+	// Issue : https://https://github.com/alimtvnetwork/enum-v1/-/issues/4
 	winRegistryKeyNames = windowsCurrentVersionRegistry{
 		buildBranch:          "BuildBranch",
 		productName:          "ProductName",

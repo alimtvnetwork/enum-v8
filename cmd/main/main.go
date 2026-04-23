@@ -6,15 +6,15 @@ import (
 	"os"
 	"unsafe"
 	
-	"gitlab.com/auk-go/core/coredata/coredynamic"
-	"gitlab.com/auk-go/core/coredata/corejson"
-	"gitlab.com/auk-go/core/iserror"
-	"gitlab.com/auk-go/core/issetter"
-	"gitlab.com/auk-go/enum/brackets"
-	"gitlab.com/auk-go/enum/dbaction"
-	"gitlab.com/auk-go/enum/instructiontype"
-	"gitlab.com/auk-go/enum/osdetect"
-	"gitlab.com/auk-go/enum/strtype"
+	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v8/coredata/corejson"
+	"github.com/alimtvnetwork/core-v8/iserror"
+	"github.com/alimtvnetwork/core-v8/issetter"
+	"https://github.com/alimtvnetwork/enum-v1/brackets"
+	"https://github.com/alimtvnetwork/enum-v1/dbaction"
+	"https://github.com/alimtvnetwork/enum-v1/instructiontype"
+	"https://github.com/alimtvnetwork/enum-v1/osdetect"
+	"https://github.com/alimtvnetwork/enum-v1/strtype"
 )
 
 func main() {

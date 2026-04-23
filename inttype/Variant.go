@@ -5,15 +5,15 @@ import (
 	"math"
 	"strconv"
 
-	"gitlab.com/auk-go/core/constants"
-	"gitlab.com/auk-go/core/converters"
-	"gitlab.com/auk-go/core/corecomparator"
-	"gitlab.com/auk-go/core/corecsv"
-	"gitlab.com/auk-go/core/coredata/corerange"
-	"gitlab.com/auk-go/core/coreimpl/enumimpl"
-	"gitlab.com/auk-go/core/coreimpl/enumimpl/enumtype"
-	"gitlab.com/auk-go/core/coreinterface/enuminf"
-	"gitlab.com/auk-go/core/errcore"
+	"github.com/alimtvnetwork/core-v8/constants"
+	"github.com/alimtvnetwork/core-v8/converters"
+	"github.com/alimtvnetwork/core-v8/corecomparator"
+	"github.com/alimtvnetwork/core-v8/corecsv"
+	"github.com/alimtvnetwork/core-v8/coredata/corerange"
+	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl/enumtype"
+	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v8/errcore"
 )
 
 type Variant int

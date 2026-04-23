@@ -1,7 +1,7 @@
 package linuxvendortype
 
 import (
-	"gitlab.com/auk-go/core/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
 )
 
 var (
@@ -19,7 +19,7 @@ var (
 		OpenSuse:  "OpenSuse",
 	}
 
-	// https://gitlab.com/auk-go/enum/-/issues/4
+	// https://https://github.com/alimtvnetwork/enum-v1/-/issues/4
 	// https://t.ly/2KHe, https://prnt.sc/M9SPHl4GBYFN
 	aliasMap = map[string]byte{
 		"ubuntu": Ubuntu.ValueByte(),

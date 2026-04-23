@@ -7,16 +7,16 @@ import (
 	"os/exec"
 	"strings"
 	
-	"gitlab.com/auk-go/core/chmodhelper"
-	"gitlab.com/auk-go/core/constants"
-	"gitlab.com/auk-go/core/coreutils/stringutil"
-	"gitlab.com/auk-go/core/errcore"
-	"gitlab.com/auk-go/core/filemode"
-	"gitlab.com/auk-go/core/osconsts"
-	"gitlab.com/auk-go/core/ostype"
-	"gitlab.com/auk-go/enum/linuxvendortype"
-	"gitlab.com/auk-go/enum/osarchs"
-	"gitlab.com/auk-go/enum/strtype"
+	"github.com/alimtvnetwork/core-v8/chmodhelper"
+	"github.com/alimtvnetwork/core-v8/constants"
+	"github.com/alimtvnetwork/core-v8/coreutils/stringutil"
+	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v8/filemode"
+	"github.com/alimtvnetwork/core-v8/osconsts"
+	"github.com/alimtvnetwork/core-v8/ostype"
+	"https://github.com/alimtvnetwork/enum-v1/linuxvendortype"
+	"https://github.com/alimtvnetwork/enum-v1/osarchs"
+	"https://github.com/alimtvnetwork/enum-v1/strtype"
 )
 
 type generate struct{}
@@ -207,7 +207,7 @@ func (it generate) macOsOperatingSystemDetail() (*OperatingSystemDetail, error) 
 //	Generates Operating System Details for Windows
 //
 // References:
-//   - Our issue : https://gitlab.com/auk-go/enum/-/issues/4
+//   - Our issue : https://https://github.com/alimtvnetwork/enum-v1/-/issues/4
 func (it generate) windowsOperatingSystemDetail() (*OperatingSystemDetail, error) {
 	sysDetailGetter, err := getWinSysDetail()
 	

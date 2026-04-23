@@ -1,6 +1,6 @@
 package conntrackstate
 
-import "gitlab.com/auk-go/core/errcore"
+import "github.com/alimtvnetwork/core-v8/errcore"
 
 func CreateMust(name string) Variant {
 	newType, err := Create(name)

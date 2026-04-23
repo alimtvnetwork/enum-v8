@@ -1,8 +1,8 @@
 package inttype
 
 import (
-	"gitlab.com/auk-go/core/corecomparator"
-	"gitlab.com/auk-go/enum/internal/messages"
+	"github.com/alimtvnetwork/core-v8/corecomparator"
+	"https://github.com/alimtvnetwork/enum-v1/internal/messages"
 )
 
 // IsCompareResult Here left is v, and right is `n`

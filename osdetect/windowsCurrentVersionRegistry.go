@@ -4,7 +4,7 @@ package osdetect
 //
 // https://prnt.sc/Yf7QKMuJNTse
 //
-// Issue : https://gitlab.com/auk-go/enum/-/issues/4
+// Issue : https://https://github.com/alimtvnetwork/enum-v1/-/issues/4
 type windowsCurrentVersionRegistry struct {
 	buildBranch          string
 	productName          string

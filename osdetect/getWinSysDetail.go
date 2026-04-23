@@ -1,10 +1,10 @@
 package osdetect
 
 import (
-	"gitlab.com/auk-go/core/coredata/corejson"
-	"gitlab.com/auk-go/core/errcore"
-	"gitlab.com/auk-go/core/osconsts"
-	"gitlab.com/auk-go/core/ostype"
+	"github.com/alimtvnetwork/core-v8/coredata/corejson"
+	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v8/osconsts"
+	"github.com/alimtvnetwork/core-v8/ostype"
 )
 
 func getWinSysDetail() (windowsSystemDetailGetter, error) {

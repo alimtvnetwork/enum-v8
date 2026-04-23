@@ -1,7 +1,7 @@
 package linuxservicestate
 
 import (
-	"gitlab.com/auk-go/core/constants"
+	"github.com/alimtvnetwork/core-v8/constants"
 )
 
 const (

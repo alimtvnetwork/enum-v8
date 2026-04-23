@@ -1,9 +1,9 @@
 package resauthtype
 
 import (
-	"gitlab.com/auk-go/core/coredata/corejson"
-	"gitlab.com/auk-go/core/coreinterface"
-	"gitlab.com/auk-go/core/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v8/coredata/corejson"
+	"github.com/alimtvnetwork/core-v8/coreinterface"
+	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
 )
 
 // Variant

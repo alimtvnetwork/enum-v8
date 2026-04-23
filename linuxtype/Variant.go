@@ -1,6 +1,6 @@
 package linuxtype
 
-import "gitlab.com/auk-go/core/coreinterface/enuminf"
+import "github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
 
 type Variant byte
 
