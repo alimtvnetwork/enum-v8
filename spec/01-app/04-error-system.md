@@ -73,6 +73,8 @@ errcore.ComparatorShouldBeWithinRangeType      // "Comparator value out of allow
 | `FmtIf(cond bool, format string, args ...any) error` | conditional | Returns nil if `cond` is false |
 | `MergeError(other error) error` | wrap one | Combines this category with a downstream error |
 | `MergeErrorWithMessage(other error, msg string) error` | wrap + label | Combine with extra context string |
+| `ErrorRefOnly(ref any) error` | value only | When the value itself is the entire context — no field name needed (e.g. `errcore.OutOfRangeType.ErrorRefOnly(badIndex)`). Used heavily by enum constructors and `panic(errcore.NotSupportedType.ErrorRefOnly(it))`-style guards. |
+| `CombineWithAnother(other error) error` | wrap one | Alias of `MergeError` preserved for older call sites (e.g. `errcore.FailedToParseType.CombineWithAnother(downstreamErr)`). New code should prefer `MergeError`. |
 
 ```go
 err := errcore.InvalidValueType.Error("field name", someRef)
@@ -81,12 +83,19 @@ err := errcore.ValidationFailedType.FmtIf(len(name) == 0, "name is required")
 err := errcore.NotFound.ErrorNoRefs("user with id 42")
 err := errcore.FailedToConvertType.MergeError(originalErr)
 err := errcore.FailedToConvertType.MergeErrorWithMessage(originalErr, "while converting X")
+err := errcore.OutOfRangeType.ErrorRefOnly(givenIndex)         // value-only form
+err := errcore.FailedToParseType.CombineWithAnother(parseErr)  // legacy alias
 
 // HandleErr — the canonical panic helper for *Must variants:
 //   func HandleErr(err error)
 //   - if err == nil → no-op
 //   - if err != nil → panics with a stack-enhanced wrapping of err
 errcore.HandleErr(err) // never bare panic(err); see method-writing pattern §*Must
+
+// MustBeEmpty — sister of HandleErr for non-*Must invariant assertions:
+//   func MustBeEmpty(err error)
+//   Same nil-safety. Use inside helpers that genuinely cannot recover.
+errcore.MustBeEmpty(err) // see compressformats/all-validation-checking-err.go
 ```
 
 ### 1.3 Struct-as-Namespace Entry Points
