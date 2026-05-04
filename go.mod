@@ -4,7 +4,7 @@ go 1.17.8
 
 require (
 	github.com/smartystreets/goconvey v1.8.1
-	github.com/alimtvnetwork/core-v9 v1.5.5
+	github.com/alimtvnetwork/core-v9 v0.0.0-20260423064907-72bcd64c06b5
 	golang.org/x/sys v0.13.0
 )
 
