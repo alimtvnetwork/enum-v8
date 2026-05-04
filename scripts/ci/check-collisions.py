@@ -34,6 +34,40 @@ from pathlib import Path
 EXCLUDE_DIRS = {".git", "node_modules", "data", "scripts", "src",
                 "public", "spec", "tmp", "vendor", "dist"}
 
+# Build-constraint file suffixes (GOOS / GOARCH). Files differing only by
+# one of these suffixes are mutually exclusive at compile time, so the
+# "same name in N files" pattern is legal and expected.
+BUILD_SUFFIXES = {
+    "linux", "darwin", "windows", "freebsd", "netbsd", "openbsd",
+    "dragonfly", "solaris", "plan9", "android", "ios", "js", "wasip1",
+    "amd64", "arm64", "arm", "386", "ppc64", "ppc64le", "mips", "mipsle",
+    "mips64", "mips64le", "riscv64", "s390x", "wasm", "loong64", "unix",
+}
+
+
+def build_tag_key(path: Path) -> str:
+    """Collapse GOOS/GOARCH-suffixed filenames to a single logical key.
+
+    `Foo_linux.go`, `Foo_darwin.go`, `Foo_windows.go` -> `Foo.go`
+    """
+    stem = path.stem
+    parts = stem.split("_")
+    while len(parts) > 1 and parts[-1] in BUILD_SUFFIXES:
+        parts.pop()
+    return str(path.parent / ("_".join(parts) + ".go"))
+
+
+def is_exported_unexported_pair(variants: list[str]) -> bool:
+    """True when variants are an Exported/unexported pair differing only in
+    the case of the first letter (legit Go accessor-over-private pattern)."""
+    if len(variants) != 2:
+        return False
+    a, b = sorted(variants)
+    if not a or not b:
+        return False
+    return (a[0].isupper() and b[0].islower()
+            and a[1:] == b[1:] and a[0].lower() == b[0])
+
 # Top-level Go declaration kinds.
 # NOTE: methods (`func (r Recv) Name`) are intentionally excluded —
 # Go allows the same method name across different receiver types.
@@ -161,12 +195,30 @@ def main(argv: list[str]) -> int:
                 if len(sites) > 1:
                     intra[(name, str(f))] = sites
 
-        pkg_cross = {n: sites for n, sites in exact.items()
-                     if len({s[0] for s in sites}) > 1}
+        pkg_cross = {}
+        for n, sites in exact.items():
+            files_for_name = {s[0] for s in sites}
+            if len(files_for_name) <= 1:
+                continue
+            # Skip GOOS/GOARCH build-tag siblings.
+            keys = {build_tag_key(Path(f)) for f in files_for_name}
+            if len(keys) <= 1:
+                continue
+            pkg_cross[n] = sites
         if pkg_cross:
             cross[pkg] = pkg_cross
-        pkg_case = {k: sorted(v) for k, v in case_ins.items()
-                    if len(v) > 1 and len({s[0] for n in v for s in exact[n]}) > 1}
+        pkg_case = {}
+        for k, v in case_ins.items():
+            if len(v) <= 1:
+                continue
+            variants = sorted(v)
+            # Skip the legitimate Exported/unexported accessor pattern.
+            if is_exported_unexported_pair(variants):
+                continue
+            files_for_variants = {s[0] for n in v for s in exact[n]}
+            if len(files_for_variants) <= 1:
+                continue
+            pkg_case[k] = variants
         if pkg_case:
             case_collisions[pkg] = {k: v for k, v in pkg_case.items()}
             # Stash exact map for the report below.
