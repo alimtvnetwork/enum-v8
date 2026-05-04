@@ -9,6 +9,22 @@
 
 ---
 
+## [spec-v0.26.0] — 2026-05-04 (Cycle 4 closed — §06 data-structures at 100 % verifiable)
+
+### Fixed
+- **`spec/01-app/06-data-structures.md`** — resolves C-CVS-06..08 + D-CVS-20..25 from Cycle 4 in a single pass. Lifts §06 from **35.7 % → 100 %** of its verifiable subset; **❌ contradiction count: 3 → 0**.
+  - **§1 "Consumer-coverage note"** (resolves **D-CVS-25**): added a callout listing actual `enum-v1` consumer counts (`corejson` 80 / `corestr` 4 / `coreonce` 1; `coregeneric` and `corepayload` zero) so readers know which sub-sections are upstream-reference.
+  - **§2 `coregeneric` header**: added explicit "⚠️ Upstream-only sub-package" callout.
+  - **§3 `corestr` rewrite** (resolves **D-CVS-23**): replaced the unused `corestr.NewCollectionPtrUsingStrings(&values, 0)` example with the actual exported surface (`corestr.New.Hashset`, `corestr.New.SimpleSlice`, `corestr.SimpleStringOnce`); cross-referenced the upstream-only `coregeneric.New.Collection.String` for callers that genuinely need a mutex-protected string list.
+  - **§4 `corejson` code block** (resolves **C-CVS-07** + **D-CVS-20** + **D-CVS-21**): replaced fictional `Serialize.ToString` / `Serialize.Raw` / `Deserialize.UsingBytes` / `Deserialize.FromTo` with the real consumer-side API: `Serialize.ToBytesErr` returning `*Result`, `Deserialize.BytesTo`, and `corejson.NewPtr(...).PrettyJsonString()`. Added a contracts subsection naming `Jsoner` / `JsonMarshaller` / `JsonContractsBinder`.
+  - **§4 "Rule (with documented exceptions)"** (resolves **C-CVS-06**): rule wording softened from "**never** `encoding/json` directly" to "**should** prefer `corejson`" with an explicit table of the two legitimate exceptions: `inttype/Variant.go:440` calling `json.Marshal(it.Value())` inside `MarshalJSON`, and `inttype/all-constructors.go:75` accepting `*json.Number` as a parameter type.
+  - **§5 `coreonce` rewrite** (resolves **D-CVS-22** + **D-CVS-24**): replaced the fictional `coreonce.New.String(producer)` namespace with the real top-level constructors `coreonce.NewAnyOnce` / `coreonce.NewByteOnce`; cross-referenced `corestr.SimpleStringOnce` as the string equivalent (which lives in `corestr`, not `coreonce`); softened "all common types" wording.
+  - **§6 `corepayload` upstream-only callout** (resolves **C-CVS-08**): added "⚠️ Upstream-only sub-package" callout deferring `PayloadCreateInstruction` field-set verification to task **AB**.
+  - **§7 decision matrix**: added a "Verified in `enum-v1`?" column (✅ vs ⚠️ upstream-only); replaced fictional rows (`corestr.Collection`, `coreonce.New.<Type>`, `corejson.Serialize`/`Deserialize` shorthand) with concrete entries pointing at real APIs.
+
+### Changed
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — moved C-CVS-06..08 + D-CVS-20..25 to **Resolved** (9 entries); cleared the **Open drift findings** table; added Cycle 4 (closed) row at **100.0 %** verifiable on §06; updated targets to ✅ for the ≥95 % aggregate goal and ✅ for zero-contradictions.
+
 ## [spec-v0.25.0] — 2026-05-04 (Cycle 4 baseline — §06 data-structures audited)
 
 ### Added
