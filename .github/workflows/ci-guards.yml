@@ -1,0 +1,85 @@
+name: CI Guards
+
+# Reusable CI guards (spec/12-cicd-pipeline-workflows/03-reusable-ci-guards):
+#   - Pattern 03: cross-file collision audit
+#   - Pattern 04: baseline-diff lint gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-guards-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/heads/release/') }}
+
+permissions:
+  contents: read
+
+jobs:
+  collision-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cross-file identifier collision audit
+        run: python3 scripts/ci/check-collisions.py .
+
+  lint-baseline-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install golangci-lint
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v1.64.8/install.sh \
+            | sh -s -- -b "$(go env GOPATH)/bin" v1.64.8
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Restore lint baseline
+        id: baseline-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .ci-cache/lint-baseline.json
+          key: lint-baseline-v1.64.8-refs/heads/main
+
+      - name: Run golangci-lint (JSON)
+        run: |
+          set +e
+          mkdir -p .ci-cache
+          golangci-lint run --timeout=5m --out-format json ./... > .ci-cache/lint-current.json
+          echo "rc=$?"
+          # Always continue — the diff script is the actual gate.
+          exit 0
+
+      - name: Diff against baseline
+        run: |
+          python3 scripts/ci/lint-baseline-diff.py \
+            .ci-cache/lint-current.json \
+            .ci-cache/lint-baseline.json
+
+      # On main, replace the baseline with the current report on success.
+      - name: Update baseline (main only)
+        if: success() && github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: cp .ci-cache/lint-current.json .ci-cache/lint-baseline.json
+
+      - name: Save lint baseline
+        if: success() && github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/cache/save@v4
+        with:
+          path: .ci-cache/lint-baseline.json
+          key: lint-baseline-v1.64.8-refs/heads/main
