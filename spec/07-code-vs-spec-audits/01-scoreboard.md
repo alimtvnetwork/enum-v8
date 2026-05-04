@@ -2,9 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 47.1 (verifiable)** *(3 sections audited)*
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 (verifiable)** *(3 sections audited, all closed)*
 
-> §03 + §04 closed. §05 (enum-system) Cycle 3 baseline: 18 claims, 8 ✅ / 6 ⚠️ / **3 ❌** / 1 ❓. The 3 contradictions are real — spec mandates "first constant must be `Invalid`" but 10 enum packages put a non-Invalid sentinel first (`Default`, `Unspecified`, `Uninitialized`, `InvalidIndex = -1`). The 6 drifts include a fictional `consts.go` file split, a `reflectinternal.TypeName(...)` example that can't compile from `enum-v1`, and a stale `tests/integratedtests/` reference (same C-CVS-01 issue already fixed in §03). See [`04-cycle3-enum-system.md`](./04-cycle3-enum-system.md).
+> §03, §04, §05 closed. §05 (enum-system) Cycle 3 closed by reframing the spec to match code: "sentinel-first" rule (with allowed names `Invalid` / `Default` / `Unspecified` / `Uninitialized` / `InvalidIndex = -1` for signed types), 2-file recipe (`Variant.go` + `vars.go`), `DefaultAllCases` factory pattern (no `internal/reflectinternal` import), shared `tests/creationtests/` registry, and softened predicate-split guideline. The single ❓ (JSON asymmetry runtime contract) is still pending task **AB**. See [`04-cycle3-enum-system.md`](./04-cycle3-enum-system.md).
 
 ## Cycle history
 
