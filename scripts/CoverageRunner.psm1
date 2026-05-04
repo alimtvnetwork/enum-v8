@@ -49,35 +49,56 @@ function Invoke-TestCoverage {
         & $repoBuildErrorsScript -OutputTxt $repoBuildErrorsFile -OutputJson $repoBuildErrorsJsonFile
     }
 
-    # Build package lists
-    $allPkgs = go list ./... 2>&1 | ForEach-Object { $_.ToString() }
+    # Determine import-path prefix for this module (e.g. enum-v1, core-v9, …)
+    # so all downstream filters are anchored to the actual module path.
+    $modulePath = (Select-String -Path 'go.mod' -Pattern '^module\s+(\S+)' -ErrorAction SilentlyContinue |
+        Select-Object -First 1).Matches[0].Groups[1].Value
+    if (-not $modulePath) { $modulePath = 'github.com/alimtvnetwork/enum-v1' }
+    $modulePrefix = "^$([regex]::Escape($modulePath))(/|$)"
+
+    # Helper: strict filter — only keep lines that look like real import paths
+    # belonging to THIS module. This protects against `go list` stderr noise
+    # (module-loader errors, "matched no packages", relative paths) ever
+    # reaching the compile checker as a phantom (root) package.
+    function Test-IsRealModulePackage {
+        param([string]$line, [string]$prefix)
+        if (-not $line) { return $false }
+        $t = $line.Trim()
+        if (-not $t) { return $false }
+        if ($t -match '^(go:\s|warning:|matched no packages|no Go files|package\s|can''t load|cannot find|err:\s|#\s)') { return $false }
+        if ($t -notmatch $prefix) { return $false }
+        # Must be a proper import path (no whitespace, no shell glob remnants)
+        if ($t -match '\s' -or $t -match '\.\.\.') { return $false }
+        return $true
+    }
+
+    # Build source package list. Capture exit code so a failed `go list`
+    # can't poison downstream filters.
+    $rawAllPkgs = & go list ./... 2>&1 | ForEach-Object { $_.ToString() }
+    $goListExit = $LASTEXITCODE
+    $allPkgs = @($rawAllPkgs | Where-Object { Test-IsRealModulePackage $_ $modulePrefix })
+    if ($goListExit -ne 0 -and $allPkgs.Count -eq 0) {
+        Write-Host "  ✗ go list ./... failed (exit $goListExit). Output:" -ForegroundColor Red
+        $rawAllPkgs | ForEach-Object { Write-Host "      $_" -ForegroundColor DarkGray }
+        if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Compile Check" "fail" "go list failed" }
+        if (Get-Command Write-PhaseSummaryBox -ErrorAction SilentlyContinue) { Write-Host ""; Write-PhaseSummaryBox }
+        exit 1
+    }
     $srcPkgs = $allPkgs | Where-Object { $_ -notmatch '/tests/' }
     $covPkgList = $srcPkgs -join ","
 
     # Discover integration test packages. Historically these lived under
     # tests/integratedtests/, but this repo (enum-v1) uses tests/creationtests/.
-    # Probe both, and filter out `go list` error/warning lines so we never
-    # feed an empty/garbage package path to the compile checker.
+    # Probe whichever roots actually exist on disk, and apply the strict
+    # module-prefix filter so junk lines never become phantom (root) packages.
     $integrationTestPkgs = @()
     foreach ($testRoot in @('./tests/integratedtests/...', './tests/creationtests/...')) {
         $rootDir = ($testRoot -replace '/\.\.\.$','') -replace '^\./',''
         if (-not (Test-Path $rootDir)) { continue }
-        $listed = go list $testRoot 2>&1 | ForEach-Object { $_.ToString() } |
-            Where-Object {
-                $_ -and
-                $_ -notmatch '^warning:' -and
-                $_ -notmatch '^(go: |matched no packages|no Go files)' -and
-                $_ -match '^[a-zA-Z0-9_.\-/]+$'
-            }
+        $rawListed = & go list $testRoot 2>&1 | ForEach-Object { $_.ToString() }
+        $listed = @($rawListed | Where-Object { Test-IsRealModulePackage $_ $modulePrefix })
         if ($listed) { $integrationTestPkgs += $listed }
     }
-
-    # Determine import-path prefix for this module (e.g. enum-v1, core-v9, …)
-    # so the in-package-test scan is not hard-coded to one repo.
-    $modulePath = (Select-String -Path 'go.mod' -Pattern '^module\s+(\S+)' -ErrorAction SilentlyContinue |
-        Select-Object -First 1).Matches[0].Groups[1].Value
-    if (-not $modulePath) { $modulePath = 'github.com/alimtvnetwork/enum-v1' }
-    $modulePrefix = "^$([regex]::Escape($modulePath))/"
 
     $inPkgTestPkgs = @()
     foreach ($srcPkg in $srcPkgs) {
@@ -91,6 +112,7 @@ function Invoke-TestCoverage {
 
     if ($allTestPkgs.Count -eq 0) {
         Write-Host "  ✗ No test packages discovered under ./tests/ or alongside source files." -ForegroundColor Red
+        if (Get-Command Write-PhaseSummaryBox -ErrorAction SilentlyContinue) { Write-Host ""; Write-PhaseSummaryBox }
         exit 1
     }
 
