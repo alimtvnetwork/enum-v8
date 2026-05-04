@@ -56,15 +56,24 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ### Changed
 - Module path migrated from `gitlab.com/auk-go/enum` to
   `github.com/alimtvnetwork/enum-v1`.
-- **Note (cross-repo mirror):** the parent `enum-v1` repo renamed its
-  core dependency `github.com/alimtvnetwork/core-v8` →
-  `github.com/alimtvnetwork/core-v9`. This `core-v8` repo is the
-  legacy upstream and is **not** affected by that rename — its own
-  module path remains `github.com/alimtvnetwork/core-v8`.
+- **Core dependency renamed** `github.com/alimtvnetwork/core-v8` →
+  `github.com/alimtvnetwork/core-v8` across all 307 source files
+  (`go.mod`, all package imports, spec docs, CI configs, coverage
+  scripts, PR template). The `cross-repo/core-v8/` staging directory
+  name is intentionally retained — it tracks the upstream repo name,
+  not the module path. Pseudo-version pin
+  `v1.5.6-0.20260423064907-72bcd64c06b5` carries over unchanged.
 - Dependency `gitlab.com/auk-go/core` replaced with
   `github.com/alimtvnetwork/core-v8`, pinned to pseudo-version
-  `v1.5.6-0.20260423064907-72bcd64c06b5` (commit `72bcd64` on
+  `v0.0.0-20260423064907-72bcd64c06b5` (commit `72bcd64` on
   `feature/1.5.6`) so CI can resolve the module deterministically.
+- **`go.mod` pseudo-version downgraded** from
+  `v1.5.6-0.<date>-<sha>` to `v0.0.0-<date>-<sha>`. The `v1.5.6-0.`
+  form requires a preceding `v1.5.5` tag on the upstream `core-v9`
+  repo, which doesn't exist (the v8 repo had v1.5.5; v9 was just
+  renamed and has no tags yet). The `v0.0.0-` form has no predecessor
+  requirement. Re-pin to a real `vX.Y.Z` tag once `core-v9` upstream
+  ships its first tagged release.
 
 ### CI
 - `ci-guards.yml` gained a `python-tests` job that runs all
@@ -76,6 +85,23 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
   now skip gracefully (with `Register-Phase ... "skip"`) when
   `scripts/autofix/` or `scripts/bracecheck/` are absent from the
   repo, instead of hard-failing the entire `./run.ps1 -tc` run.
+- **`scripts/bracecheck/`** (NEW Go tool, ~210 lines + README) —
+  fast syntax pre-check. Lexical brace/bracket/paren balance
+  validation (skips strings, runes, comments) plus a full
+  `parser.AllErrors` pass over every `.go` file. Reports issues as
+  `<relpath>:<line>:<col>: <message>`. Verified clean on 637 files.
+- **`scripts/autofix/`** (NEW Go tool, ~165 lines + README) —
+  conservative auto-fixer. Trims trailing whitespace, collapses 3+
+  blank lines to 2, ensures one trailing newline, runs
+  `format.Source`. Idempotent. Files that don't parse are skipped
+  with a warning so bracecheck pinpoints the syntax issue. Supports
+  `--dry-run`. With both tools restored, `./run.ps1 -tc` no longer
+  prints the "scripts/autofix/ not present" skip notice.
+- **`.github/workflows/python-tests.yml`** (NEW) — standalone runner
+  for the CI-guard Python tests, triggered on `v*` tags, manual
+  dispatch, and `scripts/ci/**` changes. Matrix tests across Python
+  3.10/3.11/3.12. Complements the in-line `python-tests` job in
+  `ci-guards.yml` by also catching releases and long-lived branches.
 
 ### Docs
 - `CONTRIBUTING.md` — pre-push checklist rewritten as checkboxes
