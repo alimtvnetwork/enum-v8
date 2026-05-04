@@ -34,6 +34,40 @@ from pathlib import Path
 EXCLUDE_DIRS = {".git", "node_modules", "data", "scripts", "src",
                 "public", "spec", "tmp", "vendor", "dist"}
 
+# Build-constraint file suffixes (GOOS / GOARCH). Files differing only by
+# one of these suffixes are mutually exclusive at compile time, so the
+# "same name in N files" pattern is legal and expected.
+BUILD_SUFFIXES = {
+    "linux", "darwin", "windows", "freebsd", "netbsd", "openbsd",
+    "dragonfly", "solaris", "plan9", "android", "ios", "js", "wasip1",
+    "amd64", "arm64", "arm", "386", "ppc64", "ppc64le", "mips", "mipsle",
+    "mips64", "mips64le", "riscv64", "s390x", "wasm", "loong64", "unix",
+}
+
+
+def build_tag_key(path: Path) -> str:
+    """Collapse GOOS/GOARCH-suffixed filenames to a single logical key.
+
+    `Foo_linux.go`, `Foo_darwin.go`, `Foo_windows.go` -> `Foo.go`
+    """
+    stem = path.stem
+    parts = stem.split("_")
+    while len(parts) > 1 and parts[-1] in BUILD_SUFFIXES:
+        parts.pop()
+    return str(path.parent / ("_".join(parts) + ".go"))
+
+
+def is_exported_unexported_pair(variants: list[str]) -> bool:
+    """True when variants are an Exported/unexported pair differing only in
+    the case of the first letter (legit Go accessor-over-private pattern)."""
+    if len(variants) != 2:
+        return False
+    a, b = sorted(variants)
+    if not a or not b:
+        return False
+    return (a[0].isupper() and b[0].islower()
+            and a[1:] == b[1:] and a[0].lower() == b[0])
+
 # Top-level Go declaration kinds.
 # NOTE: methods (`func (r Recv) Name`) are intentionally excluded —
 # Go allows the same method name across different receiver types.
