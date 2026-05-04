@@ -85,6 +85,23 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
   now skip gracefully (with `Register-Phase ... "skip"`) when
   `scripts/autofix/` or `scripts/bracecheck/` are absent from the
   repo, instead of hard-failing the entire `./run.ps1 -tc` run.
+- **`scripts/bracecheck/`** (NEW Go tool, ~210 lines + README) —
+  fast syntax pre-check. Lexical brace/bracket/paren balance
+  validation (skips strings, runes, comments) plus a full
+  `parser.AllErrors` pass over every `.go` file. Reports issues as
+  `<relpath>:<line>:<col>: <message>`. Verified clean on 637 files.
+- **`scripts/autofix/`** (NEW Go tool, ~165 lines + README) —
+  conservative auto-fixer. Trims trailing whitespace, collapses 3+
+  blank lines to 2, ensures one trailing newline, runs
+  `format.Source`. Idempotent. Files that don't parse are skipped
+  with a warning so bracecheck pinpoints the syntax issue. Supports
+  `--dry-run`. With both tools restored, `./run.ps1 -tc` no longer
+  prints the "scripts/autofix/ not present" skip notice.
+- **`.github/workflows/python-tests.yml`** (NEW) — standalone runner
+  for the CI-guard Python tests, triggered on `v*` tags, manual
+  dispatch, and `scripts/ci/**` changes. Matrix tests across Python
+  3.10/3.11/3.12. Complements the in-line `python-tests` job in
+  `ci-guards.yml` by also catching releases and long-lived branches.
 
 ### Docs
 - `CONTRIBUTING.md` — pre-push checklist rewritten as checkboxes
