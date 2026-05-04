@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Go build / test artifacts
+*.exe
+*.test
+*.out
+/bin/
+/dist/
+/data/coverage/
+/data/test-logs/
+/tmp/
+coverage*.out
+combined-coverage.out

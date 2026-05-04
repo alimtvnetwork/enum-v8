@@ -1,0 +1,19 @@
+# CODEOWNERS — required reviewers for protected paths.
+# Format: <path>  @owner1 @owner2
+
+# Default owner for everything in the repo.
+*                       @alimtvnetwork
+
+# CI/CD and release infrastructure.
+/.github/               @alimtvnetwork
+/scripts/               @alimtvnetwork
+/run.sh                 @alimtvnetwork
+/run.ps1                @alimtvnetwork
+/.golangci.yml          @alimtvnetwork
+
+# Module manifest changes need an explicit review.
+/go.mod                 @alimtvnetwork
+/go.sum                 @alimtvnetwork
+
+# Specs are documentation contracts.
+/spec/                  @alimtvnetwork
