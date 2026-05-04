@@ -195,12 +195,30 @@ def main(argv: list[str]) -> int:
                 if len(sites) > 1:
                     intra[(name, str(f))] = sites
 
-        pkg_cross = {n: sites for n, sites in exact.items()
-                     if len({s[0] for s in sites}) > 1}
+        pkg_cross = {}
+        for n, sites in exact.items():
+            files_for_name = {s[0] for s in sites}
+            if len(files_for_name) <= 1:
+                continue
+            # Skip GOOS/GOARCH build-tag siblings.
+            keys = {build_tag_key(Path(f)) for f in files_for_name}
+            if len(keys) <= 1:
+                continue
+            pkg_cross[n] = sites
         if pkg_cross:
             cross[pkg] = pkg_cross
-        pkg_case = {k: sorted(v) for k, v in case_ins.items()
-                    if len(v) > 1 and len({s[0] for n in v for s in exact[n]}) > 1}
+        pkg_case = {}
+        for k, v in case_ins.items():
+            if len(v) <= 1:
+                continue
+            variants = sorted(v)
+            # Skip the legitimate Exported/unexported accessor pattern.
+            if is_exported_unexported_pair(variants):
+                continue
+            files_for_variants = {s[0] for n in v for s in exact[n]}
+            if len(files_for_variants) <= 1:
+                continue
+            pkg_case[k] = variants
         if pkg_case:
             case_collisions[pkg] = {k: v for k, v in pkg_case.items()}
             # Stash exact map for the report below.
