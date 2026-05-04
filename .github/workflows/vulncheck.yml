@@ -1,0 +1,51 @@
+name: Vulnerability Scan
+
+# Standalone weekly scan independent of code changes.
+# See spec/12-cicd-pipeline-workflows/03-vulnerability-scanning.md.
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"   # Every Monday at 09:00 UTC
+  workflow_dispatch:        # Manual trigger from the GitHub UI
+
+concurrency:
+  group: vulncheck-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  govulncheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@v1.1.4
+
+      - name: Run govulncheck (third-party fail / stdlib warn)
+        run: |
+          set +e
+          govulncheck ./... 2>&1 | tee /tmp/vulncheck.out
+          rc=$?
+          set -e
+          if [ $rc -ne 0 ]; then
+            if grep "packages you import" /tmp/vulncheck.out | grep -qv "0 vulnerabilities in packages"; then
+              echo "::error::Third-party vulnerabilities detected"
+              exit 1
+            fi
+            echo "::warning::Only stdlib vulnerabilities found (no fix available in current Go version)"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vulncheck-report
+          path: /tmp/vulncheck.out
+          retention-days: 30
