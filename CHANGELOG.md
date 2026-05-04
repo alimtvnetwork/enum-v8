@@ -13,6 +13,32 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ## [Unreleased]
 
 ### Fixed
+- **`scripts/CoverageRunner.psm1`, `scripts/CoverageCompileCheck.psm1`** — second
+  pass at the `Blocked: (root) — : no such file or directory` failure that
+  surfaced during parallel `./run.ps1 -tc` runs. Even with the prior multi-root
+  probe, a failing `go list ./...` (e.g. when the upstream `core-v9`
+  module-loader error fires) could leak stderr fragments past the regex filter
+  as a single-package "phantom (root)" entry, which then aborted the whole run
+  before any coverage % was reported. Hardening:
+  1. Discovery now captures `$LASTEXITCODE` from `go list`, anchors the
+     keep-filter to the actual `module` declared in `go.mod`, rejects lines
+     containing whitespace / `...` / known stderr prefixes (`go:`, `warning:`,
+     `matched no packages`, `package`, `can't load`, `cannot find`, `err:`,
+     `# `), and aborts loudly with the raw `go list` output if nothing valid
+     survives — instead of silently producing one bogus package path.
+  2. `Get-PackageShortName` replaces the bare `'.*(integratedtests|creationtests)/?'`
+     regex. It always returns a non-empty label (trailing test segment → last
+     path segment → full path) so blocked-package summaries never collapse to
+     the unhelpful `(root)`. Blocked log lines now include the full import path
+     next to the short name.
+  3. All three early-abort code paths in `Invoke-TestCoverage` now call
+     `Write-PhaseSummaryBox` before returning, so the dashboard summary (and
+     any `Coverage Run: fail` phase status) renders even when the pipeline
+     aborts before the merge step. This is what was hiding the coverage
+     percentage — the run never reached `Write-CoverageConsoleSummary` because
+     the aborted summary box was suppressed.
+
+### Previously
 - **`scripts/CoverageRunner.psm1`** — pre-coverage compile check no longer
   aborts with `Blocked: : no such file or directory`. Two root causes:
   1. Test discovery was hard-coded to `./tests/integratedtests/...`, which
