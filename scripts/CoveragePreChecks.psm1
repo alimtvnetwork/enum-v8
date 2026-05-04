@@ -67,20 +67,26 @@ function Invoke-CoveragePreChecks {
         Write-Host "  Skipping Go auto-fixer (--no-autofix)" -ForegroundColor DarkYellow
         if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Auto-Fixer" "skip" "skipped (--no-autofix)" }
     } else {
-        $dryRunFlag = if ($ExtraArgs -and ($ExtraArgs -contains '--dry-run')) { '--dry-run' } else { $null }
-        $dryLabel = if ($dryRunFlag) { " (dry-run)" } else { "" }
-        Write-Host "  Running Go auto-fixer$dryLabel..." -ForegroundColor Yellow
-        $fixArgs = @('./scripts/autofix/')
-        if ($dryRunFlag) { $fixArgs += '--dry-run' }
-        $fixOut = & go run @fixArgs 2>&1
-        if ($LASTEXITCODE -ne 0) {
-            Write-Host ($fixOut | Out-String) -ForegroundColor Red
-            $s = Get-CallerSource; Write-Fail "Go auto-fixer encountered errors. (source: $s)"
-            if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Auto-Fixer" "warn" "errors encountered" }
+        $autofixDir = Join-Path $ScriptRoot "scripts" "autofix"
+        if (-not (Test-Path $autofixDir)) {
+            Write-Host "  Skipping Go auto-fixer (scripts/autofix/ not present in repo)" -ForegroundColor DarkYellow
+            if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Auto-Fixer" "skip" "scripts/autofix/ missing" }
         } else {
-            $fixStr = ($fixOut | Out-String).Trim() -replace '^\s*✓\s*', ''
-            if ($fixStr) { Write-Success $fixStr }
-            if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Auto-Fixer" "pass" "no fixable issues" }
+            $dryRunFlag = if ($ExtraArgs -and ($ExtraArgs -contains '--dry-run')) { '--dry-run' } else { $null }
+            $dryLabel = if ($dryRunFlag) { " (dry-run)" } else { "" }
+            Write-Host "  Running Go auto-fixer$dryLabel..." -ForegroundColor Yellow
+            $fixArgs = @('./scripts/autofix/')
+            if ($dryRunFlag) { $fixArgs += '--dry-run' }
+            $fixOut = & go run @fixArgs 2>&1
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host ($fixOut | Out-String) -ForegroundColor Red
+                $s = Get-CallerSource; Write-Fail "Go auto-fixer encountered errors. (source: $s)"
+                if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Auto-Fixer" "warn" "errors encountered" }
+            } else {
+                $fixStr = ($fixOut | Out-String).Trim() -replace '^\s*✓\s*', ''
+                if ($fixStr) { Write-Success $fixStr }
+                if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Auto-Fixer" "pass" "no fixable issues" }
+            }
         }
     }
 
@@ -88,6 +94,12 @@ function Invoke-CoveragePreChecks {
     if ($skipBrace) {
         if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Syntax Check" "skip" "skipped (--skip-bracecheck)" }
     } else {
+        $bracecheckDir = Join-Path $ScriptRoot "scripts" "bracecheck"
+        if (-not (Test-Path $bracecheckDir)) {
+            Write-Host "  Skipping Go syntax pre-check (scripts/bracecheck/ not present in repo)" -ForegroundColor DarkYellow
+            if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Syntax Check" "skip" "scripts/bracecheck/ missing" }
+            return $true
+        }
         Write-Host "  Running Go syntax pre-check (bracecheck)..." -ForegroundColor Yellow
         $braceOut = & go run ./scripts/bracecheck/ 2>&1
         if ($LASTEXITCODE -ne 0) {
