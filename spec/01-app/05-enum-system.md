@@ -43,10 +43,12 @@ The enum system uses a three-layer split that satisfies several design pillars a
                  ▼
 ┌────────────────────────────────────┐
 │  Your enum package                 │  ← Layer 3: domain-specific enum
-│  - consts.go (the type + iota)     │
-│  - vars.go (BasicEnumImpl + Ranges)│
-│  - <Type>.go (method set)          │
+│  - <TypeName>.go (type + iota +    │
+│    method set + predicates)        │
+│  - vars.go (Ranges + BasicEnumImpl)│
 └────────────────────────────────────┘
+
+> **Filename convention:** the method-set file is named after its type (e.g. `Variant.go`, `Bracket.go`, `Architecture.go`). Across this repo's 71 enum packages, the type is conventionally named `Variant` (64 / 71); the remaining 7 use a domain-specific name (`Bracket`, `Category`, `Precedence`, `Action`, `Quote`, `ExitCode`, `Architecture`). There is **no** `consts.go` — the type and its `iota` block live alongside the method set in `<TypeName>.go`.
 ```
 
 ### Why three layers?
@@ -114,85 +116,64 @@ This follows the **`newCreator` pattern** from [`02-design-philosophy.md` §5](.
 
 ## 4. Defining a New Enum (full recipe)
 
-This is the **canonical 3-file pattern** for a `byte`-backed enum named `Status`. Adapt only what's marked `// CHANGE`.
+This is the **canonical 2-file pattern** for a `byte`-backed enum. The conventional type name across this repo is `Variant`, so the recipe below uses that name (your domain may use a more descriptive name — see §4.3). Adapt only what's marked `// CHANGE`.
 
-### Step 1 — `consts.go`
+### 4.1 Sentinel-first rule  *(F-NEW-08)*
 
-Define the type and the iota constants. The first constant **must be `Invalid`** (or equivalent zero-value) so an unset variable is detectable.
+The first iota constant **must occupy the zero value** of the backing type so an unset variable is detectable. The conventional name is `Invalid`, but several equivalent **sentinel** names are accepted across the codebase, depending on domain semantics:
+
+| Sentinel name | Used by (examples) | When to prefer |
+|---|---|---|
+| `Invalid` | most enums (61 / 71) | the default — use it unless a domain term is clearer |
+| `Unspecified` | `revokereason` | wire-protocol / RFC vocabulary |
+| `Uninitialized` | `envtype` | distinguishes "never set" from "set to default" |
+| `Default` | `compresslevels`, `scripttype`, `sqljointype`, `taskpriority` | the zero value is itself a meaningful default |
+| (domain term) | `compressformats.Zip`, `logtype.Silent`, `strtype.<...>` | the domain has a natural zero-meaning value |
+
+> **Signed-int exception:** `inttype.Variant` declares `InvalidIndex Variant = -1` because its backing type (`int`) uses `-1` as the "no index" sentinel. When the backing type is signed and `-1` is the conventional unset value, name the first constant `InvalidIndex` (or similar) and assign `= -1` explicitly. This is the **only** documented case where the sentinel does not occupy the Go zero value.
+
+Whatever the name, the rule is: **the first declared iota constant is the sentinel**, and `IsValid()` / `IsInvalid()` test against it.
+
+### 4.2 Step 1 — `Variant.go` (type + iota + method set)
+
+Type declaration, iota constants, and method set all live in this single file:
 
 ```go
 package status                                  // CHANGE: package name
 
-type Status byte                                // CHANGE: type name + backing type
+import "github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
+
+// CHANGE: type name + backing type. Convention: name it `Variant`.
+type Variant byte
 
 const (
-    Invalid Status = iota                       // CHANGE: keep "Invalid" first
+    Invalid Variant = iota                      // sentinel — see §4.1
     Pending
     Ready
     Failed
 )
-```
-
-### Step 2 — `vars.go`
-
-Define the human-readable name slice and instantiate the impl.
-
-```go
-package status
-
-import (
-    "github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
-    "github.com/alimtvnetwork/core-v9/internal/reflectinternal"
-)
-
-var (
-    Ranges = [...]string{                       // CHANGE: keys must match consts.go
-        Invalid: "Invalid",
-        Pending: "Pending",
-        Ready:   "Ready",
-        Failed:  "Failed",
-    }
-
-    BasicEnumImpl = enumimpl.New.BasicByte.UsingTypeSlice(
-        reflectinternal.TypeName(Invalid),       // auto-derives "Status"
-        Ranges[:],
-    )
-)
-```
-
-### Step 3 — `Status.go` (method set)
-
-All methods below are required to satisfy `StandardEnumer` + the type-specific `Basic*Enumer`. They are mostly one-line delegations to `BasicEnumImpl`.
-
-> 🧱 **F-NEW-07 — Why so many `Value<Type>()` methods?**
-> Every method in the *Value accessors* block is **REQUIRED** to satisfy the generic `enuminf.BasicEnumValuer` interface, which downstream generic consumers (validators, converters, JSON encoders) rely on. They are intentional and **MUST NOT be deleted** even when they look like trivial conversions.
-
-```go
-package status
-
-import "github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
 
 // --- Value accessors (BasicEnumValuer) — ALL required by enuminf.BasicEnumValuer ---
 // DO NOT remove any of these even if they seem redundant; the interface needs them all.
-func (it Status) Value() byte         { return byte(it) }
-func (it Status) ValueByte() byte     { return byte(it) }
-func (it Status) ValueInt() int       { return int(it) }
-func (it Status) ValueInt8() int8     { return int8(it) }
-func (it Status) ValueInt16() int16   { return int16(it) }
-func (it Status) ValueUInt16() uint16 { return uint16(it) }
-func (it Status) ValueInt32() int32   { return int32(it) }
-func (it Status) ValueString() string { return BasicEnumImpl.ToNumberString(it.Value()) }
+func (it Variant) Value() byte         { return byte(it) }
+func (it Variant) ValueByte() byte     { return byte(it) }
+func (it Variant) ValueInt() int       { return int(it) }
+func (it Variant) ValueInt8() int8     { return int8(it) }
+func (it Variant) ValueInt16() int16   { return int16(it) }
+func (it Variant) ValueUInt16() uint16 { return uint16(it) }
+func (it Variant) ValueInt32() int32   { return int32(it) }
+func (it Variant) ValueString() string { return BasicEnumImpl.ToNumberString(it.Value()) }
 
 // --- Naming ---
-func (it Status) Name() string           { return BasicEnumImpl.ToEnumString(it.Value()) }
-func (it Status) String() string         { return BasicEnumImpl.ToEnumString(it.Value()) }
-func (it Status) TypeName() string       { return BasicEnumImpl.TypeName() }
-func (it Status) NameValue() string      { return BasicEnumImpl.NameWithValue(it.Value()) }
-func (it Status) ToNumberString() string { return BasicEnumImpl.ToNumberString(it.Value()) }
+func (it Variant) Name() string           { return BasicEnumImpl.ToEnumString(it.Value()) }
+func (it Variant) String() string         { return BasicEnumImpl.ToEnumString(it.Value()) }
+func (it Variant) TypeName() string       { return BasicEnumImpl.TypeName() }
+func (it Variant) NameValue() string      { return BasicEnumImpl.NameWithValue(it.Value()) }
+func (it Variant) ToNumberString() string { return BasicEnumImpl.ToNumberString(it.Value()) }
 
 // --- Equality ---
-func (it Status) IsNameEqual(name string) bool { return it.Name() == name }
-func (it Status) IsAnyNamesOf(names ...string) bool {
+func (it Variant) IsNameEqual(name string) bool { return it.Name() == name }
+func (it Variant) IsAnyNamesOf(names ...string) bool {
     n := it.Name()
     for _, name := range names {
         if name == n {
@@ -202,61 +183,61 @@ func (it Status) IsAnyNamesOf(names ...string) bool {
     return false
 }
 
-// --- Valid / Invalid ---
-func (it Status) IsValid() bool   { return it != Invalid }
-func (it Status) IsInvalid() bool { return it == Invalid }
+// --- Valid / Invalid (test against sentinel — see §4.1) ---
+func (it Variant) IsValid() bool   { return it != Invalid }
+func (it Variant) IsInvalid() bool { return it == Invalid }
 
 // --- Range info (BasicEnumer) ---
-func (it Status) RangeNamesCsv() string            { return BasicEnumImpl.RangeNamesCsv() }
-func (it Status) MinMaxAny() (min, max any)        { return BasicEnumImpl.MinMaxAny() }
-func (it Status) MinValueString() string           { return BasicEnumImpl.MinValueString() }
-func (it Status) MaxValueString() string           { return BasicEnumImpl.MaxValueString() }
-func (it Status) MaxInt() int                      { return BasicEnumImpl.MaxInt() }
-func (it Status) MinInt() int                      { return BasicEnumImpl.MinInt() }
-func (it Status) RangesDynamicMap() map[string]any { return BasicEnumImpl.RangesDynamicMap() }
-func (it Status) AllNameValues() []string          { return BasicEnumImpl.AllNameValues() }
-func (it Status) IntegerEnumRanges() []int         { return BasicEnumImpl.IntegerEnumRanges() }
+func (it Variant) RangeNamesCsv() string            { return BasicEnumImpl.RangeNamesCsv() }
+func (it Variant) MinMaxAny() (min, max any)        { return BasicEnumImpl.MinMaxAny() }
+func (it Variant) MinValueString() string           { return BasicEnumImpl.MinValueString() }
+func (it Variant) MaxValueString() string           { return BasicEnumImpl.MaxValueString() }
+func (it Variant) MaxInt() int                      { return BasicEnumImpl.MaxInt() }
+func (it Variant) MinInt() int                      { return BasicEnumImpl.MinInt() }
+func (it Variant) RangesDynamicMap() map[string]any { return BasicEnumImpl.RangesDynamicMap() }
+func (it Variant) AllNameValues() []string          { return BasicEnumImpl.AllNameValues() }
+func (it Variant) IntegerEnumRanges() []int         { return BasicEnumImpl.IntegerEnumRanges() }
 
 // --- OnlySupportedNamesErrorer ---
-func (it Status) OnlySupportedErr(names ...string) error {
+func (it Variant) OnlySupportedErr(names ...string) error {
     return BasicEnumImpl.OnlySupportedErr(names...)
 }
-func (it Status) OnlySupportedMsgErr(message string, names ...string) error {
+func (it Variant) OnlySupportedMsgErr(message string, names ...string) error {
     return BasicEnumImpl.OnlySupportedMsgErr(message, names...)
 }
 
 // --- Format — placeholder keys: {type-name}, {name}, {value} ---
-func (it Status) Format(format string) string {
+func (it Variant) Format(format string) string {
     return BasicEnumImpl.Format(format, it.Value())
 }
 
 // --- Type-specific (BasicByteEnumer) ---
-func (it Status) MaxByte() byte      { return BasicEnumImpl.Max() }
-func (it Status) MinByte() byte      { return BasicEnumImpl.Min() }
-func (it Status) RangesByte() []byte { return BasicEnumImpl.Ranges() }
+func (it Variant) MaxByte() byte      { return BasicEnumImpl.Max() }
+func (it Variant) MinByte() byte      { return BasicEnumImpl.Min() }
+func (it Variant) RangesByte() []byte { return BasicEnumImpl.Ranges() }
 
 // --- Range validation ---
-func (it Status) IsValidRange() bool           { return BasicEnumImpl.IsValidRange(it.Value()) }
-func (it Status) IsInvalidRange() bool         { return !it.IsValidRange() }
-func (it Status) RangesInvalidMessage() string { return BasicEnumImpl.RangesInvalidMessage() }
-func (it Status) RangesInvalidErr() error      { return BasicEnumImpl.RangesInvalidErr() }
+func (it Variant) IsValidRange() bool           { return BasicEnumImpl.IsValidRange(it.Value()) }
+func (it Variant) IsInvalidRange() bool         { return !it.IsValidRange() }
+func (it Variant) RangesInvalidMessage() string { return BasicEnumImpl.RangesInvalidMessage() }
+func (it Variant) RangesInvalidErr() error      { return BasicEnumImpl.RangesInvalidErr() }
 
 // --- String ranges ---
-func (it Status) StringRanges() []string    { return BasicEnumImpl.StringRanges() }
-func (it Status) StringRangesPtr() []string { return BasicEnumImpl.StringRangesPtr() }
+func (it Variant) StringRanges() []string    { return BasicEnumImpl.StringRanges() }
+func (it Variant) StringRangesPtr() []string { return BasicEnumImpl.StringRangesPtr() }
 
 // --- JSON ---
-func (it Status) MarshalJSON() ([]byte, error) {
+func (it Variant) MarshalJSON() ([]byte, error) {
     return BasicEnumImpl.ToEnumJsonBytes(it.Value())
 }
-func (it *Status) UnmarshalJSON(data []byte) error {
+func (it *Variant) UnmarshalJSON(data []byte) error {
     val, err := it.UnmarshallEnumToValue(data)
     if err == nil {
-        *it = Status(val)
+        *it = Variant(val)
     }
     return err
 }
-func (it Status) UnmarshallEnumToValue(data []byte) (byte, error) {
+func (it Variant) UnmarshallEnumToValue(data []byte) (byte, error) {
     return BasicEnumImpl.UnmarshallToValue(true, data)
 }
 // ⚠️ Spelling note (F-V12-06 fix):
@@ -268,23 +249,57 @@ func (it Status) UnmarshallEnumToValue(data []byte) (byte, error) {
 // — `enumimpl` exposes only the double-l names; renaming will not compile.
 
 // --- EnumType ---
-func (it Status) EnumType() enuminf.EnumTyper {
+func (it Variant) EnumType() enuminf.EnumTyper {
     return BasicEnumImpl.EnumType()
 }
 
 // --- Domain-specific predicates (CHANGE: per enum) ---
-func (it Status) IsPending() bool { return it == Pending }
-func (it Status) IsReady() bool   { return it == Ready }
-func (it Status) IsFailed() bool  { return it == Failed }
+func (it Variant) IsPending() bool { return it == Pending }
+func (it Variant) IsReady() bool   { return it == Ready }
+func (it Variant) IsFailed() bool  { return it == Failed }
 ```
 
-### Why so many methods?
+> 🧱 **F-NEW-07 — Why so many `Value<Type>()` methods?**
+> Every method in the *Value accessors* block is **REQUIRED** to satisfy the generic `enuminf.BasicEnumValuer` interface, which downstream generic consumers (validators, converters, JSON encoders) rely on. They are intentional and **MUST NOT be deleted** even when they look like trivial conversions.
 
-This is the **explicit-API** pillar — every supported operation is a named method, so callers do not need to know which interface they are satisfying. IDE autocomplete on a `Status` value lists every available query.
+### 4.3 Step 2 — `vars.go` (Ranges + BasicEnumImpl)
 
-### Predicate file-split rule
+Define the human-readable name slice and instantiate the impl:
 
-Predicate methods (`Is<Name>()`) **<20 lines each** may share `[Type].go`. Once you have **>6 predicates** OR any single predicate **exceeds 20 lines**, split each into its own `Is<Name>.go` file per [Pillar 1 of the design philosophy](./02-design-philosophy.md#pillar-1--one-file-per-function). This avoids file-explosion for small enums while preserving the one-file-per-function rule for non-trivial method sets.
+```go
+package status
+
+import "github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
+
+var (
+    Ranges = [...]string{                       // CHANGE: keys must match consts above
+        Invalid: "Invalid",
+        Pending: "Pending",
+        Ready:   "Ready",
+        Failed:  "Failed",
+    }
+
+    // Recommended: DefaultAllCases derives the type name from the first item
+    // via the engine itself (no internal-package import needed) AND registers
+    // the "all cases" slice for downstream tooling.
+    BasicEnumImpl = enumimpl.New.BasicByte.DefaultAllCases(Invalid, Ranges[:])
+)
+```
+
+> ⚠️ **Do NOT import `core-v9/internal/reflectinternal`.** It lives behind Go's `internal/` boundary and is not importable from this module. Earlier drafts of this spec showed `reflectinternal.TypeName(Invalid)` — that example was unrunnable. Use one of the supported patterns instead:
+>
+> | Pattern | Use when |
+> |---|---|
+> | `enumimpl.New.BasicByte.DefaultAllCases(Invalid, Ranges[:])` | **Recommended.** Engine derives type name from `Invalid`'s reflected type. |
+> | `enumimpl.New.BasicByte.UsingTypeSlice("Variant", Ranges[:])` | You'd rather pass the type name as a string literal. |
+
+### 4.4 Why so many methods?
+
+This is the **explicit-API** pillar — every supported operation is a named method, so callers do not need to know which interface they are satisfying. IDE autocomplete on a `Variant` value lists every available query.
+
+### 4.5 Predicate file-split guideline
+
+Predicate methods (`Is<Name>()`) generally stay in `<TypeName>.go` alongside the rest of the method set, regardless of count — the largest enum in the repo (`pathpatterntype`, 113 constants) keeps every predicate in `Variant.go`. If a single predicate body grows past ~20 lines (rare — usually it implies the predicate should be extracted to a small helper), split *that one* into its own `Is<Name>.go` file per [Pillar 1 of the design philosophy](./02-design-philosophy.md#pillar-1--one-file-per-function). Otherwise, prefer cohesion over file fan-out.
 
 ---
 
@@ -307,22 +322,31 @@ Also swap `enumimpl.New.BasicByte` for the matching factory (see next section).
 
 ## 6. Factory Method Reference
 
-Each `enumimpl.New.Basic<Type>` factory exposes the same constructor surface:
+Each `enumimpl.New.Basic<Type>` factory exposes the following constructor surface. The `*AllCases` variants additionally register the slice as the canonical "all cases" list — required by some downstream tooling (test registries, validators).
 
 | Method | Description |
 |---|---|
-| `UsingTypeSlice(typeName, names[])` | Contiguous iota from a string slice (most common) |
-| `Default(firstItem, names[])` | Same, but infers `typeName` via reflection on `firstItem` |
+| `UsingTypeSlice(typeName, names[])` | Contiguous iota from a string slice; type name passed as a literal |
+| `UsingFirstItemSliceAllCases(firstItem, names[])` | Contiguous; engine derives type name from `firstItem` AND registers all-cases slice |
+| `UsingFirstItemSliceAliasMap(firstItem, names[], aliasMap)` | Contiguous + alias map; engine derives type name |
+| `Default(firstItem, names[])` | Contiguous; engine derives type name from `firstItem` |
+| `DefaultAllCases(firstItem, names[])` | **Recommended for the standard recipe** — `Default` + all-cases registration |
 | `DefaultWithAliasMap(firstItem, names[], aliasMap)` | Contiguous + alias name → canonical name lookup |
-| `CreateUsingMap(typeName, map[T]string)` | Non-contiguous — explicit value-to-name pairs |
-| `CreateUsingMapPlusAliasMap(typeName, map[T]string, aliasMap)` | Explicit values + aliases |
+| `DefaultWithAliasMapAllCases(firstItem, names[], aliasMap)` | `DefaultWithAliasMap` + all-cases registration |
+| `CreateUsingMapPlusAliasMap(typeName, map[T]string, aliasMap)` | Sparse / explicit values + aliases |
+| `CreateUsingSlicePlusAliasMapOptions(...)` | Slice form + alias map + extra options |
+| `CreateUsingStringersSpread(...)` | Variadic `fmt.Stringer` form (used when names already exist as enum-stringer values) |
+
+> **Removed from earlier drafts:** `CreateUsingMap(typeName, map[T]string)` is not used anywhere in the codebase and has been dropped from the recommended surface. If you genuinely need sparse value-to-name pairs without aliases, pass an empty alias map to `CreateUsingMapPlusAliasMap`.
 
 ### When to pick which
 
-- **`UsingTypeSlice`** — your enum is contiguous (`iota`-style) and you already have the type name string.
-- **`Default`** — same but you'd rather have the impl reflect-derive `"Status"` from the first value.
-- **`CreateUsingMap`** — sparse / explicit values (e.g. wire-protocol codes like `0x10, 0x20, 0xFF`).
+- **`DefaultAllCases`** — the **default choice** for a new contiguous-iota enum. Engine derives the type name; downstream tooling sees the all-cases slice.
+- **`UsingTypeSlice`** — same as above but you'd rather pass `"Variant"` as a string literal (no reflection on the first item).
+- **`UsingFirstItemSliceAllCases` / `Default`** — variants when you do not need all-cases registration or want a smaller surface.
 - **`*WithAliasMap` / `*PlusAliasMap`** — wire format accepts multiple synonyms (e.g. `"ok"`, `"OK"`, `"success"` all map to `Ready`).
+- **`CreateUsingMapPlusAliasMap`** — sparse / explicit values (e.g. wire-protocol codes like `0x10, 0x20, 0xFF`).
+- **`CreateUsingStringersSpread`** — bridging an existing set of `fmt.Stringer` values into the enum engine.
 
 ---
 
@@ -366,15 +390,17 @@ Do **not** compare via `Value()` unless you need to interop with a numeric API.
 
 ## 8. Testing an Enum
 
-A new enum needs three test groups under `tests/integratedtests/<pkg>tests/`:
+Enums are exercised through the **shared creation-tests registry** under `tests/creationtests/`, **not** per-enum test directories. (Earlier drafts of this spec referenced `tests/integratedtests/<pkg>tests/`; that path has never existed in this repo — see audit cycle 1, finding C-CVS-01.)
 
-| Test family | Style | Verifies |
-|---|---|---|
-| `<EnumType>_Verification_test.go` | A (`CaseV1` + `args.Map`) | Range names, min/max, format strings, JSON round-trip |
-| `<EnumType>_NilReceiver_test.go` | `CaseNilSafe` | Pointer receiver methods (`UnmarshalJSON`) don't panic on nil |
-| `<EnumType>_OnlySupportedErr_test.go` | A | Error formatting is stable (regex-tested) |
+The registry pattern works as follows:
 
-See [`13-testing-patterns.md`](./13-testing-patterns.md) and [`/spec/06-testing-guidelines/02-test-case-types.md`](../06-testing-guidelines/02-test-case-types.md).
+1. **Register your enum's first item + Ranges slice** in `tests/creationtests/allBasicEnumsCollection.go`. The shared test driver iterates the collection and runs the standard verification matrix against every entry.
+2. **Standard verification** (range names, min/max, format strings, JSON round-trip, nil-receiver safety, `OnlySupportedErr` formatting) is applied by the shared driver — **you do not write per-enum test files**.
+3. **Domain-specific predicates** (`IsZip()`, `IsV4()`, etc.) — if they have non-trivial logic — get their own test in the predicate's package, mirroring the predicate file (`tests/creationtests/<pkg>tests/Is<Name>_test.go`). Pure delegation predicates (`return it == X`) are covered transitively by the registry sweep and do not need dedicated tests.
+
+> **Why a shared registry?** Every enum implements the same interface surface (`StandardEnumer` + `Basic<Type>Enumer`). Writing the same three test files per enum × 71 enums duplicates ~3 000 lines of boilerplate; a single table-driven driver provides identical coverage with one source of truth.
+
+See [`13-testing-patterns.md`](./13-testing-patterns.md) and [`/spec/06-testing-guidelines/02-test-case-types.md`](../06-testing-guidelines/02-test-case-types.md) for the underlying `CaseV1` / `CaseNilSafe` style guides.
 
 ---
 
@@ -382,12 +408,13 @@ See [`13-testing-patterns.md`](./13-testing-patterns.md) and [`/spec/06-testing-
 
 | Mistake | Why bad | Fix |
 |---|---|---|
-| First constant is not `Invalid` | Zero value of the type isn't catchable as "unset" | Always start with `Invalid Status = iota` |
+| First iota constant doesn't occupy the zero value | An unset variable can't be detected as "invalid" | Make the first constant the **sentinel** (`Invalid`, `Default`, `Unspecified`, `Uninitialized`, …) — see §4.1 |
+| Importing `core-v9/internal/reflectinternal` | Cross-module `internal/` import is forbidden by Go and won't compile | Use `enumimpl.New.Basic<T>.DefaultAllCases(firstItem, Ranges[:])` — the engine derives the type name |
 | Forgetting `Ranges[:]` (passing `Ranges` instead of `Ranges[:]`) | Array vs slice — compile error | Always pass `Ranges[:]` |
 | Implementing only `Value()` and `Name()` | Doesn't satisfy `BasicEnumer` — won't pass to functions expecting the interface | Implement the full method set in §4 |
 | Hand-writing JSON marshalling | Drifts from canonical format used elsewhere | Always delegate to `BasicEnumImpl.ToEnumJsonBytes` / `UnmarshallToValue` |
 | Comparing via `Value()` | Loses type safety and IDE goto-definition | Use `==` directly on the enum type |
-| Skipping nil-receiver tests for `*UnmarshalJSON` | Panics in production when JSON parser hands a nil receiver | Add a `CaseNilSafe` test |
+| Writing per-enum test files under `tests/integratedtests/...` | That path doesn't exist; tests use the shared registry under `tests/creationtests/` | Register the enum in `allBasicEnumsCollection.go` — see §8 |
 
 ---
 

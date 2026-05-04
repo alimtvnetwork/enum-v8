@@ -9,6 +9,22 @@
 
 ---
 
+## [spec-v0.24.0] — 2026-05-04 (Cycle 3 closed — §05 enum-system at 100 % verifiable)
+
+### Fixed
+- **`spec/01-app/05-enum-system.md`** — resolves C-CVS-03..05 + D-CVS-14..19 from Cycle 3 in a single pass. Lifts §05 from **47.1 % → 100 %** of its verifiable subset; **❌ contradiction count: 3 → 0**.
+  - **§1 architecture diagram**: replaced "consts.go + vars.go + `<Type>.go`" 3-file layout with the 2-file layout (`<TypeName>.go` + `vars.go`) that every enum package actually uses; added a callout that the type is conventionally named `Variant` (64 / 71 packages) and the file is named after the type.
+  - **New §4.1 "Sentinel-first rule"** (resolves **C-CVS-03** + **C-CVS-05**): reframed the "first const must be `Invalid`" rule as "**the first iota constant must occupy the zero value of the backing type**", with a sentinel-name table (`Invalid` / `Unspecified` / `Uninitialized` / `Default` / domain term) showing real packages for each form. Documented the signed-int exception (`InvalidIndex Variant = -1` in `inttype`) explicitly.
+  - **§4.2 (was Step 1 + Step 3, resolves D-CVS-14 + D-CVS-15)**: collapsed into a single `Variant.go` recipe combining type + iota + full method set. Renamed every example from `Status` → `Variant` to mirror the actual repo convention.
+  - **§4.3 (was Step 2, resolves C-CVS-04 + D-CVS-18)**: deleted the `core-v9/internal/reflectinternal` import and `reflectinternal.TypeName(Invalid)` call (forbidden cross-module `internal/`). Replaced with `enumimpl.New.BasicByte.DefaultAllCases(Invalid, Ranges[:])` as the recommended pattern, plus an alternate `UsingTypeSlice("Variant", Ranges[:])` fallback. Added an explicit warning callout.
+  - **§4.5 "Predicate file-split guideline" (resolves D-CVS-19)**: softened the hard-rule (>6 OR >20 lines triggers split) to a guideline that matches `pathpatterntype/Variant.go` reality (113 constants, all predicates kept in one file).
+  - **§6 Factory Method Reference (resolves D-CVS-16)**: expanded the table from 5 → 10 methods to cover the actually-used surface (`UsingFirstItemSliceAllCases`, `DefaultAllCases`, `DefaultWithAliasMapAllCases`, `UsingFirstItemSliceAliasMap`, `CreateUsingSlicePlusAliasMapOptions`, `CreateUsingStringersSpread`); dropped the unused `CreateUsingMap` row with an explanatory note. Updated "When to pick which" to put `DefaultAllCases` first.
+  - **§8 Testing an Enum (resolves D-CVS-17)**: rewrote the "three test files per enum under `tests/integratedtests/<pkg>tests/`" pattern to the actual shared-registry approach under `tests/creationtests/` (registration in `allBasicEnumsCollection.go`, table-driven driver). Mirrors the C-CVS-01 fix already applied to §03.
+  - **§9 Common Mistakes**: replaced the "First constant is not `Invalid`" row with a sentinel-aware version; added rows for the `internal/reflectinternal` mistake and the wrong test-folder mistake.
+
+### Changed
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — moved C-CVS-03..05 + D-CVS-14..19 to **Resolved** (9 entries); cleared the **Open drift findings** table (now empty); added Cycle 3 (closed) row at **100.0 %** verifiable on §05; updated targets to ✅ for the ≥95 % aggregate goal and ✅ for zero-contradictions.
+
 ## [spec-v0.23.0] — 2026-05-04 (Cycle 3 baseline — §05 enum-system audited)
 
 ### Added
