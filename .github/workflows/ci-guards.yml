@@ -18,7 +18,23 @@ permissions:
   contents: read
 
 jobs:
+  python-tests:
+    # Unit tests for the CI guard scripts themselves. Runs first so a broken
+    # gate script fails fast before the slower lint/collision jobs spend
+    # CI minutes producing meaningless results.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run CI guard script tests
+        run: python3 -m unittest discover -s scripts/ci -p 'test_*.py' -v
+
   collision-audit:
+    needs: python-tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,6 +47,7 @@ jobs:
         run: python3 scripts/ci/check-collisions.py .
 
   lint-baseline-diff:
+    needs: python-tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
