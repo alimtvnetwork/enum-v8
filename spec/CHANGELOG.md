@@ -9,6 +9,11 @@
 
 ---
 
+## [spec-v0.28.0] — 2026-05-04 (Tooling — surface blocked-package compile diagnostics inline)
+
+### Fixed
+- **`scripts/CoverageCompileCheck.psm1`** — when a test package fails the pre-coverage compile check, the actual `go test` diagnostic is now echoed inline directly under the "✗ Blocked: …" line (capped at 25 lines per package, with a pointer to `data/coverage/blocked-packages.txt` for the full text). Previously the only on-screen signal was the package name, forcing the user to open the saved blocked-packages report to diagnose. Applies to both sync and parallel modes via a new `Write-BlockedDiagnostic` helper. **Closes operational task AF.**
+
 ## [spec-v0.27.0] — 2026-05-04 (Cycle 5 baseline — §07 conditional-and-utilities audited)
 
 ### Added
