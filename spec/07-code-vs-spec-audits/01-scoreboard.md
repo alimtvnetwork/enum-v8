@@ -19,10 +19,11 @@
 | 2026-05-04 | 3 (closed) | `01-app/05-enum-system.md` | 18 | 17 | 0 | 0 | 1 | **100.0%** *(verifiable)* |
 | 2026-05-04 | 4 (baseline) | `01-app/06-data-structures.md` | 20 | 5 | 6 | 3 | 6 | **35.7%** *(verifiable)* |
 | 2026-05-04 | 4 (closed) | `01-app/06-data-structures.md` | 20 | 14 | 0 | 0 | 6 | **100.0%** *(verifiable)* |
+| 2026-05-04 | 5 (baseline) | `01-app/07-conditional-and-utilities.md` | 17 | 0 | 0 | 0 | 17 | **N/A** *(no verifiable subset)* |
 
 ## Open drift findings
 
-_None._ All 4 audited sections (§03, §04, §05, §06) are at 100 % of their verifiable subsets. Remaining ❓s — 7 on §04, 1 on §05, 6 on §06 — require upstream `core-v9` source (task **AB**).
+_None._ All 4 audited-and-closed sections (§03, §04, §05, §06) are at 100 % of their verifiable subsets. §07 has no verifiable subset (zero `enum-v1` consumers). Remaining ❓s — 17 on §07, 7 on §04, 1 on §05, 6 on §06 — require upstream `core-v9` source (task **AB**).
 
 ## Resolved drift findings
 
@@ -75,7 +76,7 @@ _None._ All 4 audited sections (§03, §04, §05, §06) are at 100 % of their ve
 | ✅ Resolve §05 contradictions C-CVS-03..05 (HIGH) + apply D-CVS-14..19 | **100.0** verifiable on §05 | 2026-05-04 |
 | ✅ Cycle 4 baseline on §06 | **35.7** verifiable on §06 | 2026-05-04 |
 | ✅ Resolve §06 contradictions C-CVS-06..08 + apply D-CVS-20..25 | **100.0** verifiable on §06 | 2026-05-04 |
-| 🚧 Fetch `core-v9` source (task **AB**) → resolve 7 ❓ on §04 + 1 ❓ on §05 + 6 ❓ on §06 | — | pending |
-| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **4/16 done** |
+| 🚧 Fetch `core-v9` source (task **AB**) → resolve 17 ❓ on §07 + 7 ❓ on §04 + 1 ❓ on §05 + 6 ❓ on §06 | — | pending |
+| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **5/16 baseline (4 closed)** |
 | 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
 | 🎯 Zero ❌ contradictions | 0 | ✅ |

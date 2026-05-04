@@ -9,6 +9,14 @@
 
 ---
 
+## [spec-v0.27.0] — 2026-05-04 (Cycle 5 baseline — §07 conditional-and-utilities audited)
+
+### Added
+- **`spec/07-code-vs-spec-audits/06-cycle5-conditional-and-utilities.md`** — Cycle 5 baseline audit of `spec/01-app/07-conditional-and-utilities.md`. All 17 claims (covering `conditional`, `isany`, `issetter`, `regexnew`, `coremath`, `corecmp`, `coresort`, `corefuncs`, `namevalue`, `keymk`) classified as **❓ unverifiable**: zero `enum-v1` consumers and no source mirrored under `cross-repo/core-v8/`. No drift or contradiction provable from `enum-v1` alone — verification deferred to task **AB** (fetch upstream `core-v9` source). Section coverage advances **4 / 16 → 5 / 16**; verifiable-match rate unchanged.
+
+### Changed
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — added Cycle 5 (baseline) row marked **N/A** *(no verifiable subset)*; updated section-coverage milestone to **5/16**; restated **AB** task as now spanning **17 §07 + 7 §04 + 1 §05 + 6 §06** ❓ claims.
+
 ## [spec-v0.26.0] — 2026-05-04 (Cycle 4 closed — §06 data-structures at 100 % verifiable)
 
 ### Fixed
