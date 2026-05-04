@@ -140,6 +140,61 @@ msg := errcore.MessageVarMap("validation failed", map[string]any{
 
 These produce **strings**, not errors. Wrap with `errors.New(msg)` or pass to `RawErrorType.Fmt` if you need an error value.
 
+### 1.5 Reference Helpers — `MessageWithRef` and `RangeNotMeet`
+
+Two additional **string** producers cover the common "attach a reference table to a package-level error template" pattern used throughout `*/vars.go`:
+
+```go
+// MessageWithRef(name, ref) → "name = <ref>"  (string, not error)
+mapReferenceMessage := errcore.MessageWithRef(
+    "mapping list",
+    isSetterWithVariantMap)
+// → see onofftype/vars.go:86, promptclitype/vars.go:112
+
+// RangeNotMeet(label, min, max, ranges) → range-violation message
+errMsg := errcore.RangeNotMeet(
+    errcore.ComparatorShouldBeWithinRangeType.String(),
+    corecomparator.Min(),
+    corecomparator.Max(),
+    corecomparator.Ranges())
+// → see internal/messages/messages.go
+```
+
+Use these to build a **package-level constant message** once at init time, then reference it from every constructor / validator that needs the same wording. This keeps error text consistent across all enums in a package.
+
+### 1.6 Accumulating Errors — `RawErrCollection`
+
+When one operation can produce **many independent failures** (e.g. probing several Windows registry keys), use `errcore.RawErrCollection` as a struct field instead of returning early on the first error:
+
+```go
+type windowsSystemDetailGenerator struct {
+    rawErrCollection errcore.RawErrCollection // see osdetect/windowsSystemDetailGenerator_windows.go:16
+    rootRegistryKey  registry.Key
+}
+
+// Append errors as you discover them; flush once at the end.
+g.rawErrCollection.Add(err1)
+g.rawErrCollection.Add(err2)
+finalErr := g.rawErrCollection.ToError() // nil if no errors were appended
+```
+
+`RawErrCollection` follows the same nil-safety rules as the merge functions (§3.2): flushing an empty collection yields `nil`, never a non-nil wrapper around zero errors.
+
+### 1.7 Conversion Helpers — `ToString` and `ToError`
+
+For log/JSON serialisation where a `nil` error must render as an empty value:
+
+```go
+// ToString(err) → "" if err == nil, err.Error() otherwise
+errStr := errcore.ToString(err)            // see osdetect/vars.go:111
+payload.Error = errcore.ToString(err)      // safe to call without a nil check
+
+// ToError(s) — inverse for deserialised payloads
+err := errcore.ToError(payload.Error)      // returns nil if s == ""
+```
+
+Use `ToString` instead of `if err != nil { ... } else { "" }` boilerplate at every JSON boundary.
+
 ---
 
 ## 2. Internal Contract — `errcoreinf`
