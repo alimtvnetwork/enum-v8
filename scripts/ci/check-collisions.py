@@ -138,29 +138,40 @@ def main(argv: list[str]) -> int:
         print("::warning::No .go files matched", file=sys.stderr)
         return 2
 
-    exact: dict[str, list[tuple[str, int, str]]] = defaultdict(list)
-    case_ins: dict[str, set[str]] = defaultdict(set)
+    # Group files by package directory — collisions are scoped per Go package,
+    # not module-wide (different packages legally reuse identifier names).
+    by_pkg: dict[str, list[Path]] = defaultdict(list)
+    for f in files:
+        by_pkg[str(f.parent)].append(f)
+
+    cross: dict[str, dict[str, list[tuple[str, int, str]]]] = {}
+    case_collisions: dict[str, dict[str, list[str]]] = {}
     intra: dict[tuple[str, str], list[tuple[int, str]]] = defaultdict(list)
 
-    for f in files:
-        seen_in_file: dict[str, list[tuple[int, str]]] = defaultdict(list)
-        for kind, name, lineno in parse_decls(f):
-            exact[name].append((str(f), lineno, kind))
-            case_ins[name.lower()].add(name)
-            seen_in_file[name].append((lineno, kind))
-        for name, sites in seen_in_file.items():
-            if len(sites) > 1:
-                intra[(name, str(f))] = sites
+    for pkg, pkg_files in by_pkg.items():
+        exact: dict[str, list[tuple[str, int, str]]] = defaultdict(list)
+        case_ins: dict[str, set[str]] = defaultdict(set)
+        for f in pkg_files:
+            seen_in_file: dict[str, list[tuple[int, str]]] = defaultdict(list)
+            for kind, name, lineno in parse_decls(f):
+                exact[name].append((str(f), lineno, kind))
+                case_ins[name.lower()].add(name)
+                seen_in_file[name].append((lineno, kind))
+            for name, sites in seen_in_file.items():
+                if len(sites) > 1:
+                    intra[(name, str(f))] = sites
 
-    cross = {n: sites for n, sites in exact.items()
-             if len({s[0] for s in sites}) > 1}
-    case_collisions = {k: sorted(v) for k, v in case_ins.items()
-                       if len(v) > 1 and any(len({s[0] for s in exact[n]}) >= 1 for n in v)}
-    # Filter case collisions to those that actually span multiple files.
-    case_collisions = {
-        k: variants for k, variants in case_collisions.items()
-        if len({s[0] for n in variants for s in exact[n]}) > 1
-    }
+        pkg_cross = {n: sites for n, sites in exact.items()
+                     if len({s[0] for s in sites}) > 1}
+        if pkg_cross:
+            cross[pkg] = pkg_cross
+        pkg_case = {k: sorted(v) for k, v in case_ins.items()
+                    if len(v) > 1 and len({s[0] for n in v for s in exact[n]}) > 1}
+        if pkg_case:
+            case_collisions[pkg] = {k: v for k, v in pkg_case.items()}
+            # Stash exact map for the report below.
+            case_collisions[pkg]["__exact__"] = exact  # type: ignore[assignment]
+
 
     failed = False
 
