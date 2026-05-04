@@ -390,15 +390,17 @@ Do **not** compare via `Value()` unless you need to interop with a numeric API.
 
 ## 8. Testing an Enum
 
-A new enum needs three test groups under `tests/integratedtests/<pkg>tests/`:
+Enums are exercised through the **shared creation-tests registry** under `tests/creationtests/`, **not** per-enum test directories. (Earlier drafts of this spec referenced `tests/integratedtests/<pkg>tests/`; that path has never existed in this repo — see audit cycle 1, finding C-CVS-01.)
 
-| Test family | Style | Verifies |
-|---|---|---|
-| `<EnumType>_Verification_test.go` | A (`CaseV1` + `args.Map`) | Range names, min/max, format strings, JSON round-trip |
-| `<EnumType>_NilReceiver_test.go` | `CaseNilSafe` | Pointer receiver methods (`UnmarshalJSON`) don't panic on nil |
-| `<EnumType>_OnlySupportedErr_test.go` | A | Error formatting is stable (regex-tested) |
+The registry pattern works as follows:
 
-See [`13-testing-patterns.md`](./13-testing-patterns.md) and [`/spec/06-testing-guidelines/02-test-case-types.md`](../06-testing-guidelines/02-test-case-types.md).
+1. **Register your enum's first item + Ranges slice** in `tests/creationtests/allBasicEnumsCollection.go`. The shared test driver iterates the collection and runs the standard verification matrix against every entry.
+2. **Standard verification** (range names, min/max, format strings, JSON round-trip, nil-receiver safety, `OnlySupportedErr` formatting) is applied by the shared driver — **you do not write per-enum test files**.
+3. **Domain-specific predicates** (`IsZip()`, `IsV4()`, etc.) — if they have non-trivial logic — get their own test in the predicate's package, mirroring the predicate file (`tests/creationtests/<pkg>tests/Is<Name>_test.go`). Pure delegation predicates (`return it == X`) are covered transitively by the registry sweep and do not need dedicated tests.
+
+> **Why a shared registry?** Every enum implements the same interface surface (`StandardEnumer` + `Basic<Type>Enumer`). Writing the same three test files per enum × 71 enums duplicates ~3 000 lines of boilerplate; a single table-driven driver provides identical coverage with one source of truth.
+
+See [`13-testing-patterns.md`](./13-testing-patterns.md) and [`/spec/06-testing-guidelines/02-test-case-types.md`](../06-testing-guidelines/02-test-case-types.md) for the underlying `CaseV1` / `CaseNilSafe` style guides.
 
 ---
 
