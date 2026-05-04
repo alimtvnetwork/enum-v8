@@ -91,7 +91,7 @@ func example() {
 
 ## 3. The `internal/` Boundary
 
-Go's compiler enforces that `internal/` packages can only be imported from packages **rooted at the `internal/` parent**. For `core-v8`, this means:
+Go's compiler enforces that `internal/` packages can only be imported from packages **rooted at the `internal/` parent**. For `core-v9`, this means:
 
 ```
 github.com/alimtvnetwork/core-v9/internal/...
