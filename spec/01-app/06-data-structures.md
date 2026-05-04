@@ -45,6 +45,8 @@
 
 Located at `coredata/coregeneric/`. Generic-first, built on Go 1.18+ type parameters.
 
+> ⚠️ **Upstream-only sub-package** *(audit Cycle 4)*: `coregeneric` has **zero consumers in `enum-v1`**. The API tables below reflect upstream `core-v9` documentation but cannot be cross-checked against any call site in this repo. Treat as upstream-reference until task **AB** verifies against `core-v9` source.
+
 ### 2.1 `Collection[T any]`
 
 Slice-backed collection with embedded `sync.Mutex`.
