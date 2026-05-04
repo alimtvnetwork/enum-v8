@@ -2,9 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 27.3 (verifiable subset)** *(2 sections audited)*
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 (verifiable subset)** *(2 sections audited, all verifiable claims matched)*
 
-> §03 closed at 12/12. §04 (error-system) audited in Cycle 2 with 18 claims: 3 ✅, 8 ⚠️ (spec is incomplete vs consumer usage), 7 ❓ (unverifiable without upstream `core-v9` source), 0 ❌. Score on the verifiable 11 = 27.3%. Sandbox lacks Go + upstream source; aspirational APIs intentionally marked ❓ rather than ❌ to avoid false contradictions. See [`03-cycle2-error-system.md`](./03-cycle2-error-system.md).
+> §03 closed at 12/12. §04 (error-system) extended in spec-v0.22.0 to document the 8 previously-undocumented APIs (`MustBeEmpty`, `RawErrCollection`, `ErrorRefOnly`, `CombineWithAnother`, `MessageWithRef`, `RangeNotMeet`, `ToError`/`ToString`, plus 4 missing `RawErrorType` examples). All 11 verifiable claims now match. 7 ❓ remain pending upstream `core-v9` source fetch (task **AB**).
 
 ## Cycle history
 
