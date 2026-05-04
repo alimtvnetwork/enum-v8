@@ -4,10 +4,10 @@
 // cross-repo/, dist/, build/, and .git*) and applies safe, idempotent
 // fixes to every .go file:
 //
-//   1. Trim trailing whitespace on every line.
-//   2. Collapse 3+ consecutive blank lines down to 2.
-//   3. Ensure file ends with exactly one trailing newline.
-//   4. Run gofmt-style formatting via go/format.Source.
+//  1. Trim trailing whitespace on every line.
+//  2. Collapse 3+ consecutive blank lines down to 2.
+//  3. Ensure file ends with exactly one trailing newline.
+//  4. Run gofmt-style formatting via go/format.Source.
 //
 // The fixer is conservative — only transformations whose output is
 // equivalent to the input under Go's lexical rules are applied. If
@@ -16,12 +16,14 @@
 // bracecheck can pinpoint the syntax issue.
 //
 // Flags:
-//   --dry-run   Report what would change without writing files.
+//
+//	--dry-run   Report what would change without writing files.
 //
 // Exit codes:
-//   0 — fixer ran cleanly (with or without changes).
-//   1 — at least one file failed to read or write.
-//   2 — bad CLI invocation.
+//
+//	0 — fixer ran cleanly (with or without changes).
+//	1 — at least one file failed to read or write.
+//	2 — bad CLI invocation.
 //
 // Designed to be invoked by scripts/CoveragePreChecks.psm1 and run.sh.
 package main

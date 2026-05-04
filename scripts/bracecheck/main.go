@@ -4,17 +4,18 @@
 // cross-repo/, and any path containing /testdata/) and verifies every
 // .go file:
 //
-//   1. Parses with go/parser.ParseFile (skips files with build-tag
-//      issues that wouldn't compile on the host platform anyway).
-//   2. Has balanced braces, brackets, and parens — a fast lexical
-//      check that catches mismatches the parser sometimes reports
-//      with confusing line numbers.
+//  1. Parses with go/parser.ParseFile (skips files with build-tag
+//     issues that wouldn't compile on the host platform anyway).
+//  2. Has balanced braces, brackets, and parens — a fast lexical
+//     check that catches mismatches the parser sometimes reports
+//     with confusing line numbers.
 //
 // Exit codes:
-//   0 — all files clean.
-//   1 — at least one file has a syntax or balance issue. Each issue
-//       is printed on stdout in the form:
-//         <relpath>:<line>:<col>: <message>
+//
+//	0 — all files clean.
+//	1 — at least one file has a syntax or balance issue. Each issue
+//	    is printed on stdout in the form:
+//	      <relpath>:<line>:<col>: <message>
 //
 // Designed to be invoked by scripts/CoveragePreChecks.psm1 and run.sh
 // before the slower coverage runner.
