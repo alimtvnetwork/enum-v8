@@ -84,7 +84,7 @@ jobs:
           (cd .. && zip -qr "$GITHUB_WORKSPACE/dist/enum-v1-${VERSION}-source.zip" \
               "$(basename "$GITHUB_WORKSPACE")" \
               -x "*/.git/*" "*/node_modules/*" "*/dist/*" "*/data/*" "*/tmp/*")
-          (cd dist && sha256sum * > checksums.txt)
+          (cd dist && sha256sum -- * > checksums.txt)
           ls -la dist/
 
       - name: Extract changelog entry
@@ -107,9 +107,9 @@ jobs:
             echo "" >> "$BODY"
             PREV_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]' | head -1 || true)
             RANGE="${PREV_TAG:+${PREV_TAG}..HEAD}"
-            FEATS=$(git log $RANGE --pretty=format:"- %s (%h)" --grep='^feat' -i || true)
-            FIXES=$(git log $RANGE --pretty=format:"- %s (%h)" --grep='^fix'  -i || true)
-            OTHER=$(git log $RANGE --pretty=format:"- %s (%h)" --grep='^refactor\|^chore\|^docs\|^ci\|^build\|^test\|^perf\|^style' -i || true)
+            FEATS=$(git log ${RANGE:-} --pretty=format:"- %s (%h)" --grep='^feat' -i || true)
+            FIXES=$(git log ${RANGE:-} --pretty=format:"- %s (%h)" --grep='^fix'  -i || true)
+            OTHER=$(git log ${RANGE:-} --pretty=format:"- %s (%h)" --grep='^refactor\|^chore\|^docs\|^ci\|^build\|^test\|^perf\|^style' -i || true)
             [ -n "$FEATS" ] && { echo "### Features";    echo "$FEATS"; echo ""; } >> "$BODY"
             [ -n "$FIXES" ] && { echo "### Bug Fixes";   echo "$FIXES"; echo ""; } >> "$BODY"
             [ -n "$OTHER" ] && { echo "### Maintenance"; echo "$OTHER"; echo ""; } >> "$BODY"
