@@ -56,13 +56,11 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ### Changed
 - Module path migrated from `gitlab.com/auk-go/enum` to
   `github.com/alimtvnetwork/enum-v1`.
-- **Core dependency renamed** `github.com/alimtvnetwork/core-v8` →
-  `github.com/alimtvnetwork/core-v8` across all 307 source files
-  (`go.mod`, all package imports, spec docs, CI configs, coverage
-  scripts, PR template). The `cross-repo/core-v8/` staging directory
-  name is intentionally retained — it tracks the upstream repo name,
-  not the module path. Pseudo-version pin
-  `v1.5.6-0.20260423064907-72bcd64c06b5` carries over unchanged.
+- **Note (cross-repo mirror):** the parent `enum-v1` repo renamed its
+  core dependency `github.com/alimtvnetwork/core-v8` →
+  `github.com/alimtvnetwork/core-v9`. This `core-v8` repo is the
+  legacy upstream and is **not** affected by that rename — its own
+  module path remains `github.com/alimtvnetwork/core-v8`.
 - Dependency `gitlab.com/auk-go/core` replaced with
   `github.com/alimtvnetwork/core-v8`, pinned to pseudo-version
   `v1.5.6-0.20260423064907-72bcd64c06b5` (commit `72bcd64` on
