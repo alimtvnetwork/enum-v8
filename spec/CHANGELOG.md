@@ -9,6 +9,21 @@
 
 ---
 
+## [spec-v0.18.0] — 2026-05-04 (open code-vs-spec audit phase)
+
+### Added
+- **`spec/07-code-vs-spec-audits/`** — NEW folder kicking off the implementation-vs-documentation drift audit phase. The spec-only cycle reached its ceiling (97.5–98.0 / 100, 0 open findings) at v0.17.1; this is the inverse: does the code match what the docs claim?
+  - `00-index.md` — scope rules + methodology (extract claims → locate evidence → verify ✅/⚠️/❌ → file findings).
+  - `01-scoreboard.md` — living drift scoreboard.
+  - `02-cycle1-import-conventions.md` — first cycle, audited `01-app/03-import-conventions.md` (12 claims).
+
+### Findings opened (Cycle 1)
+- 5 LOW drifts (D-CVS-01..05): stale `core-v8` prose in §03 that didn't get rewritten during the v8→v9 module rename.
+- 1 MED + 1 HIGH contradiction (C-CVS-01..02): §03 references a `tests/integratedtests/` directory that doesn't exist in this repo and an `internal/reflectinternal` import nobody uses.
+- Initial measured drift score: **41.7%** (5/12 matches). After applying the 5 LOW spec fixes this jumps to ~91.7%.
+
+---
+
 ## [spec-v0.17.1] — 2026-04-25 (close F-V16-01 — trust-boundary worked example)
 
 ### Added
