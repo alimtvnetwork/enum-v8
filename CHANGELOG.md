@@ -12,6 +12,24 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ## [Unreleased]
 
+### Fixed
+- **`scripts/CoverageRunner.psm1`** — pre-coverage compile check no longer
+  aborts with `Blocked: : no such file or directory`. Two root causes:
+  1. Test discovery was hard-coded to `./tests/integratedtests/...`, which
+     does not exist in this repo (tests live under `./tests/creationtests/`).
+     `go list` errors were being coerced into a single empty package path
+     and handed to `go test`. The probe now tries both directory names,
+     skips paths not present on disk, and filters `go list` warning/error
+     lines so only valid import paths reach the compile check.
+  2. The in-package-test scan hard-coded the `core-v9` module prefix when
+     stripping import paths to filesystem-relative paths. It now reads the
+     `module` line from `go.mod` so the same script works in `enum-v1`,
+     `core-v9`, and any other module.
+- **`scripts/CoverageRunner.psm1`, `scripts/CoverageCompileCheck.psm1`** —
+  `shortName` regex updated from `'.*integratedtests/?'` to
+  `'.*(integratedtests|creationtests)/?'` so blocked-package labels render
+  the trailing path segment in either layout.
+
 ### Added
 - **CI/CD pipeline** (`.github/workflows/ci.yml`) — SHA dedup, `golangci-lint`,
   `govulncheck`, 4-suite parallel test matrix, aggregated test summary,
