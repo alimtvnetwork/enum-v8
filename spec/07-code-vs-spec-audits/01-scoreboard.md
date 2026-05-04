@@ -20,17 +20,7 @@
 
 ## Open drift findings
 
-| ID | Title | Severity | Spec ref | Code ref | Resolution path |
-|----|-------|----------|----------|----------|-----------------|
-| C-CVS-03 | Spec mandates first const = `Invalid`; 10 enums use other sentinels | HIGH | `01-app/05-enum-system.md` §4 Step 1 | `compressformats`, `compresslevels`, `envtype`, `inttype`, `logtype`, `revokereason`, `scripttype`, `sqljointype`, `strtype`, `taskpriority` | Reframe as "sentinel first" with allowed names (`Invalid`, `Default`, `Unspecified`, `Uninitialized`, `InvalidIndex`) |
-| C-CVS-04 | Recipe imports `core-v9/internal/reflectinternal` (cross-module `internal/` is forbidden by Go) | HIGH | `01-app/05-enum-system.md` §4 Step 2 | zero packages do this | Replace with string-literal type name OR `DefaultAllCases(firstItem, ranges[:])` |
-| C-CVS-05 | "Zero-value sentinel" rule contradicted by `inttype.InvalidIndex Variant = -1` | HIGH | `01-app/05-enum-system.md` §4 Step 1 | `inttype/Variant.go` | Document the `-1` form for signed-int enums |
-| D-CVS-14 | Recipe says `<Type>.go` but actual filename is `Variant.go` in 64/71 packages | LOW | §4 Step 3 | every enum package | Document type-name + `Variant.go` convention |
-| D-CVS-15 | Recipe shows separate `consts.go`; no enum has one — type + iota + methods all in `<TypeName>.go` | MED | §4 | every enum package | Collapse Step 1 + Step 3 into single-file recipe |
-| D-CVS-16 | §6 factory table missing `*AllCases` family (10+1 call sites); `CreateUsingMap` listed but never used | MED | §6 | `enumimpl.New.BasicByte.{DefaultAllCases,DefaultWithAliasMapAllCases,UsingFirstItemSliceAllCases,UsingFirstItemSliceAliasMap,CreateUsingSlicePlusAliasMapOptions,CreateUsingStringersSpread}` | Add `*AllCases` rows; remove unused `CreateUsingMap` |
-| D-CVS-17 | §8 says tests live in `tests/integratedtests/<pkg>tests/` — same as C-CVS-01 | MED | §8 | `tests/creationtests/` shared registry | Mirror C-CVS-01 fix from §03 |
-| D-CVS-18 | `reflectinternal.TypeName(Invalid)` example unrunnable from `enum-v1` | MED | §4 Step 2 | zero usage | Replace with real pattern |
-| D-CVS-19 | "Predicate file-split rule (>6 OR >20 lines)" never enforced (`pathpatterntype` has 113 in one file) | LOW | §4 "Predicate file-split rule" | `pathpatterntype/Variant.go` | Soften to guideline matching practice |
+_None._ All 3 audited sections (§03, §04, §05) are at 100 % of their verifiable subsets. Remaining ❓s on §04 (7) and §05 (1) require upstream `core-v9` source — pending task **AB**.
 
 ## Resolved drift findings
 
