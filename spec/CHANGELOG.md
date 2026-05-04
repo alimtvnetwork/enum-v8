@@ -9,6 +9,18 @@
 
 ---
 
+## [spec-v0.20.0] — 2026-05-04 (Cycle 1 fully closed — §03 at 100%)
+
+### Fixed
+- **`spec/01-app/03-import-conventions.md` §3 "`internal/` access from tests"** — resolves **C-CVS-02**. Section was titled "Common `internal/` packages used by tests" and used `core-v9/internal/reflectinternal` as a live example, but `enum-v1` (this repo) imports zero `internal/` packages. Reframed as a forward-looking explanation that `internal/` access is a **same-module** rule, with the `reflectinternal` example explicitly attributed to the upstream `core-v9` repo's own tests, and a new **consumer-side note** stating that `enum-v1`-style consumers cannot import `core-v9/internal/...` because Go enforces `internal/` at module boundaries.
+- **`spec/01-app/03-import-conventions.md` §4 "Test-Package Imports"** — resolves **C-CVS-01**. Old text claimed tests live at `tests/integratedtests/footests/`, which doesn't exist in this repo. Replaced with the actual `enum-v1` layout (`tests/creationtests/` — flat, single `package creationtests`, mix of `*_test.go` and shared fixture `.go` files) plus a cross-reference to the upstream `core-v9` per-suite layout (`tests/<suite>/footests/`). The four shared rules (separate package, normal imports of source, no cycles, same-module `internal/` only) apply to both layouts.
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — moved C-CVS-01 and C-CVS-02 from Open → Resolved; §03 score updated 83.3 → **100.0** (12/12). Open-findings list is now empty. Cycle 1 is closed.
+
+### Verified
+- `rg -n "integratedtests|core-v8" spec/01-app/03-import-conventions.md` → 0 hits.
+
+---
+
 ## [spec-v0.19.0] — 2026-05-04 (Cycle 1 LOW-drift fixes applied)
 
 ### Fixed
