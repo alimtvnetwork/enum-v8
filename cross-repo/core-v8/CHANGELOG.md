@@ -57,7 +57,7 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 - Module path migrated from `gitlab.com/auk-go/enum` to
   `github.com/alimtvnetwork/enum-v1`.
 - Dependency `gitlab.com/auk-go/core` replaced with
-  `github.com/alimtvnetwork/core-v9`, pinned to pseudo-version
+  `github.com/alimtvnetwork/core-v8`, pinned to pseudo-version
   `v1.5.6-0.20260423064907-72bcd64c06b5` (commit `72bcd64` on
   `feature/1.5.6`) so CI can resolve the module deterministically.
 
