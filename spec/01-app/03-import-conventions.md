@@ -118,7 +118,7 @@ Tests under `tests/integratedtests/` legitimately import `internal/`:
 import "github.com/alimtvnetwork/core-v9/internal/reflectinternal"
 ```
 
-This works because the test module is rooted at the same `core-v8` module.
+This works because the test package is rooted in **the same Go module** as the `internal/` package it imports. The rule is generic — it applies whether the module is `core-v9`, `enum-v1`, or any other consumer that ships its own `internal/` tree.
 
 > **Rule**: If you are tempted to add a re-export wrapper "to expose an internal helper", **don't**. Either move the helper to a public package, or accept that external consumers don't need it.
 
