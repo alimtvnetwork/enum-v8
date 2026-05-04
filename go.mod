@@ -15,7 +15,6 @@ require (
 )
 
 // core-v8 v1.5.5 lives on the feature/1.5.6 branch (no tagged release on default branch yet).
-// After running `go mod tidy`, Go will rewrite the right-hand side to a pseudo-version like
-// v1.5.6-0.YYYYMMDDHHMMSS-<commit>. Update the commit hash below if needed, or replace this
-// line with the resolved pseudo-version once `go mod tidy` succeeds.
-replace github.com/alimtvnetwork/core-v8 => github.com/alimtvnetwork/core-v8 feature/1.5.6
+// Pseudo-version pinned to commit 72bcd64c06b5 (2026-04-23T06:49:07Z) on feature/1.5.6.
+// Re-resolve with `go mod tidy` after upstream pushes new commits.
+replace github.com/alimtvnetwork/core-v8 => github.com/alimtvnetwork/core-v8 v1.5.6-0.20260423064907-72bcd64c06b5
