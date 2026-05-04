@@ -9,6 +9,15 @@
 
 ---
 
+## [spec-v0.23.0] — 2026-05-04 (Cycle 3 baseline — §05 enum-system audited)
+
+### Added
+- **`spec/07-code-vs-spec-audits/04-cycle3-enum-system.md`** — full Cycle 3 audit of `01-app/05-enum-system.md`. 18 claims: 8 ✅ / 6 ⚠️ / **3 ❌** / 1 ❓. Verifiable score: **47.1 %** (8/17). Three real contradictions surfaced (C-CVS-03..05): the "first const = `Invalid`" rule is violated by 10 packages using alternate sentinel names (`Default`, `Unspecified`, `Uninitialized`, `InvalidIndex = -1`); the recipe imports `core-v9/internal/reflectinternal` which `enum-v1` cannot legally do across module boundaries; and `inttype.InvalidIndex Variant = -1` directly contradicts the "zero-value sentinel" wording.
+- **6 new drift findings** (D-CVS-14..19): documented vs actual file layout (`Variant.go` everywhere, no `consts.go`), missing `*AllCases` factory family in §6 (10+ call sites), unused `CreateUsingMap` listed, stale `tests/integratedtests/` reference (mirrors C-CVS-01), unrunnable `reflectinternal.TypeName(...)` example, predicate file-split rule that's never enforced.
+
+### Changed
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — added Cycle 3 row, 9 new open findings, 3 new milestones; section progress **3/16**. ❌ contradiction count went from 0 → 3 (all on §05).
+
 ## [spec-v0.22.0] — 2026-05-04 (Cycle 2 closed — §04 at 100% verifiable)
 
 ### Fixed
