@@ -70,7 +70,7 @@ import (
 )
 ```
 
-For the full inventory of public packages, see [`01-package-map.md`](./01-package-map.md).
+For the full inventory of public packages, see [`01-package-map.md`](./01-package-map.md). Not every consumer uses every package — `enum-v1`, for example, currently uses 8 of the 11 listed canonical imports.
 
 ### Root package usage
 
