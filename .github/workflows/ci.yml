@@ -101,40 +101,19 @@ jobs:
           fi
 
   # -----------------------------------------------------------------------------
-  # Test matrix — fixed 4-suite split (per spec §Test Matrix).
+  # Tests — single shard. Today only `./tests/creationtests/` actually has
+  # `_test.go` files; the per-enum packages and `cmdenumtypes/` / `osdetect/`
+  # are pure data/declaration packages exercised exclusively through the
+  # creation-tests harness. If/when in-package tests are added, split this
+  # job into a matrix again.
   # -----------------------------------------------------------------------------
   test:
     needs: [sha-check, lint, vulncheck]
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: enums-core
-            packages: >-
-              ./accesstype/... ./brackets/... ./certaction/... ./completionstate/...
-              ./compressformats/... ./compresslevels/... ./configfilestate/...
-              ./conntrackstate/... ./dbaction/... ./dbdrivertype/... ./dbexposetype/...
-              ./dbuserprivillegetype/... ./envtype/... ./eventtype/... ./inputiptype/...
-              ./instructiontype/... ./inttype/... ./iptype/... ./leveltype/...
-              ./licensetype/... ./linescomparetype/... ./linuxservicestate/...
-              ./linuxtype/... ./linuxvendortype/... ./logtype/... ./nginxlogtype/...
-              ./onofftype/... ./osarchs/... ./osgroupexecution/... ./overwritetype/...
-              ./packageinstallmethod/... ./pathpatterntype/... ./promptclitype/...
-              ./protocoltype/... ./querymethodtype/... ./quotes/... ./resauthtype/...
-              ./revokereason/... ./runtype/... ./scripttype/... ./servicestate/...
-              ./sitestatetype/... ./sqliteconnpathtype/... ./sqljointype/... ./strtype/...
-              ./taskcategory/... ./taskpriority/... ./timeunit/... ./verifiertriggertype/...
-          - name: cmdenumtypes
-            packages: ./cmdenumtypes/...
-          - name: osdetect
-            packages: ./osdetect/...
-          - name: tests-creation
-            packages: ./tests/...
     steps:
       - name: Already validated
         if: needs.sha-check.outputs.already-built == 'true'
-        run: echo "✅ SHA ${{ github.sha }} already passed CI — skipping test (${{ matrix.name }})"
+        run: echo "✅ SHA ${{ github.sha }} already passed CI — skipping tests"
 
       - uses: actions/checkout@v4
         if: needs.sha-check.outputs.already-built != 'true'
@@ -145,20 +124,20 @@ jobs:
           go-version-file: go.mod
           cache: true
 
-      - name: Run tests (${{ matrix.name }})
+      - name: Run tests
         if: needs.sha-check.outputs.already-built != 'true'
         run: |
           set -uo pipefail
           set +e
-          go test ${{ matrix.packages }} -v -count=1 \
-            -coverprofile=coverage-${{ matrix.name }}.out \
+          go test ./... -v -count=1 \
+            -coverprofile=coverage.out \
             -covermode=atomic 2>&1 | tee test-output.txt
           exit_code=${PIPESTATUS[0]}
           set -e
 
           if [ "$exit_code" -ne 0 ]; then
             echo "========================================="
-            echo " FAILED TESTS (${{ matrix.name }})"
+            echo " FAILED TESTS"
             echo "========================================="
             grep -E -A 5 '^--- FAIL:' test-output.txt || true
             echo "========================================="
@@ -168,15 +147,15 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always() && needs.sha-check.outputs.already-built != 'true'
         with:
-          name: test-results-${{ matrix.name }}
+          name: test-results
           path: |
             test-output.txt
-            coverage-${{ matrix.name }}.out
+            coverage.out
           retention-days: 7
 
   # -----------------------------------------------------------------------------
-  # Aggregate test results, compute coverage, then INLINE the SHA cache write
-  # (per spec — never a separate mark-success job).
+  # Coverage gate + SHA cache write. Stable required-check name preserved
+  # for branch protection (`test-summary`) even though the matrix collapsed.
   # -----------------------------------------------------------------------------
   test-summary:
     needs: [sha-check, test]
@@ -187,6 +166,12 @@ jobs:
         if: needs.sha-check.outputs.already-built == 'true'
         run: echo "✅ SHA ${{ github.sha }} already passed CI — skipping summary"
 
+      - name: Fail if test job did not succeed
+        if: needs.sha-check.outputs.already-built != 'true' && needs.test.result != 'success'
+        run: |
+          echo "::error::test job result = ${{ needs.test.result }}"
+          exit 1
+
       - uses: actions/checkout@v4
         if: needs.sha-check.outputs.already-built != 'true'
 
@@ -195,70 +180,25 @@ jobs:
         with:
           go-version-file: go.mod
 
-      - name: Download all test artifacts
+      - name: Download test artifacts
         if: needs.sha-check.outputs.already-built != 'true'
         uses: actions/download-artifact@v4
         with:
           path: test-artifacts
-          pattern: test-results-*
+          pattern: test-results
 
-      - name: Aggregate failures (copy-paste report)
-        if: needs.sha-check.outputs.already-built != 'true'
-        run: |
-          set -uo pipefail
-          overall=0
-          echo "========================================="
-          echo "  ALL TEST RESULTS"
-          echo "========================================="
-          for dir in test-artifacts/test-results-*; do
-            [ -d "$dir" ] || continue
-            suite=$(basename "$dir" | sed 's/^test-results-//')
-            file="$dir/test-output.txt"
-            [ -f "$file" ] || { echo "⚠️  $suite: no output"; continue; }
-            pass=$(grep -c '^--- PASS:' "$file" || true)
-            fail=$(grep -c '^--- FAIL:' "$file" || true)
-            if [ "$fail" -gt 0 ]; then
-              echo "❌ $suite: $fail failed, $pass passed"
-              overall=1
-            else
-              echo "✅ $suite: $pass passed"
-            fi
-          done
-
-          if [ "$overall" -eq 1 ]; then
-            echo ""
-            echo "========================================="
-            echo "  FAILURE REPORT (copy-paste ready)"
-            echo "========================================="
-            for dir in test-artifacts/test-results-*; do
-              file="$dir/test-output.txt"
-              [ -f "$file" ] || continue
-              fails=$(grep -c '^--- FAIL:' "$file" || true)
-              [ "$fails" -gt 0 ] || continue
-              suite=$(basename "$dir" | sed 's/^test-results-//')
-              echo ""
-              echo "-----------------------------------------"
-              echo "  Suite: $suite ($fails failed)"
-              echo "-----------------------------------------"
-              grep -E -A 8 '^--- FAIL:' "$file" | head -200 || true
-            done
-            echo "::error::Some test suites failed — see failure report above."
-            exit 1
-          fi
-
-      - name: Merge coverage profiles
+      - name: Coverage gate (60%)
         if: needs.sha-check.outputs.already-built != 'true'
         run: |
           set -euo pipefail
-          echo "mode: atomic" > combined-coverage.out
-          for f in test-artifacts/test-results-*/coverage-*.out; do
-            [ -f "$f" ] || continue
-            tail -n +2 "$f" >> combined-coverage.out
-          done
-          go tool cover -func=combined-coverage.out | tee coverage-summary.txt
+          cov=test-artifacts/test-results/coverage.out
+          if [ ! -s "$cov" ]; then
+            echo "::error::No coverage profile produced"
+            exit 1
+          fi
+          go tool cover -func="$cov" | tee coverage-summary.txt
           total=$(grep -E '^total:' coverage-summary.txt | awk '{print $3}' | tr -d '%')
           echo "Total coverage: ${total}%"
-          # Coverage threshold (spec/04-tooling/01-ci-pipeline.md): 60%
           awk -v t="$total" 'BEGIN { exit (t+0 < 60) ? 1 : 0 }' || {
             echo "::error::Coverage ${total}% is below required 60%"
             exit 1
@@ -267,13 +207,11 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always() && needs.sha-check.outputs.already-built != 'true'
         with:
-          name: coverage-combined
-          path: |
-            combined-coverage.out
-            coverage-summary.txt
+          name: coverage-summary
+          path: coverage-summary.txt
           retention-days: 14
 
-      # Inline cache write — never split into a separate job (spec §Pattern).
+      # Inline cache write — never split into a separate job.
       - name: Mark SHA as built
         if: success() && needs.sha-check.outputs.already-built != 'true'
         run: mkdir -p /tmp/ci-passed && echo "${{ github.sha }}" > /tmp/ci-passed/sha.txt
