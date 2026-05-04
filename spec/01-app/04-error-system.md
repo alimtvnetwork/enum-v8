@@ -30,6 +30,11 @@ The `errcore` package is the canonical way to construct errors. It exposes:
 | `StackEnhance` | struct-as-namespace var | Stack-trace-aware wrapping |
 | `MergeErrors`, `ManyErrorToSingle`, `SliceToError` | functions | Combining multiple errors |
 | `HandleErr(err error)` | function | **Panic helper used exclusively by `*Must` variants.** No-op when `err == nil`; panics with a stack-enhanced wrapping when `err != nil`. **Always prefer `errcore.HandleErr(err)` over bare `panic(err)` in `*Must` methods.** *(F-V12-05)* |
+| `MustBeEmpty(err error)` | function | **Sister of `HandleErr`** used by non-`*Must` call sites that still want fail-fast semantics — typical pattern is package-internal helpers that genuinely cannot recover (e.g. `compressformats/all-validation-checking-err.go`, `dbdrivertype/connectionStringCompiler.go`). Same nil-safety: no-op if `err == nil`, panics otherwise. Pick `HandleErr` inside `*Must` constructors; pick `MustBeEmpty` in invariant-asserting helpers. |
+| `RawErrCollection` | struct type | **Accumulator** for batched validation. Embed as a field (e.g. `osdetect/windowsSystemDetailGenerator_windows.go: rawErrCollection errcore.RawErrCollection`) and append errors as you discover them; flush as a single merged error at the end. Use when one operation can produce many independent failures. |
+| `ToError(...)` / `ToString(err error) string` | functions | **Conversion helpers**. `ToString` safely renders an `error` (returns `""` if nil) for log/JSON fields — see `osdetect/vars.go:111`. `ToError` is the inverse for serialised payloads. |
+| `MessageWithRef(name string, ref any) string` | function | Returns a `string` (not an `error`) of the form `"<name> = <ref>"` for embedding inside a parent error's message. Used heavily in `*/vars.go` to attach a reference table to the package-level error template. |
+| `RangeNotMeet(label string, min, max, ranges any) string` | function | Domain-specific range-violation message builder. See `internal/messages/messages.go` for the canonical use. |
 | `VarTwo`, `VarTwoNoType`, `MessageVarMap` | functions | Variable-context formatting |
 | `ErrFunc`, `ErrBytesFunc`, `ErrStringsFunc`, `ErrStringFunc`, `ErrAnyFunc` | type aliases | Common error-returning function signatures |
 
