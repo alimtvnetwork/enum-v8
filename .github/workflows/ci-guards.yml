@@ -57,6 +57,13 @@ jobs:
           path: .ci-cache/lint-baseline.json
           key: lint-baseline-v1.64.8-refs/heads/main
 
+      - name: Seed baseline from committed snapshot (cache miss)
+        if: steps.baseline-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p .ci-cache
+          cp .ci-baselines/golangci-lint.json .ci-cache/lint-baseline.json
+
+
       - name: Run golangci-lint (JSON)
         run: |
           set +e
