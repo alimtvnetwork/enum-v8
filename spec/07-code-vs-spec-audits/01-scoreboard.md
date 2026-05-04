@@ -2,9 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 (verifiable)** *(3 sections audited, all closed)*
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 35.7 (verifiable)** *(4 sections audited)*
 
-> §03, §04, §05 closed. §05 (enum-system) Cycle 3 closed by reframing the spec to match code: "sentinel-first" rule (with allowed names `Invalid` / `Default` / `Unspecified` / `Uninitialized` / `InvalidIndex = -1` for signed types), 2-file recipe (`Variant.go` + `vars.go`), `DefaultAllCases` factory pattern (no `internal/reflectinternal` import), shared `tests/creationtests/` registry, and softened predicate-split guideline. The single ❓ (JSON asymmetry runtime contract) is still pending task **AB**. See [`04-cycle3-enum-system.md`](./04-cycle3-enum-system.md).
+> §03–§05 closed. §06 (data-structures) Cycle 4 baseline: 20 claims, 5 ✅ / 6 ⚠️ / **3 ❌** / **6 ❓**. The ❓ count is high because `coregeneric` and `corepayload` have **zero consumers in `enum-v1`** — those sub-packages are documented for upstream completeness but cannot be verified from this repo. Three contradictions on the verifiable subset: `corejson.Serialize.ToString` / `Deserialize.FromTo` examples don't exist (real API is `ToBytesErr` / `BytesTo`); `coreonce.New.String` namespace doesn't match real `coreonce.NewAnyOnce` / `NewByteOnce` calls; and **`inttype/Variant.go` + `inttype/all-constructors.go` import `encoding/json` directly**, violating §4's "never `encoding/json`" rule. See [`05-cycle4-data-structures.md`](./05-cycle4-data-structures.md).
 
 ## Cycle history
 
@@ -17,10 +17,21 @@
 | 2026-05-04 | 2 (closed) | `01-app/04-error-system.md` | 18 | 11 | 0 | 0 | 7 | **100.0%** *(verifiable)* |
 | 2026-05-04 | 3 (baseline) | `01-app/05-enum-system.md` | 18 | 8 | 6 | 3 | 1 | **47.1%** *(verifiable)* |
 | 2026-05-04 | 3 (closed) | `01-app/05-enum-system.md` | 18 | 17 | 0 | 0 | 1 | **100.0%** *(verifiable)* |
+| 2026-05-04 | 4 (baseline) | `01-app/06-data-structures.md` | 20 | 5 | 6 | 3 | 6 | **35.7%** *(verifiable)* |
 
 ## Open drift findings
 
-_None._ All 3 audited sections (§03, §04, §05) are at 100 % of their verifiable subsets. Remaining ❓s on §04 (7) and §05 (1) require upstream `core-v9` source — pending task **AB**.
+| ID | Title | Severity | Spec ref | Code ref | Resolution path |
+|----|-------|----------|----------|----------|-----------------|
+| C-CVS-06 | §4 "never `encoding/json` directly" rule violated by `inttype` | HIGH | `01-app/06-data-structures.md` §4 "Rule" | `inttype/Variant.go:440` (`json.Marshal`), `inttype/all-constructors.go:75` (`*json.Number`) | Document the legitimate exceptions (`MarshalJSON` primitive delegation, `*json.Number` parameter) |
+| C-CVS-07 | `corejson.Serialize.ToString` / `Serialize.Raw` example doesn't compile | HIGH | §4 code block | zero call sites; real: `corejson.Serialize.ToBytesErr` | Replace examples with the actually-used API |
+| C-CVS-08 | `corepayload.New.PayloadWrapper.UsingInstruction(...)` example unverifiable | MED | §6 | zero `corepayload` consumers in `enum-v1` | Move §6 to "upstream-only" appendix or fetch upstream (task **AB**) |
+| D-CVS-20 | `corejson.Serialize.ToString` / `Raw` listed but never called | MED | §4 | real: `Serialize.ToBytesErr` | Update §4 examples |
+| D-CVS-21 | `corejson.Deserialize.UsingBytes` / `FromTo` listed but never called | MED | §4 | real: `Deserialize.BytesTo` | Update §4 examples |
+| D-CVS-22 | `coreonce.New.String(producer)` namespace doesn't match real top-level constructors | MED | §5 | real: `coreonce.NewAnyOnce`, `coreonce.NewByteOnce` | Rewrite §5 around real constructors |
+| D-CVS-23 | `corestr` shown as "thread-safe list of strings"; real surface is `Hashset`/`SimpleSlice`/`SimpleStringOnce` | MED | §3 | `corestr.New.Hashset`, `corestr.New.SimpleSlice`, `corestr.SimpleStringOnce` | Rewrite §3 around real exports |
+| D-CVS-24 | `coreonce` "covers all common types" overstated | LOW | §5 | only `AnyOnce` / `ByteOnce` observed | Soften wording or fetch upstream |
+| D-CVS-25 | `coregeneric` and `corepayload` presented as first-class but have no `enum-v1` consumers | LOW | §1, §2, §6 | zero imports | Add "upstream-only" callout in §1 |
 
 ## Resolved drift findings
 
