@@ -14,19 +14,13 @@
 | 2026-05-04 | 1 (post-LOW) | `01-app/03-import-conventions.md` | 12 | 10 | 0 | 2 | 0 | **83.3%** |
 | 2026-05-04 | 1 (closed) | `01-app/03-import-conventions.md` | 12 | 12 | 0 | 0 | 0 | **100.0%** |
 | 2026-05-04 | 2 (baseline) | `01-app/04-error-system.md` | 18 | 3 | 8 | 0 | 7 | **27.3%** *(verifiable)* |
+| 2026-05-04 | 2 (closed) | `01-app/04-error-system.md` | 18 | 11 | 0 | 0 | 7 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
 | ID | Title | Severity | Spec ref | Code ref | Resolution path |
 |----|-------|----------|----------|----------|-----------------|
-| D-CVS-06 | `errcore.MustBeEmpty` undocumented | MED | `01-app/04-error-system.md` §1 | 8+ call sites incl. `dbdrivertype/connectionStringCompiler.go:144` | Add row to §1 table; clarify vs `HandleErr` |
-| D-CVS-07 | `errcore.RawErrCollection` undocumented | MED | `01-app/04-error-system.md` §1 | `osdetect/windowsSystemDetailGenerator_windows.go:16` | Add §1.5 "Error Accumulation" |
-| D-CVS-08 | `<RawErrorType>.ErrorRefOnly` undocumented | MED | `01-app/04-error-system.md` §1.2 | `errcore.OutOfRangeType.ErrorRefOnly` etc. | Add row to §1.2 constructor table |
-| D-CVS-09 | `<RawErrorType>.CombineWithAnother` undocumented | LOW | §1.2 | `errcore.FailedToParseType.CombineWithAnother` | Add to §1.2 + cross-link `MergeError` |
-| D-CVS-10 | `errcore.MessageWithRef` undocumented | LOW | §1.4 | source usage | Add row to §1.4 |
-| D-CVS-11 | `errcore.RangeNotMeet` undocumented | LOW | §1 | source usage | Add §1.6 "Enum-Specific Builders" |
-| D-CVS-12 | `errcore.ToError` / `ToString` undocumented | LOW | §1 | `osdetect/vars.go:111` | Add §1.7 "Conversion Helpers" |
-| D-CVS-13 | `RawErrorType` examples missing `FailedToExecuteType`/`NotSupportedType`/`PathInvalidErrorType`/`ComparatorShouldBeWithinRangeType` | LOW | §1.1 | direct usage | Expand §1.1 examples or footnote upstream enumeration |
+| — | None (D-CVS-06..13 resolved in spec-v0.22.0) | — | — | — | — |
 
 ## Resolved drift findings
 
