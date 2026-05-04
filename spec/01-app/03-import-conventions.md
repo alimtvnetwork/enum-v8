@@ -85,7 +85,7 @@ func example() {
 }
 ```
 
-> The package name is `core`, not `corev8`. Even though the path ends in `core-v8`, Go uses the `package core` declaration in the source files.
+> The package name is `core`, not `corev9`. Even though the path ends in `core-v9`, Go uses the `package core` declaration in the source files.
 
 ---
 
