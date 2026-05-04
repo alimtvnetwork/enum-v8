@@ -27,9 +27,10 @@ cp <enum-v1>/cross-repo/core-v8/.ci-baselines/golangci-lint.json .ci-baselines/
 
 # Repo metadata
 cp <enum-v1>/cross-repo/core-v8/.golangci.yml .
+cp <enum-v1>/cross-repo/core-v8/.github/dependabot.yml .github/
 
 git add .github scripts/ci .ci-baselines .golangci.yml
-git commit -m "ci: add CI/CD pipeline, vulncheck, release, and guard workflows"
+git commit -m "ci: add CI/CD pipeline, vulncheck, release, guards, and Dependabot"
 git push -u origin ci/initial-pipeline
 ```
 
