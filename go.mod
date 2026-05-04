@@ -14,9 +14,15 @@ require (
 	github.com/smarty/assertions v1.15.1 // indirect
 )
 
-// core-v9 has no v1.5.5 tag yet (rename from core-v8 in flight; the v8 repo
-// had v1.5.5, v9 does not). The v1.5.6-0.<date>-<sha> pseudo-version Go
-// previously expected requires a v1.5.5 predecessor — switched to a
-// v0.0.0-<date>-<sha> pseudo-version which has no predecessor requirement.
-// Re-pin to a real tag (e.g. v1.5.6) once upstream tags it on core-v9.
-replace github.com/alimtvnetwork/core-v9 => github.com/alimtvnetwork/core-v9 v0.0.0-20260423064907-72bcd64c06b5
+// ── Temporary rename bridge ──────────────────────────────────────────
+// The upstream `core-v9` GitHub repo was renamed from `core-v8`, but its
+// own `go.mod` still declares `module github.com/alimtvnetwork/core-v8`.
+// Go enforces that the import path match the declared module path, so it
+// rejects loading the v9 repo under the v9 path. Until the upstream
+// `go.mod` is updated to declare `core-v9`, we resolve the v9 import
+// path to the v8 module artifact at the pinned commit.
+//
+// This block is removed (replaced by a real-tag pin) once upstream
+// commits the `module github.com/alimtvnetwork/core-v9` line and tags a
+// release.
+replace github.com/alimtvnetwork/core-v9 => github.com/alimtvnetwork/core-v8 v0.0.0-20260423064907-72bcd64c06b5

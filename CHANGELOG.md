@@ -74,6 +74,16 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
   renamed and has no tags yet). The `v0.0.0-` form has no predecessor
   requirement. Re-pin to a real `vX.Y.Z` tag once `core-v9` upstream
   ships its first tagged release.
+- **`go.mod` rename-bridge `replace` directive** — the upstream
+  `core-v9` repo's own `go.mod` still declares
+  `module github.com/alimtvnetwork/core-v8`; Go enforces import-path
+  / module-path equality so the v9 path can't load directly. Until
+  upstream commits its `module github.com/alimtvnetwork/core-v9`
+  line, `replace github.com/alimtvnetwork/core-v9 =>
+  github.com/alimtvnetwork/core-v8 v0.0.0-<date>-<sha>` resolves the
+  v9 import path to the v8 artifact at the same pinned commit. All
+  source-code imports stay on `core-v9`; only the resolution target
+  is bridged. Remove the `replace` once upstream's `go.mod` is fixed.
 
 ### CI
 - `ci-guards.yml` gained a `python-tests` job that runs all
