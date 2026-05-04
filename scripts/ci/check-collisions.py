@@ -178,24 +178,29 @@ def main(argv: list[str]) -> int:
     if cross:
         failed = True
         print("=" * 60)
-        print(" [1] CROSS-FILE EXACT COLLISIONS")
+        print(" [1] CROSS-FILE EXACT COLLISIONS (per package)")
         print("=" * 60)
-        for name in sorted(cross):
-            print(f"  {name}")
-            for f, ln, kind in sorted(cross[name]):
-                print(f"    [{kind}] {f}:{ln}")
+        for pkg in sorted(cross):
+            print(f"  package {pkg}")
+            for name in sorted(cross[pkg]):
+                print(f"    {name}")
+                for f, ln, kind in sorted(cross[pkg][name]):
+                    print(f"      [{kind}] {f}:{ln}")
         print()
 
     if case_collisions:
         failed = True
         print("=" * 60)
-        print(" [2] CASE-INSENSITIVE COLLISIONS")
+        print(" [2] CASE-INSENSITIVE COLLISIONS (per package)")
         print("=" * 60)
-        for key, variants in sorted(case_collisions.items()):
-            print(f"  {key} -> {variants}")
-            for n in variants:
-                for f, ln, kind in sorted(exact[n]):
-                    print(f"    [{kind}] {n}  {f}:{ln}")
+        for pkg, payload in sorted(case_collisions.items()):
+            exact_map = payload.pop("__exact__", {})  # type: ignore[arg-type]
+            print(f"  package {pkg}")
+            for key, variants in sorted(payload.items()):
+                print(f"    {key} -> {variants}")
+                for n in variants:
+                    for f, ln, kind in sorted(exact_map.get(n, [])):
+                        print(f"      [{kind}] {n}  {f}:{ln}")
         print()
 
     if intra:
@@ -212,7 +217,7 @@ def main(argv: list[str]) -> int:
     if failed:
         print("::error::Identifier collisions found — see categories above.")
         return 1
-    print(f"✅ No collisions across {len(files)} Go files.")
+    print(f"✅ No collisions across {len(files)} Go files in {len(by_pkg)} packages.")
     return 0
 
 
