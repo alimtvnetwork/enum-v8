@@ -110,15 +110,15 @@ is importable **only** by packages under `github.com/alimtvnetwork/core-v9/`. Ex
 | External consumer → any `internal/...` package | ❌ compile error |
 | Test package (`*tests/`) → `internal/...` of the same module | ✅ |
 
-### Common `internal/` packages used by tests
+### `internal/` access from tests
 
-Tests under `tests/integratedtests/` legitimately import `internal/`:
+Test packages that live in **the same module** as an `internal/` package may import it directly. For example, in the upstream `core-v9` repo, tests under its own `tests/` tree can do:
 
 ```go
 import "github.com/alimtvnetwork/core-v9/internal/reflectinternal"
 ```
 
-This works because the test package is rooted in **the same Go module** as the `internal/` package it imports. The rule is generic — it applies whether the module is `core-v9`, `enum-v1`, or any other consumer that ships its own `internal/` tree.
+> **Note (consumer repos like `enum-v1`):** This `internal/` access does **not** cross modules. A consumer (e.g. `enum-v1`) cannot import `core-v9/internal/...` because Go's `internal/` rule is enforced at module boundaries, not just package boundaries. Consumer-side tests should depend only on `core-v9`'s public API. See the upstream `core-v9` repo for examples of in-module `internal/` test imports.
 
 > **Rule**: If you are tempted to add a re-export wrapper "to expose an internal helper", **don't**. Either move the helper to a public package, or accept that external consumers don't need it.
 
