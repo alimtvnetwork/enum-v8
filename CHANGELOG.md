@@ -56,8 +56,36 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ### Changed
 - Module path migrated from `gitlab.com/auk-go/enum` to
   `github.com/alimtvnetwork/enum-v1`.
+- **Core dependency renamed** `github.com/alimtvnetwork/core-v8` →
+  `github.com/alimtvnetwork/core-v9` across all 307 source files
+  (`go.mod`, all package imports, spec docs, CI configs, coverage
+  scripts, PR template). The `cross-repo/core-v8/` staging directory
+  name is intentionally retained — it tracks the upstream repo name,
+  not the module path. Pseudo-version pin
+  `v1.5.6-0.20260423064907-72bcd64c06b5` carries over unchanged.
 - Dependency `gitlab.com/auk-go/core` replaced with
   `github.com/alimtvnetwork/core-v9`, pinned to pseudo-version
   `v1.5.6-0.20260423064907-72bcd64c06b5` (commit `72bcd64` on
   `feature/1.5.6`) so CI can resolve the module deterministically.
+
+### CI
+- `ci-guards.yml` gained a `python-tests` job that runs all
+  `scripts/ci/test_*.py` via `unittest discover`. The existing
+  `collision-audit` and `lint-baseline-diff` jobs now `needs:
+  python-tests` so a broken gate script fails fast before the slower
+  jobs spend CI minutes producing meaningless results.
+- `scripts/CoveragePreChecks.psm1` — auto-fixer and bracecheck steps
+  now skip gracefully (with `Register-Phase ... "skip"`) when
+  `scripts/autofix/` or `scripts/bracecheck/` are absent from the
+  repo, instead of hard-failing the entire `./run.ps1 -tc` run.
+
+### Docs
+- `CONTRIBUTING.md` — pre-push checklist rewritten as checkboxes
+  mirroring `.github/PULL_REQUEST_TEMPLATE.md`; Spec References now
+  links to `spec/04-tooling/00-overview.md` plus all six tooling
+  spec files (00–06).
+- `.ci-baselines/README.md` — fully documents the seed-then-gate
+  workflow: seeding mode (warnings, never blocks), gating mode
+  (NEW/FIXED/UNCHANGED diff with exit codes), mode-transition
+  commands, and reviewer guidance for baseline drift.
 
