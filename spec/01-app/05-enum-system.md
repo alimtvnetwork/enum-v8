@@ -408,12 +408,13 @@ See [`13-testing-patterns.md`](./13-testing-patterns.md) and [`/spec/06-testing-
 
 | Mistake | Why bad | Fix |
 |---|---|---|
-| First constant is not `Invalid` | Zero value of the type isn't catchable as "unset" | Always start with `Invalid Status = iota` |
+| First iota constant doesn't occupy the zero value | An unset variable can't be detected as "invalid" | Make the first constant the **sentinel** (`Invalid`, `Default`, `Unspecified`, `Uninitialized`, …) — see §4.1 |
+| Importing `core-v9/internal/reflectinternal` | Cross-module `internal/` import is forbidden by Go and won't compile | Use `enumimpl.New.Basic<T>.DefaultAllCases(firstItem, Ranges[:])` — the engine derives the type name |
 | Forgetting `Ranges[:]` (passing `Ranges` instead of `Ranges[:]`) | Array vs slice — compile error | Always pass `Ranges[:]` |
 | Implementing only `Value()` and `Name()` | Doesn't satisfy `BasicEnumer` — won't pass to functions expecting the interface | Implement the full method set in §4 |
 | Hand-writing JSON marshalling | Drifts from canonical format used elsewhere | Always delegate to `BasicEnumImpl.ToEnumJsonBytes` / `UnmarshallToValue` |
 | Comparing via `Value()` | Loses type safety and IDE goto-definition | Use `==` directly on the enum type |
-| Skipping nil-receiver tests for `*UnmarshalJSON` | Panics in production when JSON parser hands a nil receiver | Add a `CaseNilSafe` test |
+| Writing per-enum test files under `tests/integratedtests/...` | That path doesn't exist; tests use the shared registry under `tests/creationtests/` | Register the enum in `allBasicEnumsCollection.go` — see §8 |
 
 ---
 
