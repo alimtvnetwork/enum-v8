@@ -1,7 +1,7 @@
 # 03 — Import Conventions
 
 > ✅ **Status**: filled in audit Step 5 (2026-04-23, Asia/Kuala_Lumpur).
-> **Audience**: AI agents and contributors writing code that consumes `core-v8` packages, or extending the framework itself.
+> **Audience**: AI agents and contributors writing code that consumes `core-v9` packages, or extending the framework itself.
 > **Source**: extracted from [`/spec/00-llm-integration-guide.md`](../00-llm-integration-guide.md) §Import Conventions, §Package Map, plus `internal/` audit findings.
 
 ---
