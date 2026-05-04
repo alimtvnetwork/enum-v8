@@ -65,8 +65,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
   `v1.5.6-0.20260423064907-72bcd64c06b5` carries over unchanged.
 - Dependency `gitlab.com/auk-go/core` replaced with
   `github.com/alimtvnetwork/core-v9`, pinned to pseudo-version
-  `v1.5.6-0.20260423064907-72bcd64c06b5` (commit `72bcd64` on
+  `v0.0.0-20260423064907-72bcd64c06b5` (commit `72bcd64` on
   `feature/1.5.6`) so CI can resolve the module deterministically.
+- **`go.mod` pseudo-version downgraded** from
+  `v1.5.6-0.<date>-<sha>` to `v0.0.0-<date>-<sha>`. The `v1.5.6-0.`
+  form requires a preceding `v1.5.5` tag on the upstream `core-v9`
+  repo, which doesn't exist (the v8 repo had v1.5.5; v9 was just
+  renamed and has no tags yet). The `v0.0.0-` form has no predecessor
+  requirement. Re-pin to a real `vX.Y.Z` tag once `core-v9` upstream
+  ships its first tagged release.
 
 ### CI
 - `ci-guards.yml` gained a `python-tests` job that runs all
