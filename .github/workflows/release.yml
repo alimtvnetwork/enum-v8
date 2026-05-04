@@ -1,0 +1,163 @@
+name: Release
+
+# Library release pipeline for enum-v1.
+# Triggers on `release/**` branches and `v*` tags.
+# Produces source archives + checksums + a GitHub Release with extracted changelog.
+#
+# See spec/12-cicd-pipeline-workflows/{01-shared-conventions,02-github-release-standard}.md.
+# This is a Go LIBRARY — no cross-compiled binaries, no install scripts, no code signing.
+
+on:
+  push:
+    branches:
+      - "release/**"
+    tags:
+      - "v*"
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  # -----------------------------------------------------------------------------
+  # Validate the module compiles and tests pass before publishing.
+  # -----------------------------------------------------------------------------
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: go vet
+        run: go vet ./...
+
+      - name: go build
+        run: go build ./...
+
+      - name: go test
+        run: go test -count=1 ./...
+
+  # -----------------------------------------------------------------------------
+  # Resolve version, assemble release body, package source archives, publish.
+  # -----------------------------------------------------------------------------
+  release:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # need full history for changelog/commit fallback
+
+      - name: Resolve version
+        id: version
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            VERSION="${GITHUB_REF_NAME}"
+          elif [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
+            VERSION="${GITHUB_REF_NAME#release/}"
+          else
+            echo "::error::Unexpected ref: $GITHUB_REF"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: $VERSION"
+
+      # Library release artifacts: source archives + checksums.
+      - name: Package source archives
+        id: pack
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          mkdir -p dist
+          # Strip CI/dev artifacts that should not appear in release archives.
+          tar --exclude='./.git' --exclude='./node_modules' --exclude='./dist' \
+              --exclude='./data' --exclude='./tmp' \
+              -czf "dist/enum-v1-${VERSION}-source.tar.gz" .
+          (cd .. && zip -qr "$GITHUB_WORKSPACE/dist/enum-v1-${VERSION}-source.zip" \
+              "$(basename "$GITHUB_WORKSPACE")" \
+              -x "*/.git/*" "*/node_modules/*" "*/dist/*" "*/data/*" "*/tmp/*")
+          (cd dist && sha256sum * > checksums.txt)
+          ls -la dist/
+
+      - name: Extract changelog entry
+        id: changelog
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          BODY=/tmp/changelog-section.md
+          if [ -f CHANGELOG.md ]; then
+            awk -v ver="$VERSION" '
+              /^## / {
+                if (found) exit
+                if (index($0, ver)) found=1
+              }
+              found { print }
+            ' CHANGELOG.md > "$BODY"
+          fi
+          if [ ! -s "$BODY" ]; then
+            echo "_No CHANGELOG.md entry found for ${VERSION} — generating from commits._" > "$BODY"
+            echo "" >> "$BODY"
+            PREV_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]' | head -1 || true)
+            RANGE="${PREV_TAG:+${PREV_TAG}..HEAD}"
+            FEATS=$(git log $RANGE --pretty=format:"- %s (%h)" --grep='^feat' -i || true)
+            FIXES=$(git log $RANGE --pretty=format:"- %s (%h)" --grep='^fix'  -i || true)
+            OTHER=$(git log $RANGE --pretty=format:"- %s (%h)" --grep='^refactor\|^chore\|^docs\|^ci\|^build\|^test\|^perf\|^style' -i || true)
+            [ -n "$FEATS" ] && { echo "### Features";    echo "$FEATS"; echo ""; } >> "$BODY"
+            [ -n "$FIXES" ] && { echo "### Bug Fixes";   echo "$FIXES"; echo ""; } >> "$BODY"
+            [ -n "$OTHER" ] && { echo "### Maintenance"; echo "$OTHER"; echo ""; } >> "$BODY"
+          fi
+          echo "body_path=$BODY" >> "$GITHUB_OUTPUT"
+
+      - name: Assemble release body
+        id: body
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          OUT=/tmp/release-body.md
+          {
+            cat "${{ steps.changelog.outputs.body_path }}"
+            echo ""
+            echo "---"
+            echo ""
+            echo "### Release info"
+            echo ""
+            echo "| Field | Value |"
+            echo "|-------|-------|"
+            echo "| Version | \`${VERSION}\` |"
+            echo "| Commit  | \`${GITHUB_SHA:0:10}\` |"
+            echo "| Ref     | \`${GITHUB_REF}\` |"
+            echo "| Build Date | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |"
+            echo "| Module | \`github.com/alimtvnetwork/enum-v1\` |"
+            echo ""
+            echo "### Install"
+            echo ""
+            echo '```bash'
+            echo "go get github.com/alimtvnetwork/enum-v1@${VERSION}"
+            echo '```'
+            echo ""
+            echo "### Checksums (SHA256)"
+            echo ""
+            echo '```'
+            cat dist/checksums.txt
+            echo '```'
+          } > "$OUT"
+          echo "path=$OUT" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: "enum-v1 ${{ steps.version.outputs.version }}"
+          body_path: ${{ steps.body.outputs.path }}
+          files: dist/*
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.version, '-') }}
+          make_latest: ${{ !contains(steps.version.outputs.version, '-') && 'true' || 'false' }}
