@@ -1,0 +1,56 @@
+# golangci-lint configuration for enum-v1
+# Pinned to v1.64.8 in CI (see .github/workflows/ci.yml).
+# Local: `golangci-lint run --timeout=5m`
+
+run:
+  timeout: 5m
+  go: "1.17"
+  tests: true
+  modules-download-mode: readonly
+
+linters:
+  disable-all: true
+  enable:
+    - errcheck
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - gosimple
+    - typecheck
+    - misspell
+    - revive
+    - gosec
+
+linters-settings:
+  revive:
+    rules:
+      - name: var-naming
+      - name: exported
+        disabled: true
+      - name: package-comments
+        disabled: true
+  gosec:
+    excludes:
+      - G104 # audited via errcheck
+      - G304 # file paths from enum tests are not user-supplied
+  staticcheck:
+    checks: ["all", "-ST1000", "-ST1003", "-ST1020", "-ST1021", "-ST1022"]
+
+issues:
+  exclude-dirs:
+    - data
+    - scripts
+    - spec
+    - src
+    - public
+    - tests/creationtests/testdata
+  exclude-rules:
+    # Generated/legacy enum scaffolding tolerates noisy lint findings
+    - path: "_test\\.go$"
+      linters: [gosec, errcheck]
+    - path: "vars\\.go$"
+      linters: [gochecknoglobals]
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  new: false

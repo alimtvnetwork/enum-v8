@@ -1,0 +1,199 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/heads/release/') }}
+
+permissions:
+  contents: read
+
+jobs:
+  # -----------------------------------------------------------------------------
+  # SHA-based build deduplication (passthrough gate).
+  # -----------------------------------------------------------------------------
+  sha-check:
+    runs-on: ubuntu-latest
+    outputs:
+      already-built: ${{ steps.cache-check.outputs.cache-hit }}
+    steps:
+      - name: Check SHA cache
+        id: cache-check
+        uses: actions/cache@v4
+        with:
+          path: /tmp/ci-passed
+          key: ci-passed-${{ github.sha }}
+          lookup-only: true
+
+  # -----------------------------------------------------------------------------
+  # Lint: go vet + golangci-lint (pinned).
+  # -----------------------------------------------------------------------------
+  lint:
+    needs: sha-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Already validated
+        if: needs.sha-check.outputs.already-built == 'true'
+        run: echo "✅ SHA ${{ github.sha }} already passed CI — skipping lint"
+
+      - uses: actions/checkout@v4
+        if: needs.sha-check.outputs.already-built != 'true'
+
+      - uses: actions/setup-go@v5
+        if: needs.sha-check.outputs.already-built != 'true'
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: go vet
+        if: needs.sha-check.outputs.already-built != 'true'
+        run: go vet ./...
+
+      - uses: golangci/golangci-lint-action@v6
+        if: needs.sha-check.outputs.already-built != 'true'
+        with:
+          version: v1.64.8
+          args: --timeout=5m
+
+  # -----------------------------------------------------------------------------
+  # Vulnerability scan (in-CI). Third-party = fail; stdlib-only = warn.
+  # -----------------------------------------------------------------------------
+  vulncheck:
+    needs: sha-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Already validated
+        if: needs.sha-check.outputs.already-built == 'true'
+        run: echo "✅ SHA ${{ github.sha }} already passed CI — skipping vulncheck"
+
+      - uses: actions/checkout@v4
+        if: needs.sha-check.outputs.already-built != 'true'
+
+      - uses: actions/setup-go@v5
+        if: needs.sha-check.outputs.already-built != 'true'
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Install govulncheck
+        if: needs.sha-check.outputs.already-built != 'true'
+        run: go install golang.org/x/vuln/cmd/govulncheck@v1.1.4
+
+      - name: Run govulncheck
+        if: needs.sha-check.outputs.already-built != 'true'
+        run: |
+          set +e
+          govulncheck ./... 2>&1 | tee /tmp/vulncheck.out
+          rc=$?
+          set -e
+          if [ $rc -ne 0 ]; then
+            if grep "packages you import" /tmp/vulncheck.out | grep -qv "0 vulnerabilities in packages"; then
+              echo "::error::Third-party vulnerabilities detected"
+              exit 1
+            fi
+            echo "::warning::Only stdlib vulnerabilities found (no fix available in current Go version)"
+          fi
+
+  # -----------------------------------------------------------------------------
+  # Tests — single shard over ./... (core-v8 has 100+ packages and no
+  # natural curated split). Coverage gate: 60%.
+  # -----------------------------------------------------------------------------
+  test:
+    needs: [sha-check, lint, vulncheck]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Already validated
+        if: needs.sha-check.outputs.already-built == 'true'
+        run: echo "✅ SHA ${{ github.sha }} already passed CI — skipping tests"
+
+      - uses: actions/checkout@v4
+        if: needs.sha-check.outputs.already-built != 'true'
+
+      - uses: actions/setup-go@v5
+        if: needs.sha-check.outputs.already-built != 'true'
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Run tests
+        if: needs.sha-check.outputs.already-built != 'true'
+        run: |
+          set -uo pipefail
+          set +e
+          go test ./... -v -count=1 \
+            -coverprofile=coverage.out \
+            -covermode=atomic 2>&1 | tee test-output.txt
+          exit_code=${PIPESTATUS[0]}
+          set -e
+
+          if [ "$exit_code" -ne 0 ]; then
+            echo "========================================="
+            echo " FAILED TESTS"
+            echo "========================================="
+            grep -E -A 5 '^--- FAIL:' test-output.txt || true
+            echo "========================================="
+          fi
+          exit "$exit_code"
+
+      - name: Coverage gate
+        if: needs.sha-check.outputs.already-built != 'true'
+        run: |
+          set -euo pipefail
+          go tool cover -func=coverage.out | tee coverage-summary.txt
+          total=$(grep -E '^total:' coverage-summary.txt | awk '{print $3}' | tr -d '%')
+          echo "Total coverage: ${total}%"
+          awk -v t="$total" 'BEGIN { exit (t+0 < 60) ? 1 : 0 }' || {
+            echo "::error::Coverage ${total}% is below required 60%"
+            exit 1
+          }
+
+      - uses: actions/upload-artifact@v4
+        if: always() && needs.sha-check.outputs.already-built != 'true'
+        with:
+          name: test-results
+          path: |
+            test-output.txt
+            coverage.out
+            coverage-summary.txt
+          retention-days: 14
+
+      # Inline cache write — never split into a separate job.
+      - name: Mark SHA as built
+        if: success() && needs.sha-check.outputs.already-built != 'true'
+        run: mkdir -p /tmp/ci-passed && echo "${{ github.sha }}" > /tmp/ci-passed/sha.txt
+
+      - name: Save SHA to cache
+        if: success() && needs.sha-check.outputs.already-built != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/ci-passed
+          key: ci-passed-${{ github.sha }}
+
+  # -----------------------------------------------------------------------------
+  # Build gate — `go build ./...` only (this is a library, no cross-compile).
+  # -----------------------------------------------------------------------------
+  build-check:
+    needs: [sha-check, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Already validated
+        if: needs.sha-check.outputs.already-built == 'true'
+        run: echo "✅ SHA ${{ github.sha }} already passed CI — skipping build-check"
+
+      - uses: actions/checkout@v4
+        if: needs.sha-check.outputs.already-built != 'true'
+
+      - uses: actions/setup-go@v5
+        if: needs.sha-check.outputs.already-built != 'true'
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: go build ./...
+        if: needs.sha-check.outputs.already-built != 'true'
+        run: go build ./...
