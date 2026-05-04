@@ -9,6 +9,15 @@
 
 ---
 
+## [spec-v0.21.0] — 2026-05-04 (Cycle 2 baseline — §04 error-system audited)
+
+### Added
+- **`spec/07-code-vs-spec-audits/03-cycle2-error-system.md`** — full Cycle 2 audit of `01-app/04-error-system.md`. 18 claims extracted: 3 ✅, 8 ⚠️ (spec is incomplete vs consumer usage), 7 ❓ (unverifiable without upstream `core-v9` source — sandbox lacks Go + the module is not vendored), 0 ❌. Verifiable-subset score: **27.3 %** (3/11). New ❓ bucket introduced so aspirational APIs aren't logged as contradictions before upstream source is available.
+- **8 new open drift findings** (D-CVS-06..13) covering APIs `enum-v1` actively uses but the spec does not document: `MustBeEmpty`, `RawErrCollection`, `<RawErrorType>.ErrorRefOnly`, `<RawErrorType>.CombineWithAnother`, `MessageWithRef`, `RangeNotMeet`, `ToError`/`ToString`, plus 4 missing `RawErrorType` examples (`FailedToExecuteType`, `NotSupportedType`, `PathInvalidErrorType`, `ComparatorShouldBeWithinRangeType`).
+
+### Changed
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — added Cycle 2 row, new ❓ column, 8 open findings, 2 new milestones (apply D-CVS-06..13 spec fixes; fetch upstream `core-v9` source as task **AB**). Section progress: **2/16** done.
+
 ## [spec-v0.20.0] — 2026-05-04 (Cycle 1 fully closed — §03 at 100%)
 
 ### Fixed
