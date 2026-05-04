@@ -106,10 +106,11 @@ jobs:
             echo "_No CHANGELOG.md entry found for ${VERSION} — generating from commits._" > "$BODY"
             echo "" >> "$BODY"
             PREV_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]' | head -1 || true)
-            RANGE="${PREV_TAG:+${PREV_TAG}..HEAD}"
-            FEATS=$(git log ${RANGE:-} --pretty=format:"- %s (%h)" --grep='^feat' -i || true)
-            FIXES=$(git log ${RANGE:-} --pretty=format:"- %s (%h)" --grep='^fix'  -i || true)
-            OTHER=$(git log ${RANGE:-} --pretty=format:"- %s (%h)" --grep='^refactor\|^chore\|^docs\|^ci\|^build\|^test\|^perf\|^style' -i || true)
+            RANGE_ARGS=()
+            [ -n "$PREV_TAG" ] && RANGE_ARGS+=("${PREV_TAG}..HEAD")
+            FEATS=$(git log "${RANGE_ARGS[@]}" --pretty=format:"- %s (%h)" --grep='^feat' -i || true)
+            FIXES=$(git log "${RANGE_ARGS[@]}" --pretty=format:"- %s (%h)" --grep='^fix'  -i || true)
+            OTHER=$(git log "${RANGE_ARGS[@]}" --pretty=format:"- %s (%h)" --grep='^refactor\|^chore\|^docs\|^ci\|^build\|^test\|^perf\|^style' -i || true)
             [ -n "$FEATS" ] && { echo "### Features";    echo "$FEATS"; echo ""; } >> "$BODY"
             [ -n "$FIXES" ] && { echo "### Bug Fixes";   echo "$FIXES"; echo ""; } >> "$BODY"
             [ -n "$OTHER" ] && { echo "### Maintenance"; echo "$OTHER"; echo ""; } >> "$BODY"
