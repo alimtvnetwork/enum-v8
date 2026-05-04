@@ -73,7 +73,9 @@
 | ✅ Apply MED + LOW spec fixes for §04 (D-CVS-06..13) | **100.0** verifiable on §04 | 2026-05-04 |
 | ✅ Cycle 3 baseline on §05 | **47.1** verifiable on §05 | 2026-05-04 |
 | ✅ Resolve §05 contradictions C-CVS-03..05 (HIGH) + apply D-CVS-14..19 | **100.0** verifiable on §05 | 2026-05-04 |
-| 🚧 Fetch `core-v9` source (task **AB**) → resolve 7 ❓ on §04 + 1 ❓ on §05 | — | pending |
-| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **3/16 done** |
-| 🎯 Reach ≥95% aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
-| 🎯 Zero ❌ contradictions | 0 | ✅ |
+| ✅ Cycle 4 baseline on §06 | **35.7** verifiable on §06 | 2026-05-04 |
+| 🚧 Resolve §06 contradictions C-CVS-06..08 + apply D-CVS-20..25 | target 100 % on §06 | pending (next task **AE**) |
+| 🚧 Fetch `core-v9` source (task **AB**) → resolve 7 ❓ on §04 + 1 ❓ on §05 + 6 ❓ on §06 | — | pending |
+| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **4/16 done** |
+| 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ❌ on §06 (35.7) |
+| 🎯 Zero ❌ contradictions | 0 (currently **3** on §06) | ❌ |
