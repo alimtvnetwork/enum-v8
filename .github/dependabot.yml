@@ -1,0 +1,56 @@
+# Dependabot configuration
+# Docs: https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+# Companion spec: spec/04-tooling/01-ci-pipeline.md, 03-vulnerability-scanning.md
+
+version: 2
+updates:
+  # ---------------------------------------------------------------------------
+  # Go module dependencies. Catches CVEs and upstream version bumps for
+  # github.com/alimtvnetwork/core-v8 and the test toolchain (goconvey, etc.).
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: gomod
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: "Asia/Kuala_Lumpur"
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - go
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+    groups:
+      # Batch non-major bumps into a single PR per week — major bumps still
+      # open individually so they get focused review.
+      go-minor-patch:
+        update-types:
+          - minor
+          - patch
+
+  # ---------------------------------------------------------------------------
+  # GitHub Actions used in .github/workflows/*.yml. Keeps actions/checkout,
+  # actions/setup-go, actions/cache, golangci/golangci-lint-action, etc.
+  # pinned to current major versions.
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: "Asia/Kuala_Lumpur"
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - github-actions
+    commit-message:
+      prefix: "chore(ci)"
+      include: scope
+    groups:
+      actions-minor-patch:
+        update-types:
+          - minor
+          - patch
