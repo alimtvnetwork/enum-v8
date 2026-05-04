@@ -101,40 +101,19 @@ jobs:
           fi
 
   # -----------------------------------------------------------------------------
-  # Test matrix — fixed 4-suite split (per spec §Test Matrix).
+  # Tests — single shard. Today only `./tests/creationtests/` actually has
+  # `_test.go` files; the per-enum packages and `cmdenumtypes/` / `osdetect/`
+  # are pure data/declaration packages exercised exclusively through the
+  # creation-tests harness. If/when in-package tests are added, split this
+  # job into a matrix again.
   # -----------------------------------------------------------------------------
   test:
     needs: [sha-check, lint, vulncheck]
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: enums-core
-            packages: >-
-              ./accesstype/... ./brackets/... ./certaction/... ./completionstate/...
-              ./compressformats/... ./compresslevels/... ./configfilestate/...
-              ./conntrackstate/... ./dbaction/... ./dbdrivertype/... ./dbexposetype/...
-              ./dbuserprivillegetype/... ./envtype/... ./eventtype/... ./inputiptype/...
-              ./instructiontype/... ./inttype/... ./iptype/... ./leveltype/...
-              ./licensetype/... ./linescomparetype/... ./linuxservicestate/...
-              ./linuxtype/... ./linuxvendortype/... ./logtype/... ./nginxlogtype/...
-              ./onofftype/... ./osarchs/... ./osgroupexecution/... ./overwritetype/...
-              ./packageinstallmethod/... ./pathpatterntype/... ./promptclitype/...
-              ./protocoltype/... ./querymethodtype/... ./quotes/... ./resauthtype/...
-              ./revokereason/... ./runtype/... ./scripttype/... ./servicestate/...
-              ./sitestatetype/... ./sqliteconnpathtype/... ./sqljointype/... ./strtype/...
-              ./taskcategory/... ./taskpriority/... ./timeunit/... ./verifiertriggertype/...
-          - name: cmdenumtypes
-            packages: ./cmdenumtypes/...
-          - name: osdetect
-            packages: ./osdetect/...
-          - name: tests-creation
-            packages: ./tests/...
     steps:
       - name: Already validated
         if: needs.sha-check.outputs.already-built == 'true'
-        run: echo "✅ SHA ${{ github.sha }} already passed CI — skipping test (${{ matrix.name }})"
+        run: echo "✅ SHA ${{ github.sha }} already passed CI — skipping tests"
 
       - uses: actions/checkout@v4
         if: needs.sha-check.outputs.already-built != 'true'
@@ -145,20 +124,20 @@ jobs:
           go-version-file: go.mod
           cache: true
 
-      - name: Run tests (${{ matrix.name }})
+      - name: Run tests
         if: needs.sha-check.outputs.already-built != 'true'
         run: |
           set -uo pipefail
           set +e
-          go test ${{ matrix.packages }} -v -count=1 \
-            -coverprofile=coverage-${{ matrix.name }}.out \
+          go test ./... -v -count=1 \
+            -coverprofile=coverage.out \
             -covermode=atomic 2>&1 | tee test-output.txt
           exit_code=${PIPESTATUS[0]}
           set -e
 
           if [ "$exit_code" -ne 0 ]; then
             echo "========================================="
-            echo " FAILED TESTS (${{ matrix.name }})"
+            echo " FAILED TESTS"
             echo "========================================="
             grep -E -A 5 '^--- FAIL:' test-output.txt || true
             echo "========================================="
@@ -168,10 +147,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always() && needs.sha-check.outputs.already-built != 'true'
         with:
-          name: test-results-${{ matrix.name }}
+          name: test-results
           path: |
             test-output.txt
-            coverage-${{ matrix.name }}.out
+            coverage.out
           retention-days: 7
 
   # -----------------------------------------------------------------------------
