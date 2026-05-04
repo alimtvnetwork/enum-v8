@@ -43,10 +43,12 @@ The enum system uses a three-layer split that satisfies several design pillars a
                  ▼
 ┌────────────────────────────────────┐
 │  Your enum package                 │  ← Layer 3: domain-specific enum
-│  - consts.go (the type + iota)     │
-│  - vars.go (BasicEnumImpl + Ranges)│
-│  - <Type>.go (method set)          │
+│  - <TypeName>.go (type + iota +    │
+│    method set + predicates)        │
+│  - vars.go (Ranges + BasicEnumImpl)│
 └────────────────────────────────────┘
+
+> **Filename convention:** the method-set file is named after its type (e.g. `Variant.go`, `Bracket.go`, `Architecture.go`). Across this repo's 71 enum packages, the type is conventionally named `Variant` (64 / 71); the remaining 7 use a domain-specific name (`Bracket`, `Category`, `Precedence`, `Action`, `Quote`, `ExitCode`, `Architecture`). There is **no** `consts.go` — the type and its `iota` block live alongside the method set in `<TypeName>.go`.
 ```
 
 ### Why three layers?
