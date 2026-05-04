@@ -333,6 +333,15 @@ Use these in parameter lists and struct fields instead of inline function types.
 | Stack-trace-enhanced wrapping | `StackEnhance.Error` / `StackEnhance.Msg` |
 | Two-variable context formatting | `VarTwo` / `VarTwoNoType` |
 | Format a `map[string]any` of variables | `MessageVarMap` |
+| Value-only error (no field name) | `RawErrorType.ErrorRefOnly(ref)` |
+| Legacy alias for `MergeError` | `RawErrorType.CombineWithAnother(err)` (prefer `MergeError` in new code) |
+| Panic-on-error inside a `*Must` constructor | `errcore.HandleErr(err)` |
+| Panic-on-error inside an invariant helper | `errcore.MustBeEmpty(err)` |
+| Build a "name = ref" message fragment | `errcore.MessageWithRef(name, ref)` |
+| Build a range-violation message | `errcore.RangeNotMeet(label, min, max, ranges)` |
+| Accumulate many errors, flush once | `errcore.RawErrCollection` |
+| Render an error to string for JSON / logs | `errcore.ToString(err)` |
+| Parse a string back into an error | `errcore.ToError(s)` |
 
 ---
 
