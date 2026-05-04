@@ -1,0 +1,40 @@
+name: Python Tests (Standalone)
+
+# Standalone runner for the CI-guard Python regression tests.
+# Complements ci-guards.yml's `python-tests` job by also firing on:
+#   - version tags (so a release can't ship with broken gate scripts)
+#   - manual dispatch (so maintainers can re-run on demand without a PR)
+#   - changes to scripts/ci/** on any branch (catches drift on long-lived
+#     feature branches before they reach a PR)
+
+on:
+  push:
+    tags: ['v*']
+    paths:
+      - 'scripts/ci/**'
+      - '.github/workflows/python-tests.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: python-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run CI guard script tests
+        run: python3 -m unittest discover -s scripts/ci -p 'test_*.py' -v
