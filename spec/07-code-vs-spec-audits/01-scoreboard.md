@@ -2,23 +2,23 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **83.3 / 100** *(Cycle 1 post-fix, n=12 claims, n=1 spec section)*
+## Current MEASURED drift score: **100.0 / 100** *(Cycle 1 fully closed, n=12 claims, n=1 spec section)*
 
-> **Caveat:** sample size is one spec section. Cycle 1 baseline was 41.7%. After applying the 5 LOW drift fixes (D-CVS-01..05) on 2026-05-04, projected match for §03 is 10/12 = **83.3%**. C-CVS-01 (the missing `tests/integratedtests/` folder question) and C-CVS-02 (`internal/reflectinternal` example) remain open; resolving both lifts §03 to 100%.
+> Cycle 1 baseline was 41.7%. After D-CVS-01..05 (LOW spec edits) the score moved to 83.3%. C-CVS-01 and C-CVS-02 are now resolved by rewriting §3 "Common `internal/` packages used by tests" and §4 "Test-Package Imports" to match the actual `tests/creationtests/` layout in `enum-v1`, with a cross-reference to the upstream `core-v9` repo's per-suite layout. §03 is now at 12/12.
 
 ## Cycle history
 
 | Date | Cycle | Spec audited | Claims | ✅ Match | ⚠️ Drift | ❌ Contradiction | Score |
 |------|-------|--------------|--------|---------|---------|------------------|-------|
 | 2026-05-04 | 1 (baseline) | `01-app/03-import-conventions.md` | 12 | 5 | 5 | 2 | **41.7%** |
-| 2026-05-04 | 1 (post-fix) | `01-app/03-import-conventions.md` | 12 | 10 | 0 | 2 | **83.3%** |
+| 2026-05-04 | 1 (post-LOW) | `01-app/03-import-conventions.md` | 12 | 10 | 0 | 2 | **83.3%** |
+| 2026-05-04 | 1 (closed) | `01-app/03-import-conventions.md` | 12 | 12 | 0 | 0 | **100.0%** |
 
 ## Open drift findings
 
 | ID | Title | Severity | Spec ref | Code ref | Resolution path |
 |----|-------|----------|----------|----------|-----------------|
-| C-CVS-01 | Spec §03 line 129 references nonexistent `tests/integratedtests/` directory | **HIGH** | `spec/01-app/03-import-conventions.md:129` | `tests/` (only `creationtests/` exists) | Decide: fix spec OR restructure tests |
-| C-CVS-02 | Spec §03 line 118 `internal/reflectinternal` example doesn't apply to this repo | MED | `spec/01-app/03-import-conventions.md:118` | (0 importing files) | Fix spec — move to "see core-v9 source" reference |
+| — | None | — | — | — | — |
 
 ## Resolved drift findings
 
@@ -28,7 +28,9 @@
 | D-CVS-02 | Spec §03 line 88 says path "ends in `core-v8`" — stale | 2026-05-04 | `spec/01-app/03-import-conventions.md:88` | s/core-v8/core-v9/ + s/corev8/corev9/ |
 | D-CVS-03 | Spec §03 line 94 prose/example mismatch (v8 vs v9) | 2026-05-04 | `spec/01-app/03-import-conventions.md:94` | s/core-v8/core-v9/ |
 | D-CVS-04 | Spec §03 line 121 conflates "test module" with "core module" | 2026-05-04 | `spec/01-app/03-import-conventions.md:121` | Reworded to be module-generic |
-| D-CVS-05 | `coregeneric` canonical-import listing not annotated as optional | 2026-05-04 | `spec/01-app/03-import-conventions.md:61,73` | Inline `// optional` comment + consumer-coverage note |
+| D-CVS-05 | `coregeneric` canonical-import listing not annotated as optional | 2026-05-04 | `spec/01-app/03-import-conventions.md:61,73` | Inline `// optional` + consumer-coverage note |
+| C-CVS-01 | Spec §03 line 129 references nonexistent `tests/integratedtests/` | 2026-05-04 | `spec/01-app/03-import-conventions.md:127-145` | Spec rewritten to `tests/creationtests/` layout (matches code) + cross-ref to upstream `core-v9` per-suite layout |
+| C-CVS-02 | Spec §03 line 118 `internal/reflectinternal` example doesn't apply to this repo | 2026-05-04 | `spec/01-app/03-import-conventions.md:113-123` | Section reframed as "in upstream `core-v9` tests"; consumer-side note added explaining cross-module `internal/` is forbidden |
 
 ## Targets
 
