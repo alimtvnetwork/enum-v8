@@ -4,6 +4,30 @@
 # Dependencies: Utilities.psm1, ErrorParser.psm1, ErrorExtractor.psm1
 # ─────────────────────────────────────────────────────────────────────────────
 
+function Write-BlockedDiagnostic {
+    <#
+    .SYNOPSIS
+        Echo the (filtered) go compile diagnostic for a blocked package inline,
+        capped at a sensible length so the console stays readable.
+    #>
+    param([string[]]$Lines, [int]$MaxLines = 25)
+    if (-not $Lines -or $Lines.Count -eq 0) {
+        Write-Host "      (no diagnostic captured - see data/coverage/blocked-packages.txt)" -ForegroundColor DarkGray
+        return
+    }
+    $shown = 0
+    foreach ($line in $Lines) {
+        if (-not $line) { continue }
+        if ($shown -ge $MaxLines) {
+            $remaining = $Lines.Count - $shown
+            Write-Host "      ... +$remaining more line(s) - full diagnostic in data/coverage/blocked-packages.txt" -ForegroundColor DarkGray
+            break
+        }
+        Write-Host "      $line" -ForegroundColor DarkYellow
+        $shown++
+    }
+}
+
 function Invoke-CoverageCompileCheck {
     <#
     .SYNOPSIS
