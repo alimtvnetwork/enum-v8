@@ -22,7 +22,7 @@ This folder contains the **authoritative architectural reference** for the `core
 12. [`11-versioning.md`](./11-versioning.md)
 13. [`12-cmd-entrypoints.md`](./12-cmd-entrypoints.md)
 14. [`13-testing-patterns.md`](./13-testing-patterns.md) — forwards to `spec/06-testing-guidelines/`
-15. [`14-tests-folder-walkthrough.md`](./14-tests-folder-walkthrough.md) — `tests/integratedtests/` + `tests/testwrappers/`
+15. [`14-tests-folder-walkthrough.md`](./14-tests-folder-walkthrough.md) — `tests/creationtests/` *(this module)* + upstream `tests/testwrappers/`
 16. [`15-observability.md`](./15-observability.md) — Diagnostic primitives, logging boundaries, tracing scope *(spec-v0.16.0)*
 17. [`16-security.md`](./16-security.md) — PII/secret handling, panic policy, allocation safety *(spec-v0.16.0)*
 

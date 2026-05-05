@@ -2,11 +2,13 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 (verifiable)** *(8 sections audited + 2 baseline-only — §07, §09 — all closed)*
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 / §13 100.0 (verifiable)** *(9 sections audited + 2 baseline-only — §07, §09 — all closed)*
 
-> §12 (cmd-entrypoints) Cycle 10 closed by resolving **1 HIGH contradiction + 1 drift** (+1 latent drift logged for later): (a) **C-CVS-10** — spec §1 asserted "no `cmd/` directory" / "no `main` package" but `enum-v2/cmd/main/main.go` exists with `package main` and `func main()`; rewrote §1 as a "library-first, smoke-test allowed" policy that distinguishes upstream `core-v9` (zero `cmd/`) from this module (one permitted smoke-test harness `cmd/main/`); rule narrowed to "no additional `cmd/<name>/` entrypoints"; cross-linked `cmd/README.md`. (b) **D-CVS-32** — §3 line 71 stale `tests/integratedtests/` rewritten to `tests/creationtests/` (5th occurrence; final `rg integratedtests` sweep deferred to task **AH**). (c) **D-CVS-35** (NEW, deferred) — §5 cites `04-bootstrap-into-new-repo.md` but `spec/04-tooling/` only contains `00..03`. See [`11-cycle10-cmd-entrypoints.md`](./11-cycle10-cmd-entrypoints.md).
+> §13 (testing-patterns) Cycle 11 closed by resolving **3 drifts + 1 collateral fix** (and **retracting D-CVS-35** as a false positive): (a) **D-CVS-36** — §6 line 201 `tests/integratedtests/footests/` rewritten to `tests/creationtests/footests/` and §6 retitled "**upstream `core-v9`**" with explicit scope warning; NEW **§6.1** added documenting the actual `enum-v2` `tests/creationtests/` shape file-by-file (Goconvey + `EnumTestWrapper` registry — completely different from Styles A/B/C/D). 6th and final occurrence of this stale path within `spec/01-app/`. (b) **D-CVS-37** — Style D row example `tests/integratedtests/GetAssert_*_test.go` rewritten to upstream `tests/creationtests/GetAssert_*_test.go`. (c) **D-CVS-38** (NEW) — spec presented every example (`coretestcases.CaseV1`, `args.Map`, `coretests.BaseTestCase`, `testWrapper`, `coretests.GetAssert`) as authoritative for `enum-v2` despite zero consumers; added consumer-coverage callout naming the upstream-only types and pointing readers at `creationtests` (mirrors D-CVS-25 from cycle 4). (d) collateral: `spec/01-app/README.md:25` rewritten. **D-CVS-35 (cycle 10) retracted** — `spec/04-tooling/04-bootstrap-into-new-repo.md` does exist; earlier `ls` was head-truncated. See [`12-cycle11-testing-patterns.md`](./12-cycle11-testing-patterns.md).
 >
-> §11 (versioning) Cycle 9 closed by resolving **2 contradictions + 3 drifts**: **C-CVS-09a/b** (mojibake `core-v9 → core-v9` at §3:95 and §4:112 rewritten as the historical `core-v8` → `core-v9` migration), **D-CVS-27** (`tests/integratedtests/` → `tests/creationtests/` at §4:108), **D-CVS-30** (`versionindexes.V8` comment corrected: V8 = legacy era, V9 = current), **D-CVS-31** (4 stale `.lovable/user-preferences` citations rewritten to `mem://index.md` Core). See [`10-cycle9-versioning.md`](./10-cycle9-versioning.md).
+> §12 (cmd-entrypoints) Cycle 10 closed by resolving **1 HIGH contradiction + 1 drift**: **C-CVS-10** (spec asserted "no `cmd/` directory" but `enum-v2/cmd/main/main.go` exists; rewrote §1 as a "library-first, smoke-test allowed" policy distinguishing upstream `core-v9` from this module's permitted `cmd/main/` smoke-test harness), **D-CVS-32** (`tests/integratedtests/` → `tests/creationtests/` at §3:71). See [`11-cycle10-cmd-entrypoints.md`](./11-cycle10-cmd-entrypoints.md).
+>
+> §11 (versioning) Cycle 9 closed by resolving **2 contradictions + 3 drifts**: **C-CVS-09a/b** (mojibake `core-v9 → core-v9` at §3:95 and §4:112 rewritten as the historical `core-v8` → `core-v9` migration), **D-CVS-27** (`tests/integratedtests/` → `tests/creationtests/` at §4:108), **D-CVS-30** (`versionindexes.V8` comment corrected), **D-CVS-31** (4 stale `.lovable/user-preferences` citations rewritten to `mem://index.md` Core). See [`10-cycle9-versioning.md`](./10-cycle9-versioning.md).
 
 ## Cycle history
 
@@ -30,12 +32,14 @@
 | 2026-05-05 | 9 (closed)   | `01-app/11-versioning.md` | 20 | 9 | 0 | 0 | 11 | **100.0%** *(verifiable)* |
 | 2026-05-05 | 10 (baseline) | `01-app/12-cmd-entrypoints.md` | 22 | 9 | 3 | 4 | 6 | **56.3%** *(verifiable)* |
 | 2026-05-05 | 10 (closed)   | `01-app/12-cmd-entrypoints.md` | 22 | 16 | 0 | 0 | 6 | **100.0%** *(verifiable)* |
+| 2026-05-05 | 11 (baseline) | `01-app/13-testing-patterns.md` | 23 | 11 | 4 | 0 | 8 | **73.3%** *(verifiable)* |
+| 2026-05-05 | 11 (closed)   | `01-app/13-testing-patterns.md` | 23 | 15 | 0 | 0 | 8 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
-**D-CVS-35** (low, deferred) — `spec/01-app/12-cmd-entrypoints.md` §5 cites `/spec/04-tooling/04-bootstrap-into-new-repo.md` but `spec/04-tooling/` only contains `00..03`. Logged in cycle 10 but not in scope for fix; address in a future cleanup pass.
+_None._ **D-CVS-35 retracted** in cycle 11 as a false positive (`spec/04-tooling/04-bootstrap-into-new-repo.md` does exist; cycle 10's `ls` was head-truncated). All 9 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §12, §13) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset. Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 7 §04 + 1 §05 + 6 §06 = **112 ❓** total — require upstream `core-v9` source (task **AB**).
 
-All 8 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §12) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 7 §04 + 1 §05 + 6 §06 = **104 ❓** total — require upstream `core-v9` source (task **AB**).
+> **Cross-spec sweep status:** `rg -n 'tests/integratedtests' spec/01-app/` is now **clean** after cycle 11 (D-CVS-36 was the 6th and final occurrence in `01-app/`). Remaining hits live in `spec/CHANGELOG.md` (immutable history), `spec/99-audits/` (historical snapshots), `spec/02-app-issues/02-internal-package-coverage-policy.md` (correctly references upstream policy), and 4 files under `spec/03-powershell-test-run/` + `spec/04-tooling/04-bootstrap-into-new-repo.md` — these belong to task **AH** (cross-`spec/` cleanup, future).
 
 ## Resolved drift findings
 
@@ -83,6 +87,10 @@ All 8 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §1
 | C-CVS-10 | §12 §1 asserts "no `cmd/` directory" / "no `main` package" but `enum-v2/cmd/main/main.go` exists with `package main` and `func main()` | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §1 lines 19-37 | Rewrote §1 as a "library-first, smoke-test allowed" policy: upstream `core-v9` truly has zero `cmd/`; this module ships exactly one permitted smoke-test harness at `cmd/main/`. Rule narrowed to "no additional `cmd/<name>/` entrypoints + no `cmd/` in `core-v9`". Cross-linked `cmd/README.md`. |
 | D-CVS-32 | §12 §3 line 71 references `tests/integratedtests/` (5th occurrence of this stale path across the spec corpus) | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §3 lines 71-82 | Rewrote to `tests/creationtests/` + `go test ./tests/creationtests/...`; added cross-ref to C-CVS-01 / D-CVS-17 / D-CVS-26 / D-CVS-27 |
 | D-CVS-33 | §12 §3 line 78 example `go test ./tests/integratedtests/coregenerictests/...` | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §3 (subsumed by D-CVS-32) | Replaced with `go test ./tests/creationtests/...` and a `make` invocation for the smoke-test harness |
+| D-CVS-36 | §13 §6 line 201 prescribes per-package layout under `tests/integratedtests/footests/` (6th & final occurrence in `01-app/`); `enum-v2` doesn't even use a per-package layout | 2026-05-05 | `spec/01-app/13-testing-patterns.md` §6 + NEW §6.1 | §6 retitled "**upstream `core-v9`**" with scope warning + path corrected; NEW **§6.1** documents the actual `enum-v2` `tests/creationtests/` shape file-by-file (Goconvey + `EnumTestWrapper` registry); also fixed collateral `spec/01-app/README.md:25` |
+| D-CVS-37 | §13 §1 row D example `tests/integratedtests/GetAssert_*_test.go` | 2026-05-05 | `spec/01-app/13-testing-patterns.md` §1 line 20 (subsumed by D-CVS-36) | Rewrote to upstream `tests/creationtests/GetAssert_*_test.go` |
+| D-CVS-38 | §13 presents Styles A/B/C/D (`coretestcases.CaseV1`, `args.Map`, `coretests.BaseTestCase`, `testWrapper`, `coretests.GetAssert`) as authoritative for `enum-v2` despite zero consumers | 2026-05-05 | `spec/01-app/13-testing-patterns.md` §header + new callout block | Added consumer-coverage callout naming every upstream-only symbol and pointing `enum-v2` readers at `tests/creationtests/` (Goconvey + `EnumTestWrapper` registry); mirrors D-CVS-25 from cycle 4 |
+| D-CVS-35 | **RETRACTED** — claimed `04-bootstrap-into-new-repo.md` was missing, but the file does exist | 2026-05-05 | `spec/04-tooling/04-bootstrap-into-new-repo.md` (verified present) | Cycle 10's `ls` output was head-truncated; finding withdrawn in cycle 11 |
 
 ## Targets
 
@@ -104,9 +112,10 @@ All 8 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §1
 | ✅ Resolve §11 contradictions C-CVS-09a/b + apply D-CVS-27, D-CVS-30, D-CVS-31 | **100.0** verifiable on §11 | 2026-05-05 |
 | ✅ Cycle 10 baseline on §12 | **56.3** verifiable on §12 | 2026-05-05 |
 | ✅ Resolve §12 contradiction C-CVS-10 (HIGH) + apply D-CVS-32, D-CVS-33 | **100.0** verifiable on §12 | 2026-05-05 |
-| 🚧 Fetch `core-v9` source (task **AB**) → resolve **104 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 7 §04 + 1 §05 + 6 §06 | — | pending |
-| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **10/16 baseline (8 closed, 2 baseline-only)** |
+| ✅ Cycle 11 baseline on §13 | **73.3** verifiable on §13 | 2026-05-05 |
+| ✅ Resolve §13 drifts D-CVS-36, D-CVS-37, D-CVS-38 + retract D-CVS-35 | **100.0** verifiable on §13 | 2026-05-05 |
+| 🚧 Fetch `core-v9` source (task **AB**) → resolve **112 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 7 §04 + 1 §05 + 6 §06 | — | pending |
+| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **11/16 baseline (9 closed, 2 baseline-only)** |
 | 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
 | 🎯 Zero ❌ contradictions | 0 | ✅ |
-| 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
 | 🎯 Zero ❌ contradictions | 0 | ✅ |
