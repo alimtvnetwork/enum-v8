@@ -28,10 +28,14 @@
 | 2026-05-05 | 8 (baseline / closed) | `01-app/10-reflection-and-dynamic.md` | 19 | 4 | 0 | 0 | 15 | **100.0%** *(verifiable)* |
 | 2026-05-05 | 9 (baseline) | `01-app/11-versioning.md` | 20 | 4 | 3 | 2 | 11 | **44.4%** *(verifiable)* |
 | 2026-05-05 | 9 (closed)   | `01-app/11-versioning.md` | 20 | 9 | 0 | 0 | 11 | **100.0%** *(verifiable)* |
+| 2026-05-05 | 10 (baseline) | `01-app/12-cmd-entrypoints.md` | 22 | 9 | 3 | 4 | 6 | **56.3%** *(verifiable)* |
+| 2026-05-05 | 10 (closed)   | `01-app/12-cmd-entrypoints.md` | 22 | 16 | 0 | 0 | 6 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
-_None._ All 7 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 7 §04 + 1 §05 + 6 §06 = **98 ❓** total — require upstream `core-v9` source (task **AB**).
+**D-CVS-35** (low, deferred) — `spec/01-app/12-cmd-entrypoints.md` §5 cites `/spec/04-tooling/04-bootstrap-into-new-repo.md` but `spec/04-tooling/` only contains `00..03`. Logged in cycle 10 but not in scope for fix; address in a future cleanup pass.
+
+All 8 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §12) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 7 §04 + 1 §05 + 6 §06 = **104 ❓** total — require upstream `core-v9` source (task **AB**).
 
 ## Resolved drift findings
 
