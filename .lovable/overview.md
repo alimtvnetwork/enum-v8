@@ -1,20 +1,20 @@
-# Project Overview — enum-v2
+# Project Overview — enum-v3
 
 ## Identity
 
-- **Module path:** `github.com/alimtvnetwork/enum-v2` (renamed from `enum-v1`)
+- **Module path:** `github.com/alimtvnetwork/enum-v3` (renamed from `enum-v1`)
 - **Type:** Go enum library with PowerShell + Python tooling
 - **Frontend:** A React/Vite shell exists but is incidental — all real work happens in Go packages, PowerShell scripts, and Python CI guards.
 
 ## Core dependency
 
 - **Import path used in source:** `github.com/alimtvnetwork/core-v9` (renamed from `core-v8`)
-- **Upstream `go.mod` reality:** the upstream repo still declares `module github.com/alimtvnetwork/core-v8`. A `replace` directive in `enum-v2/go.mod` bridges the path mismatch.
-- **Bridge limitation:** Go's `internal/` rule is enforced against the cached module's declared path (`core-v8`), so any `core-v9` package that transitively imports an `internal/` package is rejected for consumers under `enum-v2/...`. Only fix is updating upstream `go.mod` and tagging a release (Task **W**).
+- **Upstream `go.mod` reality:** the upstream repo still declares `module github.com/alimtvnetwork/core-v8`. A `replace` directive in `enum-v3/go.mod` bridges the path mismatch.
+- **Bridge limitation:** Go's `internal/` rule is enforced against the cached module's declared path (`core-v8`), so any `core-v9` package that transitively imports an `internal/` package is rejected for consumers under `enum-v3/...`. Only fix is updating upstream `go.mod` and tagging a release (Task **W**).
 
 ## Directories the AI must respect
 
-- `cross-repo/core-v8/` — mirror of a separate upstream repo. **Never** rename `core-v8` → `core-v9` here. **Never** rewrite `enum-v1` → `enum-v2` here.
+- `cross-repo/core-v8/` — mirror of a separate upstream repo. **Never** rename `core-v8` → `core-v9` here. **Never** rewrite `enum-v1` → `enum-v3` here.
 - `tests/creationtests/` — actual test layout. The string `tests/integratedtests/` in any spec file is **stale** (audit finding C-CVS-01).
 
 ## Hard prohibitions

@@ -10,7 +10,7 @@
 ### PI-001: Upstream `core-v9` `go.mod` module path mismatch (Task W)
 
 - **severity:** CRITICAL / BLOCKING
-- **description:** Upstream `core-v9` repo's `go.mod` still declares `module github.com/alimtvnetwork/core-v8`. Go 1.25 rejects the `replace` bridge. Any `core-v9` package importing `internal/` is rejected for `enum-v2` consumers.
+- **description:** Upstream `core-v9` repo's `go.mod` still declares `module github.com/alimtvnetwork/core-v8`. Go 1.25 rejects the `replace` bridge. Any `core-v9` package importing `internal/` is rejected for `enum-v3` consumers.
 - **owner:** User (manual upstream action)
 - **blocks:** Task AG (drop replace bridge), full Go build, any `internal/`-dependent imports
 - **attempted fixes:** pseudo-version pin, v1.5.6 pin, Go 1.22 toolchain pin (not accepted)
@@ -26,7 +26,7 @@
 ### PI-003: 148 ❓ claims unresolved (Task AB)
 
 - **severity:** MEDIUM
-- **description:** 148 claims across `spec/01-app/` scored ❓ because they reference upstream `core-v9` APIs that have zero `enum-v2` consumers and no mirrored source. Need upstream source fetch to verify.
+- **description:** 148 claims across `spec/01-app/` scored ❓ because they reference upstream `core-v9` APIs that have zero `enum-v3` consumers and no mirrored source. Need upstream source fetch to verify.
 - **owner:** AI + User (fetch access)
 - **blocks:** Full spec verification, re-audit of §07/§09 (Task AC)
 

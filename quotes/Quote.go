@@ -5,7 +5,7 @@ import (
 
 	"github.com/alimtvnetwork/core-v9/converters"
 	"github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
-	"github.com/alimtvnetwork/enum-v2/internal/consts"
+	"github.com/alimtvnetwork/enum-v3/internal/consts"
 )
 
 type Quote byte

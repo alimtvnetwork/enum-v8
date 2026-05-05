@@ -1,6 +1,6 @@
 package creationtests
 
-import "github.com/alimtvnetwork/enum-v2/pathpatterntype"
+import "github.com/alimtvnetwork/enum-v3/pathpatterntype"
 
 var pathPatternTypeCreationTestCases = [...]PathPatternTypeCreationTestWrapper{
 	pathpatterntype.Invalid: {
