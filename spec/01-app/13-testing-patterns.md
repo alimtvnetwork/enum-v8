@@ -2,7 +2,9 @@
 
 > ✅ **Done** — extracted from `spec/00-llm-integration-guide.md` §Testing Patterns + audit §4 (Style Inventory).
 > **Status**: filled in audit Step 4 (2026-04-23, Asia/Kuala_Lumpur).
-> **Audience**: AI agents and contributors writing tests for `core-v9`.
+> **Audience**: AI agents and contributors writing tests for `core-v9` *(upstream)* or for `enum-v2` *(this module)*.
+
+> **Consumer-coverage note (`enum-v2`)**: every code example on this page (`coretestcases.CaseV1`, `args.Map`, `coretests.BaseTestCase`, `testWrapper`, `coretests.GetAssert`) refers to **upstream `core-v9`** test infrastructure that is **not consumed by `enum-v2/`**. This module's own tests live at `tests/creationtests/` and use a different shape entirely — a Goconvey-based registry runner over `EnumTestWrapper` (see [`14-tests-folder-walkthrough.md`](./14-tests-folder-walkthrough.md) §"`tests/creationtests/` shape"). Treat the Styles A–D below as the authoritative reference for upstream `core-v9` tests; for `enum-v2` enums, mirror the `creationtests` registry pattern instead.
 
 This page is the **architectural overview** of how tests are organized. For the full pattern reference, drill into [`/spec/06-testing-guidelines/`](../06-testing-guidelines/) (9 files). For folder-level structure, see [`14-tests-folder-walkthrough.md`](./14-tests-folder-walkthrough.md).
 
@@ -17,7 +19,7 @@ The codebase has **four equally-supported test styles**. Pick by data shape, not
 | **A** | Single-shape input → single-shape output. Most common. | `coretestcases.CaseV1` + `args.Map` | `tc.ShouldBeEqualMap(t, idx, actual)` | No | `errcoretests` |
 | **B** | Hetero typed-slice input (e.g. `[]args.TwoAny`) → `[]string` output | `coretests.BaseTestCase` wrapped in a `testWrapper` slice (`[]testWrapper`) | Cast to `coretestcases.CaseV1(tc.BaseTestCase)` then `ShouldBeEqual(t, idx, lines...)` | Yes — `testWrapper.go` (often a type alias to a shared wrapper) | `anycmptests`, `corecmptests` |
 | **C** | One-off micro-assertion, no loop, no shared cases | None — `args.Map` literal in the test body | `expected.ShouldBeEqual(t, idx, title, actual)` (called on the literal map) | No | `argstests` |
-| **D** | Formatted-output verification using the in-tree assertion harness | Style A or B, plus `coretests.GetAssert.*` helpers in the Act phase | Same as A or B | No | `tests/integratedtests/GetAssert_*_test.go` |
+| **D** | Formatted-output verification using the in-tree assertion harness | Style A or B, plus `coretests.GetAssert.*` helpers in the Act phase | Same as A or B | No | upstream `core-v9` `tests/creationtests/GetAssert_*_test.go` (see D-CVS-37) |
 
 > The existing tradeoffs and unresolved questions about Style B vs A migration live in [`/spec/02-app-issues/01-style-b-style-a-coexistence.md`](../02-app-issues/01-style-b-style-a-coexistence.md).
 
@@ -196,9 +198,11 @@ The full helper inventory lives in [`14-tests-folder-walkthrough.md` §3](./14-t
 
 ---
 
-## 6. Per-Package File Layout (canonical)
+## 6. Per-Package File Layout (canonical, **upstream `core-v9`**)
 
-For a public package `foo/`, its tests live at `tests/integratedtests/footests/`:
+> ⚠️ **Scope:** the layout below applies to **upstream `core-v9`** packages. `enum-v2` does **not** have per-package `*tests/` folders — all enum contract tests live in the shared `tests/creationtests/` registry runner. See the consumer-coverage note at the top of this file and §6.1 below.
+
+For a public package `foo/`, its tests live at `tests/creationtests/footests/` *(upstream)*:
 
 ```
 footests/
@@ -217,6 +221,27 @@ footests/
 ```
 
 Folder-naming and import rules: [`/spec/06-testing-guidelines/01-folder-structure.md`](../06-testing-guidelines/01-folder-structure.md).
+Prior fixes that removed stale `tests/integratedtests/` references from the spec corpus: C-CVS-01 / D-CVS-17 / D-CVS-26 / D-CVS-27 / D-CVS-32 — this section is the 6th and final occurrence (see D-CVS-36).
+
+### 6.1 `enum-v2`-specific layout
+
+```
+tests/creationtests/
+├── EnumTestWrapper.go                       # shared registry record (Header, InitialBasicEnumer, Expected*…)
+├── allBasicEnumsCollection.go               # registry: every enum's `.Invalid` instance for is-valid checks
+├── allEnumGeneralTestCases.go               # registry: per-enum expected MapValues / Min / Max / CSV
+├── simpleEnumCollectionTestCases.go         # registry slice consumed by Test_Creation
+├── pathPatternTypeCreationTestCases.go      # bespoke registry for pathpatterntype
+├── generateAllBasicEnumTestCases.go         # populates the registries at init
+├── generateAllEnumGeneralTestCases.go       #   ″
+├── generatePathPatternTestCases.go          #   ″
+├── creation_test.go                         # Goconvey runner over simpleEnumCollectionTestCases
+├── AllEnums_ContractsTesting_test.go        # Goconvey runner over allEnumGeneralTestCases
+├── PathType_Creation_test.go                # Goconvey runner over pathPatternTypeCreationTestCases
+└── ScriptType_test.go                       # bespoke per-enum runner
+```
+
+Key differences vs the upstream layout above: (a) one shared package, not per-enum sub-packages; (b) Goconvey (`. "github.com/smartystreets/goconvey/convey"`) instead of `coretestcases`/`coretests`; (c) registry-driven — adding an enum means adding one entry, not creating a new folder; (d) no `args.Map`, no `testWrapper` type alias, no `params.go`.
 
 ---
 
