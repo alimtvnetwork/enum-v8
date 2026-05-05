@@ -2,8 +2,10 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / §15 100.0 (verifiable)** *(11 sections audited + 2 baseline-only — §07, §09 — all closed)*
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / §15 100.0 / §16 100.0 (verifiable)** *(12 sections audited + 2 baseline-only — §07, §09 — all closed)* — **`spec/01-app/` directory audit COMPLETE.**
 
+> 🎉 **Milestone — `spec/01-app/` directory audit complete (Cycle 14).** All 14 numbered files (§03-§16) audited; 12 closed at 100% verifiable, 2 baseline-only (§07, §09) awaiting upstream source. Total 148 ❓ across the directory pending task AB. §16 closed at baseline with zero corrective edits (second cycle-on-first-pass to do so, after §15). See [`15-cycle14-security.md`](./15-cycle14-security.md).
+>
 > §15 (observability) Cycle 13 closed **at baseline with zero corrective edits** — first cycle-on-first-pass to do so with a non-trivial verifiable subset (14 ✅ / 13 ❓). All inter-spec cross-refs resolve; no `fmt.Print`/`log.Print` in `enum-v2` production code; no stale paths or mojibake. Introduced **spec-internal-consistency** as an explicit audit dimension. See [`14-cycle13-observability.md`](./14-cycle13-observability.md).
 >
 > §14 (tests-folder-walkthrough) Cycle 12 closed by resolving **4 drifts + 2 collateral fixes**: (a) **D-CVS-39** — §1 prescribed `tests/integratedtests/` (7th occurrence corpus-wide); §1 retitled "**`tests/creationtests/` *(upstream)*"** with scope warning + tree diagram updated. (b) **D-CVS-40** — §5 walkthrough `tests/integratedtests/widgettests/` (8th occurrence) corrected + `enum-v2` redirect. (c) **D-CVS-41** — §3 GetAssert observation-source path (9th occurrence) corrected. (d) **D-CVS-42** (NEW, mirrors D-CVS-38) — added consumer-coverage callout naming `tests/testwrappers/`, `coretests.GetAssert`, `coretestcases.CaseV1`, `StringsTestWrapper` as upstream-only and redirecting `enum-v2` readers at §13 §6.1. (e) **collateral** — `01-package-map.md` §8 (5 hits) and `02-design-philosophy.md` line 183 fixed; cycle 11's "01-app/ is clean" claim was premature, this cycle finishes the sweep. See [`13-cycle12-tests-folder-walkthrough.md`](./13-cycle12-tests-folder-walkthrough.md).
@@ -41,10 +43,11 @@
 | 2026-05-05 | 12 (baseline) | `01-app/14-tests-folder-walkthrough.md` | 24 | 8 | 6 | 0 | 10 | **57.1%** *(verifiable)* |
 | 2026-05-05 | 12 (closed)   | `01-app/14-tests-folder-walkthrough.md` | 24 | 14 | 0 | 0 | 10 | **100.0%** *(verifiable)* |
 | 2026-05-05 | 13 (baseline / closed) | `01-app/15-observability.md` | 27 | 14 | 0 | 0 | 13 | **100.0%** *(verifiable)* |
+| 2026-05-05 | 14 (baseline / closed) | `01-app/16-security.md` | 30 | 17 | 0 | 0 | 13 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
-_None._ All 11 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §12, §13, §14, §15) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset. Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 10 §14 + 13 §15 + 7 §04 + 1 §05 + 6 §06 = **135 ❓** total — require upstream `core-v9` source (task **AB**).
+_None._ All 12 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §12, §13, §14, §15, §16) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset. **`spec/01-app/` directory audit complete.** Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 10 §14 + 13 §15 + 13 §16 + 7 §04 + 1 §05 + 6 §06 = **148 ❓** total — require upstream `core-v9` source (task **AB**).
 
 > **Cross-spec sweep status:** `spec/01-app/` is now **genuinely clean** of stale `tests/integratedtests/` references after cycle 12 finished what cycle 11 thought it had finished. Remaining hits in `01-app/` are intentional anti-pattern callouts (`05-enum-system.md:417`) or retro-references inside cycle-11/12 fix notes themselves. Task **AH** still owes a sweep of `spec/03-powershell-test-run/` (4 files), `spec/04-tooling/04-bootstrap-into-new-repo.md`, and `spec/02-app-issues/02-internal-package-coverage-policy.md`. `spec/CHANGELOG.md` and `spec/99-audits/` are immutable history.
 
