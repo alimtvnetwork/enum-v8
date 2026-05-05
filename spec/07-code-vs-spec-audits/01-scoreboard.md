@@ -102,7 +102,11 @@ All 8 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §1
 | ✅ Cycle 8 baseline+closed on §10 (4 MUST/MUST-NOT rules verified, 0 violations) | **100.0** verifiable on §10 | 2026-05-05 |
 | ✅ Cycle 9 baseline on §11 | **44.4** verifiable on §11 | 2026-05-05 |
 | ✅ Resolve §11 contradictions C-CVS-09a/b + apply D-CVS-27, D-CVS-30, D-CVS-31 | **100.0** verifiable on §11 | 2026-05-05 |
-| 🚧 Fetch `core-v9` source (task **AB**) → resolve **98 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 7 §04 + 1 §05 + 6 §06 | — | pending |
-| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **9/16 baseline (7 closed, 2 baseline-only)** |
+| ✅ Cycle 10 baseline on §12 | **56.3** verifiable on §12 | 2026-05-05 |
+| ✅ Resolve §12 contradiction C-CVS-10 (HIGH) + apply D-CVS-32, D-CVS-33 | **100.0** verifiable on §12 | 2026-05-05 |
+| 🚧 Fetch `core-v9` source (task **AB**) → resolve **104 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 7 §04 + 1 §05 + 6 §06 | — | pending |
+| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **10/16 baseline (8 closed, 2 baseline-only)** |
+| 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
+| 🎯 Zero ❌ contradictions | 0 | ✅ |
 | 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
 | 🎯 Zero ❌ contradictions | 0 | ✅ |
