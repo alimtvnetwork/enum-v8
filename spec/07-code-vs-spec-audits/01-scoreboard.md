@@ -80,6 +80,9 @@ All 8 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §1
 | D-CVS-27 | §11 §4 line 108 references `tests/integratedtests/` (4th occurrence of this pattern) | 2026-05-05 | `spec/01-app/11-versioning.md:108` | Rewrote to `tests/creationtests/` + cross-ref to C-CVS-01 / D-CVS-17 / D-CVS-26 |
 | D-CVS-30 | §11 §2 line 59 comment claims `versionindexes.V8 // 8 (current era — core-v9)` — contradictory | 2026-05-05 | `spec/01-app/11-versioning.md:59` | Rewrote to `// 8 (legacy era; the current core-v9 era is V9)` |
 | D-CVS-31 | §11 cites `.lovable/user-preferences line 8` (file does not exist in `enum-v2`) in 4 places | 2026-05-05 | `spec/01-app/11-versioning.md` lines 5, 78, 133, 156 | Rewrote all 4 citations to point only to `mem://index.md` Core (which exists and carries the rule) |
+| C-CVS-10 | §12 §1 asserts "no `cmd/` directory" / "no `main` package" but `enum-v2/cmd/main/main.go` exists with `package main` and `func main()` | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §1 lines 19-37 | Rewrote §1 as a "library-first, smoke-test allowed" policy: upstream `core-v9` truly has zero `cmd/`; this module ships exactly one permitted smoke-test harness at `cmd/main/`. Rule narrowed to "no additional `cmd/<name>/` entrypoints + no `cmd/` in `core-v9`". Cross-linked `cmd/README.md`. |
+| D-CVS-32 | §12 §3 line 71 references `tests/integratedtests/` (5th occurrence of this stale path across the spec corpus) | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §3 lines 71-82 | Rewrote to `tests/creationtests/` + `go test ./tests/creationtests/...`; added cross-ref to C-CVS-01 / D-CVS-17 / D-CVS-26 / D-CVS-27 |
+| D-CVS-33 | §12 §3 line 78 example `go test ./tests/integratedtests/coregenerictests/...` | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §3 (subsumed by D-CVS-32) | Replaced with `go test ./tests/creationtests/...` and a `make` invocation for the smoke-test harness |
 
 ## Targets
 
