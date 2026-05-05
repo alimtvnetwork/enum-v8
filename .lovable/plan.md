@@ -1,7 +1,7 @@
 # Active Plan — enum-v3
 
 > Single source of truth for the project roadmap. Letter IDs are stable across sessions.
-> Last updated: 2026-05-05 (post reliability report, pre-implementation).
+> Last updated: 2026-05-05 (W+AG completed, build unblocked).
 
 ---
 
@@ -9,19 +9,12 @@
 
 ### W. Upstream `core-v9` `go.mod` rename + tag `v1.5.8`
 
-- **Status:** 🚫 Blocked — manual upstream action required
-- **Objective:** Edit upstream `core-v9` repo's `go.mod` to declare `module github.com/alimtvnetwork/core-v9`, tag `v1.5.8`.
-- **Dependencies:** None (user action)
-- **Expected outputs:** Upstream `go.mod` line 1 = `module github.com/alimtvnetwork/core-v9`; release `v1.5.8` tagged.
-- **Acceptance criteria:** `go get github.com/alimtvnetwork/core-v9@v1.5.8` succeeds from any machine.
+- **Status:** ✅ Done (2026-05-05)
 
 ### AG. Drop the `replace` bridge and pin clean `core-v9 v1.5.8`
 
-- **Status:** ⏳ Pending — waits on W
-- **Objective:** Remove `replace` directive from `enum-v3/go.mod`, pin `require core-v9 v1.5.8`.
-- **Dependencies:** W
-- **Expected outputs:** Clean `go.mod` with no `replace`; `./run.ps1 -tc` passes.
-- **Acceptance criteria:** `grep replace go.mod` returns nothing; `go build ./...` succeeds.
+- **Status:** ✅ Done (2026-05-05)
+- **Result:** `replace` directive removed, `require core-v9 v1.5.8` pinned.
 
 ---
 
