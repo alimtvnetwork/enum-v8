@@ -112,14 +112,16 @@
 
 ---
 
-## 8. Test Packages (under `tests/integratedtests/`)
+## 8. Test Packages (under `tests/creationtests/`)
 
-There is a **mirror** of public packages under `tests/integratedtests/` with the suffix `tests`. Examples:
+> ⚠️ **Scope:** the per-package mirror layout below is **upstream `core-v9`**. `enum-v2` uses one shared `tests/creationtests/` package — see [`13-testing-patterns.md` §6.1](./13-testing-patterns.md#61-enum-v2-specific-layout).
 
-- `tests/integratedtests/argstests/`
-- `tests/integratedtests/errcoretests/`
-- `tests/integratedtests/anycmptests/`
-- `tests/integratedtests/isanytests/`
+There is a **mirror** of public packages under upstream `tests/creationtests/` with the suffix `tests`. Examples:
+
+- `tests/creationtests/argstests/`
+- `tests/creationtests/errcoretests/`
+- `tests/creationtests/anycmptests/`
+- `tests/creationtests/isanytests/`
 - … (≥ 50 packages total)
 
 Naming rules and file layout for these packages are documented in [`/spec/06-testing-guidelines/01-folder-structure.md`](../06-testing-guidelines/01-folder-structure.md) and [`14-tests-folder-walkthrough.md`](./14-tests-folder-walkthrough.md).
