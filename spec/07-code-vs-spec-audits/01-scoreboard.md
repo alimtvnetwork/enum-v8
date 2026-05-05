@@ -2,9 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 (verifiable)** *(5 sections audited + 2 baseline-only — §07, §09 — all closed)*
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 (verifiable)** *(6 sections audited + 2 baseline-only — §07, §09 — all closed)*
 
-> §03–§06 + §08 closed at 100 % verifiable; §07 and §09 are baseline-only (no verifiable subset — zero `enum-v2` consumers). §09 (converters) Cycle 7 introduced **no new drifts** — all 23 claims (`converters.StringTo/BytesTo/PrettyJson`, `typesconv.IntToInt64/Int64ToInt32/Float64ToInt`, the two-return-mode contract, `errcore.FailedToConvertType` / `OverflowType`) are upstream-only with no in-repo emitter and no path-string drift to flag (unlike §08's D-CVS-26). The `strconv.Atoi/ParseBool` anti-pattern flagged in §09 §5 is also absent from `enum-v2` source. See [`08-cycle7-converters.md`](./08-cycle7-converters.md).
+> §10 (reflection-and-dynamic) Cycle 8 closed at baseline with **no fixes needed** — the four verifiable claims are all MUST/MUST-NOT compliance checks (no consumer-side `"reflect"` import, no `internal/reflectinternal` import, no `reflect.DeepEqual` calls, MUST/MUST-NOT documentation convention) and `enum-v2` honours all of them at **0 violations**. The remaining 15 ❓ on §10 (`coredynamic` API surface, `reflectcore` predicates, `internal/reflectinternal` responsibilities) defer to task **AB**. See [`09-cycle8-reflection-and-dynamic.md`](./09-cycle8-reflection-and-dynamic.md).
 
 ## Cycle history
 
@@ -23,10 +23,11 @@
 | 2026-05-05 | 6 (baseline) | `01-app/08-validators.md` | 19 | 0 | 1 | 0 | 18 | **0.0%** *(verifiable)* |
 | 2026-05-05 | 6 (closed)   | `01-app/08-validators.md` | 19 | 1 | 0 | 0 | 18 | **100.0%** *(verifiable)* |
 | 2026-05-05 | 7 (baseline) | `01-app/09-converters.md` | 23 | 0 | 0 | 0 | 23 | **N/A** *(no verifiable subset)* |
+| 2026-05-05 | 8 (baseline / closed) | `01-app/10-reflection-and-dynamic.md` | 19 | 4 | 0 | 0 | 15 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
-_None._ All 5 audited-and-closed sections (§03, §04, §05, §06, §08) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 on §07, 18 on §08, 23 on §09, 7 on §04, 1 on §05, 6 on §06 = **72 ❓** total — require upstream `core-v9` source (task **AB**).
+_None._ All 6 audited-and-closed sections (§03, §04, §05, §06, §08, §10) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 7 §04 + 1 §05 + 6 §06 = **87 ❓** total — require upstream `core-v9` source (task **AB**).
 
 ## Resolved drift findings
 
@@ -82,7 +83,8 @@ _None._ All 5 audited-and-closed sections (§03, §04, §05, §06, §08) are at 
 | ✅ Resolve §06 contradictions C-CVS-06..08 + apply D-CVS-20..25 | **100.0** verifiable on §06 | 2026-05-04 |
 | ✅ Cycle 6 baseline on §08 + apply D-CVS-26 | **100.0** verifiable on §08 | 2026-05-05 |
 | ✅ Cycle 7 baseline on §09 (no drifts; all upstream-only) | **N/A** *(no verifiable subset)* | 2026-05-05 |
-| 🚧 Fetch `core-v9` source (task **AB**) → resolve **72 ❓** total: 17 §07 + 18 §08 + 23 §09 + 7 §04 + 1 §05 + 6 §06 | — | pending |
-| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **7/16 baseline (5 closed, 2 baseline-only)** |
+| ✅ Cycle 8 baseline+closed on §10 (4 MUST/MUST-NOT rules verified, 0 violations) | **100.0** verifiable on §10 | 2026-05-05 |
+| 🚧 Fetch `core-v9` source (task **AB**) → resolve **87 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 7 §04 + 1 §05 + 6 §06 | — | pending |
+| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **8/16 baseline (6 closed, 2 baseline-only)** |
 | 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
 | 🎯 Zero ❌ contradictions | 0 | ✅ |
