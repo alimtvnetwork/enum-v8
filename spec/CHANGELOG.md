@@ -17,7 +17,7 @@
 ## [spec-v0.27.0] — 2026-05-04 (Cycle 5 baseline — §07 conditional-and-utilities audited)
 
 ### Added
-- **`spec/07-code-vs-spec-audits/06-cycle5-conditional-and-utilities.md`** — Cycle 5 baseline audit of `spec/01-app/07-conditional-and-utilities.md`. All 17 claims (covering `conditional`, `isany`, `issetter`, `regexnew`, `coremath`, `corecmp`, `coresort`, `corefuncs`, `namevalue`, `keymk`) classified as **❓ unverifiable**: zero `enum-v1` consumers and no source mirrored under `cross-repo/core-v8/`. No drift or contradiction provable from `enum-v1` alone — verification deferred to task **AB** (fetch upstream `core-v9` source). Section coverage advances **4 / 16 → 5 / 16**; verifiable-match rate unchanged.
+- **`spec/07-code-vs-spec-audits/06-cycle5-conditional-and-utilities.md`** — Cycle 5 baseline audit of `spec/01-app/07-conditional-and-utilities.md`. All 17 claims (covering `conditional`, `isany`, `issetter`, `regexnew`, `coremath`, `corecmp`, `coresort`, `corefuncs`, `namevalue`, `keymk`) classified as **❓ unverifiable**: zero `enum-v2` consumers and no source mirrored under `cross-repo/core-v8/`. No drift or contradiction provable from `enum-v2` alone — verification deferred to task **AB** (fetch upstream `core-v9` source). Section coverage advances **4 / 16 → 5 / 16**; verifiable-match rate unchanged.
 
 ### Changed
 - **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — added Cycle 5 (baseline) row marked **N/A** *(no verifiable subset)*; updated section-coverage milestone to **5/16**; restated **AB** task as now spanning **17 §07 + 7 §04 + 1 §05 + 6 §06** ❓ claims.
@@ -26,14 +26,14 @@
 
 ### Fixed
 - **`spec/01-app/06-data-structures.md`** — resolves C-CVS-06..08 + D-CVS-20..25 from Cycle 4 in a single pass. Lifts §06 from **35.7 % → 100 %** of its verifiable subset; **❌ contradiction count: 3 → 0**.
-  - **§1 "Consumer-coverage note"** (resolves **D-CVS-25**): added a callout listing actual `enum-v1` consumer counts (`corejson` 80 / `corestr` 4 / `coreonce` 1; `coregeneric` and `corepayload` zero) so readers know which sub-sections are upstream-reference.
+  - **§1 "Consumer-coverage note"** (resolves **D-CVS-25**): added a callout listing actual `enum-v2` consumer counts (`corejson` 80 / `corestr` 4 / `coreonce` 1; `coregeneric` and `corepayload` zero) so readers know which sub-sections are upstream-reference.
   - **§2 `coregeneric` header**: added explicit "⚠️ Upstream-only sub-package" callout.
   - **§3 `corestr` rewrite** (resolves **D-CVS-23**): replaced the unused `corestr.NewCollectionPtrUsingStrings(&values, 0)` example with the actual exported surface (`corestr.New.Hashset`, `corestr.New.SimpleSlice`, `corestr.SimpleStringOnce`); cross-referenced the upstream-only `coregeneric.New.Collection.String` for callers that genuinely need a mutex-protected string list.
   - **§4 `corejson` code block** (resolves **C-CVS-07** + **D-CVS-20** + **D-CVS-21**): replaced fictional `Serialize.ToString` / `Serialize.Raw` / `Deserialize.UsingBytes` / `Deserialize.FromTo` with the real consumer-side API: `Serialize.ToBytesErr` returning `*Result`, `Deserialize.BytesTo`, and `corejson.NewPtr(...).PrettyJsonString()`. Added a contracts subsection naming `Jsoner` / `JsonMarshaller` / `JsonContractsBinder`.
   - **§4 "Rule (with documented exceptions)"** (resolves **C-CVS-06**): rule wording softened from "**never** `encoding/json` directly" to "**should** prefer `corejson`" with an explicit table of the two legitimate exceptions: `inttype/Variant.go:440` calling `json.Marshal(it.Value())` inside `MarshalJSON`, and `inttype/all-constructors.go:75` accepting `*json.Number` as a parameter type.
   - **§5 `coreonce` rewrite** (resolves **D-CVS-22** + **D-CVS-24**): replaced the fictional `coreonce.New.String(producer)` namespace with the real top-level constructors `coreonce.NewAnyOnce` / `coreonce.NewByteOnce`; cross-referenced `corestr.SimpleStringOnce` as the string equivalent (which lives in `corestr`, not `coreonce`); softened "all common types" wording.
   - **§6 `corepayload` upstream-only callout** (resolves **C-CVS-08**): added "⚠️ Upstream-only sub-package" callout deferring `PayloadCreateInstruction` field-set verification to task **AB**.
-  - **§7 decision matrix**: added a "Verified in `enum-v1`?" column (✅ vs ⚠️ upstream-only); replaced fictional rows (`corestr.Collection`, `coreonce.New.<Type>`, `corejson.Serialize`/`Deserialize` shorthand) with concrete entries pointing at real APIs.
+  - **§7 decision matrix**: added a "Verified in `enum-v2`?" column (✅ vs ⚠️ upstream-only); replaced fictional rows (`corestr.Collection`, `coreonce.New.<Type>`, `corejson.Serialize`/`Deserialize` shorthand) with concrete entries pointing at real APIs.
 
 ### Changed
 - **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — moved C-CVS-06..08 + D-CVS-20..25 to **Resolved** (9 entries); cleared the **Open drift findings** table; added Cycle 4 (closed) row at **100.0 %** verifiable on §06; updated targets to ✅ for the ≥95 % aggregate goal and ✅ for zero-contradictions.
@@ -41,7 +41,7 @@
 ## [spec-v0.25.0] — 2026-05-04 (Cycle 4 baseline — §06 data-structures audited)
 
 ### Added
-- **`spec/07-code-vs-spec-audits/05-cycle4-data-structures.md`** — full Cycle 4 audit of `01-app/06-data-structures.md`. 20 claims: 5 ✅ / 6 ⚠️ / **3 ❌** / **6 ❓**. Verifiable score: **35.7 %** (5/14). Three contradictions: `corejson.Serialize.ToString` / `Deserialize.FromTo` examples don't compile (real API: `Serialize.ToBytesErr` / `Deserialize.BytesTo`); `coreonce.New.String(...)` namespace doesn't match real top-level constructors (`coreonce.NewAnyOnce` / `NewByteOnce`); §4's "never `encoding/json` directly" rule is violated by `inttype/Variant.go` (`json.Marshal` in `MarshalJSON`) and `inttype/all-constructors.go` (`*json.Number` parameter type). The high ❓ count (6) reflects that `coregeneric` and `corepayload` have **zero consumers** in `enum-v1`.
+- **`spec/07-code-vs-spec-audits/05-cycle4-data-structures.md`** — full Cycle 4 audit of `01-app/06-data-structures.md`. 20 claims: 5 ✅ / 6 ⚠️ / **3 ❌** / **6 ❓**. Verifiable score: **35.7 %** (5/14). Three contradictions: `corejson.Serialize.ToString` / `Deserialize.FromTo` examples don't compile (real API: `Serialize.ToBytesErr` / `Deserialize.BytesTo`); `coreonce.New.String(...)` namespace doesn't match real top-level constructors (`coreonce.NewAnyOnce` / `NewByteOnce`); §4's "never `encoding/json` directly" rule is violated by `inttype/Variant.go` (`json.Marshal` in `MarshalJSON`) and `inttype/all-constructors.go` (`*json.Number` parameter type). The high ❓ count (6) reflects that `coregeneric` and `corepayload` have **zero consumers** in `enum-v2`.
 - **9 new drift findings** (C-CVS-06..08 + D-CVS-20..25): documented vs actual `corejson` API, `coreonce` constructor surface, `corestr` real exports (`Hashset` / `SimpleSlice` / `SimpleStringOnce` rather than a string-list collection), and the upstream-only status of `coregeneric` / `corepayload`.
 
 ### Changed
@@ -66,7 +66,7 @@
 ## [spec-v0.23.0] — 2026-05-04 (Cycle 3 baseline — §05 enum-system audited)
 
 ### Added
-- **`spec/07-code-vs-spec-audits/04-cycle3-enum-system.md`** — full Cycle 3 audit of `01-app/05-enum-system.md`. 18 claims: 8 ✅ / 6 ⚠️ / **3 ❌** / 1 ❓. Verifiable score: **47.1 %** (8/17). Three real contradictions surfaced (C-CVS-03..05): the "first const = `Invalid`" rule is violated by 10 packages using alternate sentinel names (`Default`, `Unspecified`, `Uninitialized`, `InvalidIndex = -1`); the recipe imports `core-v9/internal/reflectinternal` which `enum-v1` cannot legally do across module boundaries; and `inttype.InvalidIndex Variant = -1` directly contradicts the "zero-value sentinel" wording.
+- **`spec/07-code-vs-spec-audits/04-cycle3-enum-system.md`** — full Cycle 3 audit of `01-app/05-enum-system.md`. 18 claims: 8 ✅ / 6 ⚠️ / **3 ❌** / 1 ❓. Verifiable score: **47.1 %** (8/17). Three real contradictions surfaced (C-CVS-03..05): the "first const = `Invalid`" rule is violated by 10 packages using alternate sentinel names (`Default`, `Unspecified`, `Uninitialized`, `InvalidIndex = -1`); the recipe imports `core-v9/internal/reflectinternal` which `enum-v2` cannot legally do across module boundaries; and `inttype.InvalidIndex Variant = -1` directly contradicts the "zero-value sentinel" wording.
 - **6 new drift findings** (D-CVS-14..19): documented vs actual file layout (`Variant.go` everywhere, no `consts.go`), missing `*AllCases` factory family in §6 (10+ call sites), unused `CreateUsingMap` listed, stale `tests/integratedtests/` reference (mirrors C-CVS-01), unrunnable `reflectinternal.TypeName(...)` example, predicate file-split rule that's never enforced.
 
 ### Changed
@@ -91,7 +91,7 @@
 
 ### Added
 - **`spec/07-code-vs-spec-audits/03-cycle2-error-system.md`** — full Cycle 2 audit of `01-app/04-error-system.md`. 18 claims extracted: 3 ✅, 8 ⚠️ (spec is incomplete vs consumer usage), 7 ❓ (unverifiable without upstream `core-v9` source — sandbox lacks Go + the module is not vendored), 0 ❌. Verifiable-subset score: **27.3 %** (3/11). New ❓ bucket introduced so aspirational APIs aren't logged as contradictions before upstream source is available.
-- **8 new open drift findings** (D-CVS-06..13) covering APIs `enum-v1` actively uses but the spec does not document: `MustBeEmpty`, `RawErrCollection`, `<RawErrorType>.ErrorRefOnly`, `<RawErrorType>.CombineWithAnother`, `MessageWithRef`, `RangeNotMeet`, `ToError`/`ToString`, plus 4 missing `RawErrorType` examples (`FailedToExecuteType`, `NotSupportedType`, `PathInvalidErrorType`, `ComparatorShouldBeWithinRangeType`).
+- **8 new open drift findings** (D-CVS-06..13) covering APIs `enum-v2` actively uses but the spec does not document: `MustBeEmpty`, `RawErrCollection`, `<RawErrorType>.ErrorRefOnly`, `<RawErrorType>.CombineWithAnother`, `MessageWithRef`, `RangeNotMeet`, `ToError`/`ToString`, plus 4 missing `RawErrorType` examples (`FailedToExecuteType`, `NotSupportedType`, `PathInvalidErrorType`, `ComparatorShouldBeWithinRangeType`).
 
 ### Changed
 - **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — added Cycle 2 row, new ❓ column, 8 open findings, 2 new milestones (apply D-CVS-06..13 spec fixes; fetch upstream `core-v9` source as task **AB**). Section progress: **2/16** done.
@@ -99,8 +99,8 @@
 ## [spec-v0.20.0] — 2026-05-04 (Cycle 1 fully closed — §03 at 100%)
 
 ### Fixed
-- **`spec/01-app/03-import-conventions.md` §3 "`internal/` access from tests"** — resolves **C-CVS-02**. Section was titled "Common `internal/` packages used by tests" and used `core-v9/internal/reflectinternal` as a live example, but `enum-v1` (this repo) imports zero `internal/` packages. Reframed as a forward-looking explanation that `internal/` access is a **same-module** rule, with the `reflectinternal` example explicitly attributed to the upstream `core-v9` repo's own tests, and a new **consumer-side note** stating that `enum-v1`-style consumers cannot import `core-v9/internal/...` because Go enforces `internal/` at module boundaries.
-- **`spec/01-app/03-import-conventions.md` §4 "Test-Package Imports"** — resolves **C-CVS-01**. Old text claimed tests live at `tests/integratedtests/footests/`, which doesn't exist in this repo. Replaced with the actual `enum-v1` layout (`tests/creationtests/` — flat, single `package creationtests`, mix of `*_test.go` and shared fixture `.go` files) plus a cross-reference to the upstream `core-v9` per-suite layout (`tests/<suite>/footests/`). The four shared rules (separate package, normal imports of source, no cycles, same-module `internal/` only) apply to both layouts.
+- **`spec/01-app/03-import-conventions.md` §3 "`internal/` access from tests"** — resolves **C-CVS-02**. Section was titled "Common `internal/` packages used by tests" and used `core-v9/internal/reflectinternal` as a live example, but `enum-v2` (this repo) imports zero `internal/` packages. Reframed as a forward-looking explanation that `internal/` access is a **same-module** rule, with the `reflectinternal` example explicitly attributed to the upstream `core-v9` repo's own tests, and a new **consumer-side note** stating that `enum-v2`-style consumers cannot import `core-v9/internal/...` because Go enforces `internal/` at module boundaries.
+- **`spec/01-app/03-import-conventions.md` §4 "Test-Package Imports"** — resolves **C-CVS-01**. Old text claimed tests live at `tests/integratedtests/footests/`, which doesn't exist in this repo. Replaced with the actual `enum-v2` layout (`tests/creationtests/` — flat, single `package creationtests`, mix of `*_test.go` and shared fixture `.go` files) plus a cross-reference to the upstream `core-v9` per-suite layout (`tests/<suite>/footests/`). The four shared rules (separate package, normal imports of source, no cycles, same-module `internal/` only) apply to both layouts.
 - **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — moved C-CVS-01 and C-CVS-02 from Open → Resolved; §03 score updated 83.3 → **100.0** (12/12). Open-findings list is now empty. Cycle 1 is closed.
 
 ### Verified
@@ -115,8 +115,8 @@
   - **D-CVS-01** (line 4): `consumes core-v8 packages` → `consumes core-v9 packages`.
   - **D-CVS-02** (line 88): `path ends in core-v8` / `not corev8` → `core-v9` / `corev9`.
   - **D-CVS-03** (line 94): `For core-v8, this means:` → `For core-v9, this means:`.
-  - **D-CVS-04** (line 121): reworded "rooted at the same `core-v8` module" to a module-generic statement that applies equally to `core-v9`, `enum-v1`, or any other consumer with its own `internal/` tree.
-  - **D-CVS-05** (lines 61, 73): annotated `coredata/coregeneric` as `// optional` in the canonical import block and added a sentence noting "not every consumer uses every package — `enum-v1`, for example, currently uses 8 of the 11 listed canonical imports".
+  - **D-CVS-04** (line 121): reworded "rooted at the same `core-v8` module" to a module-generic statement that applies equally to `core-v9`, `enum-v2`, or any other consumer with its own `internal/` tree.
+  - **D-CVS-05** (lines 61, 73): annotated `coredata/coregeneric` as `// optional` in the canonical import block and added a sentence noting "not every consumer uses every package — `enum-v2`, for example, currently uses 8 of the 11 listed canonical imports".
 - **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — moved D-CVS-01..05 from Open → Resolved; §03 score updated 41.7 → **83.3** (10/12). The two remaining `tests/integratedtests/` and `internal/reflectinternal` contradictions stay open pending a structural decision.
 
 ### Verified

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to **enum-v1** are documented in this file.
+All notable changes to **enum-v2** are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -49,7 +49,7 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
      lines so only valid import paths reach the compile check.
   2. The in-package-test scan hard-coded the `core-v9` module prefix when
      stripping import paths to filesystem-relative paths. It now reads the
-     `module` line from `go.mod` so the same script works in `enum-v1`,
+     `module` line from `go.mod` so the same script works in `enum-v2`,
      `core-v9`, and any other module.
 - **`scripts/CoverageRunner.psm1`, `scripts/CoverageCompileCheck.psm1`** —
   `shortName` regex updated from `'.*integratedtests/?'` to
@@ -99,7 +99,7 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ### Changed
 - Module path migrated from `gitlab.com/auk-go/enum` to
-  `github.com/alimtvnetwork/enum-v1`.
+  `github.com/alimtvnetwork/enum-v2`.
 - **Core dependency renamed** `github.com/alimtvnetwork/core-v8` →
   `github.com/alimtvnetwork/core-v9` across all 307 source files
   (`go.mod`, all package imports, spec docs, CI configs, coverage

@@ -49,11 +49,11 @@ function Invoke-TestCoverage {
         & $repoBuildErrorsScript -OutputTxt $repoBuildErrorsFile -OutputJson $repoBuildErrorsJsonFile
     }
 
-    # Determine import-path prefix for this module (e.g. enum-v1, core-v9, …)
+    # Determine import-path prefix for this module (e.g. enum-v2, core-v9, …)
     # so all downstream filters are anchored to the actual module path.
     $modulePath = (Select-String -Path 'go.mod' -Pattern '^module\s+(\S+)' -ErrorAction SilentlyContinue |
         Select-Object -First 1).Matches[0].Groups[1].Value
-    if (-not $modulePath) { $modulePath = 'github.com/alimtvnetwork/enum-v1' }
+    if (-not $modulePath) { $modulePath = 'github.com/alimtvnetwork/enum-v2' }
     $modulePrefix = "^$([regex]::Escape($modulePath))(/|$)"
 
     # Helper: strict filter — only keep lines that look like real import paths
@@ -88,7 +88,7 @@ function Invoke-TestCoverage {
     $covPkgList = $srcPkgs -join ","
 
     # Discover integration test packages. Historically these lived under
-    # tests/integratedtests/, but this repo (enum-v1) uses tests/creationtests/.
+    # tests/integratedtests/, but this repo (enum-v2) uses tests/creationtests/.
     # Probe whichever roots actually exist on disk, and apply the strict
     # module-prefix filter so junk lines never become phantom (root) packages.
     $integrationTestPkgs = @()

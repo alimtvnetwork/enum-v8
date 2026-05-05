@@ -4,7 +4,7 @@
 
 ## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 (verifiable)** *(4 sections audited, all closed)*
 
-> §03–§06 closed. §06 (data-structures) Cycle 4 closed by realigning the spec with `enum-v1`'s actual consumer surface: `corejson.Serialize.ToBytesErr` / `Deserialize.BytesTo` (replacing the unrunnable `ToString`/`Raw`/`UsingBytes`/`FromTo` examples), `coreonce.NewAnyOnce` / `NewByteOnce` (replacing the fictional `coreonce.New.String` namespace), `corestr.{Hashset,SimpleSlice,SimpleStringOnce}` (replacing the unused `NewCollectionPtrUsingStrings` example), and explicit ⚠️ "upstream-only" callouts on `coregeneric` / `corepayload` (zero `enum-v1` consumers). The §4 "never `encoding/json`" rule now documents the two legitimate exceptions in `inttype` (`MarshalJSON` → `json.Marshal` primitive delegation, `*json.Number` parameter type). Six ❓ remain pending task **AB** (upstream `core-v9` source). See [`05-cycle4-data-structures.md`](./05-cycle4-data-structures.md).
+> §03–§06 closed. §06 (data-structures) Cycle 4 closed by realigning the spec with `enum-v2`'s actual consumer surface: `corejson.Serialize.ToBytesErr` / `Deserialize.BytesTo` (replacing the unrunnable `ToString`/`Raw`/`UsingBytes`/`FromTo` examples), `coreonce.NewAnyOnce` / `NewByteOnce` (replacing the fictional `coreonce.New.String` namespace), `corestr.{Hashset,SimpleSlice,SimpleStringOnce}` (replacing the unused `NewCollectionPtrUsingStrings` example), and explicit ⚠️ "upstream-only" callouts on `coregeneric` / `corepayload` (zero `enum-v2` consumers). The §4 "never `encoding/json`" rule now documents the two legitimate exceptions in `inttype` (`MarshalJSON` → `json.Marshal` primitive delegation, `*json.Number` parameter type). Six ❓ remain pending task **AB** (upstream `core-v9` source). See [`05-cycle4-data-structures.md`](./05-cycle4-data-structures.md).
 
 ## Cycle history
 
@@ -23,7 +23,7 @@
 
 ## Open drift findings
 
-_None._ All 4 audited-and-closed sections (§03, §04, §05, §06) are at 100 % of their verifiable subsets. §07 has no verifiable subset (zero `enum-v1` consumers). Remaining ❓s — 17 on §07, 7 on §04, 1 on §05, 6 on §06 — require upstream `core-v9` source (task **AB**).
+_None._ All 4 audited-and-closed sections (§03, §04, §05, §06) are at 100 % of their verifiable subsets. §07 has no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 on §07, 7 on §04, 1 on §05, 6 on §06 — require upstream `core-v9` source (task **AB**).
 
 ## Resolved drift findings
 
@@ -61,7 +61,7 @@ _None._ All 4 audited-and-closed sections (§03, §04, §05, §06) are at 100 % 
 | D-CVS-22 | `coreonce.New.String(producer)` namespace doesn't match real top-level constructors | 2026-05-04 | `spec/01-app/06-data-structures.md` §5 | Rewrote §5 around `coreonce.NewAnyOnce` / `NewByteOnce` |
 | D-CVS-23 | `corestr` shown as "thread-safe list of strings"; real surface is `Hashset`/`SimpleSlice`/`SimpleStringOnce` | 2026-05-04 | `spec/01-app/06-data-structures.md` §3 | Rewrote §3 around `New.Hashset` / `New.SimpleSlice` / `SimpleStringOnce` |
 | D-CVS-24 | `coreonce` "covers all common types" overstated | 2026-05-04 | `spec/01-app/06-data-structures.md` §5 | Softened to "common typed wrappers"; cross-referenced `corestr.SimpleStringOnce` |
-| D-CVS-25 | `coregeneric` and `corepayload` presented as first-class but have no `enum-v1` consumers | 2026-05-04 | `spec/01-app/06-data-structures.md` §1, §2, §6 + §7 decision matrix | Added "Consumer-coverage note" in §1 + ⚠️ "upstream-only" callouts in §2 and §6; §7 matrix now marks each row with `enum-v1` verification status |
+| D-CVS-25 | `coregeneric` and `corepayload` presented as first-class but have no `enum-v2` consumers | 2026-05-04 | `spec/01-app/06-data-structures.md` §1, §2, §6 + §7 decision matrix | Added "Consumer-coverage note" in §1 + ⚠️ "upstream-only" callouts in §2 and §6; §7 matrix now marks each row with `enum-v2` verification status |
 
 ## Targets
 

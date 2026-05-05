@@ -84,7 +84,7 @@ var (
 	// Detect Windows version : https://stackoverflow.com/questions/44363911/detect-windows-version-in-go
 	// Operating System Version : https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version?redirectedfrom=MSDN
 	//
-	// Issue : https://github.com/alimtvnetwork/enum-v1/-/issues/4
+	// Issue : https://github.com/alimtvnetwork/enum-v2/-/issues/4
 	winRegistryKeyNames = windowsCurrentVersionRegistry{
 		buildBranch:          "BuildBranch",
 		productName:          "ProductName",
