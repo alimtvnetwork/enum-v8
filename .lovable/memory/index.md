@@ -1,6 +1,6 @@
 # Memory Index
 
-> Institutional knowledge for `enum-v2`. Every file in `.lovable/memory/` (including subfolders) MUST be listed here.
+> Institutional knowledge for `enum-v3`. Every file in `.lovable/memory/` (including subfolders) MUST be listed here.
 
 ## Top-level memory files
 

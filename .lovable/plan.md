@@ -1,4 +1,4 @@
-# Active Plan — enum-v2
+# Active Plan — enum-v3
 
 > Single source of truth for the project roadmap. Letter IDs are stable across sessions.
 > Last updated: 2026-05-05 (post reliability report, pre-implementation).
@@ -18,7 +18,7 @@
 ### AG. Drop the `replace` bridge and pin clean `core-v9 v1.5.8`
 
 - **Status:** ⏳ Pending — waits on W
-- **Objective:** Remove `replace` directive from `enum-v2/go.mod`, pin `require core-v9 v1.5.8`.
+- **Objective:** Remove `replace` directive from `enum-v3/go.mod`, pin `require core-v9 v1.5.8`.
 - **Dependencies:** W
 - **Expected outputs:** Clean `go.mod` with no `replace`; `./run.ps1 -tc` passes.
 - **Acceptance criteria:** `grep replace go.mod` returns nothing; `go build ./...` succeeds.

@@ -2,11 +2,11 @@
 
 ## Reality
 
-Tests live under `tests/creationtests/` in `enum-v2`. The structure is a flat Goconvey + `EnumTestWrapper` registry, NOT a per-package layout.
+Tests live under `tests/creationtests/` in `enum-v3`. The structure is a flat Goconvey + `EnumTestWrapper` registry, NOT a per-package layout.
 
 ## Stale spec pattern
 
-The string `tests/integratedtests/` appears in spec docs as an upstream-only convention from `core-v9`. It is **not** the layout used by `enum-v2`. Audit findings:
+The string `tests/integratedtests/` appears in spec docs as an upstream-only convention from `core-v9`. It is **not** the layout used by `enum-v3`. Audit findings:
 
 - C-CVS-01 (Cycle 1)
 - D-CVS-17 (Cycle 3, §05)
@@ -26,7 +26,7 @@ These are scheduled for cleanup as part of Task AH (folded into upcoming directo
 
 ## Tooling rule
 
-Test-discovery tooling MUST accept either folder name (or read from disk). Hard-coding one name will silently break either upstream or `enum-v2`.
+Test-discovery tooling MUST accept either folder name (or read from disk). Hard-coding one name will silently break either upstream or `enum-v3`.
 
 ## Anti-pattern callout
 
