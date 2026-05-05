@@ -1,8 +1,6 @@
 # Memory Index
 
 > Institutional knowledge for `enum-v2`. Every file in `.lovable/memory/` (including subfolders) MUST be listed here.
->
-> **Sister index** at `mem://index.md` carries always-in-context Core rules for the AI. This file is the human-browsable mirror + extended detail.
 
 ## Top-level memory files
 
@@ -19,8 +17,8 @@
 - [`workflow/02-task-letter-scheme.md`](./workflow/02-task-letter-scheme.md) — How letter IDs work across "next" turns
 
 ### `decisions/`
-- [`decisions/01-spec-internal-consistency.md`](./decisions/01-spec-internal-consistency.md) — Cycle 13 introduced spec-internal-consistency as an audit dimension; rationale + how it differs from code-vs-spec
-- [`decisions/02-cmd-main-carve-out.md`](./decisions/02-cmd-main-carve-out.md) — Cycle 10 carved out `cmd/main/` as the single permitted smoke-test entrypoint
+- [`decisions/01-spec-internal-consistency.md`](./decisions/01-spec-internal-consistency.md) — Cycle 13 introduced spec-internal-consistency as an audit dimension
+- [`decisions/02-cmd-main-carve-out.md`](./decisions/02-cmd-main-carve-out.md) — Cycle 10 carved out `cmd/main/` as single permitted smoke-test entrypoint
 - [`decisions/03-consumer-coverage-callouts.md`](./decisions/03-consumer-coverage-callouts.md) — Why upstream-only API surfaces get explicit callouts in the spec
 
 ### `audits/`
@@ -29,3 +27,9 @@
 
 ### `avoid/`
 - [`avoid/01-deferred-tasks.md`](./avoid/01-deferred-tasks.md) — Tasks the user has explicitly deferred or skipped (with reasons)
+
+### `suggestions/`
+- [`suggestions/01-suggestions-tracker.md`](./suggestions/01-suggestions-tracker.md) — All Lovable suggestions with status tracking (open/done/rejected)
+
+### `pending-issues/`
+- [`pending-issues/01-all-pending-issues.md`](./pending-issues/01-all-pending-issues.md) — Consolidated tracker for all pending issues (PI-001 through PI-004)
