@@ -4,7 +4,7 @@ go 1.17.8
 
 require (
 	github.com/smartystreets/goconvey v1.8.1
-	github.com/alimtvnetwork/core-v9 v0.0.0-20260504132614-f978d4d81b5e
+	github.com/alimtvnetwork/core-v9 v1.5.6
 	golang.org/x/sys v0.13.0
 )
 
@@ -16,22 +16,25 @@ require (
 
 // ── Temporary rename bridge ──────────────────────────────────────────
 // The upstream `core-v9` GitHub repo was renamed from `core-v8`, but its
-// own `go.mod` on the `release/v1.5.7` branch STILL declares
-// `module github.com/alimtvnetwork/core-v8` (verified 2026-05-05).
-// Go enforces that the import path match the declared module path, so it
-// rejects loading the v9 repo under the v9 path. Until upstream commits
-// the `module github.com/alimtvnetwork/core-v9` line AND tags a release,
-// we resolve the v9 import path to the v8 module artifact at the pinned
-// commit (HEAD of release/v1.5.7).
+// own `go.mod` (verified 2026-05-05 against tag v1.5.7) STILL declares
+// `module github.com/alimtvnetwork/core-v8`. Go enforces that the import
+// path match the declared module path, so it rejects loading the v9
+// repo under the v9 path. Until upstream edits go.mod to
+// `module github.com/alimtvnetwork/core-v9` and re-tags, we resolve the
+// v9 import path to the v8 module artifact.
 //
-// NOTE: Bumping this pointer pulls in the latest upstream code but does
-// NOT fix the `internal/` blocker — Go enforces the internal/ rule
-// against the cached module's declared path (`core-v8`), so consumers
-// under `enum-v2/...` are still rejected for any package that
-// transitively imports `core-v9/internal/...`.
+// PIN: `v1.5.6` is the latest tag actually published under the
+// `core-v8` URL on the Go module proxy. Earlier pseudo-version pins
+// (e.g. `v0.0.0-20260504132614-f978d4d81b5e`) referenced commits that
+// only exist under the renamed `core-v9` URL, so the proxy 404'd them
+// when fetched via `core-v8` — that was the root cause of the
+// "invalid version: unknown revision" failures in run.ps1 -tc.
 //
-// This block is removed (replaced by `v1.5.7` tag pin) once upstream:
-//   1. Edits go.mod: `module github.com/alimtvnetwork/core-v9`
-//   2. Rewrites all `core-v8` imports → `core-v9` in source
-//   3. Tags `v1.5.7` on the renamed commit
-replace github.com/alimtvnetwork/core-v9 => github.com/alimtvnetwork/core-v8 v0.0.0-20260504132614-f978d4d81b5e
+// NOTE: Even with this pin working, the bridge is INSUFFICIENT for any
+// core-v9 package that transitively imports an `internal/` package —
+// Go's internal/ rule is enforced against the cached module's declared
+// path (`core-v8`), so consumers under `enum-v2/...` are rejected. The
+// only real fix is task **W** (upstream go.mod + source rename + new
+// tag), which then unblocks task **AG** (drop this entire replace
+// block, pin `core-v9 v1.5.8` cleanly).
+replace github.com/alimtvnetwork/core-v9 => github.com/alimtvnetwork/core-v8 v1.5.6
