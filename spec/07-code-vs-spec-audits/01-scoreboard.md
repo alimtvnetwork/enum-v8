@@ -32,12 +32,14 @@
 | 2026-05-05 | 9 (closed)   | `01-app/11-versioning.md` | 20 | 9 | 0 | 0 | 11 | **100.0%** *(verifiable)* |
 | 2026-05-05 | 10 (baseline) | `01-app/12-cmd-entrypoints.md` | 22 | 9 | 3 | 4 | 6 | **56.3%** *(verifiable)* |
 | 2026-05-05 | 10 (closed)   | `01-app/12-cmd-entrypoints.md` | 22 | 16 | 0 | 0 | 6 | **100.0%** *(verifiable)* |
+| 2026-05-05 | 11 (baseline) | `01-app/13-testing-patterns.md` | 23 | 11 | 4 | 0 | 8 | **73.3%** *(verifiable)* |
+| 2026-05-05 | 11 (closed)   | `01-app/13-testing-patterns.md` | 23 | 15 | 0 | 0 | 8 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
-**D-CVS-35** (low, deferred) — `spec/01-app/12-cmd-entrypoints.md` §5 cites `/spec/04-tooling/04-bootstrap-into-new-repo.md` but `spec/04-tooling/` only contains `00..03`. Logged in cycle 10 but not in scope for fix; address in a future cleanup pass.
+_None._ **D-CVS-35 retracted** in cycle 11 as a false positive (`spec/04-tooling/04-bootstrap-into-new-repo.md` does exist; cycle 10's `ls` was head-truncated). All 9 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §12, §13) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset. Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 7 §04 + 1 §05 + 6 §06 = **112 ❓** total — require upstream `core-v9` source (task **AB**).
 
-All 8 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §12) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 7 §04 + 1 §05 + 6 §06 = **104 ❓** total — require upstream `core-v9` source (task **AB**).
+> **Cross-spec sweep status:** `rg -n 'tests/integratedtests' spec/01-app/` is now **clean** after cycle 11 (D-CVS-36 was the 6th and final occurrence in `01-app/`). Remaining hits live in `spec/CHANGELOG.md` (immutable history), `spec/99-audits/` (historical snapshots), `spec/02-app-issues/02-internal-package-coverage-policy.md` (correctly references upstream policy), and 4 files under `spec/03-powershell-test-run/` + `spec/04-tooling/04-bootstrap-into-new-repo.md` — these belong to task **AH** (cross-`spec/` cleanup, future).
 
 ## Resolved drift findings
 
