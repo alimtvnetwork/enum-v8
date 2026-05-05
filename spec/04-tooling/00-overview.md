@@ -23,7 +23,7 @@ visit; afterwards jump straight to the topic you need.
 | 04a | [Bootstrap Into a New Repo](./04-bootstrap-into-new-repo.md) | New-repo onboarding | [`run.ps1`](../../run.ps1), workflows |
 | 04b | [CI Guards](./04-ci-guards.md) | All maintainers | [`.github/workflows/ci-guards.yml`](../../.github/workflows/ci-guards.yml), [`scripts/ci/`](../../scripts/ci/) |
 | 05 | [Branch Protection](./05-branch-protection.md) | Repo admins | GitHub repo settings |
-| 06 | [Cross-Repo Sync](./06-cross-repo-sync.md) | Cross-repo maintainers | [`cross-repo/core-v8/`](../../cross-repo/core-v8/) |
+| 06 | [Cross-Repo Sync](./06-cross-repo-sync.md) | Cross-repo maintainers | [`cross-repo/core-v9/`](../../cross-repo/core-v9/) |
 
 > The duplicate `02-` / `03-` / `04-` prefixes are historical: each pair
 > covers a CI/release topic alongside its PowerShell or guard companion.
@@ -77,4 +77,4 @@ visit; afterwards jump straight to the topic you need.
 - When a workflow file is renamed, update the *Companion code* column.
 - Per [06 — Cross-Repo Sync](./06-cross-repo-sync.md), any spec change
   that documents shared tooling should also be reflected in the staged
-  `cross-repo/core-v8/` copy where applicable.
+  `cross-repo/core-v9/` copy where applicable.

@@ -7,7 +7,7 @@
 
 This file records the end-to-end **reproducibility verification** of the `spec/`
 tree. It simulates a fresh AI agent that has access **only** to `spec/` (no
-`core-v8` source code) and asked to perform a representative consumer task. The
+`core-v9` source code) and asked to perform a representative consumer task. The
 output is then compared against the actual codebase conventions to score how
 well the spec conveys the architecture.
 

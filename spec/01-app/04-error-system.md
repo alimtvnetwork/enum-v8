@@ -1,7 +1,7 @@
 # 04 — Error System
 
 > ✅ **Status**: filled in audit Step 5 (2026-04-23, Asia/Kuala_Lumpur).
-> **Audience**: anyone returning, wrapping, or asserting on errors in `core-v8` code.
+> **Audience**: anyone returning, wrapping, or asserting on errors in `core-v9` code.
 > **Source**: extracted from [`/spec/00-llm-integration-guide.md`](../00-llm-integration-guide.md) §errcore + audit cross-references.
 
 ---

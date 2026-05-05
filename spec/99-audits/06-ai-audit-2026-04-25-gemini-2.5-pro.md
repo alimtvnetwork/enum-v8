@@ -12,7 +12,7 @@ This is an outstanding specification, clearly the product of rigorous, iterative
 | Unambiguity (one valid interpretation) | 20% | 75 | The compound method suffix rules (`*Or*` pattern) are a significant point of ambiguity. The enum JSON serialization contract is asymmetric. |
 | Self-containment (no external knowledge needed) | 15% | 80 | A critical conflict between the documented Go version (`1.25`) and the existence of utilities deprecated since Go `1.21` requires external knowledge to resolve. |
 | Worked examples (copy-pasteable) | 15% | 90 | Excellent, but lacks examples for the most complex compound method names and the choice between Style A/B tests. |
-| Consistency (no contradictions across files) | 10% | 80 | The Go version vs. `coremath` deprecation notice is a direct contradiction. The `core-v8` vs. `core` package name rule is not consistently highlighted. |
+| Consistency (no contradictions across files) | 10% | 80 | The Go version vs. `coremath` deprecation notice is a direct contradiction. The `core-v9` vs. `core` package name rule is not consistently highlighted. |
 | Discoverability (index, cross-refs, naming) | 10% | 98 | Near-perfect. The AI Reading Order, ToCs, and cross-linking are best-in-class. |
 | Edge-case coverage (errors, nil, panics) | 10% | 97 | Exceptional. The `CaseNilSafe` pattern and `failing-tests` log are exemplary. |
 
@@ -48,12 +48,12 @@ This is an outstanding specification, clearly the product of rigorous, iterative
 - **Effort:** S
 - **Score uplift if fixed:** +1.5 points
 
-#### F-NEW-04 — Ambiguous `core.go` package name vs. `core-v8` module path
+#### F-NEW-04 — Ambiguous `core.go` package name vs. `core-v9` module path
 - **Severity:** medium
 - **Impact:** Agent may incorrectly try to use `corev8` as the package name in code (e.g. `corev8.EmptySlice()`), leading to compile errors.
-- **Evidence:** `spec/01-app/03-import-conventions.md`: `The package name is core, not corev8. Even though the path ends in core-v8, Go uses the package core declaration...`
+- **Evidence:** `spec/01-app/03-import-conventions.md`: `The package name is core, not corev8. Even though the path ends in core-v9, Go uses the package core declaration...`
 - **Why it can fail:** This critical clarification is buried deep within `03-import-conventions.md`. The primary `Module Identity` section in `00-llm-integration-guide.md` and `01-app/00-repo-overview.md` states the module path is `github.com/alimtvnetwork/core-v9` but does *not* immediately warn the user that the package name is simply `core`. A naive agent will assume the package name matches the last path segment.
-- **Recommended fix:** Elevate the warning. In both `00-llm-integration-guide.md` and `01-app/00-repo-overview.md`, immediately under the `Module Identity` code block, add a prominent `> **Note**: The module path is `core-v8`, but the root package name to use in code is `core`.`
+- **Recommended fix:** Elevate the warning. In both `00-llm-integration-guide.md` and `01-app/00-repo-overview.md`, immediately under the `Module Identity` code block, add a prominent `> **Note**: The module path is `core-v9`, but the root package name to use in code is `core`.`
 - **Effort:** S
 - **Score uplift if fixed:** +1.0 point
 
@@ -88,7 +88,7 @@ This is an outstanding specification, clearly the product of rigorous, iterative
 - **Resolve `coremath` vs Go built-ins:** Clarify `coremath` is deprecated and must not be used in new code. **Effort: S**
 - **Clarify compound suffix rule:** Explicitly state `AOrB` is a single token for the suffix grammar. **Effort: S**
 - **Add `Collection` vs. `SimpleSlice` guidance:** Provide a decision matrix for when to use the thread-safe vs. non-thread-safe version. **Effort: S**
-- **Elevate package name warning:** Add the `core` vs `core-v8` note to top-level identity sections. **Effort: S**
+- **Elevate package name warning:** Add the `core` vs `core-v9` note to top-level identity sections. **Effort: S**
 - **Document enum JSON asymmetry:** Explicitly state the `write-string` vs `read-string-or-numeric` contract. **Effort: S**
 - **Justify Style B cast idiom:** Add a one-sentence rationale for why the cast is intentional. **Effort: S**
 - **Justify enum boilerplate:** Add a comment explaining the `Value<Type>()` methods are for interface compliance. **Effort: S**

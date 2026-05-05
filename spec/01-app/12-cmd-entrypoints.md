@@ -18,7 +18,7 @@
 
 ## 1. No `cmd/` Directory — On Purpose
 
-The `core-v8` module is a **pure Go library**. It has:
+The `core-v9` module is a **pure Go library**. It has:
 
 - No `cmd/` directory.
 - No `main` package.

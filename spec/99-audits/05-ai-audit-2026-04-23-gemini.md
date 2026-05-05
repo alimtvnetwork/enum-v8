@@ -243,8 +243,8 @@ Projected gain if **all** roadmap items shipped: **+12.5 pts** → projected sco
 ### What stops 100% even after the roadmap?
 
 - **1.2 pts** of irreducible gap from spec medium that no amount of editing can close (e.g., AI cannot fully verify rules without seeing the actual Go source code, which is outside this Lovable project).
-- The Go module `core-v8` itself is **not in this Lovable project** — only the `spec/` deliverable. So the audit can only score the spec's *internal* qualities, not its *implementation fidelity*.
-- For true 100%, the spec would need to be checked against the actual `core-v8` source tree in a Go workspace — out of scope here.
+- The Go module `core-v9` itself is **not in this Lovable project** — only the `spec/` deliverable. So the audit can only score the spec's *internal* qualities, not its *implementation fidelity*.
+- For true 100%, the spec would need to be checked against the actual `core-v9` source tree in a Go workspace — out of scope here.
 
 ---
 

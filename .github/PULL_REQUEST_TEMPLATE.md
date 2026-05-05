@@ -27,7 +27,7 @@
 - [ ] **vulncheck**: `govulncheck` workflow green on this SHA
 
 ### Cross-repo & docs
-- [ ] If `.github/workflows/*.yml` changed → mirrored under `cross-repo/core-v8/.github/workflows/`
+- [ ] If `.github/workflows/*.yml` changed → mirrored under `cross-repo/core-v9/.github/workflows/`
       (per `spec/04-tooling/06-cross-repo-sync.md`)
 - [ ] `CHANGELOG.md` updated under `## [Unreleased]` if user-visible
 - [ ] No `@latest` / `@main` pins added in workflows or scripts

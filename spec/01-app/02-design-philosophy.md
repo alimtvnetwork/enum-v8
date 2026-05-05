@@ -2,7 +2,7 @@
 
 > ✅ **Done** — extracted from `spec/00-llm-integration-guide.md` §Design Philosophy.
 > **Status**: filled in audit Step 3 (2026-04-23, Asia/Kuala_Lumpur).
-> **Audience**: AI agents and human contributors writing **new code** for `core-v8`. Read this *before* opening a PR.
+> **Audience**: AI agents and human contributors writing **new code** for `core-v9`. Read this *before* opening a PR.
 
 This file expands the seven design pillars from [`00-repo-overview.md` §3](./00-repo-overview.md#3-design-pillars-tldr) with **rules**, **rationale**, and **examples**.
 

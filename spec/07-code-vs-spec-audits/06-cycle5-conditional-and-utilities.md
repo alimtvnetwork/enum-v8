@@ -21,10 +21,10 @@ Verification commands run from repo root:
 ```bash
 rg -l "core-v9/(conditional|isany|issetter|regexnew|coremath|corecmp|coresort|corefuncs|namevalue|keymk)" --type go
 rg -n "conditional\.|isany\.|issetter\.|regexnew\.|coremath\.|corecmp\.|coresort|corefuncs\.|namevalue\.|keymk\." --type go
-ls cross-repo/core-v8/{conditional,isany,issetter,regexnew,coremath,corecmp,coresort,corefuncs,namevalue,keymk} 2>/dev/null
+ls cross-repo/core-v9/{conditional,isany,issetter,regexnew,coremath,corecmp,coresort,corefuncs,namevalue,keymk} 2>/dev/null
 ```
 
-All three commands returned **zero matches**: no `enum-v2` package imports any of the §07 packages, and the `cross-repo/core-v8/` mirror only carries `CHANGELOG.md` / `CONTRIBUTING.md` / `README.md` / `scripts/` — not source for these packages.
+All three commands returned **zero matches**: no `enum-v2` package imports any of the §07 packages, and the `cross-repo/core-v9/` mirror only carries `CHANGELOG.md` / `CONTRIBUTING.md` / `README.md` / `scripts/` — not source for these packages.
 
 ---
 

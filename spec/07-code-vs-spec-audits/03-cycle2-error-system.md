@@ -9,7 +9,7 @@
 
 ## Audit scope & limitation
 
-`errcore` lives in `github.com/alimtvnetwork/core-v9` (declared module name: `core-v8`). The spec describes that upstream package, but `enum-v2` is the only artifact we can read. We can therefore verify:
+`errcore` lives in `github.com/alimtvnetwork/core-v9` (declared module name: `core-v9`). The spec describes that upstream package, but `enum-v2` is the only artifact we can read. We can therefore verify:
 
 1. **Symbols `enum-v2` calls** — direct evidence the documented API exists and is used.
 2. **Symbols `enum-v2` calls but the spec does NOT document** — drift: spec is incomplete relative to the API consumers actually rely on.

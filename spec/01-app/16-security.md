@@ -1,7 +1,7 @@
 # 16 — Security
 
 > ✅ **Status**: drafted at spec-v0.16.0 (2026-04-25, Asia/Kuala_Lumpur).
-> **Audience**: anyone implementing security-sensitive consumers, or extending `core-v8` itself.
+> **Audience**: anyone implementing security-sensitive consumers, or extending `core-v9` itself.
 > **Source**: unifies guidance previously scattered across `04-error-system.md` (panic policy), `00-llm-integration-guide.md` (allocation rules), `02-design-philosophy.md` (no-side-effect rule).
 > **Closes**: F-V14-05 *(security half)*.
 
@@ -21,7 +21,7 @@
 
 ## 1. Scope — Threat Model
 
-`core-v8` is a library. It does **not** itself:
+`core-v9` is a library. It does **not** itself:
 
 - Parse network input.
 - Open files, sockets, or external connections.
@@ -82,7 +82,7 @@ The library has **no PII awareness**. If you pass a password, API key, JWT, or P
 
 1. **MUST** use `errcore.HandleErr(err)` — never bare `panic(err)`. See [`04-error-system.md` §1](./04-error-system.md) for the contract.
 2. **MUST** name `*Must` methods with the exact `Must` suffix at the end of the canonical 8-slot suffix order *(see `00-llm-integration-guide.md` §Pattern 7)*. This makes panic-risk callers visible at the call site.
-3. **MUST NOT** recover from panics inside `core-v8`. Recovery is the consumer's decision (e.g. an HTTP middleware).
+3. **MUST NOT** recover from panics inside `core-v9`. Recovery is the consumer's decision (e.g. an HTTP middleware).
 4. **SHOULD** prefer the error-returning variant in library code; reserve `*Must` for tests, init, and CLI entrypoints in consuming applications.
 
 ---
@@ -124,7 +124,7 @@ The library exposes generic containers with **no built-in size limits**. An atta
 
 ## 6. Input Validation Boundary
 
-Trust boundaries are crossed where untrusted bytes become typed Go values. `core-v8` provides validators specifically for this:
+Trust boundaries are crossed where untrusted bytes become typed Go values. `core-v9` provides validators specifically for this:
 
 ```go
 v := corevalidator.New.Line.
@@ -157,7 +157,7 @@ if result.IsFailed() {
 | Returning `errcore.<Cat>.MergeError(err)` directly to an HTTP client | Log internally, return a generic 4xx/5xx body to the client. |
 | `Hashmap.Set` in a loop with no upstream length validation | Add `corevalidator.New.Slice.MaxLength(N)` before the loop. |
 | Bare `panic(err)` inside a `*Must` method | Use `errcore.HandleErr(err)` — see `04-error-system.md` §1. |
-| Recovering from a panic inside `core-v8` | Recovery is the consumer's job (e.g. middleware). |
+| Recovering from a panic inside `core-v9` | Recovery is the consumer's job (e.g. middleware). |
 
 ---
 

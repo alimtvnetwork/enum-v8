@@ -1,7 +1,7 @@
 # Spec Changelog
 
 > Tracks **versioned releases of the `spec/` deliverable** (this folder).
-> Distinct from the `core-v8` Go module's own version (governed by `spec/01-app/11-versioning.md`).
+> Distinct from the `core-v9` Go module's own version (governed by `spec/01-app/11-versioning.md`).
 >
 > **Rule** (per `.lovable/user-preferences` line 8 + `spec/01-app/11-versioning.md` §3): every meaningful spec edit cycle bumps **at least minor**.
 >
@@ -17,7 +17,7 @@
 ## [spec-v0.27.0] — 2026-05-04 (Cycle 5 baseline — §07 conditional-and-utilities audited)
 
 ### Added
-- **`spec/07-code-vs-spec-audits/06-cycle5-conditional-and-utilities.md`** — Cycle 5 baseline audit of `spec/01-app/07-conditional-and-utilities.md`. All 17 claims (covering `conditional`, `isany`, `issetter`, `regexnew`, `coremath`, `corecmp`, `coresort`, `corefuncs`, `namevalue`, `keymk`) classified as **❓ unverifiable**: zero `enum-v2` consumers and no source mirrored under `cross-repo/core-v8/`. No drift or contradiction provable from `enum-v2` alone — verification deferred to task **AB** (fetch upstream `core-v9` source). Section coverage advances **4 / 16 → 5 / 16**; verifiable-match rate unchanged.
+- **`spec/07-code-vs-spec-audits/06-cycle5-conditional-and-utilities.md`** — Cycle 5 baseline audit of `spec/01-app/07-conditional-and-utilities.md`. All 17 claims (covering `conditional`, `isany`, `issetter`, `regexnew`, `coremath`, `corecmp`, `coresort`, `corefuncs`, `namevalue`, `keymk`) classified as **❓ unverifiable**: zero `enum-v2` consumers and no source mirrored under `cross-repo/core-v9/`. No drift or contradiction provable from `enum-v2` alone — verification deferred to task **AB** (fetch upstream `core-v9` source). Section coverage advances **4 / 16 → 5 / 16**; verifiable-match rate unchanged.
 
 ### Changed
 - **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — added Cycle 5 (baseline) row marked **N/A** *(no verifiable subset)*; updated section-coverage milestone to **5/16**; restated **AB** task as now spanning **17 §07 + 7 §04 + 1 §05 + 6 §06** ❓ claims.
@@ -104,7 +104,7 @@
 - **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — moved C-CVS-01 and C-CVS-02 from Open → Resolved; §03 score updated 83.3 → **100.0** (12/12). Open-findings list is now empty. Cycle 1 is closed.
 
 ### Verified
-- `rg -n "integratedtests|core-v8" spec/01-app/03-import-conventions.md` → 0 hits.
+- `rg -n "integratedtests|core-v9" spec/01-app/03-import-conventions.md` → 0 hits.
 
 ---
 
@@ -112,15 +112,15 @@
 
 ### Fixed
 - **`spec/01-app/03-import-conventions.md`** — applied 5 LOW-severity Cycle 1 findings:
-  - **D-CVS-01** (line 4): `consumes core-v8 packages` → `consumes core-v9 packages`.
-  - **D-CVS-02** (line 88): `path ends in core-v8` / `not corev8` → `core-v9` / `corev9`.
-  - **D-CVS-03** (line 94): `For core-v8, this means:` → `For core-v9, this means:`.
-  - **D-CVS-04** (line 121): reworded "rooted at the same `core-v8` module" to a module-generic statement that applies equally to `core-v9`, `enum-v2`, or any other consumer with its own `internal/` tree.
+  - **D-CVS-01** (line 4): `consumes core-v9 packages` → `consumes core-v9 packages`.
+  - **D-CVS-02** (line 88): `path ends in core-v9` / `not corev8` → `core-v9` / `corev9`.
+  - **D-CVS-03** (line 94): `For core-v9, this means:` → `For core-v9, this means:`.
+  - **D-CVS-04** (line 121): reworded "rooted at the same `core-v9` module" to a module-generic statement that applies equally to `core-v9`, `enum-v2`, or any other consumer with its own `internal/` tree.
   - **D-CVS-05** (lines 61, 73): annotated `coredata/coregeneric` as `// optional` in the canonical import block and added a sentence noting "not every consumer uses every package — `enum-v2`, for example, currently uses 8 of the 11 listed canonical imports".
 - **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — moved D-CVS-01..05 from Open → Resolved; §03 score updated 41.7 → **83.3** (10/12). The two remaining `tests/integratedtests/` and `internal/reflectinternal` contradictions stay open pending a structural decision.
 
 ### Verified
-- `rg -n "core-v8" spec/01-app/03-import-conventions.md` → 0 hits (clean).
+- `rg -n "core-v9" spec/01-app/03-import-conventions.md` → 0 hits (clean).
 
 ---
 
@@ -133,7 +133,7 @@
   - `02-cycle1-import-conventions.md` — first cycle, audited `01-app/03-import-conventions.md` (12 claims).
 
 ### Findings opened (Cycle 1)
-- 5 LOW drifts (D-CVS-01..05): stale `core-v8` prose in §03 that didn't get rewritten during the v8→v9 module rename.
+- 5 LOW drifts (D-CVS-01..05): stale `core-v9` prose in §03 that didn't get rewritten during the v8→v9 module rename.
 - 1 MED + 1 HIGH contradiction (C-CVS-01..02): §03 references a `tests/integratedtests/` directory that doesn't exist in this repo and an `internal/reflectinternal` import nobody uses.
 - Initial measured drift score: **41.7%** (5/12 matches). After applying the 5 LOW spec fixes this jumps to ~91.7%.
 
@@ -296,7 +296,7 @@
 - **F-NEW-01** — Marked `coremath` as LEGACY in `spec/00-llm-integration-guide.md`; instructs new code to use Go 1.21+ built-in `min` / `max` / `clear`.
 - **F-NEW-02** — Added explicit *tokenization rule* + worked example to "Compound `*Or*` Naming in Filter Chains": `AOrB` is a single naming token occupying one slot in the suffix grammar.
 - **F-NEW-03** — Added decision matrix at the top of `## coregeneric — Generic Data Structures API Reference` clarifying when to use `Collection[T]` (default, mutex-protected) vs `SimpleSlice[T]` (function-local, perf-sensitive).
-- **F-NEW-04** — Elevated the `core` package name vs `core-v8` module path warning to top-level Module Identity blocks in both `spec/00-llm-integration-guide.md` and `spec/01-app/00-repo-overview.md`.
+- **F-NEW-04** — Elevated the `core` package name vs `core-v9` module path warning to top-level Module Identity blocks in both `spec/00-llm-integration-guide.md` and `spec/01-app/00-repo-overview.md`.
 - **F-NEW-05** — Added "Serialization Asymmetry" subsection to `spec/01-app/05-enum-system.md` §7, documenting that `MarshalJSON` MUST emit string names while `UnmarshalJSON` MAY accept names/aliases/numeric strings.
 - **F-NEW-06** — Added rationale block to "The CaseV1 Cast Idiom" in `spec/06-testing-guidelines/02-test-case-types.md` explaining why the cast keeps `BaseTestCase` decoupled from assertion libraries.
 - **F-NEW-07** — Added comment + rationale to `spec/01-app/05-enum-system.md` §Step 3 explaining all `Value<Type>()` methods are required by `enuminf.BasicEnumValuer` and MUST NOT be deleted.

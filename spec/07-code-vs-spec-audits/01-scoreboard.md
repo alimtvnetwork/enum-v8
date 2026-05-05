@@ -29,9 +29,9 @@ _None._ All 4 audited-and-closed sections (§03, §04, §05, §06) are at 100 % 
 
 | ID | Title | Resolved at | Fix location | Path taken |
 |----|-------|-------------|--------------|------------|
-| D-CVS-01 | Spec §03 line 4 says "consumes `core-v8`" — stale | 2026-05-04 | `spec/01-app/03-import-conventions.md:4` | s/core-v8/core-v9/ |
-| D-CVS-02 | Spec §03 line 88 says path "ends in `core-v8`" — stale | 2026-05-04 | `spec/01-app/03-import-conventions.md:88` | s/core-v8/core-v9/ + s/corev8/corev9/ |
-| D-CVS-03 | Spec §03 line 94 prose/example mismatch (v8 vs v9) | 2026-05-04 | `spec/01-app/03-import-conventions.md:94` | s/core-v8/core-v9/ |
+| D-CVS-01 | Spec §03 line 4 says "consumes `core-v9`" — stale | 2026-05-04 | `spec/01-app/03-import-conventions.md:4` | s/core-v9/core-v9/ |
+| D-CVS-02 | Spec §03 line 88 says path "ends in `core-v9`" — stale | 2026-05-04 | `spec/01-app/03-import-conventions.md:88` | s/core-v9/core-v9/ + s/corev8/corev9/ |
+| D-CVS-03 | Spec §03 line 94 prose/example mismatch (v8 vs v9) | 2026-05-04 | `spec/01-app/03-import-conventions.md:94` | s/core-v9/core-v9/ |
 | D-CVS-04 | Spec §03 line 121 conflates "test module" with "core module" | 2026-05-04 | `spec/01-app/03-import-conventions.md:121` | Reworded to be module-generic |
 | D-CVS-05 | `coregeneric` canonical-import listing not annotated as optional | 2026-05-04 | `spec/01-app/03-import-conventions.md:61,73` | Inline `// optional` + consumer-coverage note |
 | C-CVS-01 | Spec §03 line 129 references nonexistent `tests/integratedtests/` | 2026-05-04 | `spec/01-app/03-import-conventions.md:127-145` | Spec rewritten to `tests/creationtests/` layout (matches code) + cross-ref to upstream `core-v9` per-suite layout |

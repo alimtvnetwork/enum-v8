@@ -1,7 +1,7 @@
 # 04 — Bootstrap Into a New Repo
 
 > **Purpose**: Step-by-step instructions for installing the `run.ps1` PowerShell toolchain
-> and the GitHub Actions CI pipeline into a **fresh Go repository**. Generic — no `core-v8`
+> and the GitHub Actions CI pipeline into a **fresh Go repository**. Generic — no `core-v9`
 > assumptions baked in.
 >
 > **Audience**: Anyone (human or AI agent) standing up a new project that wants the same
@@ -20,7 +20,7 @@
 4. [Verifying the Install](#4-verifying-the-install)
 5. [Common Pitfalls](#5-common-pitfalls)
 6. [Optional Add-Ons](#6-optional-add-ons)
-7. [Decoupling from `core-v8` Assumptions](#7-decoupling-from-core-v8-assumptions)
+7. [Decoupling from `core-v9` Assumptions](#7-decoupling-from-core-v9-assumptions)
 
 ---
 
@@ -103,11 +103,11 @@ go mod init github.com/<owner>/<repo>
 
 ### Step 3 — Copy the toolchain
 
-From the source repo (`core-v8` or any repo with this toolchain installed):
+From the source repo (`core-v9` or any repo with this toolchain installed):
 
 ```powershell
 # Adjust $src to point at the source repo
-$src = "C:\path\to\core-v8"
+$src = "C:\path\to\core-v9"
 $dst = (Get-Location).Path
 
 Copy-Item "$src\run.ps1"                       "$dst\run.ps1"
@@ -119,7 +119,7 @@ Copy-Item "$src\.github\workflows\ci.yml"      "$dst\.github\workflows\ci.yml"
 On macOS / Linux:
 
 ```bash
-SRC=/path/to/core-v8
+SRC=/path/to/core-v9
 cp    "$SRC/run.ps1"                       ./run.ps1
 cp -r "$SRC/scripts"                       ./scripts
 mkdir -p .github/workflows
@@ -230,9 +230,9 @@ These are common follow-ups but **not required** for the toolchain to work:
 
 ---
 
-## 7. Decoupling from `core-v8` Assumptions
+## 7. Decoupling from `core-v9` Assumptions
 
-The toolchain was extracted from `core-v8` but is **not coupled** to it. Specifically:
+The toolchain was extracted from `core-v9` but is **not coupled** to it. Specifically:
 
 | Assumption you might worry about | Reality |
 |---|---|
@@ -241,8 +241,8 @@ The toolchain was extracted from `core-v8` but is **not coupled** to it. Specifi
 | `coretests` framework required | ❌ No — toolchain only invokes `go test`, doesn't care which framework you use |
 | `tests/integratedtests/` mirror layout required | ❌ No — works with any test layout `go test ./...` accepts |
 | Specific Go version required | ⚠️ 1.21+ recommended for generics support in your code; toolchain itself is version-agnostic |
-| `args.Map` / `BaseTestCase` patterns required | ❌ No — those are `core-v8` test-style choices, completely independent of the runner |
-| Phase names must match `core-v8` | ⚪ No, but renaming requires updating `02-powershell-dashboard-ui.md` §12.1 in your fork |
+| `args.Map` / `BaseTestCase` patterns required | ❌ No — those are `core-v9` test-style choices, completely independent of the runner |
+| Phase names must match `core-v9` | ⚪ No, but renaming requires updating `02-powershell-dashboard-ui.md` §12.1 in your fork |
 
 > **Rule of thumb**: If you can run `go test ./... -coverprofile=...` in your repo, the toolchain will work.
 

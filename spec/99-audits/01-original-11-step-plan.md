@@ -4,7 +4,7 @@
 > **Date**: 2026-04-23 (Asia/Kuala_Lumpur, UTC+8)
 > **Scope**: Read-only audit of `spec/` against the actual `tests/integratedtests/` codebase.
 > **Goal**: Determine whether the current spec is sufficient for an external AI to write
-> compliant integrated tests for the `core-v8` Go module — *without* having access to this
+> compliant integrated tests for the `core-v9` Go module — *without* having access to this
 > repository — and identify the exact gaps that block that goal.
 >
 > **No files were created, modified, or deleted other than this report.**
@@ -322,7 +322,7 @@ To get to ≥95%, the spec needs:
 
 ## 7. Recommendations for `spec/01-app/` and `spec/02-app-issues/`
 
-You asked the new folders to follow the spirit of `alimtvnetwork/core-v8/spec/01-app` (per your free-text answer). Without fetching that repo (per your other answer), I infer the intent from how that folder is *referenced* in this codebase:
+You asked the new folders to follow the spirit of `alimtvnetwork/core-v9/spec/01-app` (per your free-text answer). Without fetching that repo (per your other answer), I infer the intent from how that folder is *referenced* in this codebase:
 
 - `spec/03-powershell-test-run/01-overview.md` lines 256-258 references:
   - `/spec/01-app/00-repo-overview.md`

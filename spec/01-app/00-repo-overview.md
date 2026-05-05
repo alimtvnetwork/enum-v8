@@ -14,7 +14,7 @@ go 1.25.0
 ```
 
 > ⚠️ **Package name vs. module path** *(F-NEW-04 fix)*
-> Module path ends in `core-v8`. **Root package name in Go code is `core`**, not `corev8`.
+> Module path ends in `core-v9`. **Root package name in Go code is `core`**, not `corev8`.
 > Writing `corev8.X()` will not compile. See [`03-import-conventions.md`](./03-import-conventions.md).
 
 | Property | Value |
@@ -27,7 +27,7 @@ go 1.25.0
 | Install | `go get github.com/alimtvnetwork/core-v9` |
 | License | See repo `LICENSE` |
 
-**Why zero runtime deps?** The library is intended as a foundation for downstream services. A nil dependency footprint means upgrading `core-v8` cannot transitively force upgrades of unrelated packages.
+**Why zero runtime deps?** The library is intended as a foundation for downstream services. A nil dependency footprint means upgrading `core-v9` cannot transitively force upgrades of unrelated packages.
 
 ---
 

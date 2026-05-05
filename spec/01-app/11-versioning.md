@@ -56,7 +56,7 @@ import "github.com/alimtvnetwork/core-v9/versionindexes"
 
 versionindexes.V1   // 1
 versionindexes.V2   // 2
-versionindexes.V8   // 8 (current era — core-v8)
+versionindexes.V8   // 8 (current era — core-v9)
 ```
 
 ### Why integer indices?
@@ -92,7 +92,7 @@ versionindexes.V8   // 8 (current era — core-v8)
 
 1. Identify category (table above).
 2. Update `coreversion`-related constants if any.
-3. Update `go.mod` major version path **only on a major bump** (e.g. `core-v8` → `core-v9`).
+3. Update `go.mod` major version path **only on a major bump** (e.g. `core-v9` → `core-v9`).
 4. Document the bump in the release notes (if a release process exists).
 5. **Do not edit `.release/`** — that folder is owned by the release pipeline.
 
@@ -100,7 +100,7 @@ versionindexes.V8   // 8 (current era — core-v8)
 
 ## 4. Compatibility Guarantees
 
-### Within an era (e.g. `core-v8.x.y`)
+### Within an era (e.g. `core-v9.x.y`)
 
 - **Public APIs are stable**: imports from `github.com/alimtvnetwork/core-v9/<pkg>` will not break.
 - **`internal/` packages are not stable**: they may change in any minor release.
@@ -109,7 +109,7 @@ versionindexes.V8   // 8 (current era — core-v8)
 
 ### Across eras (`v8` → `v9`)
 
-- The module path changes (`core-v8` → `core-v9`). Old code keeps working unchanged.
+- The module path changes (`core-v9` → `core-v9`). Old code keeps working unchanged.
 - No automatic migration — consumers update import paths when they choose to upgrade.
 - A migration guide should accompany every era bump.
 
@@ -150,7 +150,7 @@ This rule is enforced via `.lovable/user-preferences` line 8 and is part of the 
 
 ## See Also
 
-- [`03-import-conventions.md`](./03-import-conventions.md) — Module path includes the major version (`core-v8`)
+- [`03-import-conventions.md`](./03-import-conventions.md) — Module path includes the major version (`core-v9`)
 - [`13-testing-patterns.md`](./13-testing-patterns.md) — `coretestcases.CaseV1` naming reflects the version-index pattern
 - [`/spec/04-tooling/`](../04-tooling/) — Release tooling (PowerShell runner) lives here
 - `.lovable/user-preferences` — Project rules including the version-bump and `.release/` policy

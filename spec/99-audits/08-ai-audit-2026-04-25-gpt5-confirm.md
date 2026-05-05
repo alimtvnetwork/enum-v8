@@ -19,7 +19,7 @@ The spec is very strong overall: clear AI reading order, rich worked examples, a
 - F-NEW-01 — coremath vs built-ins: ⚠️ Partial — spec/00-llm-integration-guide.md clearly deprecates coremath, but spec/01-app/01-package-map.md still lists “coremath — Min/Max for all numeric types” without a LEGACY label; also spec/01-app/00-repo-overview.md §2 groups coremath among active utilities.
 - F-NEW-02 — Compound *Or* tokenization: ✅ Adequate — explicit rule block with correct/wrong tokenization and a 3-segment example (GetOrKeyOrDefault) in spec/00-llm-integration-guide.md.
 - F-NEW-03 — Collection vs SimpleSlice decision: ✅ Adequate — decision matrix and default-to-Collection in spec/00-llm-integration-guide.md §coregeneric.
-- F-NEW-04 — core vs core-v8 warning elevation: ✅ Adequate — top-level callouts in spec/00-llm-integration-guide.md and spec/01-app/00-repo-overview.md.
+- F-NEW-04 — core vs core-v9 warning elevation: ✅ Adequate — top-level callouts in spec/00-llm-integration-guide.md and spec/01-app/00-repo-overview.md.
 - F-NEW-05 — Enum JSON asymmetry: ✅ Adequate — dedicated “Serialization Asymmetry” box in spec/01-app/05-enum-system.md §7.
 - F-NEW-06 — Style B cast idiom rationale: ✅ Adequate — clear rationale in spec/06-testing-guidelines/02-test-case-types.md §Style B.
 - F-NEW-07 — Enum Value<Type> justification: ✅ Adequate — explicit “REQUIRED by enuminf.BasicEnumValuer” note in spec/01-app/05-enum-system.md Step 3.

@@ -86,9 +86,9 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 - **Dependabot** (`.github/dependabot.yml`) — weekly `gomod` and
   `github-actions` updates, grouped minor/patch PRs, scheduled Mondays
   09:00 Asia/Kuala_Lumpur.
-- **Cross-repo staging** under `cross-repo/core-v8/` — mirrored
+- **Cross-repo staging** under `cross-repo/core-v9/` — mirrored
   workflows, `.golangci.yml`, `dependabot.yml`, baselines, and a
-  README install guide so the `core-v8` upstream can adopt the same
+  README install guide so the `core-v9` upstream can adopt the same
   CI surface (governed by `spec/04-tooling/06-cross-repo-sync.md`).
 - **Python regression tests** for the CI guards:
   `scripts/ci/test_check_collisions.py` (22 cases covering build-tag
@@ -100,10 +100,10 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ### Changed
 - Module path migrated from `gitlab.com/auk-go/enum` to
   `github.com/alimtvnetwork/enum-v2`.
-- **Core dependency renamed** `github.com/alimtvnetwork/core-v8` →
+- **Core dependency renamed** `github.com/alimtvnetwork/core-v9` →
   `github.com/alimtvnetwork/core-v9` across all 307 source files
   (`go.mod`, all package imports, spec docs, CI configs, coverage
-  scripts, PR template). The `cross-repo/core-v8/` staging directory
+  scripts, PR template). The `cross-repo/core-v9/` staging directory
   name is intentionally retained — it tracks the upstream repo name,
   not the module path. Pseudo-version pin
   `v1.5.6-0.20260423064907-72bcd64c06b5` carries over unchanged.
@@ -120,11 +120,11 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
   ships its first tagged release.
 - **`go.mod` rename-bridge `replace` directive** — the upstream
   `core-v9` repo's own `go.mod` still declares
-  `module github.com/alimtvnetwork/core-v8`; Go enforces import-path
+  `module github.com/alimtvnetwork/core-v9`; Go enforces import-path
   / module-path equality so the v9 path can't load directly. Until
   upstream commits its `module github.com/alimtvnetwork/core-v9`
   line, `replace github.com/alimtvnetwork/core-v9 =>
-  github.com/alimtvnetwork/core-v8 v0.0.0-<date>-<sha>` resolves the
+  github.com/alimtvnetwork/core-v9 v0.0.0-<date>-<sha>` resolves the
   v9 import path to the v8 artifact at the same pinned commit. All
   source-code imports stay on `core-v9`; only the resolution target
   is bridged. Remove the `replace` once upstream's `go.mod` is fixed.

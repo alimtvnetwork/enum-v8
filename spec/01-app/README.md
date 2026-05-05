@@ -4,7 +4,7 @@
 > **Source**: [`spec/99-audits/01-original-11-step-plan.md` §7.1](../99-audits/01-original-11-step-plan.md#71-proposed-spec01-app-skeleton-to-be-created-in-a-later-step)
 > **Date scaffolded**: 2026-04-23 (Asia/Kuala_Lumpur, UTC+8)
 
-This folder contains the **authoritative architectural reference** for the `core-v8` Go module, split into atomic per-topic pages. Most content will be extracted from `spec/00-llm-integration-guide.md` in subsequent steps (3, 4, 5).
+This folder contains the **authoritative architectural reference** for the `core-v9` Go module, split into atomic per-topic pages. Most content will be extracted from `spec/00-llm-integration-guide.md` in subsequent steps (3, 4, 5).
 
 ## Suggested AI Reading Order
 

@@ -1,5 +1,5 @@
 > ✅ **Status**: drafted at spec-v0.16.0, expanded at spec-v0.17.1 with trust-boundary worked example (2026-04-25, Asia/Kuala_Lumpur).
-> **Audience**: anyone wiring `core-v8` into a production consumer that needs structured logging, diagnostic context, or test-failure inspection.
+> **Audience**: anyone wiring `core-v9` into a production consumer that needs structured logging, diagnostic context, or test-failure inspection.
 > **Source**: unifies guidance previously scattered across `04-error-system.md` §5, `13-testing-patterns.md` §8, `00-llm-integration-guide.md` §StackEnhance, and `06-testing-guidelines/07-diagnostics-output-standards.md`.
 > **Closes**: F-V14-05 *(observability half)*.
 
@@ -19,7 +19,7 @@
 
 ## 1. Scope — What This Library Does and Does Not Provide
 
-`core-v8` is a **pure library**. It provides primitives for **shaping** diagnostic data so that the consuming application can route it to whatever logger, tracer, or sink it chooses.
+`core-v9` is a **pure library**. It provides primitives for **shaping** diagnostic data so that the consuming application can route it to whatever logger, tracer, or sink it chooses.
 
 | Concern | This library | Consumer's responsibility |
 |---|---|---|
@@ -33,7 +33,7 @@
 | Prometheus / metrics emission | ❌ | ✅ |
 | Sink-side PII redaction | ❌ | ✅ — but see [`16-security.md` §2](./16-security.md#2-pii--secret-handling) for what this library guarantees on its side |
 
-> **Rule (MUST)**: Do not import a logging framework into `core-v8`. The library must remain dependency-light so consumers can choose their own observability stack.
+> **Rule (MUST)**: Do not import a logging framework into `core-v9`. The library must remain dependency-light so consumers can choose their own observability stack.
 
 ---
 
@@ -122,7 +122,7 @@ Test #N — {scenario}: should be equal
 
 ## 5. Logging Boundaries
 
-Because `core-v8` itself logs nothing, every observability decision happens at the **consumer boundary**:
+Because `core-v9` itself logs nothing, every observability decision happens at the **consumer boundary**:
 
 ```go
 // In your application's adapter layer:
@@ -138,7 +138,7 @@ if result.IsFailed() {
 
 **Rules**:
 
-1. **MUST NOT** add `fmt.Print*`, `log.Print*`, or any side-effecting I/O inside `core-v8` packages. Functions return errors / messages; the consumer logs them.
+1. **MUST NOT** add `fmt.Print*`, `log.Print*`, or any side-effecting I/O inside `core-v9` packages. Functions return errors / messages; the consumer logs them.
 2. **MUST** preserve the original `error` value when logging — do not stringify and discard. Use `slog.Any("err", err)` or equivalent.
 3. **SHOULD** log at the *outermost* boundary (HTTP handler, queue consumer) rather than at every internal call. Internal calls use `errcore.<Category>.MergeError` to attach context that the outermost logger captures.
 
@@ -210,7 +210,7 @@ func (h *SignupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 ## 6. Tracing & Metrics
 
-Out of scope for `core-v8`. The library provides **no** spans, attributes, or counters. If a consumer needs OpenTelemetry, the recommended pattern is:
+Out of scope for `core-v9`. The library provides **no** spans, attributes, or counters. If a consumer needs OpenTelemetry, the recommended pattern is:
 
 ```go
 ctx, span := tracer.Start(ctx, "validate-payload")
@@ -231,7 +231,7 @@ The library's `result.Error()` and `result.Message()` are deliberately compatibl
 
 | Mistake | Fix |
 |---|---|
-| Importing `log` / `slog` / `zap` inside a `core-v8` package | Remove the import. Return errors instead; let the consumer log. |
+| Importing `log` / `slog` / `zap` inside a `core-v9` package | Remove the import. Return errors instead; let the consumer log. |
 | Calling `StackEnhance.Error` inside every helper | Call it exactly once at the public API boundary. |
 | Stringifying an error before logging (`logger.Error(err.Error())`) | Pass the `error` value: `logger.Error("op_failed", slog.Any("err", err))`. |
 | Building a context map manually when `VarTwo` would do | Prefer the helpers — they emit the canonical format the test runner expects. |

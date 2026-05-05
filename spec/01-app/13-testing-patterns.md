@@ -2,7 +2,7 @@
 
 > ✅ **Done** — extracted from `spec/00-llm-integration-guide.md` §Testing Patterns + audit §4 (Style Inventory).
 > **Status**: filled in audit Step 4 (2026-04-23, Asia/Kuala_Lumpur).
-> **Audience**: AI agents and contributors writing tests for `core-v8`.
+> **Audience**: AI agents and contributors writing tests for `core-v9`.
 
 This page is the **architectural overview** of how tests are organized. For the full pattern reference, drill into [`/spec/06-testing-guidelines/`](../06-testing-guidelines/) (9 files). For folder-level structure, see [`14-tests-folder-walkthrough.md`](./14-tests-folder-walkthrough.md).
 

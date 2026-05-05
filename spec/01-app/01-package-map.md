@@ -10,7 +10,7 @@
 
 | Package | Path suffix | Purpose |
 |---|---|---|
-| Root | `core-v8` | Generic slice/map factories (`core.go`, `generic.go`) |
+| Root | `core-v9` | Generic slice/map factories (`core.go`, `generic.go`) |
 | `bytetype` | `/bytetype` | Byte-type utilities |
 | `chmodhelper` | `/chmodhelper` | File-permission parsing & verification |
 | `conditional` | `/conditional` | Ternary helpers: `If[T]`, `IfFunc[T]`, `NilDef[T]` |

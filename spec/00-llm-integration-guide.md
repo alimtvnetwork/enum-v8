@@ -88,7 +88,7 @@ go 1.25.0
 ```
 
 > ⚠️ **Package name vs. module path** *(F-NEW-04 fix)*
-> The module path ends in `core-v8`, but the **root package name in Go code is `core`**, not `corev8`.
+> The module path ends in `core-v9`, but the **root package name in Go code is `core`**, not `corev8`.
 > ```go
 > import "github.com/alimtvnetwork/core-v9"   // module path
 > // ↓ used in code as ↓
