@@ -7,14 +7,7 @@
 
 ## Open Issues
 
-### PI-001: Upstream `core-v9` `go.mod` module path mismatch (Task W)
-
-- **severity:** CRITICAL / BLOCKING
-- **description:** Upstream `core-v9` repo's `go.mod` still declares `module github.com/alimtvnetwork/core-v8`. Go 1.25 rejects the `replace` bridge. Any `core-v9` package importing `internal/` is rejected for `enum-v3` consumers.
-- **owner:** User (manual upstream action)
-- **blocks:** Task AG (drop replace bridge), full Go build, any `internal/`-dependent imports
-- **attempted fixes:** pseudo-version pin, v1.5.6 pin, Go 1.22 toolchain pin (not accepted)
-- **real fix:** Edit upstream `go.mod` line 1 → `module github.com/alimtvnetwork/core-v9`, tag `v1.5.8`
+*(PI-001 moved to Resolved — see below)*
 
 ### PI-002: Cross-spec stale `integratedtests/` paths (Task AH)
 
