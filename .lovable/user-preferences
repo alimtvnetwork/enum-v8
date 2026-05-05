@@ -1,0 +1,12 @@
+Communication style:
+- Terse. No padding, no "Great question!" preambles.
+- Use the "Next" loop: one lettered task per turn.
+- ALWAYS end every reply with the remaining-task list (letter IDs + one-line descriptions + a "Say next for X, or pick a letter" prompt).
+- Manual-action items (push to remote, credential-bound ops) get marked ⏭️ and stay parked under the user's responsibility.
+- When all letter-tasks are done, scan memory + codebase for carry-over work and propose new lettered tasks instead of stopping.
+
+Project-specific quirks the user expects the AI to know without re-asking:
+- Never propose anything email-related.
+- Never reintroduce `core-v8` outside `cross-repo/core-v8/`.
+- Never write `tests/integratedtests/` in new spec content.
+- The `go.mod` rename-bridge is BLOCKED until upstream `core-v9` ships a `module github.com/alimtvnetwork/core-v9` declaration. Don't propose alternative bridges that require non-existent predecessor tags.
