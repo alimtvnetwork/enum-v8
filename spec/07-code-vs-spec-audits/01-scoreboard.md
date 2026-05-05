@@ -38,10 +38,11 @@
 | 2026-05-05 | 11 (closed)   | `01-app/13-testing-patterns.md` | 23 | 15 | 0 | 0 | 8 | **100.0%** *(verifiable)* |
 | 2026-05-05 | 12 (baseline) | `01-app/14-tests-folder-walkthrough.md` | 24 | 8 | 6 | 0 | 10 | **57.1%** *(verifiable)* |
 | 2026-05-05 | 12 (closed)   | `01-app/14-tests-folder-walkthrough.md` | 24 | 14 | 0 | 0 | 10 | **100.0%** *(verifiable)* |
+| 2026-05-05 | 13 (baseline / closed) | `01-app/15-observability.md` | 27 | 14 | 0 | 0 | 13 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
-_None._ All 10 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §12, §13, §14) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset. Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 10 §14 + 7 §04 + 1 §05 + 6 §06 = **122 ❓** total — require upstream `core-v9` source (task **AB**).
+_None._ All 11 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §12, §13, §14, §15) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset. Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 10 §14 + 13 §15 + 7 §04 + 1 §05 + 6 §06 = **135 ❓** total — require upstream `core-v9` source (task **AB**).
 
 > **Cross-spec sweep status:** `spec/01-app/` is now **genuinely clean** of stale `tests/integratedtests/` references after cycle 12 finished what cycle 11 thought it had finished. Remaining hits in `01-app/` are intentional anti-pattern callouts (`05-enum-system.md:417`) or retro-references inside cycle-11/12 fix notes themselves. Task **AH** still owes a sweep of `spec/03-powershell-test-run/` (4 files), `spec/04-tooling/04-bootstrap-into-new-repo.md`, and `spec/02-app-issues/02-internal-package-coverage-policy.md`. `spec/CHANGELOG.md` and `spec/99-audits/` are immutable history.
 
