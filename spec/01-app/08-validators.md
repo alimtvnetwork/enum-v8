@@ -344,7 +344,7 @@ The PowerShell test runner parses validator output to attribute failures to sour
 
 ## 6. Testing Validators
 
-Each validator package needs three test files in `tests/integratedtests/<pkg>tests/`:
+Each validator package needs three test files in `tests/creationtests/<pkg>tests/` (the repo's actual test root — see [`13-testing-patterns.md`](./13-testing-patterns.md) and the C-CVS-01 / D-CVS-17 resolutions in [`/spec/07-code-vs-spec-audits/01-scoreboard.md`](../07-code-vs-spec-audits/01-scoreboard.md)):
 
 | File | Style | Verifies |
 |---|---|---|

@@ -2,9 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 (verifiable)** *(4 sections audited, all closed)*
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 (verifiable)** *(5 sections audited, all closed)*
 
-> §03–§06 closed. §06 (data-structures) Cycle 4 closed by realigning the spec with `enum-v2`'s actual consumer surface: `corejson.Serialize.ToBytesErr` / `Deserialize.BytesTo` (replacing the unrunnable `ToString`/`Raw`/`UsingBytes`/`FromTo` examples), `coreonce.NewAnyOnce` / `NewByteOnce` (replacing the fictional `coreonce.New.String` namespace), `corestr.{Hashset,SimpleSlice,SimpleStringOnce}` (replacing the unused `NewCollectionPtrUsingStrings` example), and explicit ⚠️ "upstream-only" callouts on `coregeneric` / `corepayload` (zero `enum-v2` consumers). The §4 "never `encoding/json`" rule now documents the two legitimate exceptions in `inttype` (`MarshalJSON` → `json.Marshal` primitive delegation, `*json.Number` parameter type). Six ❓ remain pending task **AB** (upstream `core-v9` source). See [`05-cycle4-data-structures.md`](./05-cycle4-data-structures.md).
+> §03–§06 + §08 closed. §08 (validators) Cycle 6 closed by applying **D-CVS-26** — the only verifiable claim was the stale `tests/integratedtests/<pkg>tests/` path (§6 line 347), rewritten to `tests/creationtests/<pkg>tests/` to match the repo's actual test root (mirrors the C-CVS-01 / D-CVS-17 fixes already applied to §03 and §05). The remaining 17 ❓ on §08 (`corevalidator` surface, diagnostic-format contract, `coretestcases.CaseV1` / `CaseNilSafe` test styles) defer to task **AB** alongside §07's 17 ❓ — both share the same blocker (no upstream `core-v9` source for `corevalidator` / `conditional` / `isany` / `regexnew` on disk). See [`07-cycle6-validators.md`](./07-cycle6-validators.md).
 
 ## Cycle history
 
@@ -20,10 +20,12 @@
 | 2026-05-04 | 4 (baseline) | `01-app/06-data-structures.md` | 20 | 5 | 6 | 3 | 6 | **35.7%** *(verifiable)* |
 | 2026-05-04 | 4 (closed) | `01-app/06-data-structures.md` | 20 | 14 | 0 | 0 | 6 | **100.0%** *(verifiable)* |
 | 2026-05-04 | 5 (baseline) | `01-app/07-conditional-and-utilities.md` | 17 | 0 | 0 | 0 | 17 | **N/A** *(no verifiable subset)* |
+| 2026-05-05 | 6 (baseline) | `01-app/08-validators.md` | 19 | 0 | 1 | 0 | 18 | **0.0%** *(verifiable)* |
+| 2026-05-05 | 6 (closed)   | `01-app/08-validators.md` | 19 | 1 | 0 | 0 | 18 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
-_None._ All 4 audited-and-closed sections (§03, §04, §05, §06) are at 100 % of their verifiable subsets. §07 has no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 on §07, 7 on §04, 1 on §05, 6 on §06 — require upstream `core-v9` source (task **AB**).
+_None._ All 5 audited-and-closed sections (§03, §04, §05, §06, §08) are at 100 % of their verifiable subsets. §07 has no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 on §07, 18 on §08, 7 on §04, 1 on §05, 6 on §06 — require upstream `core-v9` source (task **AB**).
 
 ## Resolved drift findings
 
@@ -62,6 +64,7 @@ _None._ All 4 audited-and-closed sections (§03, §04, §05, §06) are at 100 % 
 | D-CVS-23 | `corestr` shown as "thread-safe list of strings"; real surface is `Hashset`/`SimpleSlice`/`SimpleStringOnce` | 2026-05-04 | `spec/01-app/06-data-structures.md` §3 | Rewrote §3 around `New.Hashset` / `New.SimpleSlice` / `SimpleStringOnce` |
 | D-CVS-24 | `coreonce` "covers all common types" overstated | 2026-05-04 | `spec/01-app/06-data-structures.md` §5 | Softened to "common typed wrappers"; cross-referenced `corestr.SimpleStringOnce` |
 | D-CVS-25 | `coregeneric` and `corepayload` presented as first-class but have no `enum-v2` consumers | 2026-05-04 | `spec/01-app/06-data-structures.md` §1, §2, §6 + §7 decision matrix | Added "Consumer-coverage note" in §1 + ⚠️ "upstream-only" callouts in §2 and §6; §7 matrix now marks each row with `enum-v2` verification status |
+| D-CVS-26 | §08 §6 references nonexistent `tests/integratedtests/<pkg>tests/` for validator tests | 2026-05-05 | `spec/01-app/08-validators.md` §6 line 347 | Rewrote to `tests/creationtests/<pkg>tests/` + cross-ref to C-CVS-01 / D-CVS-17 (mirrors the §03 / §05 fixes) |
 
 ## Targets
 
@@ -76,7 +79,8 @@ _None._ All 4 audited-and-closed sections (§03, §04, §05, §06) are at 100 % 
 | ✅ Resolve §05 contradictions C-CVS-03..05 (HIGH) + apply D-CVS-14..19 | **100.0** verifiable on §05 | 2026-05-04 |
 | ✅ Cycle 4 baseline on §06 | **35.7** verifiable on §06 | 2026-05-04 |
 | ✅ Resolve §06 contradictions C-CVS-06..08 + apply D-CVS-20..25 | **100.0** verifiable on §06 | 2026-05-04 |
-| 🚧 Fetch `core-v9` source (task **AB**) → resolve 17 ❓ on §07 + 7 ❓ on §04 + 1 ❓ on §05 + 6 ❓ on §06 | — | pending |
-| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **5/16 baseline (4 closed)** |
+| ✅ Cycle 6 baseline on §08 + apply D-CVS-26 | **100.0** verifiable on §08 | 2026-05-05 |
+| 🚧 Fetch `core-v9` source (task **AB**) → resolve 17 ❓ on §07 + 18 ❓ on §08 + 7 ❓ on §04 + 1 ❓ on §05 + 6 ❓ on §06 | — | pending |
+| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **6/16 baseline (5 closed)** |
 | 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
 | 🎯 Zero ❌ contradictions | 0 | ✅ |
