@@ -2,9 +2,11 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 (verifiable)** *(7 sections audited + 2 baseline-only — §07, §09 — all closed)*
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 (verifiable)** *(8 sections audited + 2 baseline-only — §07, §09 — all closed)*
 
-> §11 (versioning) Cycle 9 closed by resolving **2 contradictions + 3 drifts**: (a) **C-CVS-09a/b** — `core-v9 → core-v9` mojibake at §3 line 95 and §4 line 112 (artifacts of the bulk v8→v9 rename) rewritten to describe the historical `core-v8` → `core-v9` migration; (b) **D-CVS-27** — stale `tests/integratedtests/` at §4 line 108 rewritten to `tests/creationtests/` (mirrors C-CVS-01 / D-CVS-17 / D-CVS-26); (c) **D-CVS-30** — `versionindexes.V8` comment claiming "current era — core-v9" rewritten to identify V8 as the legacy era and V9 as current; (d) **D-CVS-31** — three stale `.lovable/user-preferences line 8` citations (§3 source line, §3 CRITICAL block, §5 enforcement note, See-Also) rewritten to point only to `mem://index.md` Core (the file actually exists; `.lovable/` doesn't). Two MUST-NOT rules independently verified at 0 violations: no `golang.org/x/mod/semver` direct use, no `.release/` writes (folder absent — vacuously satisfied). See [`10-cycle9-versioning.md`](./10-cycle9-versioning.md).
+> §12 (cmd-entrypoints) Cycle 10 closed by resolving **1 HIGH contradiction + 1 drift** (+1 latent drift logged for later): (a) **C-CVS-10** — spec §1 asserted "no `cmd/` directory" / "no `main` package" but `enum-v2/cmd/main/main.go` exists with `package main` and `func main()`; rewrote §1 as a "library-first, smoke-test allowed" policy that distinguishes upstream `core-v9` (zero `cmd/`) from this module (one permitted smoke-test harness `cmd/main/`); rule narrowed to "no additional `cmd/<name>/` entrypoints"; cross-linked `cmd/README.md`. (b) **D-CVS-32** — §3 line 71 stale `tests/integratedtests/` rewritten to `tests/creationtests/` (5th occurrence; final `rg integratedtests` sweep deferred to task **AH**). (c) **D-CVS-35** (NEW, deferred) — §5 cites `04-bootstrap-into-new-repo.md` but `spec/04-tooling/` only contains `00..03`. See [`11-cycle10-cmd-entrypoints.md`](./11-cycle10-cmd-entrypoints.md).
+>
+> §11 (versioning) Cycle 9 closed by resolving **2 contradictions + 3 drifts**: **C-CVS-09a/b** (mojibake `core-v9 → core-v9` at §3:95 and §4:112 rewritten as the historical `core-v8` → `core-v9` migration), **D-CVS-27** (`tests/integratedtests/` → `tests/creationtests/` at §4:108), **D-CVS-30** (`versionindexes.V8` comment corrected: V8 = legacy era, V9 = current), **D-CVS-31** (4 stale `.lovable/user-preferences` citations rewritten to `mem://index.md` Core). See [`10-cycle9-versioning.md`](./10-cycle9-versioning.md).
 
 ## Cycle history
 
@@ -26,10 +28,14 @@
 | 2026-05-05 | 8 (baseline / closed) | `01-app/10-reflection-and-dynamic.md` | 19 | 4 | 0 | 0 | 15 | **100.0%** *(verifiable)* |
 | 2026-05-05 | 9 (baseline) | `01-app/11-versioning.md` | 20 | 4 | 3 | 2 | 11 | **44.4%** *(verifiable)* |
 | 2026-05-05 | 9 (closed)   | `01-app/11-versioning.md` | 20 | 9 | 0 | 0 | 11 | **100.0%** *(verifiable)* |
+| 2026-05-05 | 10 (baseline) | `01-app/12-cmd-entrypoints.md` | 22 | 9 | 3 | 4 | 6 | **56.3%** *(verifiable)* |
+| 2026-05-05 | 10 (closed)   | `01-app/12-cmd-entrypoints.md` | 22 | 16 | 0 | 0 | 6 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
-_None._ All 7 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 7 §04 + 1 §05 + 6 §06 = **98 ❓** total — require upstream `core-v9` source (task **AB**).
+**D-CVS-35** (low, deferred) — `spec/01-app/12-cmd-entrypoints.md` §5 cites `/spec/04-tooling/04-bootstrap-into-new-repo.md` but `spec/04-tooling/` only contains `00..03`. Logged in cycle 10 but not in scope for fix; address in a future cleanup pass.
+
+All 8 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §12) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 7 §04 + 1 §05 + 6 §06 = **104 ❓** total — require upstream `core-v9` source (task **AB**).
 
 ## Resolved drift findings
 
@@ -74,6 +80,9 @@ _None._ All 7 audited-and-closed sections (§03, §04, §05, §06, §08, §10, �
 | D-CVS-27 | §11 §4 line 108 references `tests/integratedtests/` (4th occurrence of this pattern) | 2026-05-05 | `spec/01-app/11-versioning.md:108` | Rewrote to `tests/creationtests/` + cross-ref to C-CVS-01 / D-CVS-17 / D-CVS-26 |
 | D-CVS-30 | §11 §2 line 59 comment claims `versionindexes.V8 // 8 (current era — core-v9)` — contradictory | 2026-05-05 | `spec/01-app/11-versioning.md:59` | Rewrote to `// 8 (legacy era; the current core-v9 era is V9)` |
 | D-CVS-31 | §11 cites `.lovable/user-preferences line 8` (file does not exist in `enum-v2`) in 4 places | 2026-05-05 | `spec/01-app/11-versioning.md` lines 5, 78, 133, 156 | Rewrote all 4 citations to point only to `mem://index.md` Core (which exists and carries the rule) |
+| C-CVS-10 | §12 §1 asserts "no `cmd/` directory" / "no `main` package" but `enum-v2/cmd/main/main.go` exists with `package main` and `func main()` | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §1 lines 19-37 | Rewrote §1 as a "library-first, smoke-test allowed" policy: upstream `core-v9` truly has zero `cmd/`; this module ships exactly one permitted smoke-test harness at `cmd/main/`. Rule narrowed to "no additional `cmd/<name>/` entrypoints + no `cmd/` in `core-v9`". Cross-linked `cmd/README.md`. |
+| D-CVS-32 | §12 §3 line 71 references `tests/integratedtests/` (5th occurrence of this stale path across the spec corpus) | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §3 lines 71-82 | Rewrote to `tests/creationtests/` + `go test ./tests/creationtests/...`; added cross-ref to C-CVS-01 / D-CVS-17 / D-CVS-26 / D-CVS-27 |
+| D-CVS-33 | §12 §3 line 78 example `go test ./tests/integratedtests/coregenerictests/...` | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §3 (subsumed by D-CVS-32) | Replaced with `go test ./tests/creationtests/...` and a `make` invocation for the smoke-test harness |
 
 ## Targets
 
@@ -93,7 +102,11 @@ _None._ All 7 audited-and-closed sections (§03, §04, §05, §06, §08, §10, �
 | ✅ Cycle 8 baseline+closed on §10 (4 MUST/MUST-NOT rules verified, 0 violations) | **100.0** verifiable on §10 | 2026-05-05 |
 | ✅ Cycle 9 baseline on §11 | **44.4** verifiable on §11 | 2026-05-05 |
 | ✅ Resolve §11 contradictions C-CVS-09a/b + apply D-CVS-27, D-CVS-30, D-CVS-31 | **100.0** verifiable on §11 | 2026-05-05 |
-| 🚧 Fetch `core-v9` source (task **AB**) → resolve **98 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 7 §04 + 1 §05 + 6 §06 | — | pending |
-| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **9/16 baseline (7 closed, 2 baseline-only)** |
+| ✅ Cycle 10 baseline on §12 | **56.3** verifiable on §12 | 2026-05-05 |
+| ✅ Resolve §12 contradiction C-CVS-10 (HIGH) + apply D-CVS-32, D-CVS-33 | **100.0** verifiable on §12 | 2026-05-05 |
+| 🚧 Fetch `core-v9` source (task **AB**) → resolve **104 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 7 §04 + 1 §05 + 6 §06 | — | pending |
+| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **10/16 baseline (8 closed, 2 baseline-only)** |
+| 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
+| 🎯 Zero ❌ contradictions | 0 | ✅ |
 | 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
 | 🎯 Zero ❌ contradictions | 0 | ✅ |
