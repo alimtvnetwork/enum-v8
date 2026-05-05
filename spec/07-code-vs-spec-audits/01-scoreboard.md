@@ -2,9 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 (verifiable)** *(6 sections audited + 2 baseline-only — §07, §09 — all closed)*
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 (verifiable)** *(7 sections audited + 2 baseline-only — §07, §09 — all closed)*
 
-> §10 (reflection-and-dynamic) Cycle 8 closed at baseline with **no fixes needed** — the four verifiable claims are all MUST/MUST-NOT compliance checks (no consumer-side `"reflect"` import, no `internal/reflectinternal` import, no `reflect.DeepEqual` calls, MUST/MUST-NOT documentation convention) and `enum-v2` honours all of them at **0 violations**. The remaining 15 ❓ on §10 (`coredynamic` API surface, `reflectcore` predicates, `internal/reflectinternal` responsibilities) defer to task **AB**. See [`09-cycle8-reflection-and-dynamic.md`](./09-cycle8-reflection-and-dynamic.md).
+> §11 (versioning) Cycle 9 closed by resolving **2 contradictions + 3 drifts**: (a) **C-CVS-09a/b** — `core-v9 → core-v9` mojibake at §3 line 95 and §4 line 112 (artifacts of the bulk v8→v9 rename) rewritten to describe the historical `core-v8` → `core-v9` migration; (b) **D-CVS-27** — stale `tests/integratedtests/` at §4 line 108 rewritten to `tests/creationtests/` (mirrors C-CVS-01 / D-CVS-17 / D-CVS-26); (c) **D-CVS-30** — `versionindexes.V8` comment claiming "current era — core-v9" rewritten to identify V8 as the legacy era and V9 as current; (d) **D-CVS-31** — three stale `.lovable/user-preferences line 8` citations (§3 source line, §3 CRITICAL block, §5 enforcement note, See-Also) rewritten to point only to `mem://index.md` Core (the file actually exists; `.lovable/` doesn't). Two MUST-NOT rules independently verified at 0 violations: no `golang.org/x/mod/semver` direct use, no `.release/` writes (folder absent — vacuously satisfied). See [`10-cycle9-versioning.md`](./10-cycle9-versioning.md).
 
 ## Cycle history
 
@@ -24,10 +24,12 @@
 | 2026-05-05 | 6 (closed)   | `01-app/08-validators.md` | 19 | 1 | 0 | 0 | 18 | **100.0%** *(verifiable)* |
 | 2026-05-05 | 7 (baseline) | `01-app/09-converters.md` | 23 | 0 | 0 | 0 | 23 | **N/A** *(no verifiable subset)* |
 | 2026-05-05 | 8 (baseline / closed) | `01-app/10-reflection-and-dynamic.md` | 19 | 4 | 0 | 0 | 15 | **100.0%** *(verifiable)* |
+| 2026-05-05 | 9 (baseline) | `01-app/11-versioning.md` | 20 | 4 | 3 | 2 | 11 | **44.4%** *(verifiable)* |
+| 2026-05-05 | 9 (closed)   | `01-app/11-versioning.md` | 20 | 9 | 0 | 0 | 11 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
-_None._ All 6 audited-and-closed sections (§03, §04, §05, §06, §08, §10) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 7 §04 + 1 §05 + 6 §06 = **87 ❓** total — require upstream `core-v9` source (task **AB**).
+_None._ All 7 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset (zero `enum-v2` consumers). Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 7 §04 + 1 §05 + 6 §06 = **98 ❓** total — require upstream `core-v9` source (task **AB**).
 
 ## Resolved drift findings
 
@@ -67,6 +69,11 @@ _None._ All 6 audited-and-closed sections (§03, §04, §05, §06, §08, §10) a
 | D-CVS-24 | `coreonce` "covers all common types" overstated | 2026-05-04 | `spec/01-app/06-data-structures.md` §5 | Softened to "common typed wrappers"; cross-referenced `corestr.SimpleStringOnce` |
 | D-CVS-25 | `coregeneric` and `corepayload` presented as first-class but have no `enum-v2` consumers | 2026-05-04 | `spec/01-app/06-data-structures.md` §1, §2, §6 + §7 decision matrix | Added "Consumer-coverage note" in §1 + ⚠️ "upstream-only" callouts in §2 and §6; §7 matrix now marks each row with `enum-v2` verification status |
 | D-CVS-26 | §08 §6 references nonexistent `tests/integratedtests/<pkg>tests/` for validator tests | 2026-05-05 | `spec/01-app/08-validators.md` §6 line 347 | Rewrote to `tests/creationtests/<pkg>tests/` + cross-ref to C-CVS-01 / D-CVS-17 (mirrors the §03 / §05 fixes) |
+| C-CVS-09a | §11 §3 line 95 says "`core-v9` → `core-v9`" (mojibake from bulk v8→v9 rename) | 2026-05-05 | `spec/01-app/11-versioning.md:95` | Rewrote to "the historical `core-v8` → `core-v9` migration" — legitimate historical reference |
+| C-CVS-09b | §11 §4 line 112 says "module path changes (`core-v9` → `core-v9`)" — same mojibake | 2026-05-05 | `spec/01-app/11-versioning.md:112` | Rewrote to "the historical `core-v8` → `core-v9` migration is the canonical example" |
+| D-CVS-27 | §11 §4 line 108 references `tests/integratedtests/` (4th occurrence of this pattern) | 2026-05-05 | `spec/01-app/11-versioning.md:108` | Rewrote to `tests/creationtests/` + cross-ref to C-CVS-01 / D-CVS-17 / D-CVS-26 |
+| D-CVS-30 | §11 §2 line 59 comment claims `versionindexes.V8 // 8 (current era — core-v9)` — contradictory | 2026-05-05 | `spec/01-app/11-versioning.md:59` | Rewrote to `// 8 (legacy era; the current core-v9 era is V9)` |
+| D-CVS-31 | §11 cites `.lovable/user-preferences line 8` (file does not exist in `enum-v2`) in 4 places | 2026-05-05 | `spec/01-app/11-versioning.md` lines 5, 78, 133, 156 | Rewrote all 4 citations to point only to `mem://index.md` Core (which exists and carries the rule) |
 
 ## Targets
 
@@ -84,7 +91,9 @@ _None._ All 6 audited-and-closed sections (§03, §04, §05, §06, §08, §10) a
 | ✅ Cycle 6 baseline on §08 + apply D-CVS-26 | **100.0** verifiable on §08 | 2026-05-05 |
 | ✅ Cycle 7 baseline on §09 (no drifts; all upstream-only) | **N/A** *(no verifiable subset)* | 2026-05-05 |
 | ✅ Cycle 8 baseline+closed on §10 (4 MUST/MUST-NOT rules verified, 0 violations) | **100.0** verifiable on §10 | 2026-05-05 |
-| 🚧 Fetch `core-v9` source (task **AB**) → resolve **87 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 7 §04 + 1 §05 + 6 §06 | — | pending |
-| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **8/16 baseline (6 closed, 2 baseline-only)** |
+| ✅ Cycle 9 baseline on §11 | **44.4** verifiable on §11 | 2026-05-05 |
+| ✅ Resolve §11 contradictions C-CVS-09a/b + apply D-CVS-27, D-CVS-30, D-CVS-31 | **100.0** verifiable on §11 | 2026-05-05 |
+| 🚧 Fetch `core-v9` source (task **AB**) → resolve **98 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 7 §04 + 1 §05 + 6 §06 | — | pending |
+| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **9/16 baseline (7 closed, 2 baseline-only)** |
 | 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
 | 🎯 Zero ❌ contradictions | 0 | ✅ |
