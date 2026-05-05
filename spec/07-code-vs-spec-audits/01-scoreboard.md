@@ -87,6 +87,10 @@ _None._ **D-CVS-35 retracted** in cycle 11 as a false positive (`spec/04-tooling
 | C-CVS-10 | §12 §1 asserts "no `cmd/` directory" / "no `main` package" but `enum-v2/cmd/main/main.go` exists with `package main` and `func main()` | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §1 lines 19-37 | Rewrote §1 as a "library-first, smoke-test allowed" policy: upstream `core-v9` truly has zero `cmd/`; this module ships exactly one permitted smoke-test harness at `cmd/main/`. Rule narrowed to "no additional `cmd/<name>/` entrypoints + no `cmd/` in `core-v9`". Cross-linked `cmd/README.md`. |
 | D-CVS-32 | §12 §3 line 71 references `tests/integratedtests/` (5th occurrence of this stale path across the spec corpus) | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §3 lines 71-82 | Rewrote to `tests/creationtests/` + `go test ./tests/creationtests/...`; added cross-ref to C-CVS-01 / D-CVS-17 / D-CVS-26 / D-CVS-27 |
 | D-CVS-33 | §12 §3 line 78 example `go test ./tests/integratedtests/coregenerictests/...` | 2026-05-05 | `spec/01-app/12-cmd-entrypoints.md` §3 (subsumed by D-CVS-32) | Replaced with `go test ./tests/creationtests/...` and a `make` invocation for the smoke-test harness |
+| D-CVS-36 | §13 §6 line 201 prescribes per-package layout under `tests/integratedtests/footests/` (6th & final occurrence in `01-app/`); `enum-v2` doesn't even use a per-package layout | 2026-05-05 | `spec/01-app/13-testing-patterns.md` §6 + NEW §6.1 | §6 retitled "**upstream `core-v9`**" with scope warning + path corrected; NEW **§6.1** documents the actual `enum-v2` `tests/creationtests/` shape file-by-file (Goconvey + `EnumTestWrapper` registry); also fixed collateral `spec/01-app/README.md:25` |
+| D-CVS-37 | §13 §1 row D example `tests/integratedtests/GetAssert_*_test.go` | 2026-05-05 | `spec/01-app/13-testing-patterns.md` §1 line 20 (subsumed by D-CVS-36) | Rewrote to upstream `tests/creationtests/GetAssert_*_test.go` |
+| D-CVS-38 | §13 presents Styles A/B/C/D (`coretestcases.CaseV1`, `args.Map`, `coretests.BaseTestCase`, `testWrapper`, `coretests.GetAssert`) as authoritative for `enum-v2` despite zero consumers | 2026-05-05 | `spec/01-app/13-testing-patterns.md` §header + new callout block | Added consumer-coverage callout naming every upstream-only symbol and pointing `enum-v2` readers at `tests/creationtests/` (Goconvey + `EnumTestWrapper` registry); mirrors D-CVS-25 from cycle 4 |
+| D-CVS-35 | **RETRACTED** — claimed `04-bootstrap-into-new-repo.md` was missing, but the file does exist | 2026-05-05 | `spec/04-tooling/04-bootstrap-into-new-repo.md` (verified present) | Cycle 10's `ls` output was head-truncated; finding withdrawn in cycle 11 |
 
 ## Targets
 
@@ -108,9 +112,10 @@ _None._ **D-CVS-35 retracted** in cycle 11 as a false positive (`spec/04-tooling
 | ✅ Resolve §11 contradictions C-CVS-09a/b + apply D-CVS-27, D-CVS-30, D-CVS-31 | **100.0** verifiable on §11 | 2026-05-05 |
 | ✅ Cycle 10 baseline on §12 | **56.3** verifiable on §12 | 2026-05-05 |
 | ✅ Resolve §12 contradiction C-CVS-10 (HIGH) + apply D-CVS-32, D-CVS-33 | **100.0** verifiable on §12 | 2026-05-05 |
-| 🚧 Fetch `core-v9` source (task **AB**) → resolve **104 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 7 §04 + 1 §05 + 6 §06 | — | pending |
-| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **10/16 baseline (8 closed, 2 baseline-only)** |
+| ✅ Cycle 11 baseline on §13 | **73.3** verifiable on §13 | 2026-05-05 |
+| ✅ Resolve §13 drifts D-CVS-36, D-CVS-37, D-CVS-38 + retract D-CVS-35 | **100.0** verifiable on §13 | 2026-05-05 |
+| 🚧 Fetch `core-v9` source (task **AB**) → resolve **112 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 7 §04 + 1 §05 + 6 §06 | — | pending |
+| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **11/16 baseline (9 closed, 2 baseline-only)** |
 | 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
 | 🎯 Zero ❌ contradictions | 0 | ✅ |
-| 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
 | 🎯 Zero ❌ contradictions | 0 | ✅ |
