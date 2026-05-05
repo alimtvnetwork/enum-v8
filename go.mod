@@ -1,4 +1,4 @@
-module github.com/alimtvnetwork/enum-v2
+module github.com/alimtvnetwork/enum-v3
 
 go 1.17.8
 
@@ -33,7 +33,7 @@ require (
 // NOTE: Even with this pin working, the bridge is INSUFFICIENT for any
 // core-v9 package that transitively imports an `internal/` package —
 // Go's internal/ rule is enforced against the cached module's declared
-// path (`core-v8`), so consumers under `enum-v2/...` are rejected. The
+// path (`core-v8`), so consumers under `enum-v3/...` are rejected. The
 // only real fix is task **W** (upstream go.mod + source rename + new
 // tag), which then unblocks task **AG** (drop this entire replace
 // block, pin `core-v9 v1.5.8` cleanly).
