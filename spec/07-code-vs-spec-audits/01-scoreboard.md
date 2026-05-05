@@ -95,6 +95,11 @@ _None._ All 10 audited-and-closed sections (§03, §04, §05, §06, §08, §10, 
 | D-CVS-37 | §13 §1 row D example `tests/integratedtests/GetAssert_*_test.go` | 2026-05-05 | `spec/01-app/13-testing-patterns.md` §1 line 20 (subsumed by D-CVS-36) | Rewrote to upstream `tests/creationtests/GetAssert_*_test.go` |
 | D-CVS-38 | §13 presents Styles A/B/C/D (`coretestcases.CaseV1`, `args.Map`, `coretests.BaseTestCase`, `testWrapper`, `coretests.GetAssert`) as authoritative for `enum-v2` despite zero consumers | 2026-05-05 | `spec/01-app/13-testing-patterns.md` §header + new callout block | Added consumer-coverage callout naming every upstream-only symbol and pointing `enum-v2` readers at `tests/creationtests/` (Goconvey + `EnumTestWrapper` registry); mirrors D-CVS-25 from cycle 4 |
 | D-CVS-35 | **RETRACTED** — claimed `04-bootstrap-into-new-repo.md` was missing, but the file does exist | 2026-05-05 | `spec/04-tooling/04-bootstrap-into-new-repo.md` (verified present) | Cycle 10's `ls` output was head-truncated; finding withdrawn in cycle 11 |
+| D-CVS-39 | §14 §1 prescribes `tests/integratedtests/` as the per-package layout (7th occurrence corpus-wide) | 2026-05-05 | `spec/01-app/14-tests-folder-walkthrough.md` §1 lines 11-32 | §1 retitled "**`tests/creationtests/` *(upstream)*"** with scope warning; tree diagram updated; cross-link to all 6 prior occurrences |
+| D-CVS-40 | §14 §5 walkthrough uses `tests/integratedtests/widgettests/` (8th) | 2026-05-05 | `spec/01-app/14-tests-folder-walkthrough.md` §5 line 175 | Corrected path + inline `enum-v2` redirect ("register the enum in `allBasicEnumsCollection.go`") |
+| D-CVS-41 | §14 §3 GetAssert "observed from `tests/integratedtests/GetAssert_*_test.go`" (9th) | 2026-05-05 | `spec/01-app/14-tests-folder-walkthrough.md` §3 line 112 | Rewrote to upstream `tests/creationtests/GetAssert_*_test.go` |
+| D-CVS-42 | §14 lacks consumer-coverage callout (mirrors D-CVS-38); every wrapper/helper described is upstream-only for `enum-v2` | 2026-05-05 | `spec/01-app/14-tests-folder-walkthrough.md` §header callout | Added callout naming `tests/testwrappers/`, `coretests.GetAssert`, `coretestcases.CaseV1`, `StringsTestWrapper` and redirecting `enum-v2` readers at §13 §6.1 |
+| D-CVS-43 | Cycle 11 prematurely declared `01-app/` clean of `integratedtests`; 7 hits remained in `01-package-map.md` §8 (5) and `02-design-philosophy.md` line 183 (1) plus latent §14 hits | 2026-05-05 | `spec/01-app/01-package-map.md` §8 + `spec/01-app/02-design-philosophy.md` line 183 (collateral) | §8 retitled "upstream"; scope warning added; 4 bullets corrected to `tests/creationtests/`; design-philosophy bullet corrected + `enum-v2` redirect note |
 
 ## Targets
 
@@ -118,8 +123,9 @@ _None._ All 10 audited-and-closed sections (§03, §04, §05, §06, §08, §10, 
 | ✅ Resolve §12 contradiction C-CVS-10 (HIGH) + apply D-CVS-32, D-CVS-33 | **100.0** verifiable on §12 | 2026-05-05 |
 | ✅ Cycle 11 baseline on §13 | **73.3** verifiable on §13 | 2026-05-05 |
 | ✅ Resolve §13 drifts D-CVS-36, D-CVS-37, D-CVS-38 + retract D-CVS-35 | **100.0** verifiable on §13 | 2026-05-05 |
-| 🚧 Fetch `core-v9` source (task **AB**) → resolve **112 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 7 §04 + 1 §05 + 6 §06 | — | pending |
-| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **11/16 baseline (9 closed, 2 baseline-only)** |
+| ✅ Cycle 12 baseline on §14 | **57.1** verifiable on §14 | 2026-05-05 |
+| ✅ Resolve §14 drifts D-CVS-39..42 + collateral D-CVS-43 (`01-package-map.md` §8, `02-design-philosophy.md` line 183) | **100.0** verifiable on §14 | 2026-05-05 |
+| 🚧 Fetch `core-v9` source (task **AB**) → resolve **122 ❓** total: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 10 §14 + 7 §04 + 1 §05 + 6 §06 | — | pending |
+| 🚧 Audit all 16 sections of `01-app/` | 16/16 | **12/16 baseline (10 closed, 2 baseline-only)** |
 | 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
-| 🎯 Zero ❌ contradictions | 0 | ✅ |
 | 🎯 Zero ❌ contradictions | 0 | ✅ |
