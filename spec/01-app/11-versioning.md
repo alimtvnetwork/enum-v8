@@ -2,7 +2,7 @@
 
 > ✅ **Status**: filled in audit Step 5c (2026-04-23, Asia/Kuala_Lumpur).
 > **Audience**: maintainers cutting releases and any AI agent making code changes that require a version bump.
-> **Source**: framework convention + user preference (`.lovable/user-preferences` line 8) + `coreversion` package.
+> **Source**: framework convention + project memory ([`mem://index.md`](mem://index.md) Core: "bump at least minor; never touch `.release/`") + `coreversion` package.
 
 ---
 
@@ -56,7 +56,7 @@ import "github.com/alimtvnetwork/core-v9/versionindexes"
 
 versionindexes.V1   // 1
 versionindexes.V2   // 2
-versionindexes.V8   // 8 (current era — core-v9)
+versionindexes.V8   // 8 (legacy era; the current core-v9 era is V9)
 ```
 
 ### Why integer indices?
@@ -75,7 +75,7 @@ versionindexes.V8   // 8 (current era — core-v9)
 
 ## 3. Release / Bump Policy
 
-> **CRITICAL** (per `.lovable/user-preferences` line 8): **Code changes must bump at least minor version. Never touch the `.release/` folder.**
+> **CRITICAL** (per [`mem://index.md`](mem://index.md) Core): **Code changes must bump at least minor version. Never touch the `.release/` folder.**
 
 ### Semver mapping
 
@@ -92,7 +92,7 @@ versionindexes.V8   // 8 (current era — core-v9)
 
 1. Identify category (table above).
 2. Update `coreversion`-related constants if any.
-3. Update `go.mod` major version path **only on a major bump** (e.g. `core-v9` → `core-v9`).
+3. Update `go.mod` major version path **only on a major bump** (e.g. the historical `core-v8` → `core-v9` migration).
 4. Document the bump in the release notes (if a release process exists).
 5. **Do not edit `.release/`** — that folder is owned by the release pipeline.
 
@@ -105,11 +105,11 @@ versionindexes.V8   // 8 (current era — core-v9)
 - **Public APIs are stable**: imports from `github.com/alimtvnetwork/core-v9/<pkg>` will not break.
 - **`internal/` packages are not stable**: they may change in any minor release.
 - **Error categories** (`errcore.*Type`) are stable; new categories may be added (additive, non-breaking).
-- **Diagnostic message formats** are stable when consumed by tests in `tests/integratedtests/` (see [`08-validators.md` §5](./08-validators.md#5-diagnostic-output-contract)).
+- **Diagnostic message formats** are stable when consumed by tests in `tests/creationtests/` (see [`08-validators.md` §5](./08-validators.md#5-diagnostic-output-contract); `tests/integratedtests/` is a stale path — see C-CVS-01 / D-CVS-17 / D-CVS-26 in [`/spec/07-code-vs-spec-audits/01-scoreboard.md`](../07-code-vs-spec-audits/01-scoreboard.md)).
 
 ### Across eras (`v8` → `v9`)
 
-- The module path changes (`core-v9` → `core-v9`). Old code keeps working unchanged.
+- The module path changes (the historical `core-v8` → `core-v9` migration is the canonical example). Old code keeps working unchanged.
 - No automatic migration — consumers update import paths when they choose to upgrade.
 - A migration guide should accompany every era bump.
 
@@ -130,7 +130,7 @@ This folder is managed by the release tooling. It contains:
 3. Never delete files in `.release/`.
 4. If a tool requires changes there, escalate to a human maintainer.
 
-This rule is enforced via `.lovable/user-preferences` line 8 and is part of the project's core memory ([`mem://index.md`](mem://index.md) Core).
+This rule is enforced via project memory ([`mem://index.md`](mem://index.md) Core).
 
 ---
 
@@ -153,4 +153,4 @@ This rule is enforced via `.lovable/user-preferences` line 8 and is part of the 
 - [`03-import-conventions.md`](./03-import-conventions.md) — Module path includes the major version (`core-v9`)
 - [`13-testing-patterns.md`](./13-testing-patterns.md) — `coretestcases.CaseV1` naming reflects the version-index pattern
 - [`/spec/04-tooling/`](../04-tooling/) — Release tooling (PowerShell runner) lives here
-- `.lovable/user-preferences` — Project rules including the version-bump and `.release/` policy
+- [`mem://index.md`](mem://index.md) Core — Project rules including the version-bump and `.release/` policy
