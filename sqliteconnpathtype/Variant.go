@@ -112,16 +112,31 @@ func (it Variant) IsInvalid() bool {
 	return it == Invalid
 }
 
+// NameValue
+//
+// PI-006 (2026-05-06, Cycle 60): the upstream `BasicString.NameWithValue`
+// uses `enumimpl.NameWithValue` which formats with `EnumNameValueFormat =
+// "%s(%d)"`. Passing the string-backed value as both args yields a Go
+// fmt error string: `"Invalid(%!d(string=Invalid))"`. For a string-backed
+// enum the meaningful representation is just the name, mirroring upstream's
+// `StringEnumNameValueFormat = "%s"`.
 func (it Variant) NameValue() string {
-	return BasicEnumImpl.NameWithValue(it.String())
+	return it.String()
 }
 
 func (it Variant) IsNameEqual(name string) bool {
 	return it.Name() == name
 }
 
+// IsAnyNamesOf
+//
+// PI-007 (2026-05-06, Cycle 60): the upstream `BasicString.IsAnyOf`
+// returns true on empty `checkingItems` (vacuous-truth bug). The correct
+// dispatch for the "is this name in any of these names" question is
+// `BasicString.IsAnyNamesOf` (matches `BasicByte` semantics: empty list →
+// false). Switched dispatch instead of overriding the loop locally.
 func (it Variant) IsAnyNamesOf(names ...string) bool {
-	return BasicEnumImpl.IsAnyOf(it.Name(), names...)
+	return BasicEnumImpl.IsAnyNamesOf(it.Name(), names...)
 }
 
 func (it Variant) TypeName() string {
