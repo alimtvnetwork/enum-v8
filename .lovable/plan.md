@@ -143,10 +143,10 @@
 - **Files:** `quotes/Quotes_WrapUnwrap_test.go` + `brackets/Brackets_WrapUnwrap_test.go`. Coverage targets exercised: `WrapWith`, `UnWrapWith`, `HasBothWrappedWith`, `WhichQuote`/`WhichBracket`, `getQuoteStatus`/`getSingleBracketStatus`, `Quote.Wrap`/`SelfWrap`/`IsEqual`/`GetOther`/`WrapAny`/`WrapString`/`WrapSkipOnExist`/`WrapRegardless`/`WrapFmtString`/`IsWrapped`/`UnWrap`/`WrapWithOptions`/`WrapAnySkipOnExist`, plus `Bracket.IsStart`/`IsEnd`/`IsParenthesis`/`IsCurly`/`IsSquare` and category/start/end variants, `Bracket.Pair`/`Category`/`OtherBracket`/`Value`, `Pair.Wrap`/`SelfWrap`. Boundary cases (empty, single-char, mismatched, left-only, right-only, plain).
 - **Expected lift:** +1–2% total; lifts both packages from 7–12% into the 50–70% band.
 
-#### AL-07. `strtype` / `inttype` constructor & GetSet suites
+#### AL-07. `strtype` / `inttype` constructor & GetSet suites ✅ DONE (2026-05-06, Cycle 56)
 - **Why:** strtype 4.3%, inttype 10.3% — used by every other package via `IntType()`.
-- **Target:** `New`, `GetSet`, `GetSetVariant`, `IsCompareResult`, `fileReader` (skip os-dependent), `all-constructors.go`.
-- **Expected lift:** +2–4%.
+- **Files:** `inttype/IntType_Constructor_test.go` (covers `New`, `NewString`, `NewUInt`, `NewInt64`, `NewUsingJsonNumber`, `GetSet`, `GetSetVariant`, full `IsCompareResult` switch); `strtype/StrType_Constructor_test.go` (covers `New`, `NewUsingInteger`, `NewFileReader` smoke, `GetSet`, `GetSetVariant`).
+- **Expected lift:** +2–4pp.
 
 #### AL-08. `osdetect` selective coverage (cross-platform safe parts only)
 - **Why:** 3% but bulk is platform-specific (`windows.go`, `linux.go`).
@@ -170,12 +170,15 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **AL-07** — `strtype` / `inttype` constructor & GetSet suites ⭐ next
-2. **AL-08** — `osdetect` cross-platform parts
-3. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
-4. **AI** — Mark `spec/01-app/` as frozen (quick win)
-5. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
-6. **AB** — Already done in sandbox; status entry pending
+1. **AL-08** — `osdetect` cross-platform parts ⭐ next
+2. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
+3. **AI** — Mark `spec/01-app/` as frozen (quick win)
+4. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
+5. **AB** — Already done in sandbox; status entry pending
+
+**Done from this list:**
+- AL-01..AL-06 ✅ (Cycles 49–55)
+- AL-07 ✅ (Cycle 56, strtype + inttype constructor & GetSet + IsCompareResult; expected +2–4pp)
 
 **Done from this list:**
 - AL-01 ✅ (Cycle 49, 15.5% → 21.6%, +6.1pp)
