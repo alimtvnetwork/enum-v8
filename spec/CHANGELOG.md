@@ -9,6 +9,33 @@
 
 ---
 
+## [spec-v0.34.0] — 2026-05-06 (Cycle 19 — AB pass 1 on `01-app/09-converters.md`)
+
+### Added
+- `spec/07-code-vs-spec-audits/20-cycle19-AB-converters-promotion.md` — first ❓→ground-truth promotion pass enabled by Task **AB** (upstream `core-v9 v1.5.8` cloned to `/tmp/core-v9-upstream`).
+- Scoreboard cycle history row 19 (66.7 % verifiable for `09-converters.md`).
+
+### Changed
+- Scoreboard top-line now leads with §09 = 66.7 % (post-AB pass 1) ahead of the 100 % closed sections, reflecting that AB promotions can lower a section's verifiable score by replacing ❓ with ❌.
+- Open-drift block now lists C-CVS-11..15 (5 ❌, all blocked by `spec/01-app/` 🧊 freeze).
+
+### Discovered (NOT yet patched into spec — blocked by freeze)
+- **C-CVS-11 (HIGH)** `converters.StringTo.Integer64` does not exist.
+- **C-CVS-12 (HIGH)** `converters.StringTo.Float32` does not exist.
+- **C-CVS-13 (HIGH)** `converters.StringTo.Bool` does not exist; closest equivalent lives at `typesconv.StringToBool` and returns `bool`, not `(bool, error)`.
+- **C-CVS-14 (MEDIUM)** `converters.PrettyJson.String` / `.FromAny` should be `.PrettyString` / `.SafePrettyString` (or other `PrettyString*` variants).
+- **C-CVS-15 (CRITICAL)** Entire `typesconv` §2 + §4.3 example fabricated — actual surface is `*Ptr`, `*PtrToSimple`, `StringToBool`, etc., not numeric widening (`IntToInt64`, `Int64ToInt32`, `Float64ToInt`).
+
+### Bumped (pending action items, blocked)
+- **AJ-01** rewrite §1.1 of `09-converters.md` against verified API.
+- **AJ-02** rewrite §2 + §4.3 of `09-converters.md` against the real `typesconv` surface.
+- **AJ-03** correct `PrettyJson.*` callsites at §1.3 and §4.
+
+### Note on freeze
+`spec/01-app/` remains DRIFT-FROZEN (spec-v0.30.0). AB promotions are explicitly allowed under the freeze; the AJ-01..03 rewrites that would fix the discovered ❌s are NOT — they need a one-shot waiver from the user.
+
+---
+
 ## [spec-v0.33.0] — 2026-05-06 (Cycle 18 baseline & closed — `spec/02-app-issues/` directory at 100 % verifiable; 🎉 cross-`spec/` AH sweep COMPLETE)
 
 ### Added
