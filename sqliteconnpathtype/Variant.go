@@ -187,18 +187,54 @@ func (it Variant) UnmarshallEnumToValue(
 		jsonUnmarshallingValue)
 }
 
+// MarshalJSON
+//
+// PI-005 (2026-05-06, Cycle 60): the upstream `BasicString.ToEnumJsonBytes`
+// returns the name already wrapped in JSON double-quotes (built via
+// `toJsonName` -> `fmt.Sprintf("\"%s\"", name)`). That part is fine for
+// emit. The breakage is on the inverse: upstream `GetValueByName` looks
+// the *raw* name up in `jsonDoubleQuoteNameToValueHashMap`, which is built
+// from the raw name slice via `stringsToHashSet` — so the quoted bytes
+// from MarshalJSON cannot round-trip. We use `strconv.Quote` here for
+// clarity and provide a matching local UnmarshalJSON below that strips
+// the quotes before lookup.
 func (it Variant) MarshalJSON() ([]byte, error) {
-	return BasicEnumImpl.ToEnumJsonBytes(it.String())
+	return []byte(strconv.Quote(string(it))), nil
 }
 
+// UnmarshalJSON
+//
+// PI-005 (2026-05-06, Cycle 60): unquote the incoming bytes locally
+// before consulting `BasicEnumImpl.GetValueByName`, bypassing the upstream
+// `UnmarshallToValue` -> `GetValueByName(quotedString)` mismatch. Empty /
+// `""` / nil bytes still fall back to the registered min (matches upstream
+// `BasicString.UnmarshallToValue` semantics — minus the broken Min(): we
+// use our local `MinValueString()` which actually returns a registered
+// name).
 func (it *Variant) UnmarshalJSON(data []byte) error {
-	dataConv, err := it.UnmarshallEnumToValue(data)
-
-	if err == nil {
-		*it = Variant(dataConv)
+	if len(data) == 0 || string(data) == `""` {
+		*it = Variant(it.MinValueString())
+		return nil
 	}
 
-	return err
+	raw, err := strconv.Unquote(string(data))
+	if err != nil {
+		// Fall back to the upstream path so callers still see the upstream
+		// error shape for genuinely malformed input.
+		dataConv, upstreamErr := it.UnmarshallEnumToValue(data)
+		if upstreamErr == nil {
+			*it = Variant(dataConv)
+		}
+		return upstreamErr
+	}
+
+	resolved, err := BasicEnumImpl.GetValueByName(raw)
+	if err != nil {
+		return err
+	}
+
+	*it = Variant(resolved)
+	return nil
 }
 
 func (it Variant) StringRangesPtr() []string {
