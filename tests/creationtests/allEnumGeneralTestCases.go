@@ -1443,7 +1443,8 @@ var allEnumGeneralTestCases = []*EnumTestWrapper{
 		 ExpectedInvalidName:"Invalid",
 		 ExpectedInvalidValueString:"Invalid",
 		 ExpectedRangesNamesCsv: "All, AllWithType, AllWithTypeAndDynamicSqlitePath, AllWithTypeAndSequenceSqlitePath, DynamicSequenceSpecific, DynamicSpecific, Invalid, Prefix, PrefixType, SequenceSpecific, Specific",
-		 StringMin:"",
+		 // PI-006 (Cycle 60 → fixture updated Cycle 63): MinValueString now returns lex-min name "All".
+		 StringMin:"All",
 		 StringMax:"Specific",
 	 },
 	 {
