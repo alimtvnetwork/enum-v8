@@ -1,6 +1,6 @@
 # PowerShell Test Runner (`run.ps1`)
 
-> **Scope note (`enum-v5`)** — `run.ps1` is a generic Go-coverage runner that discovers test packages from disk (`go list ./tests/...`) and works with either layout: upstream `core-v9`'s `tests/integratedtests/<pkg>tests/` or `enum-v5`'s `tests/creationtests/`. **Example output and JSON snippets in this file use upstream-`core-v9` package names (`corecmptests`, `corejsontests`, etc.) for illustration.** When the same runner is invoked inside `enum-v5`, those paths render as `tests/creationtests/...` instead. The runner never hard-codes either folder name (per Core memory rule). See `spec/01-app/13-testing-patterns.md` §6.1 for the `enum-v5` test layout.
+> **Scope note (`enum-v6`)** — `run.ps1` is a generic Go-coverage runner that discovers test packages from disk (`go list ./tests/...`) and works with either layout: upstream `core-v9`'s `tests/integratedtests/<pkg>tests/` or `enum-v6`'s `tests/creationtests/`. **Example output and JSON snippets in this file use upstream-`core-v9` package names (`corecmptests`, `corejsontests`, etc.) for illustration.** When the same runner is invoked inside `enum-v6`, those paths render as `tests/creationtests/...` instead. The runner never hard-codes either folder name (per Core memory rule). See `spec/01-app/13-testing-patterns.md` §6.1 for the `enum-v6` test layout.
 
 ## Overview
 
