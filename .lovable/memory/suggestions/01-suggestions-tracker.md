@@ -117,26 +117,17 @@
 
 ### S-104: Add `cross-repo/core-v8/README.md` historical-naming top-of-file note
 
-- **createdAt:** 2026-05-06
+- **completed:** 2026-05-06 (Cycle 35)
 - **source:** Lovable (Cycle 17 carry-forward)
-- **affectedProject:** enum-v4
-- **description:** Cycle 17 surfaced 5 broken `cross-repo/core-v9/` paths in spec text (D-CVS-49, -52, -53, -55) — all stemming from the same root cause: readers who know the import path is `core-v9` instinctively type the wrong directory name (the actual directory keeps its historical `core-v8` name per Core memory). A prominent note inside `cross-repo/core-v8/README.md` would prevent future authors from making the same mistake.
-- **rationale:** Reduces future drift class entirely (point-of-truth fix vs. per-cite-site clarification).
-- **proposed change:** Add a top-of-file callout to `cross-repo/core-v8/README.md` explaining: (1) the directory name is historical, (2) the actual import path is `github.com/alimtvnetwork/core-v9`, (3) anyone editing spec text should write `cross-repo/core-v8/` even when discussing `core-v9` content.
-- **acceptance criteria:** `cross-repo/core-v8/README.md` head section includes the explanation; future audit cycles can cite it instead of repeating the Core-memory note inline.
-- **status:** open
-- **risk:** None — informational README edit only.
+- **resolution:** Added a prominent top-of-file callout to `cross-repo/core-v8/README.md` covering: (1) the directory name is historical and intentional (mirrors a separate upstream repo), (2) the actual import path used by `enum-v4` source is `github.com/alimtvnetwork/core-v9` (renamed 2026-05-05, tagged `v1.5.8`), (3) editors must always write `cross-repo/core-v8/` even when the surrounding sentence is about `core-v9` content, (4) the historical `enum-v1` / `core-v8` body references must NOT be rewritten (Core-memory rule). Body untouched. Closes the Cycle-17 root cause of D-CVS-49/52/53/55 at the point of truth.
+- **acceptance criteria:** ✅ Head section includes the 4-point explanation. ✅ Body content preserved.
 
-### S-105: CI guard — `spec/02-app-issues/README.md` index drift detector
+### S-105: CI guard — `spec/02-app-issues/` index-drift detector
 
-- **createdAt:** 2026-05-06
+- **completed:** 2026-05-06 (Cycle 35)
 - **source:** Lovable (Cycle 18 carry-forward)
-- **affectedProject:** enum-v4
-- **description:** Cycle 18 found `spec/02-app-issues/README.md` was stale by 4 issues for ~14 days. A trivial CI guard comparing the row count of `00-issues-index.md` (canonical) vs `README.md` would prevent recurrence.
-- **proposed change:** Add a check to `.github/workflows/ci-guards.yml` (or `scripts/ci/`) that fails if the row counts differ.
-- **acceptance criteria:** Removing a row from README CI fails; both in sync CI passes.
-- **status:** open
-- **risk:** None.
+- **resolution:** Added `scripts/ci/check-issues-index-drift.py` + `scripts/ci/test_check_issues_index_drift.py` (5 unittest cases, all pass) and a new `issues-index-drift` job in `.github/workflows/ci-guards.yml` (depends on `python-tests`, mirrors the `collision-audit` job). Script extracts every `| NN |`-prefixed row from `00-issues-index.md` (canonical) and `README.md` (human), compares **row count AND id-set**, exits 1 with `Missing from README` / `Missing from index` diffs on drift, exits 2 on missing files. Live repo reports `OK: spec/02-app-issues index in sync (9 rows).` — adopted at clean baseline.
+- **acceptance criteria:** ✅ Removing a row from README → CI fails (`test_row_count_mismatch_fails`). ✅ Both in sync → CI passes (`test_in_sync_passes` + live-repo smoke). ✅ Same count, mismatched ids → CI fails (`test_id_set_mismatch_same_count_fails`).
 
 ### S-106: `spec-api-check.psm1` — automate code-fence vs API verification
 
