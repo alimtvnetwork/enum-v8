@@ -30,6 +30,15 @@
 - **owner:** AI
 - **plan:** Next audit cycle (AA)
 
+### PI-005: `sqliteconnpathtype.Variant` JSON round-trip is broken
+
+- **severity:** MEDIUM
+- **discovered:** 2026-05-06 (Task AL-01, `Test_AllEnums_JsonRoundTrip`)
+- **description:** `MarshalJSON` on a `sqliteconnpathtype.Variant` emits the name double-quoted (e.g. `""Invalid""`), and re-`UnmarshalJSON` on those bytes returns `value given : [""Invalid""], cannot find in the enum map`. Round-trip identity is not preserved. The type is currently skipped in the new test via `jsonRoundTripSkipTypeNames`.
+- **suspected cause:** `sqliteconnpathtype/Variant.go` `MarshalJSON` likely wraps an already-quoted string with another `strconv.Quote`, or its `BasicEnumImpl` is constructed with the wrong stringer compared to sibling Variant packages (e.g. `dbaction`).
+- **owner:** AI
+- **plan:** Audit `sqliteconnpathtype/Variant.go` + `vars.go`; align with sibling pattern; remove the skip entry once round-trip passes.
+
 ---
 
 ## Resolved Issues
