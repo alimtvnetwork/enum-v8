@@ -13,6 +13,19 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ## [Unreleased]
 
 ### Changed
+- **Cycle 19 spec audit (Task AB pass 1)** — upstream `core-v9 v1.5.8`
+  cloned to `/tmp/core-v9-upstream`; first ❓→ground-truth promotion pass on
+  `spec/01-app/09-converters.md`. Result: **23 ❓ → 10 ✅ / 5 ❌ / 8 ❓**
+  (verifiable score 66.7 %). Surfaced **5 NEW contradictions**
+  (C-CVS-11..15): four HIGH (`StringTo.Integer64`, `StringTo.Float32`,
+  `StringTo.Bool`, `PrettyJson.String`/`.FromAny`) and one CRITICAL
+  (entire `typesconv` §2 + §4.3 example fabricated). All 5 are blocked
+  pending a freeze waiver for `spec/01-app/`. Spawned action items
+  AJ-01..03. Also corrected 2 stale Core-memory items in `mem://index.md`
+  (M-CVS-01: `enum-v3`→`enum-v4` module name; M-CVS-02: upstream `go.mod`
+  rename declared complete + `replace` bridge removal). See
+  `spec/07-code-vs-spec-audits/20-cycle19-AB-converters-promotion.md`.
+  Spec changelog → `spec-v0.34.0`.
 - **Cycle 18 spec audit (Task AA + closes Task AH)** — closed
   `spec/02-app-issues/` (11 files, 402 lines) at **100 % verifiable** (21 ✅ /
   5 ❓ audit-history). Raised and resolved **5 LOW drifts (D-CVS-56 →
