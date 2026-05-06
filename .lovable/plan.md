@@ -136,7 +136,8 @@
 #### AL-05. Constructor suite (`New`, `NewMust`, `RangesInvalidErr`, `Max`, `Min`) ✅ DONE pass-1 (2026-05-06, Cycle 53)
 - **Pass 1 (this cycle):** 4 per-package suites shipped — `accesstype`, `certaction`, `completionstate`, `compressformats`. Each test calls `New(name)` for every known constant, asserts round-trip via `Name()`, asserts `New("__bogus__")` returns `(Invalid, non-nil err)`, runs `NewMust(name)` for every constant, and exercises `Max()`/`Min()`/`RangesInvalidErr()` where present. compressformats has unusual iota ordering (`Invalid = 5`) — its `Min<=Max` invariant is intentionally not asserted.
 - **Files:** `accesstype/AccessType_Constructor_test.go`, `certaction/CertAction_Constructor_test.go`, `completionstate/CompletionState_Constructor_test.go`, `compressformats/CompressFormats_Constructor_test.go`.
-- **Result:** Coverage delta TBD on next `./run.ps1 -tc`; pass-1 expected lift ≈ **+1.5–2.5pp** (4 of ~10 planned packages). Pass 2 (AL-05b) will extend to 6 more low-coverage packages.
+- **Result:** Coverage delta TBD on next `./run.ps1 -tc`; pass-1 expected lift ≈ **+1.5–2.5pp** (4 of ~10 planned packages).
+- **Pass 2 ✅ DONE (Cycle 54):** 6 additional per-package suites — `dbaction`, `envtype`, `iptype`, `onofftype`, `overwritetype`, `timeunit`. envtype uses `Uninitialized` as its zero-value sentinel (not `Invalid`); onofftype has a `newOtherWays` shorthand fallback (`yes`/`y`/`1` → On, etc.) that is also exercised. Pass-2 expected lift ≈ **+2–3pp**. Cumulative AL-05 (passes 1+2) covers 10 low-coverage packages.
 #### AL-06. `quotes/` and `brackets/` dedicated suites
 - **Why:** Both currently 7–12%, neither in `allBasicEnumsCollection`. Need bespoke tests for `WrapWith`, `UnWrapWith`, `HasBothWrappedWith`, `WhichBracket`, `WhichQuote`, `getQuoteStatus`, `getSingleBracketStatus`.
 - **Expected lift:** +1–2% total but lifts these two packages into the 50–70% band.
