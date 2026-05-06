@@ -27,20 +27,28 @@
 - **acceptance criteria:** Cycle 6 audit report row 16 updated.
 - **status:** open (deferred — folded into Task AC consistency-dimension re-audit; will land with the §15 sweep after the freeze lifts)
 
-### S-109: Cycle-15 deep-probe of `tests/creationtests/` patterns to clear 21 ❓
+### S-111: Surface the GoConvey-only sub-pattern in spec/06
 
 - **createdAt:** 2026-05-06
-- **source:** Lovable (Cycle 27 — carry-forward)
+- **source:** Lovable (Cycle 37 — D-CVS-64 carry-forward)
 - **affectedProject:** enum-v4 spec
-- **description:** 21 ❓ remain in `spec/06-testing-guidelines/` (Cycle 15 baseline). They're behavioural/observational claims about the Goconvey + `EnumTestWrapper` registry pattern that need a fresh probe of `tests/creationtests/` source — distinct probe technique from Cycle 27's grep-the-script approach.
-- **rationale:** Last large pool of unresolved ❓ outside the AJ/AC backlog.
-- **proposed change:** Run a dedicated cycle: read `tests/creationtests/EnumTestWrapper.go`, `tests/creationtests/all*.go`, and the `Test_AllEnums_*` registry; promote each Cycle-15 ❓ against direct source evidence.
-- **acceptance criteria:** Cycle-15 audit file shows ≤ 5 ❓ remaining; new cycle entry on the scoreboard.
+- **description:** `spec/06-testing-guidelines/02-test-case-types.md` and `05-assertion-patterns.md` present the `coretests`-framework path (`CaseV1`/`args.Map`/`BaseTestCase`/custom `ShouldBeEqualMap`) as the only option. `enum-v4`'s own `tests/creationtests/` package is a worked example of a **simpler GoConvey-only sub-pattern** (plain `So(actual, ShouldEqual, expected)` + AAA comments + plain `[]*Wrapper` / `map[K]V` registries, no `args.*` bundling, no `BaseTestCase` extension) that the spec doesn't acknowledge.
+- **rationale:** Documenting the alternative makes the spec honest about consumer freedom and lets readers pick the lighter path when they don't need `args.Map` argument bundling.
+- **proposed change:** Add a top-of-file note to both files cross-linking `enum-v4/tests/creationtests/` (e.g. `AllEnums_ContractsTesting_test.go` for the diff-pattern). Map the diff-based assertion claim onto `enumimpl.DynamicMap.LogShouldDiffMessage(...) + So(diff, ShouldBeEmpty)` as the local-only equivalent.
+- **acceptance criteria:** Both files include the GoConvey-only callout. Cross-ref to `tests/creationtests/AllEnums_ContractsTesting_test.go` resolves.
 - **status:** open
+- **risk:** Low — additive cosmetic note; falls under Task AC consistency-dimension re-audit.
 
 ---
 
 ## Completed Suggestions
+
+### S-109: Cycle-15 deep-probe of `tests/creationtests/` patterns to clear 21 ❓
+
+- **completed:** 2026-05-06 (Cycle 37)
+- **source:** Lovable (Cycle 27 — carry-forward)
+- **resolution:** Read all 14 files under `enum-v4/tests/creationtests/` and ran the symbol-set probe `rg -n 'coretests\.|args\.|results\.|CaseV1|CaseNilSafe|GenericGherkins|GetAssert|ShouldBeEqualMap|ShouldBeSafe|InvokeWithPanicRecovery|BaseTestCase' tests/creationtests/` → **zero hits**. Confirmed `enum-v4` deliberately does NOT consume the upstream `coretests`/`args`/`results` framework; instead uses GoConvey + 2 local wrapper structs + module-level slice/map registries + AAA comments. Settled the 10 Cycle-15 ❓ items: **1 promoted ✅** (claim 20, diff-based assertion pattern via `enumimpl.DynamicMap.LogShouldDiffMessage` + `So(diff, ShouldBeEmpty)` in `AllEnums_ContractsTesting_test.go`), **9 annotated ⓘ "upstream-only"** (no `enum-v4` evidence available; remain blocked by Task AB for upstream-clone promotion). Cycle-15 verifiable subset 22/22 → 23/23 (still 100%); spec/06 unknown ❓ pool **10 → 0**. New finding D-CVS-64 (LOW) carried forward as **S-111**. Audit file: `spec/07-code-vs-spec-audits/29-cycle37-S109-creationtests-deep-probe.md`. Spec changelog → spec-v0.44.0. `package.json` 0.6.0 → 0.7.0.
+- **acceptance criteria:** ✅ New audit cycle entry on scoreboard (`Cycle 37`). ✅ Cycle-15 ❓ pool reduced from 10 → 0 unknown (1 promoted, 9 annotated upstream-only). ✅ Direct source evidence cited for every promotion/annotation.
 
 ### S-004: Fix `spec/00-llm-integration-guide.md` stale test path reference
 

@@ -9,6 +9,20 @@
 
 ---
 
+## [spec-v0.44.0] — 2026-05-06 (Cycle 37 — S-109 `tests/creationtests/` deep-probe)
+
+### Added
+- `spec/07-code-vs-spec-audits/29-cycle37-S109-creationtests-deep-probe.md` — full deep-probe report of all 14 files under `enum-v4/tests/creationtests/`. Settles the 10 ❓ items left by Cycle 15 in `spec/06-testing-guidelines/`: **1 promoted ✅** (claim 20, diff-based assertion pattern — found in `AllEnums_ContractsTesting_test.go` via `enumimpl.DynamicMap.LogShouldDiffMessage` + `So(diff, ShouldBeEmpty)`), **9 annotated ⓘ "upstream-only"** (`CaseV1`/`CaseNilSafe`/`GenericGherkins`, `args.*`, `results.*`/`InvokeWithPanicRecovery`, `ShouldBeEqual*`/`ShouldBeSafe` upstream-custom assertions distinct from GoConvey's `ShouldEqual`/`ShouldResemble`/`ShouldBeNil` family used by enum-v4, `07-diagnostics-output-standards` 5 sub-claims, `08-good-vs-bad` examples, `09-creating-custom-cases` `BaseTestCase` extension pattern). Probe commands documented for reproducibility. Closes **S-109**.
+- New finding **D-CVS-64** (LOW): `02-test-case-types.md` and `05-assertion-patterns.md` don't surface the **GoConvey-only sub-pattern** that `enum-v4` itself uses (plain `So(actual, ShouldEqual, expected)` + AAA comments + plain `[]*Wrapper` registry, no `args.Map` bundling, no `BaseTestCase` extension, no `coretests.GetAssert`). Tracked as carry-forward suggestion **S-111** — cosmetic, non-blocking.
+- `spec/07-code-vs-spec-audits/01-scoreboard.md` — Cycle 37 row added.
+
+### Notes
+- Cycle-15 verifiable subset grows 22/22 → 23/23 (still 100%). The spec/06 unknown ❓ pool drops **10 → 0** — the 9 ⓘ items are now *known* to be upstream-only consumer claims, not unknown.
+- Cumulative AB ❌ unchanged at **49** across 7 sections (24 CRITICAL). This cycle promotes/annotates ❓ items only.
+- Direct evidence files: `tests/creationtests/EnumTestWrapper.go` (local wrapper struct, NOT `BaseTestCase` extension), `AllEnums_ContractsTesting_test.go` (GoConvey + diff-pattern + `errcore.ShouldBe.StrEqMsg` header formatter), `creation_test.go` / `PathType_Creation_test.go` / `ScriptType_test.go` (AAA-commented GoConvey tests over plain registry slices/maps).
+
+---
+
 ## [spec-v0.43.0] — 2026-05-06 (Cycle 36 — S-103 portable runner reorg)
 
 ### Changed
