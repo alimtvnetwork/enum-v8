@@ -159,6 +159,59 @@
 
 ---
 
+### AL2. Per-package coverage uplift, Phase 2 (NEW — top priority)
+
+- **Status:** 📋 Planned — execute one sub-task per `next` command
+- **Motivation:** After AL-01..AL-08, total coverage rose, but most individual packages still report **<50–60%**. The shared-loop matrix exercises `Variant` accessors but skips package-private surface: `New`/`NewMust` for the ~40 packages still without a constructor suite, `all-is-checkers.go` (`IsX()` predicate set per Variant), `all-validation-checking-err.go` (per-Variant validation error helpers), `Min`/`Max`/`RangesInvalidErr`, and package-bespoke files (`dbdrivertype/Connection*.go`, `osdetect/*` platform branches).
+- **Strategy:** Group remaining ~40 packages into 6 batches of ~6–7 packages each. Per batch, ship one `<Pkg>_Coverage_test.go` per package using a small shared template (constructor round-trip for every Variant, every `IsX()` predicate, every `*Err()` helper, `Min`/`Max`/`RangesInvalidErr`, JSON round-trip if not already in matrix). Plus 2 bespoke sub-tasks for packages with non-template surface.
+- **Dependencies:** AG ✅, AL-01..AL-08 ✅
+- **Acceptance:** Each touched package reaches ≥60% statement coverage; total rises toward **≥70%**.
+- **Sequencing (one per `next`):**
+
+#### AL2-01. Batch A — simple state enums (6 pkgs)
+- **Targets:** `compresslevels`, `configfilestate`, `conntrackstate`, `osgroupexecution`, `servicestate`, `sitestatetype`.
+- **Surface:** `Create`/`CreateMust` (or `New`/`NewMust`), `all-is-checkers.go`, `all-validation-checking-err.go`, `Min`/`Max`/`RangesInvalidErr`.
+- **Expected lift:** ~+3pp total; each package 0% → 60–80%.
+
+#### AL2-02. Batch B — DB family (6 pkgs)
+- **Targets:** `dbexposetype`, `dbuserprivillegetype`, `sqljointype`, `sqliteconnpathtype`, `querymethodtype`, `resauthtype`.
+- **Surface:** Same template; sqliteconnpathtype already partly covered — focus on remaining `IsX`/`*Err` helpers.
+- **Expected lift:** ~+3pp.
+
+#### AL2-03. Batch C — networking / IP (5 pkgs)
+- **Targets:** `inputiptype`, `protocoltype`, `nginxlogtype`, `pathpatterntype`, `verifiertriggertype`.
+- **Surface:** Template + any `pathpatterntype` regex/match helpers.
+- **Expected lift:** ~+2.5pp.
+
+#### AL2-04. Batch D — Linux / OS (6 pkgs)
+- **Targets:** `linuxservicestate`, `linuxtype`, `linuxvendortype`, `osarchs`, `packageinstallmethod`, `runtype`.
+- **Surface:** Template; verify `osarchs` width helpers.
+- **Expected lift:** ~+3pp.
+
+#### AL2-05. Batch E — misc value enums (7 pkgs)
+- **Targets:** `eventtype`, `instructiontype`, `leveltype`, `licensetype`, `linescomparetype`, `logtype`, `revokereason`.
+- **Surface:** Template; many are pure label enums — coverage should jump fast.
+- **Expected lift:** ~+3pp.
+
+#### AL2-06. Batch F — task / script / prompt (5 pkgs)
+- **Targets:** `taskcategory`, `taskpriority`, `scripttype`, `promptclitype`, `cmdenumtypes`.
+- **Surface:** Template + scripttype any path helpers.
+- **Expected lift:** ~+2.5pp.
+
+#### AL2-07. Bespoke — `dbdrivertype` connection-string suite
+- **Why:** Has `Connection.go`, `ConnectionOptions.go`, `connectionStringCompiler.go` — ~3 source files of business logic the template won't reach.
+- **Approach:** Build representative `Connection` for each driver Variant; assert compiled DSN string matches expected pattern; round-trip options.
+- **Expected lift:** +1–2pp; package 0% → 60%+.
+
+#### AL2-08. Bespoke — `osdetect` Linux/Windows guarded branches
+- **Why:** Platform files contribute most uncovered lines. Cross-platform-safe portions already done in AL-08.
+- **Approach:** Add `//go:build linux` and `//go:build windows` test files exercising the OS-specific parsers with golden fixture inputs (e.g. `/etc/os-release` snippets, `cmd ver` output snippets) — pure string parsing, no syscalls.
+- **Expected lift:** +1–2pp; osdetect → ~50%+.
+
+**Combined AL2 target:** total coverage **~35–40% → ≥65%**, every per-package ≥60% except deliberately skipped platform-only files.
+
+---
+
 ## Phase 4: Manual / Parked
 
 ### A. Manual `cross-repo/core-v8/` push
