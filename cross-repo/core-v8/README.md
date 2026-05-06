@@ -1,5 +1,20 @@
 # cross-repo/core-v8/
 
+> ℹ️ **Historical naming — intentional. Do not rename this directory.**
+>
+> This folder mirrors a separate upstream repo whose name is still
+> `alimtvnetwork/core-v8`. Even though the **import path used by `enum-v4`
+> source code is `github.com/alimtvnetwork/core-v9`** (renamed 2026-05-05,
+> tagged `v1.5.8`), the directory name here keeps the historical `core-v8`
+> token so it stays in lockstep with the upstream repo it mirrors.
+>
+> **When editing spec text or scripts that reference *this directory*,
+> always write `cross-repo/core-v8/`** — even when the surrounding sentence
+> is about `core-v9` content. The mismatch is by design.
+>
+> Historical body references below (`enum-v1`, `core-v8`) likewise track the
+> mirrored repo's vintage and must NOT be rewritten — see Core memory.
+
 Adapted CI/CD workflows and CI-guard scripts ready to be copied into the
 upstream **`alimtvnetwork/core-v8`** repository. They are **not** wired
 into this `enum-v1` repo's own CI — they live here only because the
