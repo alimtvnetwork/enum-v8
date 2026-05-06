@@ -109,7 +109,10 @@ function Get-SpecApiReferences {
     .DESCRIPTION
         Returns a list of [pscustomobject]@{ Package; Symbol; Line; Context }.
         Ignores: code-block fences, table-pipe lines that are pure prose,
-        comment-only lines inside Go fences.
+        comment-only lines inside Go fences. Also detects local variables
+        declared via `:=` inside the same fenced code block and treats
+        their names as allow-listed (so `tc := …` followed by `tc.Foo()`
+        does not flag `tc` as a fabricated package).
     #>
     [CmdletBinding()]
     param([Parameter(Mandatory)][string]$Path)
@@ -118,15 +121,33 @@ function Get-SpecApiReferences {
     $lines = Get-Content -Path $Path
     $inFence = $false
     $fenceLang = ''
+    $localVars = [System.Collections.Generic.HashSet[string]]::new()
 
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $line = $lines[$i]
 
         # Track fenced code blocks
         if ($line -match '^```(\w*)') {
-            if ($inFence) { $inFence = $false; $fenceLang = '' }
+            if ($inFence) { $inFence = $false; $fenceLang = ''; [void]$localVars.Clear() }
             else { $inFence = $true; $fenceLang = $Matches[1].ToLower() }
             continue
+        }
+
+        # Inside a fence, track local Go variable bindings: `name :=`, `name, _ :=`, `var name `
+        if ($inFence) {
+            foreach ($vm in [regex]::Matches($line, '(?:^|\s|\(|,)([a-z][a-zA-Z0-9_]*)\s*(?:,\s*[a-zA-Z0-9_]+\s*)?:=')) {
+                [void]$localVars.Add($vm.Groups[1].Value)
+            }
+            foreach ($vm in [regex]::Matches($line, '\bvar\s+([a-z][a-zA-Z0-9_]*)\s+\S')) {
+                [void]$localVars.Add($vm.Groups[1].Value)
+            }
+            foreach ($vm in [regex]::Matches($line, '\bfor\s+([a-z][a-zA-Z0-9_]*)\s*(?:,\s*[a-zA-Z0-9_]+\s*)?:?=')) {
+                [void]$localVars.Add($vm.Groups[1].Value)
+            }
+            # Function parameters: `func Foo(name Type, …)`
+            foreach ($vm in [regex]::Matches($line, '(?:func[^(]*\(|,\s*)([a-z][a-zA-Z0-9_]*)\s+\*?[A-Za-z]')) {
+                [void]$localVars.Add($vm.Groups[1].Value)
+            }
         }
 
         # Match `package.Symbol` — lowercase package, Capitalised symbol.
@@ -138,6 +159,7 @@ function Get-SpecApiReferences {
             $sym = $m.Groups[2].Value
             # Skip allow-listed aliases / local variables that look package-like.
             if ($script:AllowListedPackages -contains $pkg) { continue }
+            if ($localVars.Contains($pkg)) { continue }
             # Skip references inside markdown links / URLs (file paths with .md).
             if ($line -match '\[.+\]\([^)]*' + [regex]::Escape($pkg) + '\.[A-Z]') { continue }
             $refs.Add([pscustomobject]@{
