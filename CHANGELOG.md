@@ -12,6 +12,18 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ## [Unreleased]
 
+### Changed
+- **core-v9 API migration (partial, Task AM)** — Applied confirmed renames across
+  all `enum-v4` Go source (53 sites): `coredynamic.TypeName(...)` →
+  `coredynamic.SafeTypeName(...)`, `converters.AnyToValueString(x)` →
+  `converters.AnyTo.ValueString(x)` (6 sites), and
+  `converters.Any.ToFullNameValueString` → `converters.AnyTo.ToFullNameValueString`
+  (1 site in `tests/creationtests/generateAllEnumGeneralTestCases.go`).
+  `cross-repo/` and `.release/` intentionally untouched. The remaining 11
+  `converters.StringTo*` call sites in `inttype/`, `strtype/`, and
+  `osdetect/` are still pending the upstream `stringTo` method list before
+  they can be safely rewritten.
+
 ### Fixed
 - **`scripts/CoverageRunner.psm1`, `scripts/CoverageCompileCheck.psm1`** — second
   pass at the `Blocked: (root) — : no such file or directory` failure that
