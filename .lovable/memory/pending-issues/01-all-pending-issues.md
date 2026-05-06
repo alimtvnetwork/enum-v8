@@ -51,6 +51,14 @@
 - **owner:** AI (group with PI-005 fix)
 - **plan:** Inspect `sqliteconnpathtype/vars.go` enumimpl construction + `Variant.go` `NameValue` implementation; align with `dbaction` pattern; remove both PI-005 and PI-006 skip entries (`jsonRoundTripSkipTypeNames`, `formatSuiteSkipMinMaxAll`, `formatSuiteSkipNameValue`) once the type passes both suites.
 
+### PI-007: `sqliteconnpathtype.Variant.IsAnyNamesOf()` returns true for empty input
+
+- **severity:** LOW
+- **discovered:** 2026-05-06 (Task AL-03, `Test_AllEnums_Predicates`)
+- **description:** `sqliteconnpathtype.Invalid.IsAnyNamesOf()` (no args) returns `true`. Every other Variant (`dbaction`, `strtype`, `inttype`, etc.) correctly returns `false` for the same call. Likely vacuous-truth bug in the empty-args path — possibly an early-return on `len(names)==0` inverted, or a default-true branch.
+- **owner:** AI (group with PI-005 + PI-006 in the sqliteconnpathtype audit pass)
+- **plan:** Trace `IsAnyNamesOf` through `sqliteconnpathtype/Variant.go` and the `BasicEnumImpl` wiring; align with sibling pattern; remove `predicateSuiteSkipEmptyAnyNames` entry once fixed.
+
 ---
 
 ## Resolved Issues
