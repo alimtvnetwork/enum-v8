@@ -120,7 +120,7 @@ func Test_Quotes_WrapUnwrap(t *testing.T) {
 	Convey("Quote.IsWrapped / UnWrap / WrapWithOptions", t, func() {
 		So(Double.IsWrapped(`"hi"`), ShouldBeTrue)
 		So(Double.IsWrapped("hi"), ShouldBeFalse)
-		So(Double.UnWrap(`"hi"`), ShouldEqual, "h")
+		So(Double.UnWrap(`"hi"`), ShouldEqual, "hi")
 		So(Double.WrapWithOptions(true, `"hi"`), ShouldEqual, `"hi"`)
 	})
 
