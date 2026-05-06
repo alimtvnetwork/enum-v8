@@ -1,6 +1,6 @@
 # 01 — Folder Structure & Naming Conventions
 
-> ⚠️ **Scope:** the layout below describes **upstream `core-v9`**. `enum-v4` uses a single shared `tests/creationtests/` package — see [`spec/01-app/13-testing-patterns.md` §6.1](../01-app/13-testing-patterns.md#61-enum-v4-specific-layout). Per-package `*tests/` directories under `tests/integratedtests/` apply to upstream consumers only.
+> ⚠️ **Scope:** the layout below describes **upstream `core-v9`**. `enum-v5` uses a single shared `tests/creationtests/` package — see [`spec/01-app/13-testing-patterns.md` §6.1](../01-app/13-testing-patterns.md#61-enum-v5-specific-layout). Per-package `*tests/` directories under `tests/integratedtests/` apply to upstream consumers only.
 
 ## Directory Layout
 

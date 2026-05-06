@@ -4,7 +4,7 @@
 > **Severity**: low
 > **Resolved via**: AI-driven audit finding F03 — explicit stability declaration replaces deferred maintainer call.
 
-> **Scope note (`enum-v4`, added Cycle 18)**: `coretests.GetAssert` is an **upstream `core-v9`** symbol. `enum-v4` does NOT consume it (`rg coretests\.GetAssert` over `enum-v4` source returns zero hits — verified Cycle 12). The "STABLE for any test code inside this module" declaration below applies inside the **upstream `core-v9`** module, not this one. `enum-v4` tests use Goconvey assertions inside `tests/creationtests/EnumTestWrapper.go` instead. See `spec/01-app/13-testing-patterns.md` §6.1 and `spec/01-app/14-tests-folder-walkthrough.md` consumer-coverage callout for the `enum-v4` test idiom. Historical declaration text preserved verbatim below.
+> **Scope note (`enum-v5`, added Cycle 18)**: `coretests.GetAssert` is an **upstream `core-v9`** symbol. `enum-v5` does NOT consume it (`rg coretests\.GetAssert` over `enum-v5` source returns zero hits — verified Cycle 12). The "STABLE for any test code inside this module" declaration below applies inside the **upstream `core-v9`** module, not this one. `enum-v5` tests use Goconvey assertions inside `tests/creationtests/EnumTestWrapper.go` instead. See `spec/01-app/13-testing-patterns.md` §6.1 and `spec/01-app/14-tests-folder-walkthrough.md` consumer-coverage callout for the `enum-v5` test idiom. Historical declaration text preserved verbatim below.
 
 ## Stability Declaration (authoritative)
 
