@@ -133,12 +133,10 @@
 - **Result:** Test created at `tests/creationtests/AllEnums_NumericRange_test.go`. Coverage delta TBD on next `./run.ps1 -tc` run; expected +4–6pp.
 - **Findings:** Reuses PI-006 skip for sqliteconnpathtype `MinValueString` (empty); strtype skipped from `MinInt <= MaxInt` invariant only (string-backed semantics differ).
 
-#### AL-05. Constructor suite (`New`, `NewMust`, `RangesInvalidErr`, `Max`, `Min`)
-- **Target:** Per-package `New(name)` / `NewMust(name)` / `Max()` / `Min()` / `RangesInvalidErr()` free functions.
-- **Approach:** Hand-rolled per package since signatures vary. Start with the 10 lowest-coverage packages (osdetect excluded — windows-only).
-- **Expected lift:** +3–5%.
-- **Files:** one `_test.go` per targeted package.
-
+#### AL-05. Constructor suite (`New`, `NewMust`, `RangesInvalidErr`, `Max`, `Min`) ✅ DONE pass-1 (2026-05-06, Cycle 53)
+- **Pass 1 (this cycle):** 4 per-package suites shipped — `accesstype`, `certaction`, `completionstate`, `compressformats`. Each test calls `New(name)` for every known constant, asserts round-trip via `Name()`, asserts `New("__bogus__")` returns `(Invalid, non-nil err)`, runs `NewMust(name)` for every constant, and exercises `Max()`/`Min()`/`RangesInvalidErr()` where present. compressformats has unusual iota ordering (`Invalid = 5`) — its `Min<=Max` invariant is intentionally not asserted.
+- **Files:** `accesstype/AccessType_Constructor_test.go`, `certaction/CertAction_Constructor_test.go`, `completionstate/CompletionState_Constructor_test.go`, `compressformats/CompressFormats_Constructor_test.go`.
+- **Result:** Coverage delta TBD on next `./run.ps1 -tc`; pass-1 expected lift ≈ **+1.5–2.5pp** (4 of ~10 planned packages). Pass 2 (AL-05b) will extend to 6 more low-coverage packages.
 #### AL-06. `quotes/` and `brackets/` dedicated suites
 - **Why:** Both currently 7–12%, neither in `allBasicEnumsCollection`. Need bespoke tests for `WrapWith`, `UnWrapWith`, `HasBothWrappedWith`, `WhichBracket`, `WhichQuote`, `getQuoteStatus`, `getSingleBracketStatus`.
 - **Expected lift:** +1–2% total but lifts these two packages into the 50–70% band.
@@ -170,13 +168,13 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **AL-05** — Constructor suite for lowest-coverage packages ⭐ next
+1. **AL-05b** — Constructor suite pass 2 (6 more packages: compresslevels, configfilestate, accesstype-adjacent low-coverage targets) ⭐ next
 2. **AL-06** — `quotes/` and `brackets/` dedicated suites
 3. **AL-07** — `strtype` / `inttype` constructor & GetSet suites
 4. **AL-08** — `osdetect` cross-platform parts
 5. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
 6. **AI** — Mark `spec/01-app/` as frozen (quick win)
-7. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster (MarshalJSON / NameValue / MinValueString / IsAnyNamesOf empty-args) — unblocks 3 AL skip lists
+7. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
 8. **AB** — Already done in sandbox; status entry pending
 
 **Done from this list:**
@@ -184,6 +182,7 @@
 - AL-02 ✅ (Cycle 50, 21.6% → 26.1%, +4.5pp)
 - AL-03 ✅ (Cycle 51, 26.1% → 33.8%, +7.7pp; cumulative +18.3pp)
 - AL-04 ✅ (Cycle 52, +4–6pp expected; pending local `./run.ps1 -tc` confirmation)
+- AL-05 pass-1 ✅ (Cycle 53, 4 packages: accesstype/certaction/completionstate/compressformats; pass-2 still pending)
 
 ---
 
