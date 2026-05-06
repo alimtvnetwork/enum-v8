@@ -9,6 +9,28 @@
 
 ---
 
+## [spec-v0.39.0] — 2026-05-06 (Cycle 24 — AB pass 6 on `01-app/15-observability.md`)
+
+### Added
+- `spec/07-code-vs-spec-audits/25-cycle24-AB-observability.md` — sixth AB promotion pass; 13 ❓ → **6 ✅ / 7 ❌ / 0 ❓** (verifiable score **74.1 %**). Section drops from a clean baseline due to fabricated function signatures and a fabricated test-failure output format.
+- 7 NEW contradiction findings **C-CVS-44..50**:
+  - **C-CVS-44 (CRITICAL)** — `errcore.VarTwo` example missing mandatory leading `isIncludeType bool` parameter; spec example will not compile.
+  - **C-CVS-45 (CRITICAL)** — `VarTwo`/`VarTwoNoType`/`MessageVarMap` return `string`, not `error`; spec assigns to `err :=` throughout §2, misframing the entire helper family as error builders.
+  - **C-CVS-46 (HIGH)** — §2.4 decision table presents `VarTwo`/`VarTwoNoType` as semantically distinct; reality: `VarTwoNoType` is literally `VarTwo(false, ...)`.
+  - **C-CVS-47 (HIGH)** — `coretests/results/ResultAny.go` does not exist; real files are `Result.go`, `ResultAssert.go`, `Results.go`.
+  - **C-CVS-48 (CRITICAL)** — Test-failure output format `Test #N — {scenario}: should be equal\n  expected:\n  actual:` is fabricated; zero matches in `coretests/results/`.
+  - **C-CVS-49 (CRITICAL)** — `errcore.HandleErr` does NOT attach stack-enhanced wrapping — it just `panic(err.Error())`. Spec rule §3 #2 cites the wrong rationale (correct advice, wrong reason).
+  - **C-CVS-50 (MEDIUM)** — `StackEnhance` documented as 2-method (`Error`, `Msg`); reality is 8 methods including the `*Skip` family used by 24 internal call-sites.
+- 7 new action items **AJ-28..34** — all BLOCKED on `spec/01-app/` 🧊 freeze waiver.
+
+### Changed
+- `spec/07-code-vs-spec-audits/01-scoreboard.md` — Cycle 24 row, headline updated (cumulative AB ❌ = 41; ~52 % fabrication rate across 6 sections), Open-findings list extended to C-CVS-11..50.
+
+### Notes
+- Pattern across 6 cycles: 41 ❌ accumulated, ~52 % fabrication rate, 18 CRITICAL items. **S-106 lint remains MANDATORY** before any AJ rewrite.
+
+---
+
 ## [spec-v0.38.0] — 2026-05-06 (Cycle 23 — AB pass 5 on `01-app/11-versioning.md` — **WORST section in project**)
 
 ### Added
