@@ -56,17 +56,17 @@ func Test_Brackets_WrapUnwrap(t *testing.T) {
 		So(UnWrapWith("", Parenthesis), ShouldEqual, "")
 	})
 
-	Convey("UnWrapWith — both-wrapped strips boundaries (current impl)", t, func() {
-		// unWrapBoth returns s[1:length-2] (off-by-one), so for "(hi)" (len 4)
-		// we get s[1:2] = "h".
-		So(UnWrapWith("(hi)", Parenthesis), ShouldEqual, "h")
-		So(UnWrapWith("{hi}", Curly), ShouldEqual, "h")
-		So(UnWrapWith("[hi]", Square), ShouldEqual, "h")
+	Convey("UnWrapWith — both-wrapped strips one char from each side (PI-008 fix)", t, func() {
+		// PI-008 fix: unWrapBoth now correctly returns s[1:length-1].
+		So(UnWrapWith("(hi)", Parenthesis), ShouldEqual, "hi")
+		So(UnWrapWith("{hi}", Curly), ShouldEqual, "hi")
+		So(UnWrapWith("[hi]", Square), ShouldEqual, "hi")
 	})
 
-	Convey("UnWrapWith — single-side strips two chars (current impl)", t, func() {
-		So(UnWrapWith("(hi", Parenthesis), ShouldEqual, "h")
-		So(UnWrapWith("hi)", Parenthesis), ShouldEqual, "h")
+	Convey("UnWrapWith — single-side strips exactly the wrapped boundary (PI-008 fix)", t, func() {
+		// PI-008 fix: unWrapSingle now strips exactly one char on the wrapped side.
+		So(UnWrapWith("(hi", Parenthesis), ShouldEqual, "hi")
+		So(UnWrapWith("hi)", Parenthesis), ShouldEqual, "hi")
 	})
 
 	Convey("UnWrapWith — no brackets returns input as-is", t, func() {
