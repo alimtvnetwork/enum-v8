@@ -1,5 +1,7 @@
 # Pre-Commit API Mismatch Checker
 
+> **Scope note (`enum-v4`)** — the discovery glob below (`tests/integratedtests/`) is the upstream-`core-v9` layout. The actual `run.ps1 PC` implementation reads the test root from disk and works equally on `enum-v4`'s `tests/creationtests/`. JSON example paths use upstream package names (`corejsontests`) for illustration. See [`01-overview.md`](./01-overview.md) scope note and `spec/01-app/13-testing-patterns.md` §6.1.
+
 ## Problem
 
 Coverage test files (`Coverage*_test.go`) are written against assumed method signatures of production source packages. When signatures drift (renamed methods, changed parameters, field-vs-method access), the test files fail to compile. Because the runner uses a **Build Failure Cascade** model, a single bad test package blocks the entire coverage pipeline.

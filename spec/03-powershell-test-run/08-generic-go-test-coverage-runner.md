@@ -1,5 +1,7 @@
 # Generic Go Test Coverage Runner — PowerShell Spec
 
+> **Consumer-coverage note (`enum-v4`)** — this entire file is a **portable / generic** spec for building a Go-coverage runner from scratch in any Go module. References to `tests/integratedtests/` describe the **upstream `core-v9`** convention; the same runner deployed inside `enum-v4` resolves test packages from `tests/creationtests/`. See `spec/01-app/13-testing-patterns.md` §6.1 for the `enum-v4` layout.
+
 ## Purpose
 
 This spec documents how to build a PowerShell-based Go test coverage runner
