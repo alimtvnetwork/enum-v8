@@ -24,7 +24,7 @@
 # pass and is tracked separately. S-106 is the cheap-and-fast first wall.
 # ─────────────────────────────────────────────────────────────────────────────
 
-$script:SpecApiCheckVersion = '1.1.0'
+$script:SpecApiCheckVersion = '1.2.0'  # S-115 — Test-UpstreamClone helper + sentinel guard
 
 # Pinned upstream tag — bump when core-v9 releases a new audit baseline.
 $script:UpstreamCloneUrl = 'https://github.com/alimtvnetwork/core-v9'
