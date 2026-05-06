@@ -115,6 +115,18 @@
 - **status:** open
 - **risk:** None.
 
+### S-106: `spec-api-check.psm1` — automate code-fence vs API verification
+
+- **createdAt:** 2026-05-06
+- **source:** Lovable (Cycle 19 carry-forward)
+- **affectedProject:** enum-v4
+- **description:** Cycle 19 (AB pass 1) found 5 ❌ contradictions in `spec/01-app/09-converters.md` whose root cause is identical: **the spec was authored against an internal mental model of the API, not against grep output**. C-CVS-15 in particular fabricated an entire `typesconv` numeric-widening surface that does not exist.
+- **rationale:** The same author pattern is almost certainly present in the other §07/§08/§10/§11/§15/§16 ❓ pools (124 ❓ remaining). A one-shot lint can prevent the next 50+ ❌s from ever shipping.
+- **proposed change:** Add `scripts/spec-api-check.psm1` that, for every Go code-fenced block in `spec/01-app/`, extracts `<pkg>.<symbol>` references and runs `go vet` (or `go list -f '{{.Imports}}'`) against a synthesised stub `.go` file in a tmp module rooted at `core-v9 v1.5.8`. Failures should print the spec file + line.
+- **acceptance criteria:** Removing `Integer` from `converters.stringTo` makes the lint fail; current spec text after AJ-01..03 land makes it pass; CI-friendly.
+- **status:** open
+- **risk:** Tooling addition only — no change to spec or production code.
+
 ---
 
 ## Rejected Suggestions
