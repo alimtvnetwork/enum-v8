@@ -80,6 +80,18 @@
 - **completedAt:** 2026-05-04 → 2026-05-05 (D-CVS-25, D-CVS-38, D-CVS-42)
 - **notes:** Three sections now carry explicit upstream-only callouts.
 
+### S-103: Extract portable runner specs into `spec/03-portable/` sub-directory
+
+- **createdAt:** 2026-05-06
+- **source:** Lovable (Cycle 16 carry-forward)
+- **affectedProject:** enum-v4 (spec only)
+- **description:** `spec/03-powershell-test-run/08-generic-go-test-coverage-runner.md` and `09-ai-agent-complete-reference.md` are explicitly portable ("any Go module / repository", "self-contained reference for any AI agent"). They currently sit alongside `enum-v4`-specific runner files and required top-of-file consumer-coverage callouts in Cycle 16 (D-CVS-47, D-CVS-48) to disambiguate scope.
+- **rationale:** A structural split (sub-directory) is more discoverable than a notational one (callouts) and would let future portable-runner edits ship without touching the `enum-v4`-specific files.
+- **proposed change:** Move `08-` and `09-` into a new `spec/03-powershell-test-run/portable/` sub-directory; renumber to `01-`/`02-` inside it; update cross-refs in `spec/04-tooling/` and `spec/06-testing-guidelines/` if any.
+- **acceptance criteria:** `rg -nc 'spec/03-powershell-test-run/(08|09)-' spec/` returns zero hits after the move; new portable sub-directory has its own README explaining the scope split.
+- **status:** open
+- **risk:** Low — structural reorganisation, no normative content change.
+
 ---
 
 ## Rejected Suggestions
