@@ -9,6 +9,22 @@
 
 ---
 
+## [spec-v0.50.0] — 2026-05-06 (Cycle 45 — AB-residual deep-probe of `spec/01-app/11-versioning.md`)
+
+### Added
+- `spec/07-code-vs-spec-audits/34-cycle45-AB-residual-spec01-versioning.md` — settles the single ❓ left by Cycle 23 (row 6: "`coreversion` plays well with `coregeneric.Collection`"). One demotion to ❌: `grep -rn coregeneric coreversion/` returns zero hits; `coreversion/VersionsCollection.go` is a hand-rolled `{Versions []Version}` wrapper that imports only `constants`, `coredata/corejson`, `coreinterface`. **NEW C-CVS-62 (HIGH)** — fabricated interop claim.
+- Scoreboard top-line + per-section row updated (§11 ❓ pool fully cleared; verifiable score unchanged at 18.2%).
+
+### Spawned (BLOCKED by `spec/01-app/` freeze)
+- **AJ-21b** — drop `coregeneric.Collection` interop bullet from `11-versioning.md` §1; document real `VersionsCollection` surface. Folded into existing AJ-21 §1 constructor rewrite.
+
+### Notes
+- AB-residual `spec/01-app/` ❓ pool drops 18 → 17.
+- Cumulative AB ❌ across 7 sections: 50 → 51 (CRITICAL still 23 — C-CVS-62 is HIGH).
+- §11 fully closed for ❓ — all 11 claims now have verdicts (2 ✅ / 9 ❌ / 0 ❓).
+
+---
+
 ## [spec-v0.49.0] — 2026-05-06 (Cycle 44 — AB-residual deep-probe of `spec/01-app/07-conditional-and-utilities.md`)
 
 ### Added

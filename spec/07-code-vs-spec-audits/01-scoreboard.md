@@ -2,7 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§11 18.2 *(post-AB)* / §08 33.3 *(post-AB)* / §10 38.5 *(post-AB)* / §09 68.4 *(post-AB Cycle 43)* / §16 66.7 *(post-AB)* / §07 73.7 *(post-AB Cycle 44)* / §15 74.1 *(post-AB)* / §03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / spec/06 100.0 / spec/03 100.0 / spec/04 100.0 / spec/02 100.0 (verifiable)** — **🔬 Cycle 44 (AB residual deep-probe of `spec/01-app/07-conditional-and-utilities.md`) — 2 of 3 Cycle-20 ❓ probed via upstream `core-v9 v1.5.8` clone. 2 ❓→✅ (rows 51, 52). NEW D-CVS-66 (LOW): row 51 `LazyLock` actually uses `sync.Mutex`+`isCompiled` guard (not `sync.Once`) → AJ-04b. Row 50 (advisory) classified out-of-band. AB-residual `spec/01-app/` ❓: 20 → 18. §07 verifiable 70.6% → 73.7%. Cumulative AB ❌ unchanged at 50.**
+## Current MEASURED drift score: **§11 18.2 *(post-AB Cycle 45, ❓ pool cleared)* / §08 33.3 *(post-AB)* / §10 38.5 *(post-AB)* / §09 68.4 *(post-AB Cycle 43)* / §16 66.7 *(post-AB)* / §07 73.7 *(post-AB Cycle 44)* / §15 74.1 *(post-AB)* / §03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / spec/06 100.0 / spec/03 100.0 / spec/04 100.0 / spec/02 100.0 (verifiable)** — **🔬 Cycle 45 (AB residual deep-probe of `spec/01-app/11-versioning.md`) — single Cycle-23 ❓ resolved. 1 ❓→❌ (row 6: `coreversion` has zero `coregeneric` imports; ships own `VersionsCollection`). NEW C-CVS-62 (HIGH) → AJ-21b (folded into AJ-21). §11 ❓ pool fully cleared (1 → 0). AB-residual `spec/01-app/` ❓: 18 → 17. Cumulative AB ❌ 50 → 51 (CRITICAL still 23).**
+>
+> 🔬 **Cycle 44 (AB residual deep-probe of `spec/01-app/07-conditional-and-utilities.md`)** — 2 ❓→✅ + NEW D-CVS-66 (LOW) → AJ-04b. See `33-cycle44-AB-residual-spec01-conditional.md`.
 >
 > 🔬 **Cycle 43 (AB residual deep-probe of `spec/01-app/09-converters.md`)** — 3 ❓→✅ + 1 ❓→❌ (C-CVS-61 CRITICAL → AJ-44). NEW D-CVS-65 (LOW) → AJ-03b. See `32-cycle43-AB-residual-spec01-converters.md`.
 >
