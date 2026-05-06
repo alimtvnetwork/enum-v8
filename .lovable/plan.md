@@ -102,12 +102,60 @@
 - **Expected outputs:** New enum package with full method set, registered in `tests/creationtests/`.
 - **Acceptance criteria:** `go build ./newpkg/...` and `go test ./tests/creationtests/...` pass.
 
-### AL. Test coverage expansion
+### AL. Test coverage expansion (umbrella)
 
-- **Status:** 📋 Planned
-- **Objective:** Add test cases for untested enum packages using `tests/creationtests/` pattern.
-- **Dependencies:** AG (clean Go build), AA Cycle 15 (accurate test guidelines)
-- **Expected outputs:** New test files, coverage increase.
+- **Status:** 🔄 In Progress (broken into AL-01..AL-08 below)
+- **Objective:** Lift `tests/creationtests/` coverage from baseline **15.5%** toward **≥60%** total statements.
+- **Baseline (2026-05-06):** 15.5% total, all 73 packages individually <25%, 4154 functions <50%.
+- **Strategy:** The existing `Test_AllEnums_ContractsTesting` only exercises ~6 methods per Variant. Each `Variant.go` exposes ~40–50 methods (`Json`, `JsonPtr`, `Format`, `IsAnyOf`, `IsAnyNamesOf`, `IsAnyValuesEqual`, `MarshalJSON`/`UnmarshalJSON`, `ValueInt8/16/32`, `MinByte`/`MaxByte`, `RangesByte`, `NameValue`, `ToPtr`, `AsJsoner`, etc.). Adding one shared-loop test per method family unlocks coverage across **all 73 packages simultaneously**.
+- **Dependencies:** AG (clean Go build) ✅
+- **Expected outputs:** New `*_test.go` files in `tests/creationtests/`, coverage delta recorded each pass.
+
+#### AL-01. Json round-trip suite (highest leverage)
+- **Target:** `MarshalJSON`, `UnmarshalJSON`, `Json`, `JsonPtr`, `JsonParseSelfInject`, `AsJsoner`, `AsJsonContractsBinder`, `AsJsonMarshaller`.
+- **Approach:** Loop `allBasicEnumsCollection`; for each, marshal → unmarshal → assert round-trip equals original byte value.
+- **Expected lift:** +8–12% total coverage (touches every Variant package).
+- **File:** `tests/creationtests/AllEnums_JsonRoundTrip_test.go`
+- **Acceptance:** `./run.ps1 tc` green, total ≥ 23%.
+
+#### AL-02. Format & string conversion suite
+- **Target:** `Format`, `ToNumberString`, `ValueString`, `String`, `NameValue`, `RangeNamesCsv`.
+- **Approach:** Loop collection; assert non-empty for valid items, format with `"%s=%v"`.
+- **Expected lift:** +4–6%.
+- **File:** `tests/creationtests/AllEnums_Format_test.go`
+
+#### AL-03. Comparison & predicate suite
+- **Target:** `IsAnyOf`, `IsAnyNamesOf`, `IsAnyValuesEqual`, `IsByteValueEqual`, `IsNameEqual`, `IsValueEqual`, `IsEqual`, `IsAboveOrEqual`, `IsLowerOrEqual`, `IsInvalid`, `IsValid`.
+- **Approach:** Loop collection; for each Variant, assert self-equality and inequality against `Invalid`.
+- **Expected lift:** +5–8%.
+- **File:** `tests/creationtests/AllEnums_Predicates_test.go`
+
+#### AL-04. Numeric width & range suite
+- **Target:** `ValueInt`, `ValueInt8`, `ValueInt16`, `ValueInt32`, `ValueByte`, `Value`, `MaxByte`, `MinByte`, `MinInt`, `MaxInt`, `RangesByte`, `IntegerEnumRanges`, `MinMaxAny`, `RangesDynamicMap`.
+- **Expected lift:** +4–6%.
+- **File:** `tests/creationtests/AllEnums_Numeric_test.go`
+
+#### AL-05. Constructor suite (`New`, `NewMust`, `RangesInvalidErr`, `Max`, `Min`)
+- **Target:** Per-package `New(name)` / `NewMust(name)` / `Max()` / `Min()` / `RangesInvalidErr()` free functions.
+- **Approach:** Hand-rolled per package since signatures vary. Start with the 10 lowest-coverage packages (osdetect excluded — windows-only).
+- **Expected lift:** +3–5%.
+- **Files:** one `_test.go` per targeted package.
+
+#### AL-06. `quotes/` and `brackets/` dedicated suites
+- **Why:** Both currently 7–12%, neither in `allBasicEnumsCollection`. Need bespoke tests for `WrapWith`, `UnWrapWith`, `HasBothWrappedWith`, `WhichBracket`, `WhichQuote`, `getQuoteStatus`, `getSingleBracketStatus`.
+- **Expected lift:** +1–2% total but lifts these two packages into the 50–70% band.
+
+#### AL-07. `strtype` / `inttype` constructor & GetSet suites
+- **Why:** strtype 4.3%, inttype 10.3% — used by every other package via `IntType()`.
+- **Target:** `New`, `GetSet`, `GetSetVariant`, `IsCompareResult`, `fileReader` (skip os-dependent), `all-constructors.go`.
+- **Expected lift:** +2–4%.
+
+#### AL-08. `osdetect` selective coverage (cross-platform safe parts only)
+- **Why:** 3% but bulk is platform-specific (`windows.go`, `linux.go`).
+- **Target:** Only `IsRunningInDockerContainer` stub, `Variant`, `OperatingSystemDetail` JSON, `CurrentOsType` smoke.
+- **Expected lift:** +1%.
+
+**Combined target:** 15.5% → ~60% across AL-01..AL-08.
 
 ---
 
