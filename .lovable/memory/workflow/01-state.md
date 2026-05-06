@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Task AI done — `spec/01-app/` declared DRIFT-FROZEN as spec-v0.30.0).
+> **Last updated:** 2026-05-06 (Cycle 16 closed — `spec/03-powershell-test-run/` baselined at 100 %).
 
 ## ✅ Done
 
@@ -14,6 +14,7 @@
   - `spec/01-app/` directory cleared of `tests/integratedtests/` (genuine clean as of Cycle 12).
 - **Cycle 15** — `spec/06-testing-guidelines/` directory baselined and closed at **100 % verifiable** (32 claims sampled across 10 files; 22 ✅ / 10 ❓ pending AB). Resolved D-CVS-43 (LOW) via README + `01-folder-structure.md` consumer-coverage callouts (same pattern as Cycle 12). Spec changelog → **spec-v0.29.0**. Audit file: `spec/07-code-vs-spec-audits/16-cycle15-testing-guidelines.md`.
 - **AI** — `spec/01-app/` declared **🧊 DRIFT-FROZEN** in `spec/CHANGELOG.md` as **spec-v0.30.0** (2026-05-06). Allowed future edits limited to: AB-driven ❓→✅ promotions, AC re-audit of §07/§09, upstream-API-change additions (paired with new audit cycle row), typo/formatting fixes. Scoreboard top-line carries the 🧊 marker.
+- **Cycle 16** — `spec/03-powershell-test-run/` (9 files, 2 519 lines) baselined and closed at **100 % verifiable** (22 ✅ / 6 ❓ runner-internal). Resolved D-CVS-44 → D-CVS-48 (5 LOW) via consumer-coverage callouts. Folds in **AH** debt for this directory. Spec changelog → **spec-v0.31.0**. Audit file: `spec/07-code-vs-spec-audits/17-cycle16-powershell-test-run.md`.
 - **Reliability risk report v2** produced → `/mnt/documents/02-reliability-risk-report-v2.md` (2026-05-06; supersedes v1)
 - **Suggestions tracker** consolidated → `.lovable/memory/suggestions/01-suggestions-tracker.md`
 - **Pending issues** consolidated → `.lovable/memory/pending-issues/01-all-pending-issues.md`
@@ -24,16 +25,16 @@
 
 ## 🔄 In Progress
 
-- **AA. Spec-audit cycles** — Next target: Cycle 16 → `spec/03-powershell-test-run/` (or `spec/04-tooling/`).
-- **AH. Cross-`spec/` cleanup sweep** — folded into upcoming directory audits; `spec/06` cleared in Cycle 15.
+- **AA. Spec-audit cycles** — Next target: Cycle 17 → `spec/04-tooling/` (carries residual AH debt for `04-bootstrap-into-new-repo.md`) or `spec/02-app-issues/` (carries residual AH debt for `02-internal-package-coverage-policy.md`).
+- **AH. Cross-`spec/` cleanup sweep** — `spec/03` cleared in Cycle 16; remaining: `spec/04-tooling/04-bootstrap-into-new-repo.md` + `spec/02-app-issues/02-internal-package-coverage-policy.md` (both fold into next directory audits).
 - **AM. core-v9 API migration** — Reported `tests/creationtests` compile blocker fixed in sandbox.
   - 2026-05-06: Applied confirmed renames (53 `TypeName`→`SafeTypeName`, 6 `AnyToValueString`→`AnyTo.ValueString`, 1 `Any.ToFullNameValueString`→`AnyTo.ToFullNameValueString`, remaining `StringTo*` → `StringTo.*` sites, plus follow-on `codestack`, `coreversion`, and `StringRangesPtr` API updates). Verified with `go test -mod=mod ./tests/creationtests -run '^$' -count=0`.
 
 ## ⏳ Pending
 
-- **AB.** Fetch upstream `core-v9` source to resolve 158 ❓ claims (148 in `spec/01-app/` + 10 in `spec/06-testing-guidelines/`).
+- **AB.** Fetch upstream `core-v9` source to resolve 158 ❓ claims (148 in `spec/01-app/` + 10 in `spec/06-testing-guidelines/`). Plus 6 runner-internal ❓ from Cycle 16 needing a `scripts/*.psm1` direct probe (separate sub-task).
 - **AC.** Re-audit §07 and §09 against the spec-internal-consistency dimension.
-- **AJ.** Implement any follow-on fixes from Cycle 15+ findings (currently none open).
+- **AJ.** Implement any follow-on fixes from Cycle 15/16+ findings (currently none open).
 - **AK.** New enum package creation (template validation).
 - **AL.** Test coverage expansion.
 
@@ -43,6 +44,7 @@
 
 ## Next logical step
 
-1. **AA/Cycle 16** — Audit `spec/03-powershell-test-run/` (4 files; carries the `tests/integratedtests/` sweep AH owes).
-2. **AB** — Fetch upstream `core-v9` source for ❓ verification (unblocks 158 claims + Cycle 7/9 closure).
-3. **AK** — New enum package creation / template validation.
+1. **AA/Cycle 17** — Audit `spec/04-tooling/` (carries residual AH debt for `04-bootstrap-into-new-repo.md`).
+2. **AA/Cycle 18** — Audit `spec/02-app-issues/` (carries residual AH debt for `02-internal-package-coverage-policy.md`).
+3. **AB** — Fetch upstream `core-v9` source for ❓ verification (unblocks 158 claims + Cycle 7/9 closure).
+4. **AK** — New enum package creation / template validation.
