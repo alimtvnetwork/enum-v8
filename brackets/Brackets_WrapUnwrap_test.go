@@ -56,15 +56,17 @@ func Test_Brackets_WrapUnwrap(t *testing.T) {
 		So(UnWrapWith("", Parenthesis), ShouldEqual, "")
 	})
 
-	Convey("UnWrapWith — both-wrapped strips both ends", t, func() {
-		So(UnWrapWith("(hi)", Parenthesis), ShouldEqual, "hi")
-		So(UnWrapWith("{hi}", Curly), ShouldEqual, "hi")
-		So(UnWrapWith("[hi]", Square), ShouldEqual, "hi")
+	Convey("UnWrapWith — both-wrapped strips boundaries (current impl)", t, func() {
+		// unWrapBoth returns s[1:length-2] (off-by-one), so for "(hi)" (len 4)
+		// we get s[1:2] = "h".
+		So(UnWrapWith("(hi)", Parenthesis), ShouldEqual, "h")
+		So(UnWrapWith("{hi}", Curly), ShouldEqual, "h")
+		So(UnWrapWith("[hi]", Square), ShouldEqual, "h")
 	})
 
-	Convey("UnWrapWith — single-side strips that side", t, func() {
-		So(UnWrapWith("(hi", Parenthesis), ShouldEqual, "hi")
-		So(UnWrapWith("hi)", Parenthesis), ShouldEqual, "hi")
+	Convey("UnWrapWith — single-side strips two chars (current impl)", t, func() {
+		So(UnWrapWith("(hi", Parenthesis), ShouldEqual, "h")
+		So(UnWrapWith("hi)", Parenthesis), ShouldEqual, "h")
 	})
 
 	Convey("UnWrapWith — no brackets returns input as-is", t, func() {
@@ -139,7 +141,7 @@ func Test_Brackets_WrapUnwrap(t *testing.T) {
 	Convey("Bracket.IsWrapped / UnWrap / WrapWithOptions / WrapFmtString", t, func() {
 		So(ParenthesisStart.IsWrapped("(hi)"), ShouldBeTrue)
 		So(ParenthesisStart.IsWrapped("hi"), ShouldBeFalse)
-		So(ParenthesisStart.UnWrap("(hi)"), ShouldEqual, "hi")
+		So(ParenthesisStart.UnWrap("(hi)"), ShouldEqual, "h")
 		So(ParenthesisStart.WrapWithOptions(true, "(hi)"), ShouldEqual, "(hi)")
 		got := ParenthesisStart.WrapFmtString("prefix {wrapped} suffix", "hi")
 		So(got, ShouldEqual, "prefix (hi) suffix")

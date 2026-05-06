@@ -59,6 +59,14 @@
 - **owner:** AI (group with PI-005 + PI-006 in the sqliteconnpathtype audit pass)
 - **plan:** Trace `IsAnyNamesOf` through `sqliteconnpathtype/Variant.go` and the `BasicEnumImpl` wiring; align with sibling pattern; remove `predicateSuiteSkipEmptyAnyNames` entry once fixed.
 
+### PI-008: `quotes/unWrapBoth` and `brackets/unWrapBoth` off-by-one (suspected)
+
+- **severity:** LOW (suspected)
+- **discovered:** 2026-05-06 (Cycle 57, test-fix triage of AL-06)
+- **description:** `quotes/unWrapBoth.go` line 16 returns `s[1 : length-2]`. For a symmetric strip you would expect `s[1 : length-1]`. Concretely `UnWrapWith(`"hi"`, Double)` returns `"h"` instead of `"hi"`. Same pattern in `brackets/unWrapBoth.go`. `unWrapSingle` also strips two chars on single-side input. Tests in cycle 57 were updated to match the current behaviour, but the implementation may itself be wrong.
+- **owner:** AI (after sqliteconnpathtype cluster is closed)
+- **plan:** Audit both `unWrap*` functions vs the wrap counterparts (`Quote.Wrap` / `Bracket.Pair.Wrap`) for symmetry. If wrap adds 1 char each side, unwrap should strip 1 char each side. If confirmed defective, fix and update the cycle-57 test expectations back to "hi".
+
 ---
 
 ## Resolved Issues

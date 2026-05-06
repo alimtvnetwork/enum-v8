@@ -7,8 +7,12 @@ import (
 )
 
 // AL-05b: Constructor surface coverage for iptype.
+//
+// Note: the registered enum names in iptype/vars.go use the prefixed form
+// "IpV4"/"IpV6" (the Go identifiers V4/V6 are aliases). Aliases like "v4",
+// "ver4", "ipv4" are also accepted via aliasMap.
 func Test_IpType_Constructors(t *testing.T) {
-	knownNames := []string{"Invalid", "V4", "V6"}
+	knownNames := []string{"Invalid", "IpV4", "IpV6"}
 
 	Convey("iptype.New — known names round-trip", t, func() {
 		for _, name := range knownNames {
