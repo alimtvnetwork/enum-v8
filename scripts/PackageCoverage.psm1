@@ -43,17 +43,10 @@ function Invoke-PackageTestCoverage {
 
     # Resolve the test-suite root (creationtests vs legacy integratedtests).
     # Per Core-memory rule: tooling must accept either name — never hard-code one.
-    $testsRootCandidates = @('creationtests', 'integratedtests')
-    $suiteRoot = $null
-    foreach ($candidate in $testsRootCandidates) {
-        $candidatePath = Join-Path (Join-Path $global:ProjectRoot 'tests') (Join-Path $candidate $pkg)
-        if (Test-Path $candidatePath) { $suiteRoot = $candidate; break }
-    }
-    if (-not $suiteRoot) {
-        # Fall back to the canonical name so the downstream error from `go test`
-        # is the user-facing diagnostic ("no Go files in ...").
-        $suiteRoot = 'creationtests'
-        Write-Host "  ⚠ Package '$pkg' not found under tests/creationtests/ or tests/integratedtests/ — defaulting to creationtests/" -ForegroundColor Yellow
+    $suiteRoot = Resolve-TestSuiteRoot -Package $pkg
+    $resolvedPath = Join-Path (Join-Path (Join-Path $global:ProjectRoot 'tests') $suiteRoot) $pkg
+    if (-not (Test-Path $resolvedPath)) {
+        Write-Host "  ⚠ Package '$pkg' not found under tests/creationtests/ or tests/integratedtests/ — defaulting to $suiteRoot/" -ForegroundColor Yellow
     }
 
     # Build check
