@@ -34,10 +34,10 @@
 
 ## Resolved Issues
 
-### D-CVS-62: Missing `scripts/coverage/Generate-CoveragePrompts.ps1`
+### D-CVS-62: Missing `scripts/coverage/` utilities
 
-- **resolved:** 2026-05-06 (Cycle 31, S-108)
-- **fix:** Created the script per `spec/03-powershell-test-run/06-coverage-prompt-generator.md`. Smoke-tested end-to-end. Three sibling standalone utilities still missing — tracked as **S-110**.
+- **resolved:** 2026-05-06 (Cycles 31 + 32, S-108 + S-110)
+- **fix:** Cycle 31 (S-108) restored the auto-invoked `Generate-CoveragePrompts.ps1`. Cycle 32 (S-110) restored the three standalone utilities (`Get-UncoveredLines.ps1`, `Get-FunctionCoverage.ps1`, `Get-PackageCoverageReport.ps1`). All four scripts smoke-tested via nix-pwsh. `scripts/coverage/` and `spec/03-powershell-test-run/06-coverage-prompt-generator.md` are now in lockstep.
 
 ### PI-001: Upstream `core-v9` `go.mod` module path mismatch (Task W + AG)
 
