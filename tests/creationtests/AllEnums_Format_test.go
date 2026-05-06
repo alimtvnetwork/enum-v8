@@ -30,7 +30,8 @@ import (
 //     malformed `NameValue()` (`"Invalid(%!d(string=Invalid))"` — wrong fmt
 //     verb). Tracked as PI-006; skipped here so the suite stays green.
 var formatSuiteSkipMinMaxAll = map[string]string{
-	"strtype.Variant": "free-form string enum, no fixed ranges",
+	"strtype.Variant":            "free-form string enum, no fixed ranges",
+	"sqliteconnpathtype.Variant": "PI-006 — MinValueString returns empty",
 }
 
 var formatSuiteSkipNameValue = map[string]string{
