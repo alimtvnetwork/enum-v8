@@ -9,6 +9,31 @@
 
 ---
 
+## [spec-v0.40.0] — 2026-05-06 (Cycle 25 — AB pass 7 on `01-app/16-security.md` — **completes AB sweep of `spec/01-app/`**)
+
+### Added
+- `spec/07-code-vs-spec-audits/26-cycle25-AB-security.md` — seventh AB promotion pass; 13 ❓ → **3 ✅ / 1 ⚠️ / 9 ❌ / 0 ❓** (verifiable score **66.7 %**). §16 inherits fabrication from earlier cycles: trust-boundary rules cite fabricated `coredynamic.*`, `corevalidator.New.Line/Slice` fluent, `corestr.*`.
+- 9 NEW contradiction findings **C-CVS-51..59**:
+  - **C-CVS-51 (CRITICAL)** — `corestr` package does not exist in upstream (zero matches for `find . -type d -name corestr*`).
+  - **C-CVS-52 (CRITICAL)** — `corestr.StringBuilder` fabricated; consumers must use stdlib `strings.Builder`.
+  - **C-CVS-53 (CRITICAL)** — `corestr.IsValidUTF8` fabricated; real call is stdlib `unicode/utf8.ValidString`.
+  - **C-CVS-54 (CRITICAL)** — `errcore.InvalidInput.MergeError(...)` won't compile; `InvalidInput` is not an `errcore` category. `errcore/vars.go` exposes only `ShouldBe`, `Expected`, `StackEnhance` at package level.
+  - **C-CVS-55 (CRITICAL)** — `coredynamic.AllFields` rule (§4 rule 4) unactionable — package doesn't exist (inherited from C-CVS-29).
+  - **C-CVS-56 (CRITICAL)** — `coredynamic.SetField`/`InvokeMethod` rules (§5 rules 2-3) unactionable — same.
+  - **C-CVS-57 (CRITICAL)** — Trust-boundary §6 example uses fabricated `corevalidator.New.Line.NotEmpty().MaxLength(255).Matches(re).Build()` + `result.IsFailed()`/`result.Error()` shape (inherited from C-CVS-22/23).
+  - **C-CVS-58 (HIGH)** — `corevalidator.New.Slice.MaxLength(N)` cited in 4 separate locations (§4 rule 1, §6 rule 2, §7 mistake row) — all fabricated.
+  - **C-CVS-59 (HIGH)** — `errcore.VarTwo("password", pwd, …)` example in §2 reproduces C-CVS-44 missing-`isIncludeType bool` defect; folded into AJ-28.
+- 1 NEW drift finding **D-CVS-61 (LOW)** — `coregeneric` import path should be `coredata/coregeneric` (same drift class as C-CVS-14 for `corejson`).
+- 9 new action items **AJ-35..43** — all BLOCKED on `spec/01-app/` 🧊 freeze waiver.
+
+### Changed
+- `spec/07-code-vs-spec-audits/01-scoreboard.md` — Cycle 25 row, headline updated (cumulative AB ❌ = 50; ~54 % fabrication rate; 24 CRITICAL across 7 sections), Open-findings list extended to C-CVS-11..59 + D-CVS-61.
+
+### Notes
+- **🎉 AB sweep of `spec/01-app/` is COMPLETE.** All 7 sections that previously held ≥10 ❓ (§07, §08, §09, §10, §11, §15, §16) have been promoted. Pattern across 7 cycles: 50 ❌ accumulated, ~54 % fabrication rate, 24 CRITICAL items (~48 %). **S-106 lint remains MANDATORY** before any AJ rewrite.
+
+---
+
 ## [spec-v0.39.0] — 2026-05-06 (Cycle 24 — AB pass 6 on `01-app/15-observability.md`)
 
 ### Added

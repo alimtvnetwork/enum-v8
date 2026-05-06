@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 24 — AB pass 6 on `15-observability.md`: 7 more ❌ surfaced — `errcore.VarTwo` example missing `isIncludeType bool` param, helpers return `string` not `error`, `HandleErr` is bare `panic`, test-failure format fabricated; cumulative AB ❌ = 41; first AB pass to drop a clean baseline; §15 now at 74.1 %).
+> **Last updated:** 2026-05-06 (Cycle 25 — AB pass 7 on `16-security.md`: 9 more ❌ surfaced — `corestr` package doesn't exist, `errcore.InvalidInput` doesn't exist, trust-boundary example built on fabricated `coredynamic`/`corevalidator.New` APIs; cumulative AB ❌ = 50; **🎉 AB sweep of `spec/01-app/` COMPLETE**; §16 at 66.7 %).
 
 ## ✅ Done
 
@@ -34,9 +34,9 @@
 
 ## ⏳ Pending
 
-- **AB. (in progress)** Upstream `core-v9 v1.5.8` cloned. **Done:** pass 1 §09 (66.7 %), pass 2 §07 (70.6 %), pass 3 §08 (33.3 %), pass 4 §10 (38.5 %), pass 5 §11 (**18.2 % — worst**), pass 6 §15 (74.1 % — dropped from clean baseline). **Pass-7 target:** `16-security.md` (13 ❓). Plus 14 workflow/script-internal ❓ and 5 audit-history ❓.
-- **AC.** Re-audit §07 / §08 / §09 / §10 / §11 / §15 against consistency dimension. Now partially unblocked by Cycles 19-24 — re-run after AJ-01..34 land.
-- **AJ.** **NEW open items: AJ-01..34** (all blocked by `spec/01-app/` freeze). Highest-impact: AJ-32 (replace fabricated test-failure format in §15.4), AJ-29 (re-frame entire §15.2 helper family — they return strings not errors), AJ-33 (rewrite §15.3 stack-enhancement rationale — `HandleErr` doesn't wrap), AJ-27 (rewrite entire `versionindexes` §2 — wrong purpose), AJ-15 (delete entire `coredynamic` §2 — package does not exist), AJ-08..14 (rewrite almost all of `08-validators.md`). User decision needed on lifting freeze for an AB-fix waiver — but S-106 lint is now **MANDATORY** first (cumulative ❌ = 41, fabrication rate ~52 %, 18 CRITICAL).
+- **AB. 🎉 Sweep of `spec/01-app/` COMPLETE.** All 7 sections holding ≥10 ❓ promoted: pass 1 §09 (66.7 %), pass 2 §07 (70.6 %), pass 3 §08 (33.3 %), pass 4 §10 (38.5 %), pass 5 §11 (**18.2 % — worst**), pass 6 §15 (74.1 %), pass 7 §16 (66.7 %). **Residual:** 24 non-API ❓ in `spec/01-app/` + 14 workflow/script-internal ❓ in spec/03/04 + 10 spec/06 + 5 spec/02 audit-history (= **53 ❓** total). These need a different probe (deep-read of `scripts/*.psm1` and `.github/workflows/*.yml`), not upstream-source comparison.
+- **AC.** Re-audit §07 / §08 / §09 / §10 / §11 / §15 / §16 against consistency dimension — run after AJ-01..43 land.
+- **AJ.** **NEW open items: AJ-01..43** (all blocked by `spec/01-app/` freeze). Highest-impact for §16: AJ-42 (rewrite §6 trust-boundary example — built on fabricated validator API), AJ-39 (replace `errcore.InvalidInput` — won't compile), AJ-36/37/38 (purge fabricated `corestr.*` package). For §15: AJ-32 (replace fabricated test-failure format), AJ-29 (re-frame helper family — return strings not errors), AJ-33 (rewrite stack-enhancement rationale). For §11: AJ-27 (rewrite `versionindexes` §2 — wrong purpose). For §10: AJ-15 (delete `coredynamic` §2 — package doesn't exist). For §08: AJ-08..14 (rewrite almost entire chapter). User decision needed on lifting freeze — but S-106 lint is now **MANDATORY** first (cumulative ❌ = 50, fabrication rate ~54 %, 24 CRITICAL ~48 %).
 - **AK.** New enum package creation (template validation).
 - **AL.** Test coverage expansion.
 
@@ -66,14 +66,18 @@
 
 - **C-CVS-44..50** — 7 ❌ contradictions in `spec/01-app/15-observability.md`. Severity: 4× CRITICAL, 2× HIGH, 1× MEDIUM. **First AB pass to drop a previously-clean section** (was 100 % at Cycle 13 baseline, now 74.1 %). Highlights: (a) `errcore.VarTwo` example omits the mandatory leading `isIncludeType bool` parameter — the spec example will not compile; (b) `VarTwo`/`VarTwoNoType`/`MessageVarMap` all return `string` (not `error`) — entire §2 framing as "error builders" is wrong; (c) `coretests/results/ResultAny.go` does not exist (real files: `Result.go`, `ResultAssert.go`, `Results.go`); (d) test-failure output format `Test #N — {scenario}: should be equal` with indented `expected:`/`actual:` is fabricated — `grep -rn "should be equal\|expected:\|actual:" coretests/results/` returns zero matches; (e) `errcore.HandleErr` is literally `func HandleErr(err error) { panic(err.Error()) }` — does NOT attach stack-enhanced wrapping as §3 rule 2 claims. See `spec/07-code-vs-spec-audits/25-cycle24-AB-observability.md`. Spawned **AJ-28..34**. **Cumulative AB ❌ = 41** across 6 audited sections; **18 CRITICAL** (~44 %); fabrication rate ~52 %.
 
+## 🆕 New findings (Cycle 25)
+
+- **C-CVS-51..59 + D-CVS-61** — 9 ❌ + 1 ⚠️ in `spec/01-app/16-security.md`. Severity: 6× CRITICAL, 2× HIGH, 1× LOW (drift). **Completes the AB sweep of `spec/01-app/`** — all 7 sections that previously held ≥10 ❓ have been promoted. Highlights: (a) `corestr` package doesn't exist anywhere in upstream — `StringBuilder` and `IsValidUTF8` are fabricated; consumers must use stdlib `strings.Builder` and `unicode/utf8.ValidString`; (b) `errcore.InvalidInput.MergeError(...)` example won't compile — `InvalidInput` is not exposed as an `errcore` category (only `ShouldBe`/`Expected`/`StackEnhance` are); (c) trust-boundary §6 example uses fabricated `corevalidator.New.Line.NotEmpty().MaxLength().Matches().Build()` fluent + `result.IsFailed()` shape (inherited from C-CVS-22/23); (d) §4 rule 4 + §5 rules 2-3 cite `coredynamic.AllFields/SetField/InvokeMethod` — package doesn't exist (inherited from C-CVS-29); (e) `corevalidator.New.Slice.MaxLength(N)` cited in 4 places — all fabricated; (f) `errcore.VarTwo("password", pwd, …)` example reproduces C-CVS-44 defect (folded into AJ-28); (g) D-CVS-61 LOW drift — `coregeneric` import path should be `coredata/coregeneric`. See `spec/07-code-vs-spec-audits/26-cycle25-AB-security.md`. Spawned **AJ-35..43**. **Cumulative AB ❌ = 50** across 7 audited sections; **24 CRITICAL** (~48 %); fabrication rate ~54 %.
+
 ## ⏭️ Manual user action (parked)
 
 - **A.** Push `cross-repo/core-v8/` mirror to its upstream GitHub repo.
 
 ## Next logical step
 
-1. **Build S-106** (`scripts/spec-api-check.psm1`) — lint to catch the fabrication pattern before AJ rewrites. **MANDATORY next given 41 ❌ accumulated and ~52 % fabrication rate (18 CRITICAL).** OR
-2. **AB pass 7** — Cycle 25 on `16-security.md` (13 ❓; last 13-❓ section in `spec/01-app/`). OR
-3. **User decision: lift `spec/01-app/` freeze** for AJ-01..34 patches (highly risky without S-106). OR
+1. **Build S-106** (`scripts/spec-api-check.psm1`) — lint to catch the fabrication pattern before AJ rewrites. **MANDATORY next given 50 ❌ accumulated and ~54 % fabrication rate (24 CRITICAL ~48 %).** OR
+2. **Resolve workflow/script-internal ❓** — deep-probe `scripts/*.psm1` and `.github/workflows/*.yml` to promote the 29 remaining ❓ in spec/03/04/06 + spec/02 audit-history. OR
+3. **User decision: lift `spec/01-app/` freeze** for AJ-01..43 patches (highly risky without S-106). OR
 4. **AK** — New enum package creation / template validation. OR
 5. **AL** — Test-coverage expansion.
