@@ -9,6 +9,21 @@
 
 ---
 
+## [spec-v0.32.0] — 2026-05-06 (Cycle 17 baseline & closed — `spec/04-tooling/` directory at 100 % verifiable)
+
+### Added
+- **`spec/07-code-vs-spec-audits/18-cycle17-tooling.md`** — Cycle 17 audit covering all 10 files in `spec/04-tooling/` (30 representative claims across 2 553 lines). Closes the directory at **100 % verifiable** (22 ✅ / 8 ❓; the 8 ❓ are workflow/script-internal behaviours requiring direct `.github/workflows/*.yml` and `scripts/*.psm1` probes). Raises and resolves **D-CVS-49 → D-CVS-55** (7 LOW drifts) in the same cycle. Folds in residual task **AH** debt for this directory.
+
+### Fixed
+- **`spec/04-tooling/00-overview.md`** (D-CVS-49) — fixed 2 broken `cross-repo/core-v9/` paths (Map table row 06 + Maintenance §3) to `cross-repo/core-v8/` with explicit Core-memory note that the directory intentionally retains its historical `core-v8` name even though the import path is `core-v9`.
+- **`spec/04-tooling/04-bootstrap-into-new-repo.md`** (D-CVS-50) — §7 decoupling row "tests/integratedtests/ mirror layout required ❌ No" now names both upstream-`core-v9` and `enum-v4` (`tests/creationtests/`) layouts as concrete examples. Closes the AH-tracked occurrence for this directory.
+- **`spec/04-tooling/06-cross-repo-sync.md`** (D-CVS-51 → D-CVS-55) — fixed 5 stale-token sites: `enum-v2 → enum-v4` at lines 11, 80 (template comment), 91; `cross-repo/core-v9 → cross-repo/core-v8` at lines 19, 80 (template comment), 103 (See Also). Template comment at line 80 carried both stale tokens (D-CVS-53). Each rewrite includes a Core-memory clarification where appropriate.
+
+### Changed
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — added Cycle 17 history row; lifted top-line milestone to include **`spec/04-tooling/` baselined & closed**; bumped open-❓ aggregate from **164 → 172** (8 from `spec/04` workflow-internal behaviours).
+
+---
+
 ## [spec-v0.31.0] — 2026-05-06 (Cycle 16 baseline & closed — `spec/03-powershell-test-run/` directory at 100 % verifiable)
 
 ### Added

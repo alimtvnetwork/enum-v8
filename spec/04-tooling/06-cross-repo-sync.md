@@ -8,7 +8,7 @@
 
 ## 1. Why this directory exists
 
-`enum-v2` depends on `core-v9` and shares the same CI/CD philosophy with
+`enum-v4` depends on `core-v9` and shares the same CI/CD philosophy with
 it. Ideally both repos would consume the workflows from a single source
 of truth (a reusable workflow or a `.github` org-level repo). Until that
 exists, the workflows are **duplicated** with light per-repo
@@ -16,8 +16,10 @@ adaptations.
 
 Lovable can only edit files inside this project, so adapted copies
 intended for sister repos live under `cross-repo/<repo-name>/` and are
-copied across by a maintainer (see `cross-repo/core-v9/README.md` for
-the exact `cp` recipe).
+copied across by a maintainer (see `cross-repo/core-v8/README.md` for
+the exact `cp` recipe — the directory intentionally retains its
+`core-v8` name even though the upstream import path is now `core-v9`,
+per Core memory).
 
 These files are **not** loaded by GitHub Actions in this repo — only
 files under the literal `.github/workflows/` path are. Anything inside
@@ -77,7 +79,7 @@ maintainer should:
 3. Add a comment to the target-repo workflow header pointing back at
    this spec, e.g.:
    ```yaml
-   # Synced from github.com/alimtvnetwork/enum-v2/cross-repo/core-v9/
+   # Synced from github.com/alimtvnetwork/enum-v4/cross-repo/core-v8/
    # See: spec/04-tooling/06-cross-repo-sync.md
    ```
 
@@ -88,7 +90,7 @@ maintainer should:
 Replace `cross-repo/` with one of:
 
 - **A reusable workflow** in a shared `alimtvnetwork/.github` repo, with
-  both `enum-v2` and `core-v9` calling it via `uses:`.
+  both `enum-v4` and `core-v9` calling it via `uses:`.
 - **A `composite action`** packaged in its own repo for the lint /
   vulncheck / collision-audit steps.
 - **A Go-module template repo** that downstream repos vendor.
@@ -100,8 +102,8 @@ Once any of those lands, delete `cross-repo/` and update
 
 ## See Also
 
-- `cross-repo/core-v9/README.md` — concrete install recipe for the
-  current target.
+- `cross-repo/core-v8/README.md` — concrete install recipe for the
+  current target. (Directory keeps `core-v8` name; import path is `core-v9`.)
 - [`01-ci-pipeline.md`](./01-ci-pipeline.md), [`02-release-pipeline.md`](./02-release-pipeline.md),
   [`03-vulnerability-scanning.md`](./03-vulnerability-scanning.md),
   [`04-ci-guards.md`](./04-ci-guards.md) — what the staged copies
