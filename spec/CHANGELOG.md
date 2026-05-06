@@ -9,6 +9,25 @@
 
 ---
 
+## [spec-v0.42.0] — 2026-05-06 (Cycle 27 — AB residual deep-probe of scripts + workflows)
+
+### Added
+- `spec/07-code-vs-spec-audits/28-cycle27-AB-scripts-deep-probe.md` — first dedicated "scripts deep-probe" cycle. Promoted 11 ❓ from runner-internal/workflow-internal claims (6 from §03 Cycle 16 + 5 from §04 Cycle 17) using direct evidence from `scripts/CoverageRunner.psm1`, `scripts/PreCommitCheck.psm1`, `.github/workflows/release.yml`, `.github/workflows/ci.yml`, and `run.ps1`.
+- 2 NEW LOW drift findings:
+  - **D-CVS-62** — `scripts/coverage/Generate-CoveragePrompts.ps1` is referenced by `scripts/CoverageRunner.psm1:313-316` and `scripts/PackageCoverage.psm1:150` (with `-BatchSize 500`) but is **MISSING** from the repo. Both call-sites guard with `if (Test-Path)` so the missing-file case silently no-ops. Tracked as suggestion **S-108**.
+  - **D-CVS-63** — `spec/03-powershell-test-run/04-pre-commit-api-checker.md` JSON-schema example was missing the `source` field (actual schema in `PreCommitCheck.psm1:169` writes 7 fields, spec showed 6). Resolved this cycle by adding the `source` field to the example.
+
+### Changed
+- `spec/03-powershell-test-run/04-pre-commit-api-checker.md` — added `source` field to the JSON schema example to match `scripts/PreCommitCheck.psm1` ground truth.
+- `spec/07-code-vs-spec-audits/01-scoreboard.md` — Cycle 27 row added; AB-residual ❓ tally drops 53 → 42; cumulative AB ❌ unchanged at 49.
+
+### Notes
+- Cumulative AB ❌ unchanged at **49** across 7 sections (24 CRITICAL). This cycle promotes ❓ items only.
+- 3 §04 Cycle-17 ❓ deferred (out-of-band metadata + cosmetic UI tokens — non-behavioural).
+- 21 ❓ remain in `spec/06-testing-guidelines/` (Cycle 15) — distinct probe technique (read `tests/creationtests/` patterns), deferred to future cycle.
+
+---
+
 ## [spec-v0.41.0] — 2026-05-06 (Cycle 26 — S-106 self-audit & retractions)
 
 ### Added
