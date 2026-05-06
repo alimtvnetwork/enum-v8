@@ -62,11 +62,12 @@
 
 ### AB. Fetch upstream `core-v9` source
 
-- **Status:** ⏳ Pending
-- **Objective:** Get upstream `core-v9` source into a workspace path so auditor can verify 148 ❓ claims.
-- **Dependencies:** Fetch access to upstream repo
-- **Expected outputs:** ❓ claims promoted to ✅ or ❌.
-- **Acceptance criteria:** ❓ count drops to <10.
+- **Status:** 🔄 In Progress (per-spec-directory residual passes)
+- **Objective:** Get upstream `core-v9` source into a workspace path so auditor can verify ❓ claims.
+- **Dependencies:** Fetch access to upstream repo ✅ (clone at `/tmp/core-v9-upstream`, tag `v1.5.8`)
+- **Expected outputs:** ❓ claims promoted to ✅ or ❌, per audited directory.
+- **Acceptance criteria:** ❓ count drops to <10 across all audited directories.
+- **Progress:** §06 (`spec/06-testing-guidelines/`) — Cycle 48 (this session, 2026-05-06): 10 ❓ → 10 ✅, zero new findings.
 
 ### AC. Re-audit §07 and §09
 
