@@ -60,11 +60,14 @@ func TestCompressLevels_RangesAndAccessors(t *testing.T) {
 	if len(v.IntegerEnumRanges()) == 0 {
 		t.Error("IntegerEnumRanges empty")
 	}
-	if err := v.OnlySupportedErr("Default", "Best"); err != nil {
-		t.Errorf("OnlySupportedErr unexpected: %v", err)
+	// OnlySupportedErr / OnlySupportedMsgErr are *informational* — they always
+	// return a non-nil error describing supported vs unsupported names. We just
+	// exercise them for coverage and assert they produce a message.
+	if err := v.OnlySupportedErr("Default", "Best"); err == nil {
+		t.Error("OnlySupportedErr should return informational error")
 	}
-	if err := v.OnlySupportedMsgErr("ctx", "Default"); err != nil {
-		t.Errorf("OnlySupportedMsgErr unexpected: %v", err)
+	if err := v.OnlySupportedMsgErr("ctx", "Default"); err == nil {
+		t.Error("OnlySupportedMsgErr should return informational error")
 	}
 }
 

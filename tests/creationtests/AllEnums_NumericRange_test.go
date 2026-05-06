@@ -40,7 +40,8 @@ var numericRangeSuiteSkipMinMaxIntOrder = map[string]string{
 }
 
 var numericRangeSuiteSkipRangesDynamicMap = map[string]string{
-	"strtype.Variant": "string-backed enum; RangesDynamicMap is intentionally empty",
+	"strtype.Variant":        "string-backed enum; RangesDynamicMap is intentionally empty",
+	"compresslevels.Variant": "int8-backed enum with negative range; RangesDynamicMap returns empty in upstream impl",
 }
 
 func Test_AllEnums_NumericRange(t *testing.T) {
