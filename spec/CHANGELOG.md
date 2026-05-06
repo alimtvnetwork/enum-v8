@@ -9,6 +9,31 @@
 
 ---
 
+## [spec-v0.37.0] — 2026-05-06 (Cycle 22 — AB pass 4 on `01-app/10-reflection-and-dynamic.md` — second-worst section)
+
+### Added
+- `spec/07-code-vs-spec-audits/23-cycle22-AB-reflection-and-dynamic.md` — fourth AB promotion pass; 19 claims → **5 ✅ / 8 ❌ / 6 ❓** (verifiable score **38.5 %** — second-worst score in project, after §08 33.3 %).
+- 8 NEW contradiction findings **C-CVS-29..36**:
+  - **C-CVS-29 (CRITICAL)** — entire `coredynamic` package documented in §2 does not exist in upstream `core-v9 v1.5.8`. `coredynamic/` directory absent; `grep -rln coredynamic` returns zero source files. `InvokeMethod`, `HasMethod`, `MethodNames`, `GetField`, `SetField`, `AllFields`, `TypeFullName`, `IsNullOrUndefined` all fabricated.
+  - **C-CVS-30 (CRITICAL)** — `reflectcore.IsPointer/IsStruct/IsSlice/IsMap/IsFunc/IsChannel/IsInterface` as bare top-level predicates do not exist; real shape is aggregate `reflectcore.Is.Pointer(v)` etc.
+  - **C-CVS-31 (CRITICAL)** — `reflectcore.WalkFields` fabricated; field walking lives at `reflectcore/reflectmodel.FieldProcessor`.
+  - **C-CVS-32 (CRITICAL)** — `reflectcore.GetTag` fabricated.
+  - **C-CVS-33 (CRITICAL)** — `reflectcore.DerefAll` fabricated.
+  - **C-CVS-34 (HIGH)** — `internal/reflectinternal` "off-limits to consumers" framing misleading: `reflectcore/vars.go` publicly re-exports 15 internal symbols (`Converter, Utils, Looper, CodeStack, GetFunc, Is, TypeName, TypeNames, TypeNamesString, TypeNamesReferenceString, ReflectType, ReflectGetter, ReflectGetterUsingReflectValue, SliceConverter, MapConverter`).
+  - **C-CVS-35 (HIGH)** — claimed `errcore` panic-wrapping facade does not exist in `reflectcore`.
+  - **C-CVS-36 (HIGH)** — §7 mistake-row guidance about `InvokeMethod`/`HasMethod` fabricated (those methods don't exist).
+- 6 new action items **AJ-15..20** (rewrites for §2, §3.1, §3.2, §3.3, §1+§4 framing, §7 table) — all BLOCKED on `spec/01-app/` 🧊 freeze waiver.
+
+### Changed
+- `spec/07-code-vs-spec-audits/01-scoreboard.md` — added Cycle 22 row, headline updated, ❓ count reduced 98 → 89.
+
+### Notes
+- **Cumulative fabrication rate is now ~45 %** across 4 audited sections (29 ✅ / 26 ❌ / 23 ❓ promoted out of 80 baseline ❓).
+- **S-106 lint is now MANDATORY** before any AJ rewrite (was "strongly recommended" in spec-v0.36.0).
+- `spec/01-app/` 🧊 freeze remains in force; no `spec/01-app/` files modified by this cycle (audit file lives under `spec/07-code-vs-spec-audits/`).
+
+---
+
 ## [spec-v0.36.0] — 2026-05-06 (Cycle 21 — AB pass 3 on `01-app/08-validators.md` — worst-drift section in project)
 
 ### Added

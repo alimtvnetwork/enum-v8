@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 21 — AB pass 3 on `08-validators.md`: 8 more ❌ surfaced — worst-drift section in the project; cumulative AB ❌ = 18).
+> **Last updated:** 2026-05-06 (Cycle 22 — AB pass 4 on `10-reflection-and-dynamic.md`: 8 more ❌ surfaced — entire `coredynamic` package fabricated; cumulative AB ❌ = 26).
 
 ## ✅ Done
 
@@ -34,9 +34,9 @@
 
 ## ⏳ Pending
 
-- **AB. (in progress)** Upstream `core-v9 v1.5.8` cloned. **Done:** pass 1 §09 (66.7 %), pass 2 §07 (70.6 %), pass 3 §08 (33.3 % — worst). **Pass-4 targets:** `10-reflection-and-dynamic.md` (15 ❓), `11-versioning.md` (11 ❓), `15-observability.md` (13 ❓), `16-security.md` (13 ❓). Plus 14 workflow/script-internal ❓ and 5 audit-history ❓.
-- **AC.** Re-audit §07 / §08 / §09 against consistency dimension. Now partially unblocked by Cycles 19+20+21 — re-run after AJ-01..14 land.
-- **AJ.** **NEW open items: AJ-01..14** (all blocked by `spec/01-app/` freeze). Most-impactful: AJ-08..14 rewriting almost the entire `08-validators.md` (8 ❌ — fluent-builder API, `Validate(input) Result` contract, `RangeValidator`, `StringCompareAs`, custom-validator template, attribution pipeline all fabricated). User decision needed on lifting freeze for an AB-fix waiver — but **strongly recommend S-106 lint lands first** so AJ rewrites don't introduce fresh fabrications.
+- **AB. (in progress)** Upstream `core-v9 v1.5.8` cloned. **Done:** pass 1 §09 (66.7 %), pass 2 §07 (70.6 %), pass 3 §08 (33.3 % — worst), pass 4 §10 (38.5 % — second-worst). **Pass-5 targets:** `11-versioning.md` (11 ❓), `15-observability.md` (13 ❓), `16-security.md` (13 ❓). Plus 14 workflow/script-internal ❓ and 5 audit-history ❓.
+- **AC.** Re-audit §07 / §08 / §09 / §10 against consistency dimension. Now partially unblocked by Cycles 19+20+21+22 — re-run after AJ-01..20 land.
+- **AJ.** **NEW open items: AJ-01..20** (all blocked by `spec/01-app/` freeze). Most-impactful: AJ-15 (delete entire `coredynamic` §2 — package does not exist) and AJ-08..14 (rewrite almost all of `08-validators.md`). User decision needed on lifting freeze for an AB-fix waiver — but S-106 lint is now **MANDATORY** first so AJ rewrites don't introduce fresh fabrications (cumulative ❌ = 26, fabrication rate ~45 %).
 - **AK.** New enum package creation (template validation).
 - **AL.** Test coverage expansion.
 
@@ -54,14 +54,18 @@
 - **C-CVS-21..28** — 8 ❌ contradictions in `spec/01-app/08-validators.md` — almost the entire chapter is fabricated. Severity: 4× HIGH, 4× CRITICAL. Real `corevalidator/` exposes `LineValidator{LineNumber, TextValidator}` with `IsMatch(lineNumber, content, isCaseSensitive) bool`; the spec describes a fluent-builder + `Validate(input) Result` API that does not exist. **Cumulative fabrication rate is now 41 %** across 3 audited sections.
 - **Recommendation:** S-106 lint should land **before any AJ rewrite** — without it, the same author pattern that produced 18 ❌ will likely produce more.
 
+## 🆕 New findings (Cycle 22)
+
+- **C-CVS-29..36** — 8 ❌ contradictions in `spec/01-app/10-reflection-and-dynamic.md`. Severity: 3× HIGH, 5× CRITICAL. The **entire `coredynamic` package documented in §2 does not exist** in upstream `core-v9 v1.5.8` — `coredynamic/` directory is absent and `grep -rln coredynamic` returns zero source files. `reflectcore` (§3) is a thin re-export shim over `internal/reflectinternal` (15 re-exported symbols), not the predicate library described — `IsPointer`/`WalkFields`/`GetTag`/`DerefAll` are all fabricated. The "internal off-limits" framing in §4 is also misleading because `reflectcore/vars.go` publicly re-exports the very symbols it claims are walled off. See `spec/07-code-vs-spec-audits/23-cycle22-AB-reflection-and-dynamic.md`. Spawned **AJ-15..20**. **Cumulative fabrication rate is now ~45 %** across 4 audited sections.
+
 ## ⏭️ Manual user action (parked)
 
 - **A.** Push `cross-repo/core-v8/` mirror to its upstream GitHub repo.
 
 ## Next logical step
 
-1. **AB pass 4** — Cycle 22 on `10-reflection-and-dynamic.md` (15 ❓). OR
-2. **Build S-106** (`scripts/spec-api-check.psm1`) — lint to catch the fabrication pattern before AJ rewrites. **Recommended next.** OR
-3. **User decision: lift `spec/01-app/` freeze** for AJ-01..14 patches (risky without S-106). OR
+1. **Build S-106** (`scripts/spec-api-check.psm1`) — lint to catch the fabrication pattern before AJ rewrites. **MANDATORY next given 26 ❌ accumulated.** OR
+2. **AB pass 5** — Cycle 23 on `11-versioning.md` (11 ❓). OR
+3. **User decision: lift `spec/01-app/` freeze** for AJ-01..20 patches (highly risky without S-106). OR
 4. **AK** — New enum package creation / template validation. OR
 5. **AL** — Test-coverage expansion.
