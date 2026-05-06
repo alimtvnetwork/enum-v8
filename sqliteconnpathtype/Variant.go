@@ -47,8 +47,29 @@ func (it Variant) MinMaxAny() (min, max interface{}) {
 	return BasicEnumImpl.MinMaxAny()
 }
 
+// MinValueString
+//
+// PI-006 (2026-05-06, Cycle 60): the upstream
+// `enumimpl.newBasicStringCreator.CreateUsingStringersSpread` initialises
+// `min := ""` and then only assigns under `if name < min`, which never
+// fires (every real name is `> ""`). The upstream `BasicString.Min()` /
+// `MinValueString()` therefore always returns "". We compute the
+// lexicographically smallest registered name locally to provide the value
+// every caller actually expects.
 func (it Variant) MinValueString() string {
-	return BasicEnumImpl.MinValueString()
+	names := BasicEnumImpl.StringRanges()
+	if len(names) == 0 {
+		return ""
+	}
+
+	min := names[0]
+	for _, n := range names[1:] {
+		if n < min {
+			min = n
+		}
+	}
+
+	return min
 }
 
 func (it Variant) MaxValueString() string {
