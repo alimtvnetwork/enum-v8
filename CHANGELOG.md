@@ -13,6 +13,7 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ## [Unreleased]
 
 ### Changed
+- **Cycle 20 spec audit (Task AB pass 2)** — `spec/01-app/07-conditional-and-utilities.md`: 17 ❓ → **12 ✅ / 5 ❌ / 3 ❓** (verifiable score 70.6 %). Surfaced **5 NEW contradictions** (C-CVS-16..20): three HIGH (`TypedErrorFunctionsExecuteResults` wrong shape; `coremath` claims 7 type families but has 3; `Collection.ToMap()` fabricated) and two CRITICAL (`namevalue.NewInstance` constructor doesn't exist + entire `keymk.New.Compile(...)` snippet fabricated). All blocked pending freeze waiver. Spawned AJ-04..07. Cumulative AB ❌ count: **10** across 2 sections (~25 % fabrication rate). See `spec/07-code-vs-spec-audits/21-cycle20-AB-conditional-and-utilities.md`. Spec changelog → `spec-v0.35.0`.
 - **Cycle 19 spec audit (Task AB pass 1)** — upstream `core-v9 v1.5.8`
   cloned to `/tmp/core-v9-upstream`; first ❓→ground-truth promotion pass on
   `spec/01-app/09-converters.md`. Result: **23 ❓ → 10 ✅ / 5 ❌ / 8 ❓**
