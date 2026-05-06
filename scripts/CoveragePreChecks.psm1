@@ -144,6 +144,7 @@ function Invoke-CoveragePreChecks {
                 Write-Host "  Spec-API lint errored: $_" -ForegroundColor DarkYellow
                 if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "warn" "lint errored" }
             }
+            }
         }
     }
 
