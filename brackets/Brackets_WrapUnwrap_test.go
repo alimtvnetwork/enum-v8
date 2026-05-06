@@ -141,7 +141,7 @@ func Test_Brackets_WrapUnwrap(t *testing.T) {
 	Convey("Bracket.IsWrapped / UnWrap / WrapWithOptions / WrapFmtString", t, func() {
 		So(ParenthesisStart.IsWrapped("(hi)"), ShouldBeTrue)
 		So(ParenthesisStart.IsWrapped("hi"), ShouldBeFalse)
-		So(ParenthesisStart.UnWrap("(hi)"), ShouldEqual, "h")
+		So(ParenthesisStart.UnWrap("(hi)"), ShouldEqual, "hi")
 		So(ParenthesisStart.WrapWithOptions(true, "(hi)"), ShouldEqual, "(hi)")
 		got := ParenthesisStart.WrapFmtString("prefix {wrapped} suffix", "hi")
 		So(got, ShouldEqual, "prefix (hi) suffix")
