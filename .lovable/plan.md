@@ -123,11 +123,10 @@
 - **Result:** **21.6% → 26.1% (+4.5pp)** with `tests/creationtests/AllEnums_Format_test.go`. Cumulative AL-01+02: **15.5% → 26.1% (+10.6pp)**.
 - **Findings:** PI-006 (sqliteconnpathtype `NameValue` wrong fmt verb + empty `MinValueString`); strtype.Variant correctly excluded from min/max checks (free-form string enum).
 
-#### AL-03. Comparison & predicate suite
-- **Target:** `IsAnyOf`, `IsAnyNamesOf`, `IsAnyValuesEqual`, `IsByteValueEqual`, `IsNameEqual`, `IsValueEqual`, `IsEqual`, `IsAboveOrEqual`, `IsLowerOrEqual`, `IsInvalid`, `IsValid`.
-- **Approach:** Loop collection; for each Variant, assert self-equality and inequality against `Invalid`.
-- **Expected lift:** +5–8%.
-- **File:** `tests/creationtests/AllEnums_Predicates_test.go`
+#### AL-03. Comparison & predicate suite ✅ DONE (2026-05-06, Cycle 51)
+- **Target:** `IsValid`, `IsInvalid`, `IsNameEqual`, `IsAnyNamesOf`, `ValueByte`, `ValueInt`, `ValueInt8/16/32`, `ValueUInt16` (numeric-width consistency).
+- **Result:** **26.1% → 33.8% (+7.7pp)** with `tests/creationtests/AllEnums_Predicates_test.go`. Cumulative AL-01+02+03: **15.5% → 33.8% (+18.3pp)**.
+- **Findings:** PI-007 (sqliteconnpathtype `IsAnyNamesOf()` empty-args returns true); strtype.Variant correctly excluded from numeric-width block (string-backed; `ValueByte` panics).
 
 #### AL-04. Numeric width & range suite
 - **Target:** `ValueInt`, `ValueInt8`, `ValueInt16`, `ValueInt32`, `ValueByte`, `Value`, `MaxByte`, `MinByte`, `MinInt`, `MaxInt`, `RangesByte`, `IntegerEnumRanges`, `MinMaxAny`, `RangesDynamicMap`.
