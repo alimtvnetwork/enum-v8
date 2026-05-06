@@ -28,10 +28,19 @@ import (
 //     MinInt <= MaxInt invariant is skipped (not asserted) for that type.
 var numericRangeSuiteSkipMinValueString = map[string]string{
 	"sqliteconnpathtype.Variant": "PI-006 — MinValueString returns empty",
+	"strtype.Variant":            "string-backed enum; MinValueString is empty by design",
+}
+
+var numericRangeSuiteSkipMaxValueString = map[string]string{
+	"strtype.Variant": "string-backed enum; MaxValueString is empty by design",
 }
 
 var numericRangeSuiteSkipMinMaxIntOrder = map[string]string{
 	"strtype.Variant": "string-backed enum; MinInt/MaxInt semantics differ",
+}
+
+var numericRangeSuiteSkipRangesDynamicMap = map[string]string{
+	"strtype.Variant": "string-backed enum; RangesDynamicMap is intentionally empty",
 }
 
 func Test_AllEnums_NumericRange(t *testing.T) {
@@ -40,6 +49,9 @@ func Test_AllEnums_NumericRange(t *testing.T) {
 		typeName := current.TypeName()
 		_, skipMinValString := numericRangeSuiteSkipMinValueString[typeName]
 		_, skipMinMaxOrder := numericRangeSuiteSkipMinMaxIntOrder[typeName]
+
+		_, skipMaxValString := numericRangeSuiteSkipMaxValueString[typeName]
+		_, skipRangesMap := numericRangeSuiteSkipRangesDynamicMap[typeName]
 
 		Convey(typeName+" — numeric range / width surface", t, func() {
 			// MinInt <= MaxInt invariant for numeric-backed enums.
@@ -54,11 +66,13 @@ func Test_AllEnums_NumericRange(t *testing.T) {
 			So(minAny, ShouldNotBeNil)
 			So(maxAny, ShouldNotBeNil)
 
-			// MaxValueString must be non-empty for every type.
-			So(current.MaxValueString(), ShouldNotBeBlank)
+			// MaxValueString must be non-empty for every numeric-backed type.
+			if !skipMaxValString {
+				So(current.MaxValueString(), ShouldNotBeBlank)
+			}
 
 			// MinValueString must be non-empty for every type
-			// except known-broken sqliteconnpathtype (PI-006).
+			// except known-broken sqliteconnpathtype (PI-006) and string-backed strtype.
 			if !skipMinValString {
 				So(current.MinValueString(), ShouldNotBeBlank)
 			}
@@ -66,12 +80,16 @@ func Test_AllEnums_NumericRange(t *testing.T) {
 			// RangesDynamicMap returns a non-nil map.
 			rangesMap := current.RangesDynamicMap()
 			So(rangesMap, ShouldNotBeNil)
-			So(len(rangesMap), ShouldBeGreaterThan, 0)
+			if !skipRangesMap {
+				So(len(rangesMap), ShouldBeGreaterThan, 0)
+			}
 
-			// AllNameValues is non-empty.
+			// AllNameValues is non-empty for numeric-backed enums.
 			allNV := current.AllNameValues()
 			So(allNV, ShouldNotBeNil)
-			So(len(allNV), ShouldBeGreaterThan, 0)
+			if !skipRangesMap {
+				So(len(allNV), ShouldBeGreaterThan, 0)
+			}
 
 			// IntegerEnumRanges returns a non-nil structure.
 			integerRanges := current.IntegerEnumRanges()
