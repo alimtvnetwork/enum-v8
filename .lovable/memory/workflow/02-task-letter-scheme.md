@@ -22,7 +22,7 @@
 | AJ | Implement spec fixes from Cycle 15 findings | 📋 Planned |
 | AK | New enum package creation (template validation) | 📋 Planned |
 | AL | Test coverage expansion | 📋 Planned |
-| AM | Fix broken `core-v9` API calls (converter + coredynamic migration) | 🔄 In Progress |
+| AM | Fix broken `core-v9` API calls (converter + coredynamic migration) | 🔄 In Progress — patched, awaiting local validation |
 
 (Letters B–V, X, Y, Z, AD, AE, AF — earlier tasks that were either completed across cycles 1–14 or merged into the surviving letters above. Per "never delete history" rule: those completions are recorded in `.lovable/plan.md` Completed section and in the per-cycle audit reports.)
 
@@ -33,5 +33,6 @@ Every "next"-loop reply MUST end with the remaining-task list:
 - One-line description
 - Current status marker
 - Closing line: "Say **next** for **<recommended letter>**, or pick a letter."
+- If no obvious next task is active, read `.lovable/plan.md` and this workflow memory, then suggest the highest-priority remaining task.
 
 Skipping this list breaks the user's mental tracking and is a hard violation.
