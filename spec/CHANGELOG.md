@@ -9,6 +9,23 @@
 
 ---
 
+## [spec-v0.52.0] — 2026-05-06 (Cycle 47 — AB-residual deep-probe of `spec/01-app/10-reflection-and-dynamic.md` — COMPLETES THE SWEEP)
+
+### Added
+- `spec/07-code-vs-spec-audits/36-cycle47-AB-residual-spec01-reflection.md` — settles 5 of 6 ❓ items left by Cycle 22. **1 promotion to ✅** (item 6: `isany.DeepEqual` verbatim at `isany/DeepEqual.go:29`). **2 demotions to ❌**: item 5 (NEW **C-CVS-63 HIGH** — `coreonce` exists at `coredata/coreonce/` per **R-CVS-03 retraction** but is typed memoization, NOT reflection-binding); item 2 (NEW **C-CVS-64 HIGH** — `grep '"unsafe"' coredata/corejson/ coredata/coredynamic/` returns zero; the unsafe-pointer fast-path claim is fabricated). **1 retained ❓** (item 3 "type-cache keyed on `reflect.Type`" — plausible-no-emitter, defer to Task AC). **2 out-of-band** (item 1 subjective motivation prose, item 4 benchmark claim — Task AC advisory dimension).
+- Spawned **AJ-17b** (delete unsafe-pointer sentence at §4) and **AJ-19b** (rewrite §6 `coreonce` framing) — both folded into existing AJ-17/AJ-19.
+- NEW suggestion **S-115**: harden `scripts/spec-api-check.psm1` `Get-UpstreamPackages` to recursively walk `coredata/*` subpackages so future audits don't repeat the R-CVS-01/02/03 "missed parent dir" mistake.
+- Scoreboard top-line + per-section row updated (§10 verifiable 38.5% → 37.5% as denominator grows from demotions).
+
+### Notes
+- 🎉 **AB-residual deep-probe sweep across `spec/01-app/` is now COMPLETE.** All seven AB-cycle ❓ pools (Cycles 19, 20, 21, 22, 23, 24, 25) settled or classified out-of-band.
+- AB-residual `spec/01-app/` ❓ pool drops 11 → 6 (all OOB/plausible-no-emitter; **zero active probe targets remain**).
+- Cumulative AB ❌ across 7 sections: 51 → 53 (CRITICAL still 23, HIGH +2).
+- Cumulative retractions: R-CVS-01 + R-CVS-02 + **R-CVS-03** — all same drift class (missed `coredata/` parent in initial probe).
+- Remaining `spec/01-app/` work is the AJ rewrite backlog (52 items, all blocked by freeze).
+
+---
+
 ## [spec-v0.51.0] — 2026-05-06 (Cycle 46 — AB-residual deep-probe of `spec/01-app/08-validators.md`)
 
 ### Added
