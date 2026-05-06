@@ -24,7 +24,7 @@
 # pass and is tracked separately. S-106 is the cheap-and-fast first wall.
 # ─────────────────────────────────────────────────────────────────────────────
 
-$script:SpecApiCheckVersion = '1.0.0'
+$script:SpecApiCheckVersion = '1.1.0'
 
 # Packages that ALWAYS resolve (Go stdlib + project-local non-upstream pkgs).
 # Anything matching is allow-listed without a directory check.
@@ -32,9 +32,15 @@ $script:AllowListedPackages = @(
     # Go stdlib (subset commonly cited in spec)
     'fmt', 'strings', 'strconv', 'errors', 'context', 'time', 'os', 'io',
     'bytes', 'sort', 'sync', 'reflect', 'regexp', 'unicode', 'utf8',
-    'http', 'json', 'log', 'slog', 'testing', 'math',
+    'http', 'json', 'log', 'slog', 'testing', 'math', 'unsafe', 'runtime',
+    'path', 'filepath', 'url', 'net', 'rand', 'crypto', 'sha256', 'base64',
     # Common third-party / OTel convention names
     'codes', 'tracer', 'span', 'security', 'logger', 'otel',
+    # Pseudo-package names used in templates / illustrative examples
+    # (these are placeholder names, not real Go packages — flagging them
+    # creates noise without adding signal).
+    'emailvalidator', 'corev8', 'expected', 'validator', 'downstream',
+    'registry',
     # Generic placeholder words used in prose / pseudo-code
     'pkg', 'parameter', 'iter', 'core'
 )
@@ -44,9 +50,23 @@ $script:AllowListedPackages = @(
 # fence above than a true package reference. We still flag it inside fences.
 $script:ProseLooseMode = $true
 
+# Heuristic: longer (4-char+) local-variable names commonly appear in
+# illustrative snippets where the binding is OUTSIDE the visible fence
+# (the fence is indented under a numbered-list item, or the binding is
+# narratively elided). Flagging `safe.PasswordHash`, `cart.Total`,
+# `payload.Error` is pure noise. Allow-list the most common ones.
+$script:CommonLocalVarNames = @(
+    'tc', 'col', 'svc', 'cart', 'safe', 'payload', 'pattern', 'result',
+    'input', 'status', 'err', 'opts', 'cfg', 'req', 'resp', 'ctx', 'val',
+    'item', 'items', 'row', 'rows', 'msg', 'data', 'out', 'buf'
+)
+
 function Get-UpstreamPackages {
     [CmdletBinding()]
-    param([Parameter(Mandatory)][string]$UpstreamDir)
+    param(
+        [Parameter(Mandatory)][string]$UpstreamDir,
+        [string]$LocalDir
+    )
 
     if (-not (Test-Path $UpstreamDir)) {
         throw "Upstream clone not found at $UpstreamDir. Re-clone with: git clone --depth 1 --branch v1.5.8 https://github.com/alimtvnetwork/core-v9 $UpstreamDir"
@@ -56,15 +76,22 @@ function Get-UpstreamPackages {
     # Index by the BASENAME so spec references like `coregeneric.Hashmap` resolve
     # even though the real path is `coredata/coregeneric`.
     $pkgs = @{}
-    Get-ChildItem -Path $UpstreamDir -Recurse -Filter '*.go' -File -ErrorAction SilentlyContinue |
-        Where-Object { $_.FullName -notmatch '[\\/]\.git[\\/]' } |
-        ForEach-Object {
-            $dir = $_.Directory.FullName
-            $base = Split-Path $dir -Leaf
-            if (-not $pkgs.ContainsKey($base)) {
-                $pkgs[$base] = $dir
+    $sources = @($UpstreamDir)
+    if ($LocalDir -and (Test-Path $LocalDir)) { $sources += $LocalDir }
+    foreach ($src in $sources) {
+        Get-ChildItem -Path $src -Recurse -Filter '*.go' -File -ErrorAction SilentlyContinue |
+            Where-Object {
+                $_.FullName -notmatch '[\\/]\.git[\\/]' -and
+                $_.FullName -notmatch '[\\/](node_modules|cross-repo|tests|scripts|spec|src|public|data|cmd|assets|configs)[\\/]'
+            } |
+            ForEach-Object {
+                $dir = $_.Directory.FullName
+                $base = Split-Path $dir -Leaf
+                if (-not $pkgs.ContainsKey($base)) {
+                    $pkgs[$base] = $dir
+                }
             }
-        }
+    }
     return $pkgs
 }
 
@@ -129,8 +156,9 @@ function Get-SpecApiReferences {
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $line = $lines[$i]
 
-        # Track fenced code blocks
-        if ($line -match '^```(\w*)') {
+        # Track fenced code blocks. Fences may be INDENTED (e.g. inside a
+        # numbered-list item) — match leading whitespace too (S-106 v1.1).
+        if ($line -match '^\s*```(\w*)') {
             if ($inFence) { $inFence = $false; $fenceLang = ''; [void]$localVars.Clear() }
             else { $inFence = $true; $fenceLang = $Matches[1].ToLower() }
             continue
@@ -163,6 +191,11 @@ function Get-SpecApiReferences {
             # Skip allow-listed aliases / local variables that look package-like.
             if ($script:AllowListedPackages -contains $pkg) { continue }
             if ($localVars.Contains($pkg)) { continue }
+            # Skip common local-variable names that frequently appear with an
+            # elided binding (S-106 v1.1).
+            if ($script:CommonLocalVarNames -contains $pkg) { continue }
+            # Skip identifiers that look like a versioned local var (`v1`, `v2`, ...).
+            if ($pkg -match '^v\d+$') { continue }
             # Skip references inside markdown links / URLs (file paths with .md).
             if ($line -match '\[.+\]\([^)]*' + [regex]::Escape($pkg) + '\.[A-Z]') { continue }
             # Outside fences, a token of length ≤ 3 is most likely a placeholder
@@ -192,6 +225,7 @@ function Invoke-SpecApiCheck {
     param(
         [string]$SpecDir = 'spec/01-app',
         [string]$UpstreamDir = '/tmp/core-v9-upstream',
+        [string]$LocalDir = '.',
         [switch]$StrictExitCode,
         [string]$OnlyFile
     )
@@ -205,8 +239,8 @@ function Invoke-SpecApiCheck {
     if (-not (Test-Path $SpecDir)) { throw "SpecDir not found: $SpecDir" }
 
     Write-Host '  ▶ Indexing upstream packages...' -ForegroundColor Yellow
-    $pkgMap = Get-UpstreamPackages -UpstreamDir $UpstreamDir
-    Write-Host "    Found $($pkgMap.Count) Go packages in upstream"
+    $pkgMap = Get-UpstreamPackages -UpstreamDir $UpstreamDir -LocalDir $LocalDir
+    Write-Host "    Found $($pkgMap.Count) Go packages (upstream + local enum-v4)"
 
     Write-Host '  ▶ Indexing upstream top-level symbols...' -ForegroundColor Yellow
     $symMap = Get-UpstreamTopLevelSymbols -PackageMap $pkgMap
