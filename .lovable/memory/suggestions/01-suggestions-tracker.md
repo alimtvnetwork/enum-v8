@@ -16,6 +16,19 @@
 
 ## Open Suggestions
 
+### S-115: Harden `Get-UpstreamPackages` to recursively walk `coredata/`
+
+- **createdAt:** 2026-05-06
+- **source:** Lovable (Cycle 47 — third retraction R-CVS-03 of same drift class)
+- **affectedProject:** enum-v4 tooling
+- **description:** `scripts/spec-api-check.psm1` `Get-UpstreamPackages` indexes `core-v9` package directories but missed nested `coredata/coredynamic` (R-CVS-01), `coredata/corestr` (R-CVS-02), and `coredata/coreonce` (R-CVS-03) — all three caused initial false fabrication-flagging that had to be retracted.
+- **rationale:** Three same-class probe failures across three audit cycles indicates the indexer needs to recursively descend at least one level into `coredata/` (and possibly other parent dirs like `internal/`).
+- **proposed change:** Add a recursive walk of `coredata/*` directories in the `-LocalDir` and `-UpstreamDir` indexing paths; re-run S-106 lint after the change to confirm no regression on existing flagged items.
+- **acceptance criteria:** A test-clone scenario where `coredata/coreonce` exists is correctly indexed and `coreonce.NewAnyErrorOnce` is NOT flagged as a fabrication.
+- **status:** open
+
+---
+
 ### S-002: Promote `errcore.VarTwoNoType` from ❓ to ✅ in Cycle 6
 
 - **createdAt:** 2026-05-05
