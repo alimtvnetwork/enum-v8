@@ -76,6 +76,13 @@
 
 ## Completed Suggestions
 
+### S-107: Goconvey-failure summarizer for `failing-tests.txt`
+
+- **completed:** 2026-05-06 (Cycle 33)
+- **source:** Lovable (carry-forward from Cycle 24 — `TestLogWriter.psm1` Pass-2 collector buries goconvey failures under `N total assertions` lines)
+- **resolution:** Added `Get-GoconveyFailureSummary` to `scripts/TestLogWriter.psm1` (also exported). For each failed test's captured block, walks the lines and pairs every `Expected:` with its nearest following `Actual:` / `(Line N)` / `Message:` (8-line look-ahead window, stops when the next `Expected:` starts). `Write-TestLogs` now prepends a `── Failure summary (N) ──` mini-section to each `FAIL:` block in `failing-tests.txt`, listing each triplet as `#i Expected: ... | Actual: ... (Line N) [Message]` BEFORE the noisy raw block. The original raw block is preserved underneath for full context. Smoke-tested via `nix run nixpkgs#powershell` on a synthetic 2-failure goconvey block: extracted both triplets correctly (incl. optional Message field), empty blocks return 0, non-goconvey blocks (e.g. plain `panic:`) return 0 with no false positives. `package.json` 0.2.0 → 0.3.0.
+- **acceptance criteria:** ✅ Failed-test blocks now lead with the goconvey Expected/Actual triplets. ✅ Existing raw-block content is preserved (no information loss). ✅ Helper handles empty + non-goconvey blocks safely.
+
 ### S-110: Restore standalone coverage utilities documented alongside S-108
 
 - **completed:** 2026-05-06 (Cycle 32)
