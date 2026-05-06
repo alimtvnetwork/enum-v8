@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (reliability report v2 generated; memory verified intact).
+> **Last updated:** 2026-05-06 (Task AM API migration patched; local validation pending).
 
 ## ✅ Done
 
@@ -24,8 +24,8 @@
 
 - **AA. Spec-audit cycles** — Cycle 15 target: `spec/06-testing-guidelines/`.
 - **AH. Cross-`spec/` cleanup sweep** — folded into upcoming directory audits.
-- **AM. core-v9 API migration** — Fixing broken converter/coredynamic calls. Awaiting `stringTo` method list from user.
-  - 2026-05-06: Applied confirmed renames (53 `TypeName`→`SafeTypeName`, 6 `AnyToValueString`→`AnyTo.ValueString`, 1 `Any.ToFullNameValueString`→`AnyTo.ToFullNameValueString`). 11 `StringTo*` sites still pending method-list confirmation.
+- **AM. core-v9 API migration** — Patched obsolete converter/coredynamic calls; awaiting user's local `./run.ps1 -tc` validation because sandbox has no `go` binary.
+  - 2026-05-06: Applied confirmed renames (53 `TypeName`→`SafeTypeName`, 6 `AnyToValueString`→`AnyTo.ValueString`, 1 `Any.ToFullNameValueString`→`AnyTo.ToFullNameValueString`, plus remaining `StringTo*` → `StringTo.*` sites).
 
 ## ⏳ Pending
 
@@ -42,6 +42,6 @@
 
 ## Next logical step
 
-1. **AM** — Complete API migration mapping (user provides `stringTo` methods), then fix all broken calls.
+1. **AM** — Rerun `./run.ps1 -tc` locally and inspect any new compile blockers.
 2. **AA/Cycle 15** — Audit `spec/06-testing-guidelines/`.
 3. **AI** — Mark `spec/01-app/` as frozen (quick win).
