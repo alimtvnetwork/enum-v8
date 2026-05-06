@@ -22,10 +22,22 @@ function Invoke-TestCoverage {
 
     if (Get-Command Reset-Phases -ErrorAction SilentlyContinue) { Reset-Phases }
 
-    Invoke-FetchLatest
+    $fetchResult = Invoke-FetchLatest
     if (Get-Command Register-Phase -ErrorAction SilentlyContinue) {
-        Register-Phase "Git Pull" "pass" "pulled from remote"
-        Register-Phase "Dependencies" "pass" "up to date"
+        # S-112 — register phases truthfully from the actual return status of
+        # Invoke-GitPull / go mod tidy instead of hard-coding 'pass'.
+        $gp = $fetchResult.GitPull
+        $td = $fetchResult.Tidy
+        if ($gp -and $gp.Status) {
+            Register-Phase "Git Pull" $gp.Status $gp.Message
+        } else {
+            Register-Phase "Git Pull" "pass" "pulled from remote"
+        }
+        if ($td -and $td.Status) {
+            Register-Phase "Dependencies" $td.Status $td.Message
+        } else {
+            Register-Phase "Dependencies" "pass" "up to date"
+        }
     }
 
     # Clean data folder
