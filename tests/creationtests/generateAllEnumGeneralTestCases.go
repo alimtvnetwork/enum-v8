@@ -29,7 +29,7 @@ func generateAllEnumGeneralTestCases(
 	fmt.Println("var allEnumGeneralTestCases = []*EnumTestWrapper{")
 	failedBasicEnumer := corestr.New.SimpleSlice.Cap(10)
 	doublesWrapFunc := quotes.Double.Wrap
-	toFullStringer := converters.Any.ToFullNameValueString
+	toFullStringer := converters.AnyTo.ToFullNameValueString
 
 	for i := 0; i < length; i++ {
 		item := allBasicEnumsCollection[i]

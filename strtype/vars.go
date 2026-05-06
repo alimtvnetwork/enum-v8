@@ -37,5 +37,5 @@ var (
 	bytesSerializer    = corejson.Serialize.ToBytesErr
 	stringDeserializer = corejson.Deserialize.BytesTo.String
 
-	typeName = coredynamic.TypeName(Variant(""))
+	typeName = coredynamic.SafeTypeName(Variant(""))
 )

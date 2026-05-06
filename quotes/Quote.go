@@ -94,7 +94,7 @@ func (it Quote) GetOther() Quote {
 }
 
 func (it Quote) WrapAny(source interface{}) string {
-	toString := converters.AnyToValueString(source)
+	toString := converters.AnyTo.ValueString(source)
 
 	return WrapWith(
 		toString,
@@ -103,7 +103,7 @@ func (it Quote) WrapAny(source interface{}) string {
 }
 
 func (it Quote) WrapAnySkipOnExist(source interface{}) string {
-	toString := converters.AnyToValueString(source)
+	toString := converters.AnyTo.ValueString(source)
 
 	return WrapWith(
 		toString,

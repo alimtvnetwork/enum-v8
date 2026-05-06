@@ -42,10 +42,10 @@ var (
 		SystemUpdate: true,
 	}
 
-	priorityMapString = converters.AnyToValueString(
+	priorityMapString = converters.AnyTo.ValueString(
 		priorityMap)
 
 	BasicEnumImpl = enumimpl.New.BasicByte.UsingTypeSlice(
-		coredynamic.TypeName(Default),
+		coredynamic.SafeTypeName(Default),
 		Ranges[:])
 )

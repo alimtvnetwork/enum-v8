@@ -22,7 +22,7 @@ var (
 	rangesMap = [...]string{}
 
 	BasicEnumImpl = enumimpl.New.BasicString.CreateUsingStringersSpread(
-		coredynamic.TypeName(Invalid),
+		coredynamic.SafeTypeName(Invalid),
 		Invalid,
 		AllSqlitePath,
 		AllWithTypeSqlitePath,

@@ -160,5 +160,5 @@ var (
 	}
 
 	BasicEnumImpl = rangesMap.BasicByte(
-		coredynamic.TypeName(Invalid))
+		coredynamic.SafeTypeName(Invalid))
 )

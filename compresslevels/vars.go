@@ -52,6 +52,6 @@ var (
 	}
 
 	BasicEnumImpl = enumimpl.New.BasicInt8.UsingTypeSlice(
-		coredynamic.TypeName(Default),
+		coredynamic.SafeTypeName(Default),
 		stringRanges[:])
 )

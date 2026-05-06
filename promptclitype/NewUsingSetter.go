@@ -13,7 +13,7 @@ func NewUsingSetter(value issetter.Value) (Variant, error) {
 		return Invalid, errcore.
 			KeyNotExistInMapType.
 			Error(
-				typeConvFailedPrefixMsg+coredynamic.TypeName(value),
+				typeConvFailedPrefixMsg+coredynamic.SafeTypeName(value),
 				mapReferenceMessage)
 	}
 
