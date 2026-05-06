@@ -110,7 +110,7 @@ func (it windowsSystemDetailGenerator) SystemDetail() (*OperatingSystemDetail, e
 	var versionInNumber int
 	
 	if hasVersionNumber {
-		toNumber, err := converters.StringToInteger(
+		toNumber, err := converters.StringTo.Integer(
 			versionNumberStrings[0])
 		
 		it.rawErrCollection.AddError(err)
