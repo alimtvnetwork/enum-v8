@@ -46,6 +46,21 @@ jobs:
       - name: Cross-file identifier collision audit
         run: python3 scripts/ci/check-collisions.py .
 
+  issues-index-drift:
+    # S-105: fail CI if spec/02-app-issues/README.md and 00-issues-index.md
+    # disagree on the set of issue IDs they list.
+    needs: python-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: spec/02-app-issues index-drift guard
+        run: python3 scripts/ci/check-issues-index-drift.py .
+
   lint-baseline-diff:
     needs: python-tests
     runs-on: ubuntu-latest
