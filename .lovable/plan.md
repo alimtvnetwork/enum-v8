@@ -138,9 +138,10 @@
 - **Files:** `accesstype/AccessType_Constructor_test.go`, `certaction/CertAction_Constructor_test.go`, `completionstate/CompletionState_Constructor_test.go`, `compressformats/CompressFormats_Constructor_test.go`.
 - **Result:** Coverage delta TBD on next `./run.ps1 -tc`; pass-1 expected lift ≈ **+1.5–2.5pp** (4 of ~10 planned packages).
 - **Pass 2 ✅ DONE (Cycle 54):** 6 additional per-package suites — `dbaction`, `envtype`, `iptype`, `onofftype`, `overwritetype`, `timeunit`. envtype uses `Uninitialized` as its zero-value sentinel (not `Invalid`); onofftype has a `newOtherWays` shorthand fallback (`yes`/`y`/`1` → On, etc.) that is also exercised. Pass-2 expected lift ≈ **+2–3pp**. Cumulative AL-05 (passes 1+2) covers 10 low-coverage packages.
-#### AL-06. `quotes/` and `brackets/` dedicated suites
-- **Why:** Both currently 7–12%, neither in `allBasicEnumsCollection`. Need bespoke tests for `WrapWith`, `UnWrapWith`, `HasBothWrappedWith`, `WhichBracket`, `WhichQuote`, `getQuoteStatus`, `getSingleBracketStatus`.
-- **Expected lift:** +1–2% total but lifts these two packages into the 50–70% band.
+#### AL-06. `quotes/` and `brackets/` dedicated suites ✅ DONE (2026-05-06, Cycle 55)
+- **Why:** Both currently 7–12%, neither in `allBasicEnumsCollection`. Bespoke tests required.
+- **Files:** `quotes/Quotes_WrapUnwrap_test.go` + `brackets/Brackets_WrapUnwrap_test.go`. Coverage targets exercised: `WrapWith`, `UnWrapWith`, `HasBothWrappedWith`, `WhichQuote`/`WhichBracket`, `getQuoteStatus`/`getSingleBracketStatus`, `Quote.Wrap`/`SelfWrap`/`IsEqual`/`GetOther`/`WrapAny`/`WrapString`/`WrapSkipOnExist`/`WrapRegardless`/`WrapFmtString`/`IsWrapped`/`UnWrap`/`WrapWithOptions`/`WrapAnySkipOnExist`, plus `Bracket.IsStart`/`IsEnd`/`IsParenthesis`/`IsCurly`/`IsSquare` and category/start/end variants, `Bracket.Pair`/`Category`/`OtherBracket`/`Value`, `Pair.Wrap`/`SelfWrap`. Boundary cases (empty, single-char, mismatched, left-only, right-only, plain).
+- **Expected lift:** +1–2% total; lifts both packages from 7–12% into the 50–70% band.
 
 #### AL-07. `strtype` / `inttype` constructor & GetSet suites
 - **Why:** strtype 4.3%, inttype 10.3% — used by every other package via `IntType()`.
@@ -169,13 +170,12 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **AL-06** — `quotes/` and `brackets/` dedicated suites ⭐ next
-2. **AL-07** — `strtype` / `inttype` constructor & GetSet suites
-3. **AL-08** — `osdetect` cross-platform parts
-4. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
-5. **AI** — Mark `spec/01-app/` as frozen (quick win)
-6. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
-7. **AB** — Already done in sandbox; status entry pending
+1. **AL-07** — `strtype` / `inttype` constructor & GetSet suites ⭐ next
+2. **AL-08** — `osdetect` cross-platform parts
+3. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
+4. **AI** — Mark `spec/01-app/` as frozen (quick win)
+5. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
+6. **AB** — Already done in sandbox; status entry pending
 
 **Done from this list:**
 - AL-01 ✅ (Cycle 49, 15.5% → 21.6%, +6.1pp)
@@ -184,6 +184,7 @@
 - AL-04 ✅ (Cycle 52, +4–6pp expected; pending local `./run.ps1 -tc` confirmation)
 - AL-05 pass-1 ✅ (Cycle 53, 4 packages: accesstype/certaction/completionstate/compressformats)
 - AL-05 pass-2 ✅ (Cycle 54, 6 packages: dbaction/envtype/iptype/onofftype/overwritetype/timeunit)
+- AL-06 ✅ (Cycle 55, quotes/+brackets/ bespoke wrap-unwrap suites; expected +1–2pp + lifts both packages from 7–12% into 50–70% band)
 
 ---
 
