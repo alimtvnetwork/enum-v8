@@ -6,9 +6,9 @@ import (
 	"github.com/alimtvnetwork/core-v9/coreversion"
 	"github.com/alimtvnetwork/core-v9/errcore"
 	"github.com/alimtvnetwork/core-v9/ostype"
-	"github.com/alimtvnetwork/enum-v3/inttype"
-	"github.com/alimtvnetwork/enum-v3/osarchs"
-	"github.com/alimtvnetwork/enum-v3/strtype"
+	"github.com/alimtvnetwork/enum-v4/inttype"
+	"github.com/alimtvnetwork/enum-v4/osarchs"
+	"github.com/alimtvnetwork/enum-v4/strtype"
 	"golang.org/x/sys/windows/registry"
 )
 
@@ -73,7 +73,7 @@ func (it windowsSystemDetailGenerator) CompiledErrorWithStackTraces() error {
 
 // SystemDetail
 //
-//	Reference : https://github.com/alimtvnetwork/enum-v3/-/issues/4
+//	Reference : https://github.com/alimtvnetwork/enum-v4/-/issues/4
 func (it windowsSystemDetailGenerator) SystemDetail() (*OperatingSystemDetail, error) {
 	buildBranch := it.Value(winRegistryKeyNames.buildBranch)
 	productName := it.Value(winRegistryKeyNames.productName)

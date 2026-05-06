@@ -20,7 +20,7 @@
 
 - **createdAt:** 2026-05-05
 - **source:** Lovable (Cycle 13)
-- **affectedProject:** enum-v3
+- **affectedProject:** enum-v4
 - **description:** Go 1.25 rejects the dual-path `replace` bridge. Pinning to Go 1.22 would unblock builds.
 - **rationale:** Allows development to continue while waiting for upstream `core-v9` `go.mod` rename.
 - **proposed change:** Add `toolchain go1.22.0` to `go.mod`.
@@ -32,7 +32,7 @@
 
 - **createdAt:** 2026-05-05
 - **source:** Lovable (Cycle 13, §15 audit)
-- **affectedProject:** enum-v3 spec
+- **affectedProject:** enum-v4 spec
 - **description:** `VarTwoNoType` was scored ❓ but IS cross-referenced from multiple spec files.
 - **rationale:** Under spec-internal-consistency dimension it qualifies as ✅.
 - **proposed change:** Backport promotion when Task AC runs.
@@ -43,7 +43,7 @@
 
 - **createdAt:** 2026-05-05
 - **source:** Lovable (reliability report)
-- **affectedProject:** enum-v3 spec
+- **affectedProject:** enum-v4 spec
 - **description:** Line 13 references `tests/integratedtests/` which doesn't exist. Should be `tests/creationtests/`.
 - **rationale:** This is the #1 failure risk for any AI following the spec to write tests.
 - **proposed change:** Replace `integratedtests` with `creationtests` throughout the file.
@@ -54,7 +54,7 @@
 
 - **createdAt:** 2026-05-05
 - **source:** Lovable (reliability report)
-- **affectedProject:** enum-v3 spec
+- **affectedProject:** enum-v4 spec
 - **description:** Line 36 references `tests/integratedtests/` in the decision matrix table.
 - **rationale:** First file any AI reads; stale path causes immediate misdirection.
 - **proposed change:** Replace stale reference with `tests/creationtests/`.

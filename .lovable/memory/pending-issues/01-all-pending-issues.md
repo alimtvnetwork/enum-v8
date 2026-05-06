@@ -19,7 +19,7 @@
 ### PI-003: 148 ❓ claims unresolved (Task AB)
 
 - **severity:** MEDIUM
-- **description:** 148 claims across `spec/01-app/` scored ❓ because they reference upstream `core-v9` APIs that have zero `enum-v3` consumers and no mirrored source. Need upstream source fetch to verify.
+- **description:** 148 claims across `spec/01-app/` scored ❓ because they reference upstream `core-v9` APIs that have zero `enum-v4` consumers and no mirrored source. Need upstream source fetch to verify.
 - **owner:** AI + User (fetch access)
 - **blocks:** Full spec verification, re-audit of §07/§09 (Task AC)
 
@@ -37,6 +37,6 @@
 ### PI-001: Upstream `core-v9` `go.mod` module path mismatch (Task W + AG)
 
 - **resolved:** 2026-05-05
-- **fix:** User renamed upstream `go.mod` → `module github.com/alimtvnetwork/core-v9`, tagged `v1.5.8`. AI dropped `replace` bridge in `enum-v3/go.mod`, pinned `core-v9 v1.5.8`.
+- **fix:** User renamed upstream `go.mod` → `module github.com/alimtvnetwork/core-v9`, tagged `v1.5.8`. AI dropped `replace` bridge in `enum-v4/go.mod`, pinned `core-v9 v1.5.8`.
 
 _(Consolidated from `.lovable/pending-issues/01-core-v9-go-mod-rename.md` and `02-cross-spec-stale-paths.md` — those files are now superseded by this tracker)_
