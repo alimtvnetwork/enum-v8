@@ -9,6 +9,21 @@
 
 ---
 
+## [spec-v0.53.0] — 2026-05-06 (Cycle 61 — Task **AI**: `spec/01-app/` formally FROZEN)
+
+### Changed
+- **🧊 `spec/01-app/` is now FROZEN.** All AB-residual deep-probe sweep work is complete (Cycles 19–25 + 41–47, settled in spec-v0.52.0 / Cycle 47). Zero active probe targets remain across all 14 files. Remaining work on `spec/01-app/` is purely the **AJ rewrite backlog** (~54 items, all already authored as `spec/07-code-vs-spec-audits/AJ-NN-…` companion docs and explicitly tagged "BLOCKED by `spec/01-app/` freeze" in their changelog entries).
+- **Freeze policy:** Until the AJ backlog is unblocked by an explicit user "thaw" instruction, no AI cycle may modify any file under `spec/01-app/` for any reason. New findings on `spec/01-app/` content must be authored as new `AJ-NN-*.md` companion docs in `spec/07-code-vs-spec-audits/` and queued behind the freeze. Audit / research / cross-reference work that *reads* `spec/01-app/` is unaffected.
+- **Why now:** Cycle 47 closed the last open ❓ pool (§10 reflection-and-dynamic) and explicitly noted "Remaining `spec/01-app/` work is the AJ rewrite backlog (52 items, all blocked by freeze)". This entry promotes that observation to a binding, top-of-CHANGELOG policy so future cycles inherit it without re-reading 7 cycles of audit context.
+
+### Notes
+- Scope of freeze: every file under `spec/01-app/` (16 files: `01-overview.md` through `16-security.md`, plus the section index).
+- NOT frozen: `spec/02-app-issues/`, `spec/03-powershell-test-run/`, `spec/04-tooling/`, `spec/05-failing-tests/`, `spec/06-testing-guidelines/`, `spec/07-code-vs-spec-audits/`, `spec/99-audits/`, `spec/00-llm-integration-guide.md`, `spec/CHANGELOG.md`.
+- Companion AJ items live at `spec/07-code-vs-spec-audits/AJ-*.md` (already created across spec-v0.43.0 onwards). Each carries its own "BLOCKED by freeze" header.
+- Thaw instruction shape (for future user reference): _"Thaw `spec/01-app/` and apply AJ-NN through AJ-MM"_ — explicit range, explicit task letter.
+
+---
+
 ## [spec-v0.52.0] — 2026-05-06 (Cycle 47 — AB-residual deep-probe of `spec/01-app/10-reflection-and-dynamic.md` — COMPLETES THE SWEEP)
 
 ### Added
