@@ -137,8 +137,52 @@ function Merge-UniqueOutputLines {
     return $merged.ToArray()
 }
 
+function Resolve-TestSuiteRoot {
+    <#
+    .SYNOPSIS
+        Resolve the test-suite root directory name (creationtests vs legacy integratedtests).
+    .DESCRIPTION
+        Per Core-memory rule: "Tests live under tests/creationtests/, NOT tests/integratedtests/.
+        Tooling that probes test packages must accept either name (or read from disk) — never
+        hard-code one." This helper returns the first existing root, preferring 'creationtests'.
+    .PARAMETER ProjectRoot
+        The repository root. Defaults to $global:ProjectRoot.
+    .PARAMETER Package
+        Optional package name. When supplied, only roots that actually contain
+        tests/<root>/<Package> are considered a match.
+    .OUTPUTS
+        [string] One of 'creationtests' or 'integratedtests'. Returns 'creationtests' as
+        the default fallback when neither exists, so the downstream `go test` error is the
+        user-facing diagnostic ("no Go files in ...").
+    .EXAMPLE
+        $root = Resolve-TestSuiteRoot                     # → 'creationtests'
+        $root = Resolve-TestSuiteRoot -Package 'osdetect' # → 'creationtests' if osdetect exists there
+    #>
+    [CmdletBinding()]
+    param(
+        [string]$ProjectRoot = $global:ProjectRoot,
+        [string]$Package = ''
+    )
+
+    $candidates = @('creationtests', 'integratedtests')
+    $testsDir   = Join-Path $ProjectRoot 'tests'
+
+    foreach ($candidate in $candidates) {
+        $rootPath = Join-Path $testsDir $candidate
+        if (-not (Test-Path $rootPath)) { continue }
+        if ($Package) {
+            $pkgPath = Join-Path $rootPath $Package
+            if (Test-Path $pkgPath) { return $candidate }
+        } else {
+            return $candidate
+        }
+    }
+
+    return 'creationtests'
+}
+
 Export-ModuleMember -Function @(
     'Write-Header', 'Write-Success', 'Write-Fail',
     'Ensure-TestLogDir', 'Filter-TestWarnings', 'Merge-UniqueOutputLines',
-    'Get-CallerSource'
+    'Get-CallerSource', 'Resolve-TestSuiteRoot'
 )
