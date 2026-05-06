@@ -10,6 +10,18 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.38.0] — 2026-05-06 — Cycle 66 — Batch A test fix-up
+
+### Fixed
+- **AL2-01b** — Repaired 8 failing tests in Batch A coverage suites that incorrectly asserted `nil` on diagnostic methods (`OnlySupportedErr`, `OnlySupportedMsgErr`, `RangesInvalidErr`) which always return non-nil informational descriptors. Affected: `compresslevels`, `conntrackstate`, `servicestate`, `sitestatetype`.
+- **onofftype** — Removed brittle assertions that pinned shorthand-input results (e.g. `New("yes") == On`); `BasicEnumImpl.GetValueByName` does fuzzy matching before the alias-map fallback, so shorthand results cannot be pinned without coupling to upstream impl. Inputs are now exercised for coverage only.
+- **tests/creationtests/AllEnums_NumericRange_test.go** — Added `compresslevels.Variant` to the `RangesDynamicMap` skip list (int8-backed enum with negative range returns empty map upstream).
+
+### Documentation
+- Added two new RCA patterns to `.lovable/memory/07-test-failure-rca-patterns.md`:
+  - **Pattern 5** — `OnlySupportedErr` / `RangesInvalidErr` are diagnostic descriptors, never assert nil
+  - **Pattern 6** — Don't pin shorthand-input results; only canonical `Ranges[...]` names are stable
+
 ## [Unreleased]
 
 ### Planned
