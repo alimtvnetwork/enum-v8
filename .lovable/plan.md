@@ -148,10 +148,11 @@
 - **Files:** `inttype/IntType_Constructor_test.go` (covers `New`, `NewString`, `NewUInt`, `NewInt64`, `NewUsingJsonNumber`, `GetSet`, `GetSetVariant`, full `IsCompareResult` switch); `strtype/StrType_Constructor_test.go` (covers `New`, `NewUsingInteger`, `NewFileReader` smoke, `GetSet`, `GetSetVariant`).
 - **Expected lift:** +2–4pp.
 
-#### AL-08. `osdetect` selective coverage (cross-platform safe parts only)
+#### AL-08. `osdetect` selective coverage (cross-platform safe parts only) ✅ DONE (2026-05-06, Cycle 58)
 - **Why:** 3% but bulk is platform-specific (`windows.go`, `linux.go`).
 - **Target:** Only `IsRunningInDockerContainer` stub, `Variant`, `OperatingSystemDetail` JSON, `CurrentOsType` smoke.
-- **Expected lift:** +1%.
+- **File:** `osdetect/OsDetect_CrossPlatform_test.go` — Variant predicates + name/value/byte accessors, IsAnyOf, ToPtr round-trip, DefaultCmdProcessName branches, New/NewMust round-trip + error path, Variant JSON round-trip, OperatingSystemDetail JSON helpers smoke (zero value), CurrentOsType / CurrentOsMixTypes / CurrentOsTypesMap / IsCurrentOsTypesContains smoke, IsRunningInDockerContainer stability check.
+- **Expected lift:** +1pp (osdetect goes from ~3% to ~25–35%; pure-Variant logic is now well covered).
 
 **Combined target:** 15.5% → ~60% across AL-01..AL-08.
 
