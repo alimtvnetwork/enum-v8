@@ -9,6 +9,32 @@
 
 ---
 
+## [spec-v0.35.0] — 2026-05-06 (Cycle 20 — AB pass 2 on `01-app/07-conditional-and-utilities.md`)
+
+### Added
+- `spec/07-code-vs-spec-audits/21-cycle20-AB-conditional-and-utilities.md` — second AB promotion pass; 17 ❓ → 12 ✅ / 5 ❌ / 3 ❓ (verifiable score 70.6 %).
+- Scoreboard cycle history row 20.
+
+### Changed
+- Scoreboard top-line now leads with §07 = 70.6 % and §09 = 66.7 % (post-AB) ahead of the 100 % closed sections.
+- Open-drift block now covers C-CVS-11..20 (10 ❌, all blocked by `spec/01-app/` 🧊 freeze).
+- Remaining-❓ count drops 124 → 110.
+
+### Discovered (NOT yet patched into spec — blocked by freeze)
+- **C-CVS-16 (HIGH)** `conditional.TypedErrorFunctionsExecuteResults` is a branch-selector `(isTrue, trueFns, falseFns)`, not a `(fn1, fn2)` fan-out aggregator.
+- **C-CVS-17 (HIGH)** `coremath` Min/Max exists only for `Byte`/`Int`/`Float32` (3 families, not 7); `Int16/32/64` + `Float64` are absent.
+- **C-CVS-18 (CRITICAL)** `namevalue.NewInstance(...)` constructor does not exist; `Instance[K,V]` is a generic struct with public `Name`/`Value` fields, not methods. No `ValueAny()`.
+- **C-CVS-19 (HIGH)** `Collection.ToMap()` does not exist.
+- **C-CVS-20 (CRITICAL)** Entire `keymk.New.Compile(...)` snippet fabricated; real surface is `keymk.NewKey.Create(opt, main).CompileKeys(...)`.
+
+### Bumped (pending action items, blocked)
+- **AJ-04..07** — corresponding rewrites of §1.3 / §5 / §7 / §8.
+
+### Note
+Cumulative AB pattern: across the 2 sections audited so far, ~25 % of API claims are fabricated. Suggests S-106 (`spec-api-check.psm1`) lint should land **before** any further AB-fix waiver; otherwise AJ rewrites risk introducing new fabrications.
+
+---
+
 ## [spec-v0.34.0] — 2026-05-06 (Cycle 19 — AB pass 1 on `01-app/09-converters.md`)
 
 ### Added
