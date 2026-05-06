@@ -172,17 +172,19 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **AL-01** — Json round-trip suite (highest coverage leverage, ~+10%)
-2. **AL-02** — Format & string conversion suite
-3. **AL-03** — Comparison & predicate suite
-4. **AL-04** — Numeric width & range suite
-5. **AL-05** — Constructor suite for lowest-coverage packages
-6. **AL-06** — `quotes/` and `brackets/` dedicated suites
-7. **AL-07** — `strtype` / `inttype` constructor & GetSet suites
-8. **AL-08** — `osdetect` cross-platform parts
-9. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
-10. **AI** — Mark `spec/01-app/` as frozen (quick win)
+1. **AL-02** — Format & string conversion suite ⭐ next
+2. **AL-03** — Comparison & predicate suite
+3. **AL-04** — Numeric width & range suite
+4. **AL-05** — Constructor suite for lowest-coverage packages
+5. **AL-06** — `quotes/` and `brackets/` dedicated suites
+6. **AL-07** — `strtype` / `inttype` constructor & GetSet suites
+7. **AL-08** — `osdetect` cross-platform parts
+8. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
+9. **AI** — Mark `spec/01-app/` as frozen (quick win)
+10. **PI-005** — Fix `sqliteconnpathtype.Variant` MarshalJSON double-quoting (unblocks AL skip removal)
 11. **AB** — Already done in sandbox; status entry pending
+
+**Done from this list:** AL-01 ✅ (2026-05-06, Cycle 49, 15.5% → 21.6%).
 
 ---
 
