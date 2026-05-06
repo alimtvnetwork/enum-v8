@@ -2,7 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / §15 100.0 / §16 100.0 / spec/06 100.0 (verifiable)** *(12 sections in `spec/01-app/` + 2 baseline-only — §07, §09 — all closed; `spec/06-testing-guidelines/` baselined Cycle 15)* — **`spec/01-app/` directory audit COMPLETE & 🧊 DRIFT-FROZEN (spec-v0.30.0); `spec/06-testing-guidelines/` directory baselined.**
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / §15 100.0 / §16 100.0 / spec/06 100.0 / spec/03 100.0 (verifiable)** — **`spec/01-app/` 🧊 FROZEN (spec-v0.30.0); `spec/06-testing-guidelines/` baselined Cycle 15; `spec/03-powershell-test-run/` baselined & closed Cycle 16.**
+
+> 🆕 **Cycle 16 (`spec/03-powershell-test-run/` directory baseline & closed at 100% verifiable)** — 28 representative claims sampled across 9 files (2 519 lines). **5 LOW drifts (D-CVS-44 → D-CVS-48) raised and resolved in the same cycle** via the established consumer-coverage callout pattern (top-of-file scope notes for `01-overview.md`, `04-pre-commit-api-checker.md`, `08-generic-go-test-coverage-runner.md`, `09-ai-agent-complete-reference.md`; one inline rewrite for `06-coverage-prompt-generator.md` because the line is *quoted prompt output*). 22 ✅ / 6 ❓ (runner-internal behaviours). Folds in task **AH** debt for this directory. See [`17-cycle16-powershell-test-run.md`](./17-cycle16-powershell-test-run.md).
 
 > 🧊 **Freeze (spec-v0.30.0, 2026-05-06):** `spec/01-app/` is now closed for code-vs-spec drift work. Allowed edits: AB-driven ❓→✅ promotions, AC re-audit of §07/§09, upstream-API-change additions (paired with new audit cycle row), typo/formatting fixes. All other edits are out of scope until the freeze is explicitly lifted. See `spec/CHANGELOG.md` `[spec-v0.30.0]` entry. Drift work moves to `spec/03-powershell-test-run/`, `spec/04-tooling/`, `spec/02-app-issues/` (Cycles 16+).
 
@@ -49,10 +51,11 @@
 | 2026-05-05 | 13 (baseline / closed) | `01-app/15-observability.md` | 27 | 14 | 0 | 0 | 13 | **100.0%** *(verifiable)* |
 | 2026-05-05 | 14 (baseline / closed) | `01-app/16-security.md` | 30 | 17 | 0 | 0 | 13 | **100.0%** *(verifiable)* |
 | 2026-05-06 | 15 (baseline / closed) | `06-testing-guidelines/` (10 files) | 32 | 22 | 1→0 | 0 | 10 | **100.0%** *(verifiable)* |
+| 2026-05-06 | 16 (baseline / closed) | `03-powershell-test-run/` (9 files) | 28 | 22 | 5→0 | 0 | 6 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
-_None._ All 12 audited-and-closed sections in `spec/01-app/` (§03, §04, §05, §06, §08, §10, §11, §12, §13, §14, §15, §16) plus the entire `spec/06-testing-guidelines/` directory (Cycle 15) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset. **`spec/01-app/` directory audit complete; `spec/06-testing-guidelines/` directory baselined.** Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 10 §14 + 13 §15 + 13 §16 + 7 §04 + 1 §05 + 6 §06 + **10 spec/06** = **158 ❓** total — require upstream `core-v9` source (task **AB**).
+_None._ All 12 audited-and-closed sections in `spec/01-app/` (§03, §04, §05, §06, §08, §10, §11, §12, §13, §14, §15, §16) plus the entire `spec/06-testing-guidelines/` directory (Cycle 15) plus the entire `spec/03-powershell-test-run/` directory (Cycle 16) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset. **`spec/01-app/` 🧊 frozen; `spec/06-testing-guidelines/` baselined; `spec/03-powershell-test-run/` baselined & closed.** Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 10 §14 + 13 §15 + 13 §16 + 7 §04 + 1 §05 + 6 §06 + **10 spec/06 + 6 spec/03** = **164 ❓** total — 158 require upstream `core-v9` source (task **AB**); 6 are runner-internal behaviours requiring a direct probe of `scripts/*.psm1`.
 
 > **Cross-spec sweep status:** `spec/01-app/` is now **genuinely clean** of stale `tests/integratedtests/` references after cycle 12 finished what cycle 11 thought it had finished. Remaining hits in `01-app/` are intentional anti-pattern callouts (`05-enum-system.md:417`) or retro-references inside cycle-11/12 fix notes themselves. Task **AH** still owes a sweep of `spec/03-powershell-test-run/` (4 files), `spec/04-tooling/04-bootstrap-into-new-repo.md`, and `spec/02-app-issues/02-internal-package-coverage-policy.md`. `spec/CHANGELOG.md` and `spec/99-audits/` are immutable history.
 
