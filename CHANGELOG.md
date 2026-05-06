@@ -13,6 +13,13 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ## [Unreleased]
 
 ### Changed
+- **Cycle 15 spec audit (Task AA)** — closed `spec/06-testing-guidelines/`
+  directory at **100 % of its verifiable subset** (32 claims sampled across 10
+  files; 22 ✅ / 10 ❓ pending task AB). Resolved one LOW drift (D-CVS-43) by
+  adding an `enum-v4` consumer-coverage callout to `spec/06-testing-guidelines/README.md`
+  and a `⚠️ Scope` warning to `01-folder-structure.md`. See
+  `spec/07-code-vs-spec-audits/16-cycle15-testing-guidelines.md`. Spec changelog
+  bumped to **spec-v0.29.0**.
 - **core-v9 API migration (Task AM)** — Applied all confirmed `core-v9 v1.5.8`
   namespace rewrites across `enum-v4` Go source: `coredynamic.TypeName(...)` →
   `coredynamic.SafeTypeName(...)`, `converters.AnyToValueString(x)` →
