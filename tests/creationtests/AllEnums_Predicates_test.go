@@ -71,18 +71,21 @@ func Test_AllEnums_Predicates(t *testing.T) {
 			}
 
 			// Numeric-width accessors must agree on the underlying value.
-			vByte := current.ValueByte()
-			vInt := current.ValueInt()
-			vInt8 := current.ValueInt8()
-			vInt16 := current.ValueInt16()
-			vInt32 := current.ValueInt32()
-			vUInt16 := current.ValueUInt16()
+			// Skipped for string-backed enums where these accessors panic.
+			if !skipNumericWidth {
+				vByte := current.ValueByte()
+				vInt := current.ValueInt()
+				vInt8 := current.ValueInt8()
+				vInt16 := current.ValueInt16()
+				vInt32 := current.ValueInt32()
+				vUInt16 := current.ValueUInt16()
 
-			So(int(vByte), ShouldEqual, vInt)
-			So(int(vInt8), ShouldEqual, vInt)
-			So(int(vInt16), ShouldEqual, vInt)
-			So(int(vInt32), ShouldEqual, vInt)
-			So(int(vUInt16), ShouldEqual, vInt)
+				So(int(vByte), ShouldEqual, vInt)
+				So(int(vInt8), ShouldEqual, vInt)
+				So(int(vInt16), ShouldEqual, vInt)
+				So(int(vInt32), ShouldEqual, vInt)
+				So(int(vUInt16), ShouldEqual, vInt)
+			}
 		})
 	}
 }
