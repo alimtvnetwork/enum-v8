@@ -8,7 +8,7 @@ import (
 	"github.com/alimtvnetwork/core-v9/errcore"
 )
 
-func GenerateTestCases(t *testing.T) {
+func Test_GenerateTestCases(t *testing.T) {
 	generateAllEnumGeneralTestCases(
 		false)
 }
