@@ -9,8 +9,8 @@
 ## Core dependency
 
 - **Import path used in source:** `github.com/alimtvnetwork/core-v9` (renamed from `core-v8`)
-- **Upstream `go.mod` reality:** the upstream repo still declares `module github.com/alimtvnetwork/core-v8`. A `replace` directive in `enum-v3/go.mod` bridges the path mismatch.
-- **Bridge limitation:** Go's `internal/` rule is enforced against the cached module's declared path (`core-v8`), so any `core-v9` package that transitively imports an `internal/` package is rejected for consumers under `enum-v3/...`. Only fix is updating upstream `go.mod` and tagging a release (Task **W**).
+- **Upstream status:** ✅ Resolved. `core-v9` `go.mod` now declares `module github.com/alimtvnetwork/core-v9` (tag `v1.5.8`). The `replace` directive has been removed. `go.mod` pins `require core-v9 v1.5.8` cleanly.
+- **API migration:** `core-v9` refactored `converters` from package-level functions to struct namespaces (`AnyTo`, `StringTo`, etc.). `coredynamic.TypeName` → `coredynamic.SafeTypeName`. See `.lovable/memory/06-core-v9-api-migration.md`.
 
 ## Directories the AI must respect
 

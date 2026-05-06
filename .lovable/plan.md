@@ -1,7 +1,7 @@
 # Active Plan — enum-v3
 
 > Single source of truth for the project roadmap. Letter IDs are stable across sessions.
-> Last updated: 2026-05-05 (W+AG completed, build unblocked).
+> Last updated: 2026-05-06 (AM added — API migration task).
 
 ---
 
@@ -15,6 +15,15 @@
 
 - **Status:** ✅ Done (2026-05-05)
 - **Result:** `replace` directive removed, `require core-v9 v1.5.8` pinned.
+
+### AM. Fix broken `core-v9` API calls (converter + coredynamic migration)
+
+- **Status:** 🔄 In Progress — mapping discovered 2026-05-06, awaiting `stringTo` method list from user
+- **Objective:** Update all `enum-v3` source files that use old `core-v8`-era function signatures (`converters.AnyToValueString`, `coredynamic.TypeName`, etc.) to the new struct-namespace API (`converters.AnyTo.ValueString`, `coredynamic.SafeTypeName`, etc.).
+- **Dependencies:** User provides `stringTo` method list (pending PowerShell output)
+- **Expected outputs:** All affected `.go` files updated, `go build ./...` passes.
+- **Acceptance criteria:** `go build ./...` succeeds with `core-v9 v1.5.8`.
+- **Reference:** `.lovable/memory/06-core-v9-api-migration.md`
 
 ---
 
@@ -115,10 +124,9 @@
 
 **Recommended next task:** Pick from this list:
 
-1. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/` (highest leverage, fixes #1 failure risk)
-2. **AI** — Mark `spec/01-app/` as frozen (quick win, 5 minutes)
-3. **S-003 + S-004** — Fix the two critical stale paths in `spec/06` and `spec/00` (quick fix, immediate reliability gain)
-4. **W** — If you have access to the upstream `core-v9` repo, fix the `go.mod` (unblocks everything)
+1. **AM** — Complete API migration (provide `stringTo` method list, then fix all broken calls)
+2. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/` (highest leverage spec task)
+3. **AI** — Mark `spec/01-app/` as frozen (quick win, 5 minutes)
 
 ---
 
@@ -129,3 +137,8 @@
 - **Completed:** 2026-05-04 → 2026-05-05
 - **Result:** All 14 numbered files audited. 12 at 100% verifiable. 2 baseline-only.
 - **Findings:** C-CVS-01..10 (10 contradictions), D-CVS-01..43 (43 drifts), all resolved.
+
+### W + AG — Unblock Build
+
+- **Completed:** 2026-05-05
+- **Result:** Upstream `core-v9` `go.mod` fixed, `replace` bridge removed, `require core-v9 v1.5.8` pinned.

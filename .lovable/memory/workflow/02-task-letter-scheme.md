@@ -12,13 +12,17 @@
 | Letter | Task | Status |
 |---|---|---|
 | A | Manual `cross-repo/core-v8/` push | ⏭️ Manual |
-| W | Upstream `core-v9` `go.mod` rename + `v1.5.8` tag | 🚫 Blocked |
-| AA | Spec-audit cycles (next directory) | 🔄 In Progress |
+| W | Upstream `core-v9` `go.mod` rename + `v1.5.8` tag | ✅ Done |
+| AA | Spec-audit cycles (next: Cycle 15 `spec/06-testing-guidelines/`) | 🔄 In Progress |
 | AB | Fetch upstream `core-v9` source for ❓ resolution | ⏳ Pending |
 | AC | Re-audit §07/§09 against spec-internal consistency | ⏳ Pending |
-| AG | Drop `replace` bridge after W | ⏳ Pending |
+| AG | Drop `replace` bridge after W | ✅ Done |
 | AH | Cross-`spec/` cleanup sweep | 🔄 In Progress |
 | AI | Mark `spec/01-app/` frozen in CHANGELOG | ⏳ Pending |
+| AJ | Implement spec fixes from Cycle 15 findings | 📋 Planned |
+| AK | New enum package creation (template validation) | 📋 Planned |
+| AL | Test coverage expansion | 📋 Planned |
+| AM | Fix broken `core-v9` API calls (converter + coredynamic migration) | 🔄 In Progress |
 
 (Letters B–V, X, Y, Z, AD, AE, AF — earlier tasks that were either completed across cycles 1–14 or merged into the surviving letters above. Per "never delete history" rule: those completions are recorded in `.lovable/plan.md` Completed section and in the per-cycle audit reports.)
 
