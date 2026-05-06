@@ -225,11 +225,18 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **Local verification** — Re-run `./run.ps1 -tc` and confirm AL-08 + PI-005..008 fixes are green ⭐ verify
-2. **AC** — Re-audit §07 / §09 (now unblocked: AB residual for §06 done)
-3. **AB residual** — Continue ❓ promotion for any later cycle that still has upstream-deferred claims
-4. **AK** — New enum package creation / recipe validation
-5. **A** — Manual `cross-repo/core-v8/` push
+1. **AL2-01** — Batch A coverage uplift (compresslevels, configfilestate, conntrackstate, osgroupexecution, servicestate, sitestatetype) ⭐ **NEXT (user priority #1)**
+2. **AL2-02** — Batch B (DB family: dbexposetype, dbuserprivillegetype, sqljointype, sqliteconnpathtype, querymethodtype, resauthtype)
+3. **AL2-03** — Batch C (networking / IP: inputiptype, protocoltype, nginxlogtype, pathpatterntype, verifiertriggertype)
+4. **AL2-04** — Batch D (Linux / OS: linuxservicestate, linuxtype, linuxvendortype, osarchs, packageinstallmethod, runtype)
+5. **AL2-05** — Batch E (misc: eventtype, instructiontype, leveltype, licensetype, linescomparetype, logtype, revokereason)
+6. **AL2-06** — Batch F (taskcategory, taskpriority, scripttype, promptclitype, cmdenumtypes)
+7. **AL2-07** — Bespoke `dbdrivertype` connection-string suite
+8. **AL2-08** — Bespoke `osdetect` Linux/Windows guarded branches
+9. **AC** — Re-audit §07 / §09 (now unblocked)
+10. **AB residual** — Continue ❓ promotion for later cycles
+11. **AK** — New enum package creation / recipe validation
+12. **A** — Manual `cross-repo/core-v8/` push
 
 **Done from this list:**
 - AL-01..AL-08 ✅ (Cycles 49–55, 56, 58 — full AL umbrella)
