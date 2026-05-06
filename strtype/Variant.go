@@ -589,11 +589,11 @@ func (it Variant) String() string {
 }
 
 func (it Variant) ConvInteger() (int, error) {
-	return converters.StringToInteger(it.String())
+	return converters.StringTo.Integer(it.String())
 }
 
 func (it Variant) Integer() int {
-	return converters.StringToIntegerDefault(it.String())
+	return converters.StringTo.IntegerDefault(it.String())
 }
 
 func (it Variant) IntType() inttype.Variant {
@@ -605,7 +605,7 @@ func (it Variant) Version() *coreversion.Version {
 }
 
 func (it Variant) IntegerDefaultVal(defaultVal int) (valueInt int, isSuccess bool) {
-	return converters.StringToIntegerWithDefault(it.String(), defaultVal)
+	return converters.StringTo.IntegerWithDefault(it.String(), defaultVal)
 }
 
 func (it Variant) Name() string {
