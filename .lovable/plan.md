@@ -128,10 +128,10 @@
 - **Result:** **26.1% → 33.8% (+7.7pp)** with `tests/creationtests/AllEnums_Predicates_test.go`. Cumulative AL-01+02+03: **15.5% → 33.8% (+18.3pp)**.
 - **Findings:** PI-007 (sqliteconnpathtype `IsAnyNamesOf()` empty-args returns true); strtype.Variant correctly excluded from numeric-width block (string-backed; `ValueByte` panics).
 
-#### AL-04. Numeric width & range suite
-- **Target:** `ValueInt`, `ValueInt8`, `ValueInt16`, `ValueInt32`, `ValueByte`, `Value`, `MaxByte`, `MinByte`, `MinInt`, `MaxInt`, `RangesByte`, `IntegerEnumRanges`, `MinMaxAny`, `RangesDynamicMap`.
-- **Expected lift:** +4–6%.
-- **File:** `tests/creationtests/AllEnums_Numeric_test.go`
+#### AL-04. Numeric width & range suite ✅ DONE (2026-05-06, Cycle 52)
+- **Target:** `MinInt`, `MaxInt`, `MinMaxAny`, `MinValueString`, `MaxValueString`, `RangesDynamicMap`, `AllNameValues`, `IntegerEnumRanges`.
+- **Result:** Test created at `tests/creationtests/AllEnums_NumericRange_test.go`. Coverage delta TBD on next `./run.ps1 -tc` run; expected +4–6pp.
+- **Findings:** Reuses PI-006 skip for sqliteconnpathtype `MinValueString` (empty); strtype skipped from `MinInt <= MaxInt` invariant only (string-backed semantics differ).
 
 #### AL-05. Constructor suite (`New`, `NewMust`, `RangesInvalidErr`, `Max`, `Min`)
 - **Target:** Per-package `New(name)` / `NewMust(name)` / `Max()` / `Min()` / `RangesInvalidErr()` free functions.
