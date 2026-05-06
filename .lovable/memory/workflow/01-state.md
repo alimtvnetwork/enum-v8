@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 28 — S-106 WIRED into GitHub Actions via new `spec-api-lint` job in `.github/workflows/ci-guards.yml`; strict on PRs touching `spec/` or the lint script, warn-only otherwise. Cumulative AB ❌ unchanged at 49, CRITICAL = 22).
+> **Last updated:** 2026-05-06 (Cycle 29 — S-106 v1.1 SHIPPED; pkg-fab false positives 22 → 0 via indented-fence fix + local enum-v4 indexing + expanded allow-list + receiver-name detection. Cumulative AB ❌ unchanged at 49, CRITICAL = 22).
 
 ## ✅ Done
 
@@ -28,6 +28,7 @@
 - **S-106. Spec-API fabrication lint** — ✅ Built `scripts/spec-api-check.psm1` v1.0.0 (2026-05-06). Indexes 182 upstream packages and 10,216 symbols; scans spec for `package.Symbol` references; flags pkg/sym fabrications. Local-var tracking per-fence + ProseLooseMode heuristic. First run retracted 2 wrong audit findings (R-CVS-01/02). Limits: presence-only; does NOT catch arity/return-type drift (S-106 v2 needs Go AST pass).
 - **CI integration of S-106** — ✅ Wired into `scripts/CoveragePreChecks.psm1` as a "Spec-API Lint" dashboard phase (Cycle 27, 2026-05-06). Runs after safeTest boundary lint, before Go auto-fixer. Soft gate (warn-only) by default so the 49 known fabrications don't block runs. Flags via `run.ps1`: `--no-spec-api` skips, `--strict-spec-api` fails TC on any fabrication (for CI). Auto-skips when upstream clone, spec dir, or lint module is absent.
 - **CI workflow gate (S-106)** — ✅ Added `spec-api-lint` job to `.github/workflows/ci-guards.yml` (Cycle 28, 2026-05-06). Clones `core-v9 @ v1.5.8` to `/tmp/core-v9-upstream` and runs `Invoke-SpecApiCheck` via pwsh. PRs touching `spec/` or `scripts/spec-api-check.psm1` run with `-StrictExitCode`; all other runs are warn-only.
+- **S-106 v1.1** — ✅ False-positive cleanup (Cycle 29, 2026-05-06). Indented-fence detection (`^\s*\`\`\``), local enum-v4 indexing in `Get-UpstreamPackages -LocalDir`, expanded allow-list (stdlib `unsafe`/`runtime`/`path`/etc., template names `emailvalidator`/`corev8`/`expected`/`validator`/`downstream`/`registry`, CommonLocalVarNames bucket of 25 frequent var names), `vN` versioned-local skip, and receiver-name binding (`func (it Variant)` → `it` local). Pkg-fab FP drop 22 → 0; sym-fab list now matches AB findings 1:1.
 
 ## 🔄 In Progress
 
@@ -40,7 +41,6 @@
 - **AB. 🎉 Sweep of `spec/01-app/` COMPLETE.** All 7 sections holding ≥10 ❓ promoted: pass 1 §09 (66.7 %), pass 2 §07 (70.6 %), pass 3 §08 (33.3 %), pass 4 §10 (38.5 %), pass 5 §11 (**18.2 % — worst**), pass 6 §15 (74.1 %), pass 7 §16 (66.7 %). **Residual:** 24 non-API ❓ in `spec/01-app/` + 14 workflow/script-internal ❓ in spec/03/04 + 10 spec/06 + 5 spec/02 audit-history (= **53 ❓** total). These need a different probe (deep-read of `scripts/*.psm1` and `.github/workflows/*.yml`), not upstream-source comparison.
 - **AC.** Re-audit §07 / §08 / §09 / §10 / §11 / §15 / §16 against consistency dimension — run after AJ-01..43 land.
 - **AJ.** **49 open items: AJ-01..43** (all blocked by `spec/01-app/` freeze, but **S-106 v1.0 now in place** so rewrites are safe). AJ-15 split → AJ-15a (path-qualify `coredata/coredynamic`) + AJ-15b (purge fabricated symbols). AJ-36/37/38 re-scoped (keep `corestr` package, purge fabricated symbols only). Highest-impact: AJ-42 (rewrite §6 trust-boundary example — built on fabricated `corevalidator.New.Line` API), AJ-32 (replace fabricated test-failure format in §15.4), AJ-29 (re-frame §15.2 helpers — return strings not errors), AJ-33 (rewrite §15.3 stack-enhancement rationale — `HandleErr` doesn't wrap), AJ-27 (rewrite `versionindexes` §2 — wrong purpose), AJ-08..14 (rewrite almost all of `08-validators.md`).
-- **S-106 v1.1.** Refine prose-token allow-list; reduce residual ~40 pkg-fab false positives.
 - **S-106 v2.** Go AST-based signature lint (catches arity/return-type/receiver-shape drift like C-CVS-44/45/49).
 - **AK.** New enum package creation (template validation).
 - **AL.** Test coverage expansion.
