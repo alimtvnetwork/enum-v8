@@ -33,4 +33,4 @@ User workflow: incremental "next" commands, expects the remaining-task list show
 - [Pending issues](mem://pending-issues/01-all-pending-issues) — Legacy tracker (now individual files in .lovable/pending-issues/)
 - [CI tooling layout](mem://features/ci-tooling) — ci-guards.yml structure, baseline gate, python-tests job, run.ps1 pre-checks (if exists)
 - [No email notifications](mem://constraints/no-email-notifications) — never send or configure email/notification delivery of any kind (if exists)
-- [Reliability report](mem://features/reliability-report) — /mnt/documents/01-reliability-risk-report.md produced 2026-05-05 (if exists)
+- [Reliability report](mem://features/reliability-report) — latest: /mnt/documents/02-reliability-risk-report-v2.md (2026-05-06); prior: 01-reliability-risk-report.md (2026-05-05) (if exists)
