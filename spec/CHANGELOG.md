@@ -9,6 +9,22 @@
 
 ---
 
+## [spec-v0.49.0] — 2026-05-06 (Cycle 44 — AB-residual deep-probe of `spec/01-app/07-conditional-and-utilities.md`)
+
+### Added
+- `spec/07-code-vs-spec-audits/33-cycle44-AB-residual-spec01-conditional.md` — settles 2 of 3 ❓ items left by Cycle 20. Both promotions to ✅: row 51 (`LazyLock` defers + caches — confirmed via `regexnew/LazyRegex.go:34-110` `mu sync.Mutex` + `isCompiled` guard); row 52 (`corecmp` returns `CompareEqual/Less/Greater` = 0/-1/1 — verbatim at `constants/constants.go:336-338`). One **NEW D-CVS-66 (LOW)** — mechanism-name drift: spec implies `sync.Once`, real impl uses `sync.Mutex` + boolean guard (functionally equivalent but cached-error semantics require this design).
+- Scoreboard top-line + per-section row updated (§07 verifiable 70.6% → 73.7%).
+
+### Spawned (BLOCKED by `spec/01-app/` freeze)
+- **AJ-04b** — add footnote at `07-conditional-and-utilities.md:173` clarifying `sync.Mutex` + `isCompiled` mechanism vs `sync.Once`.
+
+### Notes
+- AB-residual `spec/01-app/` ❓ pool drops 20 → 18.
+- Cumulative AB ❌ across 7 sections: unchanged at 50 (23 CRITICAL).
+- Out-of-band: row 50 (advisory pitfall on `issetter.Value`) deferred to Task AC.
+
+---
+
 ## [spec-v0.48.0] — 2026-05-06 (Cycle 43 — AB-residual deep-probe of `spec/01-app/09-converters.md`)
 
 ### Added
