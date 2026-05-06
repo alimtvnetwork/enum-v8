@@ -9,6 +9,23 @@
 
 ---
 
+## [spec-v0.48.0] — 2026-05-06 (Cycle 43 — AB-residual deep-probe of `spec/01-app/09-converters.md`)
+
+### Added
+- `spec/07-code-vs-spec-audits/32-cycle43-AB-residual-spec01-converters.md` — settles 4 of 8 ❓ items left by Cycle 19. Three promotions to ✅ (rows 57, 58, 60: `BytesTo.PrettyJsonString` intent, PrettyJson↔corejson overlap, `IntegerWithDefault` fall-back behaviour). One demotion to ❌ (row 62: **C-CVS-61 CRITICAL** — `errcore.OverflowType.Fmt(...)` fabricated; zero `Overflow` hits in upstream `errcore/`). One new drift **D-CVS-65 (LOW)** — spec line 54 should call `converters.PrettyJson.Bytes.Safe(jsonBytes)` not `BytesTo.PrettyJsonString(...)`.
+- Scoreboard top-line + per-section row updated (§09 verifiable 66.7% → 68.4%).
+
+### Spawned (BLOCKED by `spec/01-app/` freeze)
+- **AJ-03b** — rewrite `09-converters.md:54` to real `PrettyJson.Bytes.Safe` call shape.
+- **AJ-44** — drop `errcore.OverflowType.Fmt(...)` at `09-converters.md:161`; replace with real `errcore` builder.
+
+### Notes
+- AB-residual `spec/01-app/` ❓ pool drops 24 → 20.
+- Cumulative AB ❌ across 7 sections: 49 → 50 (23 CRITICAL).
+- Out-of-band: 4 remaining ❓ classified (1 unprobeable per C-CVS-11; 3 deferred to Task AC contract pass).
+
+---
+
 ## [spec-v0.44.0] — 2026-05-06 (Cycle 37 — S-109 `tests/creationtests/` deep-probe)
 
 ### Added
