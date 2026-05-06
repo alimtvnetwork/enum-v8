@@ -1,5 +1,7 @@
 # PowerShell Test Runner (`run.ps1`)
 
+> **Scope note (`enum-v4`)** — `run.ps1` is a generic Go-coverage runner that discovers test packages from disk (`go list ./tests/...`) and works with either layout: upstream `core-v9`'s `tests/integratedtests/<pkg>tests/` or `enum-v4`'s `tests/creationtests/`. **Example output and JSON snippets in this file use upstream-`core-v9` package names (`corecmptests`, `corejsontests`, etc.) for illustration.** When the same runner is invoked inside `enum-v4`, those paths render as `tests/creationtests/...` instead. The runner never hard-codes either folder name (per Core memory rule). See `spec/01-app/13-testing-patterns.md` §6.1 for the `enum-v4` test layout.
+
 ## Overview
 
 `run.ps1` is the primary task runner for the project. It provides short, memorable commands for running tests, building, formatting, and more.
