@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 29 — S-106 v1.1 SHIPPED; pkg-fab false positives 22 → 0 via indented-fence fix + local enum-v4 indexing + expanded allow-list + receiver-name detection. Cumulative AB ❌ unchanged at 49, CRITICAL = 22).
+> **Last updated:** 2026-05-06 (Cycle 27 — AB residual deep-probe: promoted 11 ❓ via direct script/workflow evidence; surfaced D-CVS-62 [missing prompt-generator script → S-108] + D-CVS-63 [spec JSON schema missing `source` field, fixed]. AB-residual ❓ 53 → 42. Cumulative AB ❌ unchanged at 49, CRITICAL = 22).
 
 ## ✅ Done
 
@@ -38,7 +38,7 @@
 
 ## ⏳ Pending
 
-- **AB. 🎉 Sweep of `spec/01-app/` COMPLETE.** All 7 sections holding ≥10 ❓ promoted: pass 1 §09 (66.7 %), pass 2 §07 (70.6 %), pass 3 §08 (33.3 %), pass 4 §10 (38.5 %), pass 5 §11 (**18.2 % — worst**), pass 6 §15 (74.1 %), pass 7 §16 (66.7 %). **Residual:** 24 non-API ❓ in `spec/01-app/` + 14 workflow/script-internal ❓ in spec/03/04 + 10 spec/06 + 5 spec/02 audit-history (= **53 ❓** total). These need a different probe (deep-read of `scripts/*.psm1` and `.github/workflows/*.yml`), not upstream-source comparison.
+- **AB. 🎉 Sweep of `spec/01-app/` COMPLETE; AB-residual deep-probe IN PROGRESS.** Cycle 27 cleared 11 ❓ (6 §03 + 5 §04). **Residual: 42 ❓** = 24 non-API in `spec/01-app/` + 3 deferred §04 metadata + ~10 in `spec/06-testing-guidelines/` (Cycle-15 — needs `tests/creationtests/` probe, tracked as S-109) + 5 spec/02 audit-history.
 - **AC.** Re-audit §07 / §08 / §09 / §10 / §11 / §15 / §16 against consistency dimension — run after AJ-01..43 land.
 - **AJ.** **49 open items: AJ-01..43** (all blocked by `spec/01-app/` freeze, but **S-106 v1.0 now in place** so rewrites are safe). AJ-15 split → AJ-15a (path-qualify `coredata/coredynamic`) + AJ-15b (purge fabricated symbols). AJ-36/37/38 re-scoped (keep `corestr` package, purge fabricated symbols only). Highest-impact: AJ-42 (rewrite §6 trust-boundary example — built on fabricated `corevalidator.New.Line` API), AJ-32 (replace fabricated test-failure format in §15.4), AJ-29 (re-frame §15.2 helpers — return strings not errors), AJ-33 (rewrite §15.3 stack-enhancement rationale — `HandleErr` doesn't wrap), AJ-27 (rewrite `versionindexes` §2 — wrong purpose), AJ-08..14 (rewrite almost all of `08-validators.md`).
 - **AK.** New enum package creation (template validation).
