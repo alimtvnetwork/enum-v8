@@ -9,6 +9,23 @@
 
 ---
 
+## [spec-v0.31.0] — 2026-05-06 (Cycle 16 baseline & closed — `spec/03-powershell-test-run/` directory at 100 % verifiable)
+
+### Added
+- **`spec/07-code-vs-spec-audits/17-cycle16-powershell-test-run.md`** — Cycle 16 audit covering all 9 files in `spec/03-powershell-test-run/` (28 representative claims across 2 519 lines). Closes the directory at **100 % verifiable** (22 ✅ / 6 ❓; the 6 ❓ are runner-internal behaviours — parallel-threading model, JSON-schema fidelity — requiring a direct `scripts/*.psm1` probe). Raises and resolves **D-CVS-44 → D-CVS-48** (5 LOW drifts) in the same cycle. Folds in task **AH** debt for this directory.
+
+### Fixed
+- **`spec/03-powershell-test-run/01-overview.md`** (D-CVS-44) — added a top-of-file **`Scope note (enum-v4)`** explaining `run.ps1` is layout-agnostic and example JSON paths (`tests/integratedtests/corecmptests/...`) use upstream-`core-v9` package names for illustration. The runner reads test packages from disk via `go list ./tests/...` and works on either layout.
+- **`spec/03-powershell-test-run/04-pre-commit-api-checker.md`** (D-CVS-45) — added the same `Scope note (enum-v4)` callout, redirecting to `01-overview.md` and `01-app/13-testing-patterns.md` §6.1.
+- **`spec/03-powershell-test-run/06-coverage-prompt-generator.md`** (D-CVS-46) — inline rewrite of the prompt template (line 71) to name both upstream-`core-v9` and `enum-v4` test layouts. Inline rewrite chosen because the line is *quoted prompt output* — a top-of-file scope note wouldn't propagate into the generated prompt.
+- **`spec/03-powershell-test-run/08-generic-go-test-coverage-runner.md`** (D-CVS-47) — added a top-of-file **`Consumer-coverage note (enum-v4)`** scoping the entire portable-runner spec to upstream-`core-v9` nomenclature.
+- **`spec/03-powershell-test-run/09-ai-agent-complete-reference.md`** (D-CVS-48) — added the same `Consumer-coverage note (enum-v4)` callout. Per-token rewrite of the 7 in-text `tests/integratedtests/` references avoided to preserve the file's portability promise (header line: "self-contained reference for any AI agent working on a Go project").
+
+### Changed
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — added Cycle 16 history row; lifted top-line milestone to include **`spec/03-powershell-test-run/` baselined & closed**; bumped open-❓ aggregate from **158 → 164** (6 from `spec/03` runner-internal behaviours).
+
+---
+
 ## [spec-v0.30.0] — 2026-05-06 (Freeze marker — `spec/01-app/` directory closed for code-vs-spec drift)
 
 ### Added
