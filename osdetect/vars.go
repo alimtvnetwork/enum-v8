@@ -28,19 +28,20 @@ var (
 	}
 	
 	lowerCaseNames = [...]string{
-		Invalid:   "invalid",
-		AnyOs:     "any-os",
-		Windows:   "windows",
-		Unix:      "unix",
-		Linux:     "linux",
-		MacOs:     "macOs",
-		Ubuntu:    "ubuntu",
-		Debian:    "Debian",
-		ArchLinux: "ArchLinux",
-		FreeBsd:   "FreeBsd",
-		Centos:    "centos",
-		Docker:    "docker",
-		Android:   "android",
+		Invalid:               "invalid",
+		AnyOs:                 "any-os",
+		Windows:               "windows",
+		Unix:                  "unix",
+		Linux:                 "linux",
+		MacOs:                 "macOs",
+		Ubuntu:                "ubuntu",
+		Debian:                "Debian",
+		ArchLinux:             "ArchLinux",
+		FreeBsd:               "FreeBsd",
+		Centos:                "centos",
+		RedHatEnterpriseLinux: "redhat-enterprise-linux",
+		Docker:                "docker",
+		Android:               "android",
 	}
 	
 	osGroupMap = map[Variant]bool{
