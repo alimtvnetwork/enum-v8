@@ -9,6 +9,20 @@
 
 ---
 
+## [spec-v0.51.0] — 2026-05-06 (Cycle 46 — AB-residual deep-probe of `spec/01-app/08-validators.md`)
+
+### Added
+- `spec/07-code-vs-spec-audits/35-cycle46-AB-residual-spec01-validators.md` — settles all 6 ❓ items left by Cycle 21. **2 promotions to ✅** (row 43: `errcore.VarTwoNoType` + `ValidationFailedType` symbol existence at `errcore/VarTwoNoType.go:25` + `RawErrorType.go:121`; row 45: `regexnew.New.Lazy` constructor at `regexnew/newCreator.go:34`). **3 reclassifications to ⓘ "upstream-only"** per Cycle 37 (S-109): row 42 (`coretestcases.CaseV1`/`CaseNilSafe`), row 44 (`<pkg>tests/<V>_Verification_test.go` naming — enum-v4 has flat `tests/creationtests/`, upstream `core-v9` uses `<pkg>tests/` subdirs but neither uses `_Verification_` filenames). **1 out-of-band** (row 46: aspirational diagnostic rules → Task AC advisory dimension). **NO NEW FINDINGS.**
+- Scoreboard top-line + per-section row updated (§08 verifiable 33.3% → 42.9%; §08 ❓ pool fully cleared).
+
+### Notes
+- AB-residual `spec/01-app/` ❓ pool drops 17 → 11 — **only Cycle 22 (`10-reflection-and-dynamic.md`) has active probe targets left**.
+- Cumulative AB ❌ across 7 sections: unchanged at 51 (CRITICAL 23).
+- Cumulative ⓘ "upstream-only" annotations: 9 → 11.
+- §08 is no longer the worst-drift section (§11 still worst at 18.2%).
+
+---
+
 ## [spec-v0.50.0] — 2026-05-06 (Cycle 45 — AB-residual deep-probe of `spec/01-app/11-versioning.md`)
 
 ### Added
