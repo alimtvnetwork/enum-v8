@@ -104,6 +104,17 @@
 - **status:** open
 - **risk:** None — informational README edit only.
 
+### S-105: CI guard — `spec/02-app-issues/README.md` index drift detector
+
+- **createdAt:** 2026-05-06
+- **source:** Lovable (Cycle 18 carry-forward)
+- **affectedProject:** enum-v4
+- **description:** Cycle 18 found `spec/02-app-issues/README.md` was stale by 4 issues for ~14 days. A trivial CI guard comparing the row count of `00-issues-index.md` (canonical) vs `README.md` would prevent recurrence.
+- **proposed change:** Add a check to `.github/workflows/ci-guards.yml` (or `scripts/ci/`) that fails if the row counts differ.
+- **acceptance criteria:** Removing a row from README CI fails; both in sync CI passes.
+- **status:** open
+- **risk:** None.
+
 ---
 
 ## Rejected Suggestions

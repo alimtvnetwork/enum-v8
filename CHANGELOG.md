@@ -13,6 +13,17 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ## [Unreleased]
 
 ### Changed
+- **Cycle 18 spec audit (Task AA + closes Task AH)** — closed
+  `spec/02-app-issues/` (11 files, 402 lines) at **100 % verifiable** (21 ✅ /
+  5 ❓ audit-history). Raised and resolved **5 LOW drifts (D-CVS-56 →
+  D-CVS-60)**: 1 stale README index (5 open vs reality 9 resolved) + 4
+  upstream-vs-`enum-v4` scope footnotes on the historical resolution files
+  (`02-internal-package-coverage-policy.md`, `03-getassert-undocumented-api.md`,
+  `04-testwrappers-public-surface.md`, `05-missing-params-go-files.md`).
+  **🎉 Marks Task AH (cross-`spec/` cleanup sweep) Done** — every directory
+  under `spec/` outside the immutable history folders is now baselined. See
+  `spec/07-code-vs-spec-audits/19-cycle18-app-issues.md`. Spec changelog
+  bumped to **spec-v0.33.0**.
 - **Cycle 17 spec audit (Task AA + AH partial)** — closed `spec/04-tooling/`
   (10 files, 2 553 lines) at **100 % verifiable** (22 ✅ / 8 ❓ workflow-
   internal). Raised and resolved **7 LOW drifts (D-CVS-49 → D-CVS-55)** in the

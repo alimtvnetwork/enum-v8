@@ -9,6 +9,23 @@
 
 ---
 
+## [spec-v0.33.0] — 2026-05-06 (Cycle 18 baseline & closed — `spec/02-app-issues/` directory at 100 % verifiable; 🎉 cross-`spec/` AH sweep COMPLETE)
+
+### Added
+- **`spec/07-code-vs-spec-audits/19-cycle18-app-issues.md`** — Cycle 18 audit covering all 11 files in `spec/02-app-issues/` (26 representative claims across 402 lines). Closes the directory at **100 % verifiable** (21 ✅ / 5 ❓ audit-history claims). Raises and resolves **D-CVS-56 → D-CVS-60** (5 LOW drifts) in the same cycle. **Marks task AH (cross-`spec/` cleanup sweep) Done** — every directory under `spec/` outside the immutable history folders has been baselined.
+
+### Fixed
+- **`spec/02-app-issues/README.md`** (D-CVS-56) — index was stale by ~4 issues for ~14 days (since spec-v0.6.0 introduced #06–#09 and resolved all 9). Rewrote the index table to 9 rows all ✅ resolved; updated the top-of-file status banner to "All 9 issues resolved (last update spec-v0.8.0)".
+- **`spec/02-app-issues/02-internal-package-coverage-policy.md`** (D-CVS-57) — added a Cycle-18 `Scope note (enum-v4)` after the status banner, explaining that the cited `tests/integratedtests/<pkg>tests/` and `csvinternaltests/`/`fsinternaltests/` paths describe upstream `core-v9` (which has an `internal/` directory); `enum-v4` has no `internal/` at all, so the policy applies vacuously here. Historical resolution text preserved verbatim.
+- **`spec/02-app-issues/03-getassert-undocumented-api.md`** (D-CVS-58) — added an `enum-v4`-scope footnote noting `coretests.GetAssert` returns zero hits in `enum-v4` (Goconvey assertions are used inside `EnumTestWrapper` instead). Historical "STABLE for any test code inside this module" declaration preserved verbatim — it now correctly applies to upstream `core-v9` only.
+- **`spec/02-app-issues/04-testwrappers-public-surface.md`** (D-CVS-59) — added an `enum-v4`-scope footnote noting `tests/testwrappers/` does NOT exist in `enum-v4` (the project uses a single shared `EnumTestWrapper` inside `tests/creationtests/`). Historical declaration preserved verbatim.
+- **`spec/02-app-issues/05-missing-params-go-files.md`** (D-CVS-60) — added an `enum-v4`-scope footnote noting `tests/integratedtests/` and `errcoretests/` are upstream-`core-v9` package names; the "grandfathered, no back-fill" rule applies vacuously here (`tests/creationtests/` uses shared `vars.go`, no per-package `params.go`).
+
+### Changed
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — added Cycle 18 history row; lifted top-line milestone to include **🎉 Cross-`spec/` AH sweep COMPLETE**; bumped open-❓ aggregate from **172 → 177** (5 audit-history claims).
+
+---
+
 ## [spec-v0.32.0] — 2026-05-06 (Cycle 17 baseline & closed — `spec/04-tooling/` directory at 100 % verifiable)
 
 ### Added
