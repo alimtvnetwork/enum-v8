@@ -73,15 +73,25 @@ function Invoke-CoveragePreChecks {
             if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "skip" "spec-api-check.psm1 missing" }
         } elseif (-not (Test-Path $specDir)) {
             if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "skip" "spec/01-app/ missing" }
-        } elseif (-not (Test-Path $upstreamDir)) {
-            Write-Host "  Skipping spec-API lint (upstream clone $upstreamDir absent)" -ForegroundColor DarkYellow
-            Write-Host "    Hint: git clone --depth 1 --branch v1.5.8 https://github.com/alimtvnetwork/core-v9 $upstreamDir" -ForegroundColor DarkGray
-            if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "skip" "upstream clone absent" }
         } else {
+            # S-115: import early so Test-UpstreamClone is available for the sentinel check.
+            try { Import-Module $specApiModule -Force -DisableNameChecking } catch {}
+            $cloneStatus = $null
+            if (Get-Command Test-UpstreamClone -ErrorAction SilentlyContinue) {
+                $cloneStatus = Test-UpstreamClone -Path $upstreamDir
+            } elseif (Test-Path $upstreamDir) {
+                $cloneStatus = [pscustomobject]@{ Ok = $true; Reason = 'ok' }
+            } else {
+                $cloneStatus = [pscustomobject]@{ Ok = $false; Reason = 'missing' }
+            }
+            if (-not $cloneStatus.Ok) {
+                Write-Host "  Skipping spec-API lint (upstream clone unavailable: $($cloneStatus.Reason))" -ForegroundColor DarkYellow
+                Write-Host "    Hint: git clone --depth 1 --branch v1.5.8 https://github.com/alimtvnetwork/core-v9 $upstreamDir" -ForegroundColor DarkGray
+                if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "skip" "upstream clone $($cloneStatus.Reason)" }
+            } else {
             Write-Host ""
             Write-Host "  Running spec-API fabrication lint (S-106)..." -ForegroundColor Yellow
             try {
-                Import-Module $specApiModule -Force -DisableNameChecking
                 $strict = $ExtraArgs -and ($ExtraArgs -contains '--strict-spec-api')
                 $specResult = Invoke-SpecApiCheck -SpecDir $specDir -UpstreamDir $upstreamDir
                 $fabCount = 0
@@ -133,6 +143,7 @@ function Invoke-CoveragePreChecks {
             } catch {
                 Write-Host "  Spec-API lint errored: $_" -ForegroundColor DarkYellow
                 if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "warn" "lint errored" }
+            }
             }
         }
     }

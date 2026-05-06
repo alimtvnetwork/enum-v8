@@ -24,7 +24,58 @@
 # pass and is tracked separately. S-106 is the cheap-and-fast first wall.
 # ─────────────────────────────────────────────────────────────────────────────
 
-$script:SpecApiCheckVersion = '1.1.0'
+$script:SpecApiCheckVersion = '1.2.0'  # S-115 — Test-UpstreamClone helper + sentinel guard
+
+# Pinned upstream tag — bump when core-v9 releases a new audit baseline.
+$script:UpstreamCloneUrl = 'https://github.com/alimtvnetwork/core-v9'
+$script:UpstreamCloneTag = 'v1.5.8'
+$script:UpstreamCloneDefaultPath = '/tmp/core-v9-upstream'
+
+function Test-UpstreamClone {
+    <#
+    .SYNOPSIS S-115 — Verify the core-v9 upstream clone is present and well-formed.
+    .DESCRIPTION
+        Audit probes (e.g. AB-residual ❓→✅/❌ classification) read source files
+        directly from the upstream clone with rg/grep. If the clone is missing,
+        every probe returns 0 hits and produces FALSE fabrication conclusions
+        (R-CVS-01, R-CVS-02, R-CVS-03 were all the same drift). This helper
+        is the single source of truth: call it BEFORE any upstream probe.
+    .PARAMETER Path Defaults to /tmp/core-v9-upstream.
+    .PARAMETER AutoClone If set, runs the documented git clone when missing.
+    .OUTPUTS [pscustomobject]@{ Ok; Path; Reason; PackageCount }
+    #>
+    [CmdletBinding()]
+    param(
+        [string]$Path = $script:UpstreamCloneDefaultPath,
+        [switch]$AutoClone
+    )
+
+    if (-not (Test-Path $Path)) {
+        if ($AutoClone) {
+            Write-Host "  ▶ Cloning core-v9 @ $script:UpstreamCloneTag → $Path" -ForegroundColor Yellow
+            & git clone --depth 1 --branch $script:UpstreamCloneTag $script:UpstreamCloneUrl $Path 2>&1 | Out-Host
+            if ($LASTEXITCODE -ne 0 -or -not (Test-Path $Path)) {
+                return [pscustomobject]@{ Ok = $false; Path = $Path; Reason = 'clone-failed'; PackageCount = 0 }
+            }
+        } else {
+            return [pscustomobject]@{ Ok = $false; Path = $Path; Reason = 'missing'; PackageCount = 0 }
+        }
+    }
+
+    # Sentinel: a real core-v9 checkout always has coredata/coregeneric.
+    $sentinel = Join-Path $Path 'coredata/coregeneric'
+    if (-not (Test-Path $sentinel)) {
+        return [pscustomobject]@{ Ok = $false; Path = $Path; Reason = 'sentinel-missing (coredata/coregeneric absent — wrong branch or shallow rename?)'; PackageCount = 0 }
+    }
+
+    $pkgCount = (Get-ChildItem -Path $Path -Recurse -Directory -ErrorAction SilentlyContinue |
+                 Where-Object {
+                     $_.FullName -notmatch '[\\/]\.git[\\/]' -and
+                     (Get-ChildItem -Path $_.FullName -Filter '*.go' -File -ErrorAction SilentlyContinue | Select-Object -First 1)
+                 }).Count
+
+    return [pscustomobject]@{ Ok = $true; Path = $Path; Reason = 'ok'; PackageCount = $pkgCount }
+}
 
 # Packages that ALWAYS resolve (Go stdlib + project-local non-upstream pkgs).
 # Anything matching is allow-listed without a directory check.
@@ -70,6 +121,14 @@ function Get-UpstreamPackages {
 
     if (-not (Test-Path $UpstreamDir)) {
         throw "Upstream clone not found at $UpstreamDir. Re-clone with: git clone --depth 1 --branch v1.5.8 https://github.com/alimtvnetwork/core-v9 $UpstreamDir"
+    }
+
+    # S-115 sentinel: warn loudly if the directory exists but isn't a real
+    # core-v9 checkout — prevents silent under-indexing that masquerades as
+    # fabrications in audit probes.
+    $sentinel = Join-Path $UpstreamDir 'coredata/coregeneric'
+    if (-not (Test-Path $sentinel)) {
+        Write-Warning "Upstream clone at $UpstreamDir is missing sentinel 'coredata/coregeneric'. Audit probes may produce false fabrications. Re-clone with: git clone --depth 1 --branch v1.5.8 https://github.com/alimtvnetwork/core-v9 $UpstreamDir"
     }
 
     # Collect every directory that contains at least one .go file (= a Go package).
@@ -348,4 +407,4 @@ function Invoke-SpecApiCheck {
     }
 }
 
-Export-ModuleMember -Function Invoke-SpecApiCheck, Get-UpstreamPackages, Get-UpstreamTopLevelSymbols, Get-SpecApiReferences
+Export-ModuleMember -Function Invoke-SpecApiCheck, Get-UpstreamPackages, Get-UpstreamTopLevelSymbols, Get-SpecApiReferences, Test-UpstreamClone

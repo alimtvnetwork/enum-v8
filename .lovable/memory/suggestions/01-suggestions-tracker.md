@@ -25,7 +25,7 @@
 - **rationale:** Three same-class probe failures across three audit cycles indicates the indexer needs to recursively descend at least one level into `coredata/` (and possibly other parent dirs like `internal/`).
 - **proposed change:** Add a recursive walk of `coredata/*` directories in the `-LocalDir` and `-UpstreamDir` indexing paths; re-run S-106 lint after the change to confirm no regression on existing flagged items.
 - **acceptance criteria:** A test-clone scenario where `coredata/coreonce` exists is correctly indexed and `coreonce.NewAnyErrorOnce` is NOT flagged as a fabrication.
-- **status:** open
+- **status:** ✅ done — moved to Completed (Cycle 48). Original framing was wrong (recursion already worked). See completed entry for the actual fix.
 
 ---
 
@@ -43,6 +43,13 @@
 ---
 
 ## Completed Suggestions
+
+### S-115: Harden upstream-clone presence detection (audit-probe correctness)
+
+- **completed:** 2026-05-06 (Cycle 48)
+- **source:** Lovable (Cycle 47 — third retraction R-CVS-03 of same drift class)
+- **resolution:** Empirically verified the original framing was wrong: `Get-UpstreamPackages` already walks `coredata/*` recursively via `Get-ChildItem -Recurse` (line 82). A live indexing run against `/tmp/core-v9-upstream` correctly indexed `coreonce`, `coregeneric`, `corestr`, `coredynamic` (177 pkgs total; `coreonce.NewAnyErrorOnce` resolved). The real defect was operator-side: when the upstream clone is **missing**, audit probes that read source via `rg`/`grep` directly silently return 0 hits and produce false fabrication conclusions (R-CVS-01/02/03 were all the same drift). Built two guardrails in `scripts/spec-api-check.psm1` v1.2.0: (1) **`Test-UpstreamClone` exported helper** that returns `{ Ok; Path; Reason; PackageCount }` and supports `-AutoClone` for one-shot remediation. Sentinel = `coredata/coregeneric` (always present in a real core-v9 checkout). Reasons: `missing` / `sentinel-missing` / `clone-failed` / `ok`. (2) **Sentinel-missing warning inside `Get-UpstreamPackages`** so every spec-api-check run also surfaces the drift even if the helper isn't called explicitly. Wired the helper into `scripts/CoveragePreChecks.psm1` "Spec-API Lint" phase: the old plain `Test-Path $upstreamDir` skip is replaced with `Test-UpstreamClone` so a directory that exists but lacks the sentinel (wrong branch, partial clone) now skips with a precise reason instead of running and producing false negatives. Smoke test `tests/scripts/Test-UpstreamClone.ps1` covers 4 cases (missing path / sentinel-missing / `Get-UpstreamPackages` warning / real clone) — all 7 assertions pass via `nix run nixpkgs#powershell`. `package.json` 0.17.0 → 0.18.0.
+- **acceptance criteria:** ✅ `Test-UpstreamClone` exported and returns the documented shape. ✅ Real clone scenario indexes `coreonce.NewAnyErrorOnce` (verified pre-change — already worked). ✅ Sentinel-missing scenario detected. ✅ CI pre-check uses sentinel-aware skip with precise reason. ✅ `Get-UpstreamPackages` emits a warning when sentinel is absent. ✅ Smoke test in repo prevents regression.
 
 ### S-114: `PackageCoverage.psm1` (and 3 other modules) hard-codes `tests/integratedtests/` path
 
