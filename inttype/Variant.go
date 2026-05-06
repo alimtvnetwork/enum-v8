@@ -294,7 +294,7 @@ func (it Variant) IsNameOfValues(anyValues ...int) bool {
 }
 
 func (it Variant) AddStringAsNumber(n string) Variant {
-	convInt, isSuccess := converters.StringToIntegerWithDefault(
+	convInt, isSuccess := converters.StringTo.IntegerWithDefault(
 		n, 0)
 
 	if isSuccess {
