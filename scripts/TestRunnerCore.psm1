@@ -5,24 +5,77 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 function Invoke-GitPull {
-    <# .SYNOPSIS Pull the latest changes from the remote git repository. #>
+    <#
+    .SYNOPSIS
+        Pull the latest changes from the remote git repository.
+    .DESCRIPTION
+        S-113: probes the configured `origin` remote with `git ls-remote --exit-code origin`
+        BEFORE attempting `git pull`, so a missing/unreachable remote produces a clean
+        `skip` result instead of a confusing "Repository not found" + soft-fail.
+
+        S-112: returns a structured status object so callers can register a truthful
+        dashboard phase row instead of hard-coding `pass`.
+    .OUTPUTS
+        [pscustomobject] @{ Status = 'pass' | 'warn' | 'skip'; Message = '...' }
+    #>
     [CmdletBinding()]
     param()
     Write-Header "Pulling latest from remote"
     $prevPref = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+
+    # S-113 — early remote probe. If `origin` doesn't exist or is unreachable,
+    # don't attempt `git pull` (which would emit a misleading "Repository not found").
+    $hasOrigin = $false
+    $originUrl = (git remote get-url origin 2>$null)
+    if ($LASTEXITCODE -eq 0 -and $originUrl) { $hasOrigin = $true }
+    if (-not $hasOrigin) {
+        Write-Host "  No 'origin' remote configured — skipping pull" -ForegroundColor Yellow
+        $ErrorActionPreference = $prevPref
+        return [pscustomobject]@{ Status = 'skip'; Message = 'no origin remote' }
+    }
+
+    # Probe reachability without printing remote refs.
+    $null = git ls-remote --exit-code origin HEAD 2>&1
+    $reachable = ($LASTEXITCODE -eq 0)
+    if (-not $reachable) {
+        Write-Host "  Remote 'origin' ($originUrl) unreachable — skipping pull" -ForegroundColor Yellow
+        $ErrorActionPreference = $prevPref
+        return [pscustomobject]@{ Status = 'skip'; Message = 'remote unreachable' }
+    }
+
     git pull 2>&1 | ForEach-Object { Write-Host "  $_" -ForegroundColor Gray }
-    if ($LASTEXITCODE -eq 0) { Write-Success "Git pull complete" } else { $s = Get-CallerSource; Write-Fail "git pull failed (continuing anyway) (source: $s)" }
+    $pullExit = $LASTEXITCODE
     $ErrorActionPreference = $prevPref
+    if ($pullExit -eq 0) {
+        Write-Success "Git pull complete"
+        return [pscustomobject]@{ Status = 'pass'; Message = 'pulled from remote' }
+    }
+    $s = Get-CallerSource
+    Write-Fail "git pull failed (continuing anyway) (source: $s)"
+    return [pscustomobject]@{ Status = 'warn'; Message = 'pull failed (continuing)' }
 }
 
 function Invoke-FetchLatest {
-    <# .SYNOPSIS Pull git changes and run `go mod tidy` to sync dependencies. #>
+    <#
+    .SYNOPSIS
+        Pull git changes and run `go mod tidy` to sync dependencies.
+    .OUTPUTS
+        [pscustomobject] @{ GitPull = <Invoke-GitPull result>; Tidy = @{ Status; Message } }
+    #>
     [CmdletBinding()]
     param()
-    Invoke-GitPull
+    $gitResult = Invoke-GitPull
     Write-Header "Fetching latest dependencies"
     go mod tidy
-    if ($LASTEXITCODE -eq 0) { Write-Success "Dependencies up to date" } else { $s = Get-CallerSource; Write-Fail "go mod tidy failed (source: $s)" }
+    if ($LASTEXITCODE -eq 0) {
+        Write-Success "Dependencies up to date"
+        $tidy = [pscustomobject]@{ Status = 'pass'; Message = 'up to date' }
+    } else {
+        $s = Get-CallerSource
+        Write-Fail "go mod tidy failed (source: $s)"
+        $tidy = [pscustomobject]@{ Status = 'warn'; Message = 'tidy failed' }
+    }
+    return [pscustomobject]@{ GitPull = $gitResult; Tidy = $tidy }
 }
 
 function Invoke-BuildCheck {
