@@ -13,6 +13,17 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ## [Unreleased]
 
 ### Changed
+- **Cycle 17 spec audit (Task AA + AH partial)** — closed `spec/04-tooling/`
+  (10 files, 2 553 lines) at **100 % verifiable** (22 ✅ / 8 ❓ workflow-
+  internal). Raised and resolved **7 LOW drifts (D-CVS-49 → D-CVS-55)** in the
+  same cycle: 2 broken `cross-repo/core-v9/` paths in `00-overview.md`, 1
+  missing-precedent in `04-bootstrap-into-new-repo.md` §7 (the AH-tracked
+  occurrence), and 4 stale `enum-v2`/`cross-repo/core-v9` tokens in
+  `06-cross-repo-sync.md` (line 80 template comment carried both stale tokens).
+  Each fix includes a Core-memory clarification that `cross-repo/core-v8/`
+  intentionally keeps its historical name even though the import path is
+  `core-v9`. See `spec/07-code-vs-spec-audits/18-cycle17-tooling.md`. Spec
+  changelog bumped to **spec-v0.32.0**.
 - **Cycle 16 spec audit (Task AA + AH partial)** — closed
   `spec/03-powershell-test-run/` (9 files, 2 519 lines) at **100 % verifiable**
   (22 ✅ / 6 ❓; the 6 ❓ are runner-internal behaviours requiring a direct
