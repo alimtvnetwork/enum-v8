@@ -28,6 +28,17 @@
 
 ---
 
+## [spec-v0.42.1] — 2026-05-06 (Cycle 34 — S-004 scope callout)
+
+### Changed
+- `spec/00-llm-integration-guide.md` — added an inline upstream-vs-enum-v4 scope callout above the "Test Folder Structure" code fence (line 826), matching the disclaimer model already used by `spec/06-testing-guidelines/01-folder-structure.md` line 3. Cross-links `spec/01-app/13-testing-patterns.md` §6.1 and `spec/06-testing-guidelines/01-folder-structure.md`. Closes suggestion **S-004** and disambiguates the Decision-Matrix Style-D row (line 36) by the same callout — `integratedtests/` references are now correctly scoped to upstream `core-v9` consumers.
+
+### Notes
+- **S-003** verified already-resolved: `spec/06-testing-guidelines/01-folder-structure.md` line 3 already carries the same scope disclaimer.
+- **PI-002** (Cross-spec stale `integratedtests/` paths) plan marked complete in `.lovable/memory/pending-issues/01-all-pending-issues.md`.
+
+---
+
 ## [spec-v0.41.0] — 2026-05-06 (Cycle 26 — S-106 self-audit & retractions)
 
 ### Added

@@ -16,18 +16,6 @@
 
 ## Open Suggestions
 
-### S-001: Pin Go toolchain to 1.22 as stopgap for Task W
-
-- **createdAt:** 2026-05-05
-- **source:** Lovable (Cycle 13)
-- **affectedProject:** enum-v4
-- **description:** Go 1.25 rejects the dual-path `replace` bridge. Pinning to Go 1.22 would unblock builds.
-- **rationale:** Allows development to continue while waiting for upstream `core-v9` `go.mod` rename.
-- **proposed change:** Add `toolchain go1.22.0` to `go.mod`.
-- **acceptance criteria:** `./run.ps1 -tc` passes with Go 1.22 toolchain.
-- **status:** open
-- **risk:** Masks the underlying issue; locks to older toolchain.
-
 ### S-002: Promote `errcore.VarTwoNoType` from ❓ to ✅ in Cycle 6
 
 - **createdAt:** 2026-05-05
@@ -37,29 +25,7 @@
 - **rationale:** Under spec-internal-consistency dimension it qualifies as ✅.
 - **proposed change:** Backport promotion when Task AC runs.
 - **acceptance criteria:** Cycle 6 audit report row 16 updated.
-- **status:** open
-
-### S-003: Fix `spec/06-testing-guidelines/01-folder-structure.md` stale path
-
-- **createdAt:** 2026-05-05
-- **source:** Lovable (reliability report)
-- **affectedProject:** enum-v4 spec
-- **description:** Line 13 references `tests/integratedtests/` which doesn't exist. Should be `tests/creationtests/`.
-- **rationale:** This is the #1 failure risk for any AI following the spec to write tests.
-- **proposed change:** Replace `integratedtests` with `creationtests` throughout the file.
-- **acceptance criteria:** `rg integratedtests spec/06-testing-guidelines/01-folder-structure.md` returns 0 hits.
-- **status:** open
-
-### S-004: Fix `spec/00-llm-integration-guide.md` stale test path reference
-
-- **createdAt:** 2026-05-05
-- **source:** Lovable (reliability report)
-- **affectedProject:** enum-v4 spec
-- **description:** Line 36 references `tests/integratedtests/` in the decision matrix table.
-- **rationale:** First file any AI reads; stale path causes immediate misdirection.
-- **proposed change:** Replace stale reference with `tests/creationtests/`.
-- **acceptance criteria:** `rg integratedtests spec/00-llm-integration-guide.md` returns only the anti-pattern callout lines.
-- **status:** open
+- **status:** open (deferred — folded into Task AC consistency-dimension re-audit; will land with the §15 sweep after the freeze lifts)
 
 ### S-109: Cycle-15 deep-probe of `tests/creationtests/` patterns to clear 21 ❓
 
@@ -75,6 +41,27 @@
 ---
 
 ## Completed Suggestions
+
+### S-004: Fix `spec/00-llm-integration-guide.md` stale test path reference
+
+- **completed:** 2026-05-06 (Cycle 34)
+- **source:** Lovable (reliability report, 2026-05-05)
+- **resolution:** Re-framing applied (not path replacement). The `tests/integratedtests/` references on lines 36 (Decision Matrix Style D row) and 826 (Test Folder Structure section) correctly document the **upstream `core-v9` consumer layout**; `enum-v4` itself uses the single shared `tests/creationtests/` package. Added an inline scope callout above the line-826 code fence that explains the upstream-vs-enum-v4 split and cross-links both `spec/01-app/13-testing-patterns.md` §6.1 and `spec/06-testing-guidelines/01-folder-structure.md` (which already carries the same disclaimer on its own line 3). Pattern matches the resolution model used in Cycles 12/15/17/18 for sibling `integratedtests` references.
+- **acceptance criteria:** ✅ `tests/integratedtests/` references in `spec/00-llm-integration-guide.md` are now scope-disambiguated. ✅ No misdirection risk for AI readers — the callout lands before the code block.
+
+### S-003: Fix `spec/06-testing-guidelines/01-folder-structure.md` stale path
+
+- **completed:** 2026-05-06 (Cycle 34) — already-resolved discovery
+- **source:** Lovable (reliability report, 2026-05-05)
+- **resolution:** Verified obsolete. `spec/06-testing-guidelines/01-folder-structure.md` line 3 already carries the upstream-scope disclaimer added in earlier audit cycles: *"⚠️ Scope: the layout below describes upstream `core-v9`. enum-v4 uses a single shared `tests/creationtests/` package — see [spec/01-app/13-testing-patterns.md §6.1]…"*. The `integratedtests` references in the file body intentionally document the upstream consumer layout, not enum-v4. Closing as **resolved-by-prior-cycle** with no edit needed.
+- **acceptance criteria:** ✅ Scope disclaimer present (line 3). ✅ No misdirection risk.
+
+### S-001: Pin Go toolchain to 1.22 as stopgap for Task W
+
+- **completed:** 2026-05-06 (Cycle 34) — closed as **obsolete**
+- **source:** Lovable (Cycle 13, 2026-05-05)
+- **resolution:** Stopgap no longer relevant. The underlying problem (Go 1.25 rejecting the dual-path `replace` bridge to upstream `core-v9`) was fixed at the source by Tasks W + AG (2026-05-05): upstream `core-v9` was renamed to `module github.com/alimtvnetwork/core-v9` and tagged `v1.5.8`; `enum-v4/go.mod` now pins `core-v9 v1.5.8` directly with no `replace` bridge (per Core memory). Pinning to Go 1.22 would now mask the working modern setup. **Do not** add `toolchain go1.22.0` to `go.mod`.
+- **acceptance criteria:** ✅ `replace` bridge removed (Task AG). ✅ `enum-v4` builds against current toolchain without the stopgap. ✅ Risk noted in original suggestion (toolchain lock-in) avoided.
 
 ### S-107: Goconvey-failure summarizer for `failing-tests.txt`
 
