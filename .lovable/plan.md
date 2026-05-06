@@ -171,8 +171,11 @@
 #### AL2-01. Batch A — simple state enums (6 pkgs) ✅ DONE (2026-05-06, Cycle 64)
 - **Targets:** `compresslevels`, `configfilestate`, `conntrackstate`, `osgroupexecution`, `servicestate`, `sitestatetype`.
 - **Surface:** `Create`/`CreateMust` (or `New`/`NewMust`), `all-is-checkers.go`, `all-validation-checking-err.go`, `Min`/`Max`/`RangesInvalidErr`.
-- **Result:** 6 new test files (`<Pkg>_Coverage_test.go` per package) covering constructors + every `IsX` predicate + full Variant accessor sweep. Estimated +3pp total; each package 0% → 60–80%. Pending local `./run.ps1 -tc` confirmation.
-- **Notes:** `compresslevels` and `configfilestate` have no `New`/`NewMust` (Variant-only); `servicestate.Min()` returns `Status` not `Invalid` (verified). `osgroupexecution` exposes the full 40-method Precedence surface — broadest single-file coverage in this batch.
+- **Result:** 6 new test files (`<Pkg>_Coverage_test.go` per package) covering constructors + every `IsX` predicate + full Variant accessor sweep.
+
+#### AL2-01b. Batch A test fix-up ✅ DONE (2026-05-06, Cycle 66)
+- **Result:** Repaired 8 failing tests caused by misuse of diagnostic methods (`OnlySupportedErr`, `RangesInvalidErr` always non-nil) and brittle pinning of fuzzy-matched shorthand inputs (`onofftype`). Added `compresslevels.Variant` to `RangesDynamicMap` skip list. Documented as RCA Patterns 5 & 6.
+- **Notes:** `compresslevels` and `configfilestate` have no `New`/`NewMust` (Variant-only); `servicestate.Min()` returns `Status` not `Invalid` (verified).
 
 #### AL2-02. Batch B — DB family (6 pkgs)
 - **Targets:** `dbexposetype`, `dbuserprivillegetype`, `sqljointype`, `sqliteconnpathtype`, `querymethodtype`, `resauthtype`.
