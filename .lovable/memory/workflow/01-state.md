@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (post API migration investigation).
+> **Last updated:** 2026-05-06 (reliability report v2 generated; memory verified intact).
 
 ## ✅ Done
 
@@ -12,7 +12,7 @@
   - 43 drift findings resolved (D-CVS-01 … D-CVS-43).
   - New audit dimension introduced: **spec-internal consistency** (Cycle 13).
   - `spec/01-app/` directory cleared of `tests/integratedtests/` (genuine clean as of Cycle 12).
-- **Reliability risk report** produced → `/mnt/documents/01-reliability-risk-report.md`
+- **Reliability risk report v2** produced → `/mnt/documents/02-reliability-risk-report-v2.md` (2026-05-06; supersedes v1)
 - **Suggestions tracker** consolidated → `.lovable/memory/suggestions/01-suggestions-tracker.md`
 - **Pending issues** consolidated → `.lovable/memory/pending-issues/01-all-pending-issues.md`
 - **Plan.md** updated with phases, cycle plan, and next-task selection
