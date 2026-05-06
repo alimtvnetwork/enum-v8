@@ -1,7 +1,7 @@
 # Active Plan — enum-v4
 
 > Single source of truth for the project roadmap. Letter IDs are stable across sessions.
-> Last updated: 2026-05-06 (AM creationtests compile blocker fixed).
+> Last updated: 2026-05-06 (Cycle 19 — AB pass 1 done; AJ-01..03 spawned, blocked by `spec/01-app/` freeze).
 
 ---
 
