@@ -1,7 +1,7 @@
 # Active Plan — enum-v4
 
 > Single source of truth for the project roadmap. Letter IDs are stable across sessions.
-> Last updated: 2026-05-06 (AM API migration patched; pending local validation).
+> Last updated: 2026-05-06 (AM creationtests compile blocker fixed).
 
 ---
 
@@ -18,9 +18,9 @@
 
 ### AM. Fix broken `core-v9` API calls (converter + coredynamic migration)
 
-- **Status:** 🔄 In Progress — code patched 2026-05-06; awaiting user's local `./run.ps1 -tc` validation
+- **Status:** ✅ Done for reported blocker — `tests/creationtests` compile check passes in sandbox
 - **Objective:** Update all `enum-v4` source files that use old `core-v8`-era function signatures (`converters.AnyToValueString`, `coredynamic.TypeName`, etc.) to the new struct-namespace API (`converters.AnyTo.ValueString`, `coredynamic.SafeTypeName`, etc.).
-- **Dependencies:** Local Windows/Go run output from user, because sandbox has no `go` binary.
+- **Dependencies:** None for the reported `creationtests` compile blocker.
 - **Expected outputs:** All affected `.go` files updated, `go build ./...` passes.
 - **Acceptance criteria:** `go build ./...` succeeds with `core-v9 v1.5.8`.
 - **Reference:** `.lovable/memory/06-core-v9-api-migration.md`
@@ -124,9 +124,9 @@
 
 **Recommended next task:** Pick from this list:
 
-1. **AM** — Validate patched API migration by rerunning `./run.ps1 -tc` locally
-2. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/` (highest leverage spec task)
-3. **AI** — Mark `spec/01-app/` as frozen (quick win, 5 minutes)
+1. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/` (highest leverage spec task)
+2. **AI** — Mark `spec/01-app/` as frozen (quick win, 5 minutes)
+3. **AB** — Fetch upstream `core-v9` source for ❓ claim verification
 
 ---
 
