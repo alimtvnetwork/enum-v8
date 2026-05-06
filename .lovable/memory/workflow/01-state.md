@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 25 — AB pass 7 on `16-security.md`: 9 more ❌ surfaced — `corestr` package doesn't exist, `errcore.InvalidInput` doesn't exist, trust-boundary example built on fabricated `coredynamic`/`corevalidator.New` APIs; cumulative AB ❌ = 50; **🎉 AB sweep of `spec/01-app/` COMPLETE**; §16 at 66.7 %).
+> **Last updated:** 2026-05-06 (Cycle 26 — **S-106 lint BUILT** at `scripts/spec-api-check.psm1` v1.0.0; first run RETRACTED C-CVS-29 + C-CVS-51 (both packages exist nested under `coredata/`); cumulative AB ❌ drops 50 → 49, CRITICAL 24 → 22; AJ-15/36/37/38 re-scoped; AJ-01..43 may now safely proceed with S-106 guardrail).
 
 ## ✅ Done
 
@@ -25,6 +25,7 @@
 - **W.** Upstream `core-v9` `go.mod` rename + `v1.5.8` tag — ✅ Done (2026-05-05)
 - **AG.** Drop `replace` bridge and pin clean `core-v9 v1.5.8` — ✅ Done (2026-05-05)
 - **core-v9 API investigation** — Mapped converter/coredynamic API changes (2026-05-06). See `.lovable/memory/06-core-v9-api-migration.md`.
+- **S-106. Spec-API fabrication lint** — ✅ Built `scripts/spec-api-check.psm1` v1.0.0 (2026-05-06). Indexes 182 upstream packages and 10,216 symbols; scans spec for `package.Symbol` references; flags pkg/sym fabrications. Local-var tracking per-fence + ProseLooseMode heuristic. First run retracted 2 wrong audit findings (R-CVS-01/02). Limits: presence-only; does NOT catch arity/return-type drift (S-106 v2 needs Go AST pass).
 
 ## 🔄 In Progress
 
@@ -36,7 +37,10 @@
 
 - **AB. 🎉 Sweep of `spec/01-app/` COMPLETE.** All 7 sections holding ≥10 ❓ promoted: pass 1 §09 (66.7 %), pass 2 §07 (70.6 %), pass 3 §08 (33.3 %), pass 4 §10 (38.5 %), pass 5 §11 (**18.2 % — worst**), pass 6 §15 (74.1 %), pass 7 §16 (66.7 %). **Residual:** 24 non-API ❓ in `spec/01-app/` + 14 workflow/script-internal ❓ in spec/03/04 + 10 spec/06 + 5 spec/02 audit-history (= **53 ❓** total). These need a different probe (deep-read of `scripts/*.psm1` and `.github/workflows/*.yml`), not upstream-source comparison.
 - **AC.** Re-audit §07 / §08 / §09 / §10 / §11 / §15 / §16 against consistency dimension — run after AJ-01..43 land.
-- **AJ.** **NEW open items: AJ-01..43** (all blocked by `spec/01-app/` freeze). Highest-impact for §16: AJ-42 (rewrite §6 trust-boundary example — built on fabricated validator API), AJ-39 (replace `errcore.InvalidInput` — won't compile), AJ-36/37/38 (purge fabricated `corestr.*` package). For §15: AJ-32 (replace fabricated test-failure format), AJ-29 (re-frame helper family — return strings not errors), AJ-33 (rewrite stack-enhancement rationale). For §11: AJ-27 (rewrite `versionindexes` §2 — wrong purpose). For §10: AJ-15 (delete `coredynamic` §2 — package doesn't exist). For §08: AJ-08..14 (rewrite almost entire chapter). User decision needed on lifting freeze — but S-106 lint is now **MANDATORY** first (cumulative ❌ = 50, fabrication rate ~54 %, 24 CRITICAL ~48 %).
+- **AJ.** **49 open items: AJ-01..43** (all blocked by `spec/01-app/` freeze, but **S-106 v1.0 now in place** so rewrites are safe). AJ-15 split → AJ-15a (path-qualify `coredata/coredynamic`) + AJ-15b (purge fabricated symbols). AJ-36/37/38 re-scoped (keep `corestr` package, purge fabricated symbols only). Highest-impact: AJ-42 (rewrite §6 trust-boundary example — built on fabricated `corevalidator.New.Line` API), AJ-32 (replace fabricated test-failure format in §15.4), AJ-29 (re-frame §15.2 helpers — return strings not errors), AJ-33 (rewrite §15.3 stack-enhancement rationale — `HandleErr` doesn't wrap), AJ-27 (rewrite `versionindexes` §2 — wrong purpose), AJ-08..14 (rewrite almost all of `08-validators.md`).
+- **S-106 v1.1.** Refine prose-token allow-list; reduce residual ~40 pkg-fab false positives.
+- **S-106 v2.** Go AST-based signature lint (catches arity/return-type/receiver-shape drift like C-CVS-44/45/49).
+- **CI integration.** Wire S-106 v1.0 into `run.ps1 -tc` pre-checks alongside autofix/bracecheck; add CI gate failing any new spec PR that introduces a sym-fabrication.
 - **AK.** New enum package creation (template validation).
 - **AL.** Test coverage expansion.
 
@@ -70,14 +74,23 @@
 
 - **C-CVS-51..59 + D-CVS-61** — 9 ❌ + 1 ⚠️ in `spec/01-app/16-security.md`. Severity: 6× CRITICAL, 2× HIGH, 1× LOW (drift). **Completes the AB sweep of `spec/01-app/`** — all 7 sections that previously held ≥10 ❓ have been promoted. Highlights: (a) `corestr` package doesn't exist anywhere in upstream — `StringBuilder` and `IsValidUTF8` are fabricated; consumers must use stdlib `strings.Builder` and `unicode/utf8.ValidString`; (b) `errcore.InvalidInput.MergeError(...)` example won't compile — `InvalidInput` is not exposed as an `errcore` category (only `ShouldBe`/`Expected`/`StackEnhance` are); (c) trust-boundary §6 example uses fabricated `corevalidator.New.Line.NotEmpty().MaxLength().Matches().Build()` fluent + `result.IsFailed()` shape (inherited from C-CVS-22/23); (d) §4 rule 4 + §5 rules 2-3 cite `coredynamic.AllFields/SetField/InvokeMethod` — package doesn't exist (inherited from C-CVS-29); (e) `corevalidator.New.Slice.MaxLength(N)` cited in 4 places — all fabricated; (f) `errcore.VarTwo("password", pwd, …)` example reproduces C-CVS-44 defect (folded into AJ-28); (g) D-CVS-61 LOW drift — `coregeneric` import path should be `coredata/coregeneric`. See `spec/07-code-vs-spec-audits/26-cycle25-AB-security.md`. Spawned **AJ-35..43**. **Cumulative AB ❌ = 50** across 7 audited sections; **24 CRITICAL** (~48 %); fabrication rate ~54 %.
 
+## 🆕 New findings (Cycle 26 — S-106 self-audit)
+
+- **R-CVS-01** retracts **C-CVS-29 (Cycle 22)** — `coredynamic` package EXISTS at `coredata/coredynamic/` (20+ files including `Dynamic.go`, `DynamicGetters.go`, `Collection*.go`). Original audit relied on `find . -type d -name coredynamic` from upstream root and missed the nested `coredata/` parent. The 8 specific method symbols (`AllFields`/`SetField`/`InvokeMethod`/`HasMethod`/`MethodNames`/`GetField`/`IsNullOrUndefined`/`TypeFullName`) remain confirmed sym-fabrications. AJ-15 split into AJ-15a (path-qualify §2) + AJ-15b (purge symbols).
+- **R-CVS-02** retracts **C-CVS-51 (Cycle 25)** — `corestr` package EXISTS at `coredata/corestr/` (30+ files including `Collection.go`, `Hashmap.go`, `Hashset.go`, `LinkedList.go`, etc.). Same root-cause as R-CVS-01. `StringBuilder`/`IsValidUTF8`/`NewCollectionPtrUsingStrings` remain confirmed sym-fabrications. AJ-36/37/38 re-scoped to keep package and purge symbols only.
+- **C-CVS-60 (LOW, aggregate)** — 4 new low-impact sym-fabs surfaced by S-106's first run: `coronce.New`, `enumimpl.NewBasicByte`, `errcore.OverflowType`, `errcoreinf.SomeErrorer`.
+- **Net effect on tally:** Cumulative AB ❌ drops 50 → **49**; CRITICAL count drops 24 → **22**; fabrication rate ~52 % (essentially unchanged). 3 ⚠️ drifts now tracked (D-CVS-61 + R-CVS-01-path + R-CVS-02-path). See `spec/07-code-vs-spec-audits/27-cycle26-S106-self-audit-retractions.md`.
+
 ## ⏭️ Manual user action (parked)
 
 - **A.** Push `cross-repo/core-v8/` mirror to its upstream GitHub repo.
 
 ## Next logical step
 
-1. **Build S-106** (`scripts/spec-api-check.psm1`) — lint to catch the fabrication pattern before AJ rewrites. **MANDATORY next given 50 ❌ accumulated and ~54 % fabrication rate (24 CRITICAL ~48 %).** OR
-2. **Resolve workflow/script-internal ❓** — deep-probe `scripts/*.psm1` and `.github/workflows/*.yml` to promote the 29 remaining ❓ in spec/03/04/06 + spec/02 audit-history. OR
-3. **User decision: lift `spec/01-app/` freeze** for AJ-01..43 patches (highly risky without S-106). OR
+1. **Lift `spec/01-app/` freeze** and apply AJ-01..43 spec rewrites — **S-106 guardrail is now in place** so rewrites are safe (any fresh fabrication will be flagged). OR
+2. **Wire S-106 into `run.ps1 -tc` pre-checks** + CI gate so future spec PRs can't regress. OR
+3. **S-106 v1.1 / v2 enhancements** (allow-list refinement; Go AST signature lint to catch arity/return-type drift). OR
+4. **Resolve workflow/script-internal ❓** — deep-probe `scripts/*.psm1` and `.github/workflows/*.yml` to promote the 29 remaining ❓ in spec/03/04/06 + spec/02 audit-history. OR
+5. **AC consistency re-audit** — re-pass §07-§11+§15+§16 with the consistency dimension after AJ rewrites land. OR
 4. **AK** — New enum package creation / template validation. OR
 5. **AL** — Test-coverage expansion.
