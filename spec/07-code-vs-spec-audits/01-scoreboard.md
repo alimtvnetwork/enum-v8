@@ -2,7 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§11 18.2 *(post-AB)* / §08 33.3 *(post-AB)* / §10 38.5 *(post-AB)* / §09 68.4 *(post-AB Cycle 43)* / §16 66.7 *(post-AB)* / §07 70.6 *(post-AB)* / §15 74.1 *(post-AB)* / §03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / spec/06 100.0 / spec/03 100.0 / spec/04 100.0 / spec/02 100.0 (verifiable)** — **🔬 Cycle 43 (AB residual deep-probe of `spec/01-app/09-converters.md`) — 4 of 8 Cycle-19 ❓ probed via upstream `core-v9 v1.5.8` clone. 3 ❓→✅ (rows 57, 58, 60), 1 ❓→❌ (row 62: NEW C-CVS-61 CRITICAL — `errcore.OverflowType` fabricated → AJ-44). NEW D-CVS-65 (LOW): `BytesTo.PrettyJsonString` should be `converters.PrettyJson.Bytes.Safe` → AJ-03b. AB-residual `spec/01-app/` ❓: 24 → 20. §09 verifiable 66.7% → 68.4%. Cumulative AB ❌ 49 → 50 (23 CRITICAL).**
+## Current MEASURED drift score: **§11 18.2 *(post-AB)* / §08 33.3 *(post-AB)* / §10 38.5 *(post-AB)* / §09 68.4 *(post-AB Cycle 43)* / §16 66.7 *(post-AB)* / §07 73.7 *(post-AB Cycle 44)* / §15 74.1 *(post-AB)* / §03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / spec/06 100.0 / spec/03 100.0 / spec/04 100.0 / spec/02 100.0 (verifiable)** — **🔬 Cycle 44 (AB residual deep-probe of `spec/01-app/07-conditional-and-utilities.md`) — 2 of 3 Cycle-20 ❓ probed via upstream `core-v9 v1.5.8` clone. 2 ❓→✅ (rows 51, 52). NEW D-CVS-66 (LOW): row 51 `LazyLock` actually uses `sync.Mutex`+`isCompiled` guard (not `sync.Once`) → AJ-04b. Row 50 (advisory) classified out-of-band. AB-residual `spec/01-app/` ❓: 20 → 18. §07 verifiable 70.6% → 73.7%. Cumulative AB ❌ unchanged at 50.**
+>
+> 🔬 **Cycle 43 (AB residual deep-probe of `spec/01-app/09-converters.md`)** — 3 ❓→✅ + 1 ❓→❌ (C-CVS-61 CRITICAL → AJ-44). NEW D-CVS-65 (LOW) → AJ-03b. See `32-cycle43-AB-residual-spec01-converters.md`.
 >
 > 🔬 **Cycle 42 (AB residual deep-probe of `spec/04-tooling/` metadata)** — 4 of 8 Cycle-17 ❓ probed via direct CI workflow + runner evidence. AB-residual ❓ pool 27 → 23. See `31-cycle42-AB-residual-spec04-metadata.md`.
 >
