@@ -601,7 +601,7 @@ func (it Variant) IntType() inttype.Variant {
 }
 
 func (it Variant) Version() *coreversion.Version {
-	return coreversion.New.Default(it.String())
+	return coreversion.New.DefaultPtr(it.String())
 }
 
 func (it Variant) IntegerDefaultVal(defaultVal int) (valueInt int, isSuccess bool) {
