@@ -29,7 +29,7 @@ var (
 
 ## Confirmed migration map
 
-| Old call (enum-v3 code today) | New call (core-v9 v1.5.8) | Verified? |
+| Old call (enum-v4 code today) | New call (core-v9 v1.5.8) | Verified? |
 |---|---|---|
 | `converters.AnyToValueString(x)` | `converters.AnyTo.ValueString(x)` | ✅ User confirmed method exists |
 | `converters.StringToInteger(s)` | `converters.StringTo.Integer(s)` | ⏳ Awaiting `stringTo` method list |
@@ -65,7 +65,7 @@ Select-String -Path "converters/*.go" -Pattern "func \(.*stringTo\)" | Select-Ob
 ```
 Response not yet received at session end. This is the next piece needed to complete the mapping.
 
-## Where broken calls live in enum-v3
+## Where broken calls live in enum-v4
 
 Run this to find all affected files:
 ```bash
@@ -77,6 +77,6 @@ rg -n 'converters\.Any\.' --type go
 ## Next steps
 
 1. Get `stringTo` method list from user (pending command output)
-2. Search enum-v3 codebase for all broken calls
+2. Search enum-v4 codebase for all broken calls
 3. Create a new task (AM?) to apply the migration fixes
 4. Bump version after changes

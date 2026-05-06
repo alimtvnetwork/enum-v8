@@ -4,7 +4,7 @@ package osdetect
 //
 // https://prnt.sc/Yf7QKMuJNTse
 //
-// Issue : https://github.com/alimtvnetwork/enum-v3/-/issues/4
+// Issue : https://github.com/alimtvnetwork/enum-v4/-/issues/4
 type windowsCurrentVersionRegistry struct {
 	buildBranch          string
 	productName          string

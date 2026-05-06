@@ -4,8 +4,8 @@ import (
 	"fmt"
 	
 	"github.com/alimtvnetwork/core-v9/coreversion"
-	"github.com/alimtvnetwork/enum-v3/inttype"
-	"github.com/alimtvnetwork/enum-v3/strtype"
+	"github.com/alimtvnetwork/enum-v4/inttype"
+	"github.com/alimtvnetwork/enum-v4/strtype"
 )
 
 type WindowsSystemDetail struct {
