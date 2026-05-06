@@ -31,13 +31,13 @@ var (
 
 | Old call (enum-v4 code today) | New call (core-v9 v1.5.8) | Verified? |
 |---|---|---|
-| `converters.AnyToValueString(x)` | `converters.AnyTo.ValueString(x)` | ✅ User confirmed method exists |
+| `converters.AnyToValueString(x)` | `converters.AnyTo.ValueString(x)` | ✅ Applied 2026-05-06 (6 sites) |
 | `converters.StringToInteger(s)` | `converters.StringTo.Integer(s)` | ⏳ Awaiting `stringTo` method list |
 | `converters.StringToIntegerWithDefault(s, d)` | `converters.StringTo.IntegerWithDefault(s, d)` | ⏳ Awaiting `stringTo` method list |
 | `converters.StringToByte(s)` | `converters.StringTo.Byte(s)` | ⏳ Awaiting `stringTo` method list |
 | `converters.StringToIntegerDefault(s)` | `converters.StringTo.IntegerDefault(s)` | ⏳ Awaiting `stringTo` method list |
-| `converters.Any.ToFullNameValueString(x)` | `converters.AnyTo.ToFullNameValueString(x)` | ⏳ Need confirmation |
-| `coredynamic.TypeName(x)` | `coredynamic.SafeTypeName(x)` | ✅ User confirmed — no public `TypeName` exists, only `SafeTypeName` |
+| `converters.Any.ToFullNameValueString(x)` | `converters.AnyTo.ToFullNameValueString(x)` | ✅ Applied 2026-05-06 (1 site) |
+| `coredynamic.TypeName(x)` | `coredynamic.SafeTypeName(x)` | ✅ Applied 2026-05-06 (53 sites) |
 
 ## `anyItemConverter` methods (confirmed from user output)
 
@@ -76,7 +76,6 @@ rg -n 'converters\.Any\.' --type go
 
 ## Next steps
 
-1. Get `stringTo` method list from user (pending command output)
-2. Search enum-v4 codebase for all broken calls
-3. Create a new task (AM?) to apply the migration fixes
-4. Bump version after changes
+1. Get `stringTo` method list from user (pending PowerShell output) — blocks 11 remaining call sites in `inttype/Variant.go`, `strtype/Variant.go`, `osdetect/windowsSystemDetailGenerator_windows.go`.
+2. Apply `StringTo*` rewrites once method names confirmed.
+3. Run `go build ./...` to validate full migration.
