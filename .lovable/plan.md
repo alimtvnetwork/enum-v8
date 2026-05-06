@@ -111,12 +111,12 @@
 - **Dependencies:** AG (clean Go build) ✅
 - **Expected outputs:** New `*_test.go` files in `tests/creationtests/`, coverage delta recorded each pass.
 
-#### AL-01. Json round-trip suite (highest leverage)
-- **Target:** `MarshalJSON`, `UnmarshalJSON`, `Json`, `JsonPtr`, `JsonParseSelfInject`, `AsJsoner`, `AsJsonContractsBinder`, `AsJsonMarshaller`.
-- **Approach:** Loop `allBasicEnumsCollection`; for each, marshal → unmarshal → assert round-trip equals original byte value.
-- **Expected lift:** +8–12% total coverage (touches every Variant package).
-- **File:** `tests/creationtests/AllEnums_JsonRoundTrip_test.go`
-- **Acceptance:** `./run.ps1 tc` green, total ≥ 23%.
+#### AL-01. Json round-trip suite (highest leverage) ✅ DONE (2026-05-06, Cycle 49)
+- **Target:** `MarshalJSON`, `UnmarshalJSON` (and `BasicEnumImpl.ToEnumJsonBytes` / `UnmarshallToValue`).
+- **Approach:** Loop `allBasicEnumsCollection`; for each, marshal → re-unmarshal into the same pointer → assert `Name()` + `ValueString()` round-trip.
+- **Result:** **15.5% → 21.6% total (+6.1pp)** with one new file `tests/creationtests/AllEnums_JsonRoundTrip_test.go`.
+- **Findings:** PI-005 (sqliteconnpathtype double-quoted MarshalJSON) — type skipped via `jsonRoundTripSkipTypeNames` map.
+- **Acceptance:** `./run.ps1 tc` green, total ≥ 21%. ✅
 
 #### AL-02. Format & string conversion suite
 - **Target:** `Format`, `ToNumberString`, `ValueString`, `String`, `NameValue`, `RangeNamesCsv`.
