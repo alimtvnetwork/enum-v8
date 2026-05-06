@@ -32,14 +32,17 @@ $script:AllowListedPackages = @(
     # Go stdlib (subset commonly cited in spec)
     'fmt', 'strings', 'strconv', 'errors', 'context', 'time', 'os', 'io',
     'bytes', 'sort', 'sync', 'reflect', 'regexp', 'unicode', 'utf8',
-    'http', 'json', 'log', 'slog',
-    # Common third-party in spec snippets
-    'codes', 'tracer', 'span', 'security', 'logger', 'h', 'r', 'w', 'cart',
-    'ctx', 'svc', 'vr', 'emailV', 'result', 'safe', 'original', 'logEntry',
-    'v', 'err', 'msg', 'it', 'rs', 'opt', 'main',
-    # OTel / slog convention names sometimes appear bare
-    'otel'
+    'http', 'json', 'log', 'slog', 'testing', 'math',
+    # Common third-party / OTel convention names
+    'codes', 'tracer', 'span', 'security', 'logger', 'otel',
+    # Generic placeholder words used in prose / pseudo-code
+    'pkg', 'parameter', 'iter', 'core'
 )
+
+# Heuristic: in prose (outside fenced code blocks) a single-segment lowercase
+# token followed by `.Foo` is more likely a local variable from a removed
+# fence above than a true package reference. We still flag it inside fences.
+$script:ProseLooseMode = $true
 
 function Get-UpstreamPackages {
     [CmdletBinding()]
@@ -162,6 +165,9 @@ function Get-SpecApiReferences {
             if ($localVars.Contains($pkg)) { continue }
             # Skip references inside markdown links / URLs (file paths with .md).
             if ($line -match '\[.+\]\([^)]*' + [regex]::Escape($pkg) + '\.[A-Z]') { continue }
+            # Outside fences, a token of length ≤ 3 is most likely a placeholder
+            # variable from prose (e.g. `tc.Method`, `v1.Equal`). Skip in loose mode.
+            if ($script:ProseLooseMode -and -not $inFence -and $pkg.Length -le 3) { continue }
             $refs.Add([pscustomobject]@{
                 Package = $pkg
                 Symbol  = $sym
