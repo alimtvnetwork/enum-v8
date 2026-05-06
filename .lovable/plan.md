@@ -186,6 +186,7 @@
 - AI ✅ (Cycle 61, `spec/01-app/` formally FROZEN in spec-v0.53.0)
 - AA / Cycle 15 ✅ (audited `spec/06-testing-guidelines/`, baselined at 100% verifiable)
 - AB residual for §06 ✅ (Cycle 62, 10 deferred ❓ → 10 ✅ via `/tmp/core-v9-upstream` v1.5.8; zero new findings)
+- Cycle 63 ✅ (3 test failures fixed: osdetect lowerCaseNames gap, sqliteconnpathtype StringMin fixture drift, sqliteconnpathtype RangesDynamicMap upstream lazy-init defect; 4th "failure" was Goconvey log-conflation phantom; RCA pattern catalogue saved to `.lovable/memory/07-test-failure-rca-patterns.md`)
 
 **Done — full AL umbrella:**
 - AL-01 ✅ (Cycle 49, 15.5% → 21.6%, +6.1pp)
