@@ -42,6 +42,7 @@ A targeted compile check that validates **only** `Coverage*` test files against 
   "checkedCount": 18,
   "passedCount": 16,
   "failedCount": 2,
+  "source": "PreCommitCheck.psm1 → Invoke-PreCommitCheck",
   "failures": [
     {
       "package": "corejsontests",
