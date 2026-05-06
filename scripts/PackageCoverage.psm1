@@ -13,7 +13,8 @@ function Invoke-PackageTestCoverage {
     .SYNOPSIS
         Run coverage for a single test package (TCP command).
     .PARAMETER pkg
-        The test package directory name under tests/integratedtests/.
+        The test package directory name under tests/creationtests/ (or the
+        legacy tests/integratedtests/ layout — resolved at runtime).
     .EXAMPLE
         Invoke-PackageTestCoverage "regexnewtests"
     #>
@@ -40,9 +41,17 @@ function Invoke-PackageTestCoverage {
     $preCheckOk = Invoke-CoveragePreChecks -ScriptRoot $global:ProjectRoot -ExtraArgs $ExtraArgs -CoverDir $coverDir
     if (-not $preCheckOk) { exit 1 }
 
+    # Resolve the test-suite root (creationtests vs legacy integratedtests).
+    # Per Core-memory rule: tooling must accept either name — never hard-code one.
+    $suiteRoot = Resolve-TestSuiteRoot -Package $pkg
+    $resolvedPath = Join-Path (Join-Path (Join-Path $global:ProjectRoot 'tests') $suiteRoot) $pkg
+    if (-not (Test-Path $resolvedPath)) {
+        Write-Host "  ⚠ Package '$pkg' not found under tests/creationtests/ or tests/integratedtests/ — defaulting to $suiteRoot/" -ForegroundColor Yellow
+    }
+
     # Build check
     Push-Location tests
-    try { if (-not (Invoke-BuildCheck "./integratedtests/$pkg/...")) { return } }
+    try { if (-not (Invoke-BuildCheck "./$suiteRoot/$pkg/...")) { return } }
     finally { Pop-Location }
 
     New-Item -ItemType Directory -Path $coverDir -Force | Out-Null
@@ -59,7 +68,7 @@ function Invoke-PackageTestCoverage {
     # Run coverage
     $prevPref = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
-    $output = & go test -v -count=1 "-coverprofile=$coverProfile" "-coverpkg=$covPkgList" "./tests/integratedtests/$pkg/..." 2>&1 | ForEach-Object { $_.ToString() }
+    $output = & go test -v -count=1 "-coverprofile=$coverProfile" "-coverpkg=$covPkgList" "./tests/$suiteRoot/$pkg/..." 2>&1 | ForEach-Object { $_.ToString() }
     $exitCode = $LASTEXITCODE
     $ErrorActionPreference = $prevPref
 
