@@ -15,5 +15,5 @@ func GetCurrentOsDetail() (*OperatingSystemDetail, error) {
 	
 	return nil, errcore.NotSupportedType.Error(
 		"couldn't cast or generate os details!",
-		codestack.StacksStringDefault())
+		codestack.StacksTo.StringDefault())
 }
