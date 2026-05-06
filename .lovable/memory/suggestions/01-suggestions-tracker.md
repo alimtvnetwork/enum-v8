@@ -31,6 +31,13 @@
 
 ## Completed Suggestions
 
+### S-114: `PackageCoverage.psm1` (and 3 other modules) hard-codes `tests/integratedtests/` path
+
+- **completed:** 2026-05-06 (Cycle 40)
+- **source:** Lovable (discovered while scoping AL — Cycle 39 follow-up)
+- **resolution:** Added shared `Resolve-TestSuiteRoot` helper to `scripts/Utilities.psm1` (~30 LOC). Probes `creationtests` first, then `integratedtests`, with optional `-Package` parameter for per-package resolution; falls back to `creationtests` default so the downstream `go test` error becomes the user-facing diagnostic. Refactored four callsites to use it: `scripts/PackageCoverage.psm1` (TCP — lines 45 + 62), `scripts/TestRunner.psm1` (TP — lines 35/42/44), `scripts/Help.psm1` (`Invoke-IntegratedTests` — lines 27/31), `scripts/PreCommitCheck.psm1:55`. `CoverageRunner.psm1` (lines 103-107) was already correct and left untouched. Smoke test at `tests/scripts/Test-ResolveTestSuiteRoot.ps1` covers 5 cases (creationtests-only / `-Package` known / `-Package` missing / legacy-only / live repo) — all pass. Module-import smoke confirms helper exported + all four refactored modules parse cleanly. `package.json` 0.9.0 → 0.10.0.
+- **acceptance criteria:** ✅ TCP/TP/integrated-tests/pre-commit commands now find the real `tests/creationtests/` packages on this repo. ✅ Helper accepts either layout per Core-memory rule (never hard-coded). ✅ Smoke test in repo prevents regression. ✅ `CoverageSplitRecovery.psm1` / `CoverageProfileMerger.psm1` / `CoverageReportHtml.psm1` / `CoveragePreChecks.psm1` references to `integratedtests` left as comments/doc-strings only — no behaviour changes needed (they regex-match against either name or are display-only).
+
 ### S-111: Surface the GoConvey-only sub-pattern in spec/06
 
 - **completed:** 2026-05-06 (Cycle 39)
