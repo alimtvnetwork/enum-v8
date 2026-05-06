@@ -9,6 +9,29 @@
 
 ---
 
+## [spec-v0.38.0] — 2026-05-06 (Cycle 23 — AB pass 5 on `01-app/11-versioning.md` — **WORST section in project**)
+
+### Added
+- `spec/07-code-vs-spec-audits/24-cycle23-AB-versioning.md` — fifth AB promotion pass; 11 claims → **2 ✅ / 8 ❌ / 1 ❓** (verifiable score **18.2 %** — new worst score in project).
+- 8 NEW contradiction findings **C-CVS-37..43**:
+  - **C-CVS-37 (CRITICAL)** — `coreversion.Parse(s) (Version, error)` fabricated; real constructor is `coreversion.New.Default(s) Version` and returns no error (uses `IsInvalid` flag).
+  - **C-CVS-38 (HIGH)** — typed accessors `v.Major()/Minor()/Patch()` fabricated; real surface is **public fields** `VersionMajor/VersionMinor/VersionPatch/VersionBuild int` plus `MajorString()/MinorString()/PatchString()/BuildString()` helpers.
+  - **C-CVS-39 (CRITICAL)** — fluent comparison `v1.LessThan(v2)/Equal/GreaterThanOrEqual` fabricated; real comparison is package-level `coreversion.Compare(left, right *Version) corecomparator.Compare`.
+  - **C-CVS-40 (LOW)** — `String()` claim "returns `\"v1.2.3\"`" inaccurate; returns the `Compiled` field which can be empty for `Empty()`/`Invalid` versions.
+  - **C-CVS-41 (HIGH)** — "Wraps stdlib errors in `errcore.FailedToConvertType`" rationale fabricated; `coreversion/` package has zero `errcore` references.
+  - **C-CVS-42 (HIGH)** — package path `versionindexes/` is wrong; real path is `enums/versionindexes/`.
+  - **C-CVS-43 (CRITICAL)** — constants `versionindexes.V1=1, V2=2, V8=8` "version eras" entirely fabricated; real consts are `Major=0, Minor=1, Patch=2, Build=3, Invalid=4` indexing **version-component positions**, not historical eras. **Conceptual error, not just API drift** — the spec invents a different *purpose* for the package.
+- 7 new action items **AJ-21..27** (rewrites for §1 constructor, §1 accessors, §1 compare, §1 `String()`, §1 errcore bullet, §2 import path, §2 entire framing) — all BLOCKED on `spec/01-app/` 🧊 freeze waiver.
+
+### Changed
+- `spec/07-code-vs-spec-audits/01-scoreboard.md` — Cycle 23 row, headline replaced (§11 now WORST at 18.2 %; cumulative AB ❌ = 34; ~55 % fabrication rate across 5 sections), Open-findings list extended to C-CVS-11..43.
+
+### Notes
+- Pattern across 5 cycles: 34 ❌ accumulated, ~55 % fabrication rate, ~44 % CRITICAL severity. **S-106 lint is now MANDATORY** before any AJ rewrite — without it, the same author pattern that produced 34 ❌ will likely produce more during rewrites.
+- §11 is uniquely bad among the 5 audited sections because C-CVS-43 invents an entirely different *purpose* for `versionindexes` (eras vs. component positions). Cycles 19–22 fabricated APIs that *plausibly could exist*; this cycle fabricates a package's reason for existing. Future audits should explicitly cross-check package-purpose claims against upstream `readme.md` / `doc.go`.
+
+---
+
 ## [spec-v0.37.0] — 2026-05-06 (Cycle 22 — AB pass 4 on `01-app/10-reflection-and-dynamic.md` — second-worst section)
 
 ### Added
