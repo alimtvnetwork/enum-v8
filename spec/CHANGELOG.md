@@ -9,6 +9,22 @@
 
 ---
 
+## [spec-v0.30.0] — 2026-05-06 (Freeze marker — `spec/01-app/` directory closed for code-vs-spec drift)
+
+### Added
+- **`spec/01-app/` — DRIFT-FROZEN marker.** With Cycle 14 closing the last numbered file (`16-security.md`) and the directory audit complete (12 files at 100 % verifiable + 2 baseline-only — §07, §09 — awaiting task **AB**), `spec/01-app/` is now declared **frozen for code-vs-spec drift work**. Future edits to files in this directory MUST fall into one of these allowed categories:
+  1. **Upstream-source verification** — when task **AB** lands, ❓ claims may be promoted to ✅ (or new findings raised) for §04 (7), §05 (1), §06 (6), §07 (17), §08 (18), §09 (23), §10 (15), §11 (11), §12 (6), §13 (8), §14 (10), §15 (13), §16 (13) — **148 ❓ total**.
+  2. **Re-audit of §07 / §09** under the spec-internal-consistency dimension (task **AC**).
+  3. **New normative content** introduced because of an upstream `core-v9` API change (must be paired with a new audit cycle row in `spec/07-code-vs-spec-audits/01-scoreboard.md`).
+  4. **Typo / formatting / link fixes** (no normative change).
+
+  All other categories of edit (drive-by rewording, reorganisation, additional examples, etc.) are **out of scope** until the freeze is explicitly lifted in a future `spec-vX.Y.0` entry. Drift work moves to `spec/03-powershell-test-run/`, `spec/04-tooling/`, and `spec/02-app-issues/` (Cycles 16+).
+
+### Changed
+- **`spec/CHANGELOG.md`** — recorded the freeze as its own versioned entry so the marker is discoverable from the changelog (not buried in an audit cycle file). No file under `spec/01-app/` is touched by this entry; the freeze is a process declaration, not a content edit.
+
+---
+
 ## [spec-v0.29.0] — 2026-05-06 (Cycle 15 baseline & closed — `spec/06-testing-guidelines/` directory at 100 % verifiable)
 
 ### Added
