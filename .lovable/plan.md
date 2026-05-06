@@ -168,13 +168,13 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **AL-05** — Constructor suite for lowest-coverage packages ⭐ next
+1. **AL-05b** — Constructor suite pass 2 (6 more packages: compresslevels, configfilestate, accesstype-adjacent low-coverage targets) ⭐ next
 2. **AL-06** — `quotes/` and `brackets/` dedicated suites
 3. **AL-07** — `strtype` / `inttype` constructor & GetSet suites
 4. **AL-08** — `osdetect` cross-platform parts
 5. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
 6. **AI** — Mark `spec/01-app/` as frozen (quick win)
-7. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster (MarshalJSON / NameValue / MinValueString / IsAnyNamesOf empty-args) — unblocks 3 AL skip lists
+7. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
 8. **AB** — Already done in sandbox; status entry pending
 
 **Done from this list:**
@@ -182,6 +182,7 @@
 - AL-02 ✅ (Cycle 50, 21.6% → 26.1%, +4.5pp)
 - AL-03 ✅ (Cycle 51, 26.1% → 33.8%, +7.7pp; cumulative +18.3pp)
 - AL-04 ✅ (Cycle 52, +4–6pp expected; pending local `./run.ps1 -tc` confirmation)
+- AL-05 pass-1 ✅ (Cycle 53, 4 packages: accesstype/certaction/completionstate/compressformats; pass-2 still pending)
 
 ---
 
