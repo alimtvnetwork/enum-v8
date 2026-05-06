@@ -2,7 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / §15 100.0 / §16 100.0 (verifiable)** *(12 sections audited + 2 baseline-only — §07, §09 — all closed)* — **`spec/01-app/` directory audit COMPLETE.**
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / §15 100.0 / §16 100.0 / spec/06 100.0 (verifiable)** *(12 sections in `spec/01-app/` + 2 baseline-only — §07, §09 — all closed; `spec/06-testing-guidelines/` baselined Cycle 15)* — **`spec/01-app/` directory audit COMPLETE; `spec/06-testing-guidelines/` directory baselined.**
+
+> 🆕 **Cycle 15 (`spec/06-testing-guidelines/` directory baseline) closed at 100% verifiable** with **1 LOW drift resolved (D-CVS-43)**: added an `enum-v4` consumer-coverage callout to `README.md` and a `⚠️ Scope` warning to `01-folder-structure.md` clarifying that the entire portable testing guideline describes upstream `core-v9` (not `enum-v4`). 32 representative claims sampled across 10 files: 22 ✅ / 10 ❓ (all pending AB). See [`16-cycle15-testing-guidelines.md`](./16-cycle15-testing-guidelines.md).
 
 > 🎉 **Milestone — `spec/01-app/` directory audit complete (Cycle 14).** All 14 numbered files (§03-§16) audited; 12 closed at 100% verifiable, 2 baseline-only (§07, §09) awaiting upstream source. Total 148 ❓ across the directory pending task AB. §16 closed at baseline with zero corrective edits (second cycle-on-first-pass to do so, after §15). See [`15-cycle14-security.md`](./15-cycle14-security.md).
 >
@@ -44,10 +46,11 @@
 | 2026-05-05 | 12 (closed)   | `01-app/14-tests-folder-walkthrough.md` | 24 | 14 | 0 | 0 | 10 | **100.0%** *(verifiable)* |
 | 2026-05-05 | 13 (baseline / closed) | `01-app/15-observability.md` | 27 | 14 | 0 | 0 | 13 | **100.0%** *(verifiable)* |
 | 2026-05-05 | 14 (baseline / closed) | `01-app/16-security.md` | 30 | 17 | 0 | 0 | 13 | **100.0%** *(verifiable)* |
+| 2026-05-06 | 15 (baseline / closed) | `06-testing-guidelines/` (10 files) | 32 | 22 | 1→0 | 0 | 10 | **100.0%** *(verifiable)* |
 
 ## Open drift findings
 
-_None._ All 12 audited-and-closed sections (§03, §04, §05, §06, §08, §10, §11, §12, §13, §14, §15, §16) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset. **`spec/01-app/` directory audit complete.** Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 10 §14 + 13 §15 + 13 §16 + 7 §04 + 1 §05 + 6 §06 = **148 ❓** total — require upstream `core-v9` source (task **AB**).
+_None._ All 12 audited-and-closed sections in `spec/01-app/` (§03, §04, §05, §06, §08, §10, §11, §12, §13, §14, §15, §16) plus the entire `spec/06-testing-guidelines/` directory (Cycle 15) are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset. **`spec/01-app/` directory audit complete; `spec/06-testing-guidelines/` directory baselined.** Remaining ❓s — 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6 §12 + 8 §13 + 10 §14 + 13 §15 + 13 §16 + 7 §04 + 1 §05 + 6 §06 + **10 spec/06** = **158 ❓** total — require upstream `core-v9` source (task **AB**).
 
 > **Cross-spec sweep status:** `spec/01-app/` is now **genuinely clean** of stale `tests/integratedtests/` references after cycle 12 finished what cycle 11 thought it had finished. Remaining hits in `01-app/` are intentional anti-pattern callouts (`05-enum-system.md:417`) or retro-references inside cycle-11/12 fix notes themselves. Task **AH** still owes a sweep of `spec/03-powershell-test-run/` (4 files), `spec/04-tooling/04-bootstrap-into-new-repo.md`, and `spec/02-app-issues/02-internal-package-coverage-policy.md`. `spec/CHANGELOG.md` and `spec/99-audits/` are immutable history.
 
