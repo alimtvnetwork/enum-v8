@@ -170,15 +170,18 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **AL-08** — `osdetect` cross-platform parts ⭐ next
-2. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
-3. **AI** — Mark `spec/01-app/` as frozen (quick win)
+1. **Cycle 57 verification** — Re-run `./run.ps1 -tc` and confirm all 6 fixed tests pass ⭐ verify
+2. **AL-08** — `osdetect` cross-platform parts (next NEW work)
+3. **PI-008** — Audit `unWrapBoth`/`unWrapSingle` off-by-one (quotes + brackets) — may flip cycle-57 expectations
 4. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
-5. **AB** — Already done in sandbox; status entry pending
+5. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
+6. **AI** — Mark `spec/01-app/` as frozen (quick win)
+7. **AB** — Already done in sandbox; status entry pending
 
 **Done from this list:**
 - AL-01..AL-06 ✅ (Cycles 49–55)
 - AL-07 ✅ (Cycle 56, strtype + inttype constructor & GetSet + IsCompareResult; expected +2–4pp)
+- Cycle 57 ✅ (test fixes for 6 failures from first `-tc` run after AL-04..AL-07: iptype/overwritetype/onofftype/quotes/brackets/AllEnums_NumericRange)
 
 **Done from this list:**
 - AL-01 ✅ (Cycle 49, 15.5% → 21.6%, +6.1pp)
