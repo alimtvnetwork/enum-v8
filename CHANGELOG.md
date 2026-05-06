@@ -13,6 +13,13 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ## [Unreleased]
 
 ### Changed
+- **`spec/01-app/` DRIFT-FROZEN (Task AI)** — declared the directory closed for
+  code-vs-spec drift work in `spec/CHANGELOG.md` as **spec-v0.30.0**. Allowed
+  future edits: AB-driven ❓→✅ promotions, AC re-audit of §07/§09,
+  upstream-API-change additions (paired with a new audit cycle row), typo/
+  formatting fixes. Drift work moves to `spec/03-powershell-test-run/`,
+  `spec/04-tooling/`, `spec/02-app-issues/` (Cycles 16+). Scoreboard top-line
+  updated with 🧊 freeze marker.
 - **Cycle 15 spec audit (Task AA)** — closed `spec/06-testing-guidelines/`
   directory at **100 % of its verifiable subset** (32 claims sampled across 10
   files; 22 ✅ / 10 ❓ pending task AB). Resolved one LOW drift (D-CVS-43) by
