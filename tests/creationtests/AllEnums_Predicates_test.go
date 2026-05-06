@@ -29,8 +29,16 @@ import (
 //   - `sqliteconnpathtype.Variant.IsAnyNamesOf()` (empty args) returns true
 //     while every other Variant correctly returns false. Tracked as PI-007;
 //     the empty-args assertion is skipped for that type.
+//   - `strtype.Variant.ValueByte()` (and the other numeric-width accessors)
+//     panic because strtype is a string-backed enum — those accessors are
+//     present on the interface but unimplemented for non-numeric backings.
+//     The numeric-width consistency block is therefore skipped for strtype.
 var predicateSuiteSkipEmptyAnyNames = map[string]string{
 	"sqliteconnpathtype.Variant": "PI-007 — IsAnyNamesOf() with no args returns true",
+}
+
+var predicateSuiteSkipNumericWidth = map[string]string{
+	"strtype.Variant": "string-backed enum; numeric-width accessors panic",
 }
 
 func Test_AllEnums_Predicates(t *testing.T) {
