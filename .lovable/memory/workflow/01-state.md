@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 39 — closed **S-111** with cosmetic spec/06 callouts. Added "Sub-Pattern: GoConvey-Only (Local Wrapper)" to `02-test-case-types.md` and "Sub-Pattern: GoConvey-Only Diff Assertion" to `05-assertion-patterns.md`. Both cross-link `tests/creationtests/AllEnums_ContractsTesting_test.go` and provide an equivalence table mapping `CaseV1`/`args.Map`/`ShouldBeEqualMap` ↔ local-wrapper/registry/`So(diff, ShouldBeEmpty)`. Resolves D-CVS-64. Spec changelog → spec-v0.45.0. `package.json` 0.8.0 → 0.9.0.). Open suggestions: S-002 (deferred to Task AC).
+> **Last updated:** 2026-05-06 (Cycle 41 — AB-residual deep-probe of `spec/02-app-issues/` audit-history. Read `spec/99-audits/05-ai-audit-2026-04-23-gemini.md` (287 lines, 8 findings F01–F08) and promoted all 5 ❓ left by Cycle 18 to ✅ via direct evidence (F01 → issue #02, F03 → issues #03+#04, F06 → issue #01, `params.go` rule → issue #05). `spec/02-app-issues/` now 26/26 ✅ with zero ❓. AB-residual ❓ pool 32 → 27. No spec edits required. Audit file: `30-cycle41-AB-residual-spec02-audit-history.md`. Spec changelog → spec-v0.46.0. `package.json` 0.10.0 → 0.11.0. Recent prior cycles: **40** (S-114 — `Resolve-TestSuiteRoot` helper + 4 callsite fixes for hard-coded `tests/integratedtests/` paths; smoke test all-pass), **39** (S-111 — GoConvey-only sub-pattern callouts in spec/06; D-CVS-64 closed). Open suggestions: S-002 (deferred to Task AC).
 
 ## ✅ Done
 
