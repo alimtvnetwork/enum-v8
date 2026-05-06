@@ -173,11 +173,10 @@
 **Recommended next task:** Pick from this list (in order):
 
 1. **Local verification** — Re-run `./run.ps1 -tc` and confirm AL-08 + PI-005..008 fixes are green ⭐ verify
-2. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
-3. **AB** — Already done in sandbox; status entry pending
-4. **AC** — Re-audit §07 / §09 (waits on AB)
-5. **AK** — New enum package creation / recipe validation
-6. **A** — Manual `cross-repo/core-v8/` push
+2. **AC** — Re-audit §07 / §09 (now unblocked: AB residual for §06 done)
+3. **AB residual** — Continue ❓ promotion for any later cycle that still has upstream-deferred claims
+4. **AK** — New enum package creation / recipe validation
+5. **A** — Manual `cross-repo/core-v8/` push
 
 **Done from this list:**
 - AL-01..AL-08 ✅ (Cycles 49–55, 56, 58 — full AL umbrella)
@@ -185,6 +184,8 @@
 - PI-008 ✅ (Cycle 59, off-by-one fix in quotes/brackets unwrap helpers)
 - PI-005 + PI-006 + PI-007 ✅ (Cycle 60, sqliteconnpathtype cluster — local overrides for upstream core-v9 defects; 4 skip-list entries removed)
 - AI ✅ (Cycle 61, `spec/01-app/` formally FROZEN in spec-v0.53.0)
+- AA / Cycle 15 ✅ (audited `spec/06-testing-guidelines/`, baselined at 100% verifiable)
+- AB residual for §06 ✅ (Cycle 62, 10 deferred ❓ → 10 ✅ via `/tmp/core-v9-upstream` v1.5.8; zero new findings)
 
 **Done — full AL umbrella:**
 - AL-01 ✅ (Cycle 49, 15.5% → 21.6%, +6.1pp)
