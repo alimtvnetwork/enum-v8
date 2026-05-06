@@ -39,6 +39,18 @@
 - **owner:** AI
 - **plan:** Audit `sqliteconnpathtype/Variant.go` + `vars.go`; align with sibling pattern; remove the skip entry once round-trip passes.
 
+### PI-006: `sqliteconnpathtype.Variant` Format/NameValue/MinValueString defects
+
+- **severity:** MEDIUM
+- **discovered:** 2026-05-06 (Task AL-02, `Test_AllEnums_Format`)
+- **description:** Three related defects on `sqliteconnpathtype.Variant`:
+  1. `NameValue()` returns `"Invalid(%!d(string=Invalid))"` — wrong fmt verb (`%d` against a `string` arg). Should be `"Invalid(0)"` or similar.
+  2. `MinValueString()` returns `""` (empty), unlike every other Variant package which returns the min name (e.g. `"Invalid"`).
+  3. `MaxValueString()` is non-empty (`"Specific"`) so the asymmetry confirms a configuration bug rather than a free-form enum design.
+- **suspected cause:** Likely the same `enumimpl.New.BasicByte`/`BasicEnum` constructor mis-wiring as PI-005 — wrong stringer or wrong min/max accessor passed at registration time.
+- **owner:** AI (group with PI-005 fix)
+- **plan:** Inspect `sqliteconnpathtype/vars.go` enumimpl construction + `Variant.go` `NameValue` implementation; align with `dbaction` pattern; remove both PI-005 and PI-006 skip entries (`jsonRoundTripSkipTypeNames`, `formatSuiteSkipMinMaxAll`, `formatSuiteSkipNameValue`) once the type passes both suites.
+
 ---
 
 ## Resolved Issues

@@ -118,11 +118,10 @@
 - **Findings:** PI-005 (sqliteconnpathtype double-quoted MarshalJSON) — type skipped via `jsonRoundTripSkipTypeNames` map.
 - **Acceptance:** `./run.ps1 tc` green, total ≥ 21%. ✅
 
-#### AL-02. Format & string conversion suite
-- **Target:** `Format`, `ToNumberString`, `ValueString`, `String`, `NameValue`, `RangeNamesCsv`.
-- **Approach:** Loop collection; assert non-empty for valid items, format with `"%s=%v"`.
-- **Expected lift:** +4–6%.
-- **File:** `tests/creationtests/AllEnums_Format_test.go`
+#### AL-02. Format & string conversion suite ✅ DONE (2026-05-06, Cycle 50)
+- **Target:** `Format`, `Name`, `String`, `ValueString`, `ToNumberString`, `RangeNamesCsv`, `NameValue`, `MinValueString`, `MaxValueString`, `AllNameValues`.
+- **Result:** **21.6% → 26.1% (+4.5pp)** with `tests/creationtests/AllEnums_Format_test.go`. Cumulative AL-01+02: **15.5% → 26.1% (+10.6pp)**.
+- **Findings:** PI-006 (sqliteconnpathtype `NameValue` wrong fmt verb + empty `MinValueString`); strtype.Variant correctly excluded from min/max checks (free-form string enum).
 
 #### AL-03. Comparison & predicate suite
 - **Target:** `IsAnyOf`, `IsAnyNamesOf`, `IsAnyValuesEqual`, `IsByteValueEqual`, `IsNameEqual`, `IsValueEqual`, `IsEqual`, `IsAboveOrEqual`, `IsLowerOrEqual`, `IsInvalid`, `IsValid`.
@@ -172,19 +171,20 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **AL-02** — Format & string conversion suite ⭐ next
-2. **AL-03** — Comparison & predicate suite
-3. **AL-04** — Numeric width & range suite
-4. **AL-05** — Constructor suite for lowest-coverage packages
-5. **AL-06** — `quotes/` and `brackets/` dedicated suites
-6. **AL-07** — `strtype` / `inttype` constructor & GetSet suites
-7. **AL-08** — `osdetect` cross-platform parts
-8. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
-9. **AI** — Mark `spec/01-app/` as frozen (quick win)
-10. **PI-005** — Fix `sqliteconnpathtype.Variant` MarshalJSON double-quoting (unblocks AL skip removal)
-11. **AB** — Already done in sandbox; status entry pending
+1. **AL-03** — Comparison & predicate suite ⭐ next
+2. **AL-04** — Numeric width & range suite
+3. **AL-05** — Constructor suite for lowest-coverage packages
+4. **AL-06** — `quotes/` and `brackets/` dedicated suites
+5. **AL-07** — `strtype` / `inttype` constructor & GetSet suites
+6. **AL-08** — `osdetect` cross-platform parts
+7. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
+8. **AI** — Mark `spec/01-app/` as frozen (quick win)
+9. **PI-005 + PI-006** — Fix sqliteconnpathtype MarshalJSON / NameValue / MinValueString (unblocks AL skip removals)
+10. **AB** — Already done in sandbox; status entry pending
 
-**Done from this list:** AL-01 ✅ (2026-05-06, Cycle 49, 15.5% → 21.6%).
+**Done from this list:**
+- AL-01 ✅ (Cycle 49, 15.5% → 21.6%, +6.1pp)
+- AL-02 ✅ (Cycle 50, 21.6% → 26.1%, +4.5pp; cumulative +10.6pp)
 
 ---
 
