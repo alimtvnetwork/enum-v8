@@ -171,21 +171,19 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **Local verification** — Re-run `./run.ps1 -tc` and confirm AL-08 + PI-008 fixes are green ⭐ verify
-2. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
-3. **AI** — Mark `spec/01-app/` as frozen in `spec/CHANGELOG.md` (quick win)
-4. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
-5. **AB** — Already done in sandbox; status entry pending
-6. **AC** — Re-audit §07 / §09 (waits on AB)
-7. **AK** — New enum package creation / recipe validation
-8. **A** — Manual `cross-repo/core-v8/` push
+1. **Local verification** — Re-run `./run.ps1 -tc` and confirm AL-08 + PI-005..008 fixes are green ⭐ verify
+2. **AI** — Mark `spec/01-app/` as frozen in `spec/CHANGELOG.md` (quick win)
+3. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
+4. **AB** — Already done in sandbox; status entry pending
+5. **AC** — Re-audit §07 / §09 (waits on AB)
+6. **AK** — New enum package creation / recipe validation
+7. **A** — Manual `cross-repo/core-v8/` push
 
 **Done from this list:**
-- AL-01..AL-06 ✅ (Cycles 49–55)
-- AL-07 ✅ (Cycle 56, strtype + inttype)
+- AL-01..AL-08 ✅ (Cycles 49–55, 56, 58 — full AL umbrella)
 - Cycle 57 ✅ (test fixes for 6 failures)
-- AL-08 ✅ (Cycle 58, osdetect cross-platform safe coverage)
-- PI-008 ✅ (Cycle 59, fixed off-by-one in quotes/brackets unwrap helpers + tests)
+- PI-008 ✅ (Cycle 59, off-by-one fix in quotes/brackets unwrap helpers)
+- PI-005 + PI-006 + PI-007 ✅ (Cycle 60, sqliteconnpathtype cluster — local overrides for upstream core-v9 defects; 4 skip-list entries removed)
 
 **Done — full AL umbrella:**
 - AL-01 ✅ (Cycle 49, 15.5% → 21.6%, +6.1pp)

@@ -21,12 +21,10 @@ import (
 // coverage lift available from the existing collection.
 //
 // Known-broken types (skipped, tracked as pending issues):
-//   - sqliteconnpathtype.Variant: MarshalJSON emits double-quoted
-//     value (`""Invalid""`) which UnmarshalJSON cannot parse back.
-//     See .lovable/memory/pending-issues for follow-up.
-var jsonRoundTripSkipTypeNames = map[string]string{
-	"sqliteconnpathtype.Variant": "marshals double-quoted name; round-trip fails",
-}
+//   (none — PI-005 RESOLVED in Cycle 60 with local MarshalJSON / UnmarshalJSON
+//    overrides on sqliteconnpathtype.Variant that bypass the upstream
+//    `GetValueByName(quotedString)` mismatch.)
+var jsonRoundTripSkipTypeNames = map[string]string{}
 
 func Test_AllEnums_JsonRoundTrip(t *testing.T) {
 	for _, current := range allBasicEnumsCollection {

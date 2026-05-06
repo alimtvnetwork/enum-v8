@@ -30,34 +30,26 @@
 - **owner:** AI
 - **plan:** Next audit cycle (AA)
 
-### PI-005: `sqliteconnpathtype.Variant` JSON round-trip is broken
+### PI-005: `sqliteconnpathtype.Variant` JSON round-trip is broken ✅ RESOLVED (2026-05-06, Cycle 60)
 
-- **severity:** MEDIUM
-- **discovered:** 2026-05-06 (Task AL-01, `Test_AllEnums_JsonRoundTrip`)
-- **description:** `MarshalJSON` on a `sqliteconnpathtype.Variant` emits the name double-quoted (e.g. `""Invalid""`), and re-`UnmarshalJSON` on those bytes returns `value given : [""Invalid""], cannot find in the enum map`. Round-trip identity is not preserved. The type is currently skipped in the new test via `jsonRoundTripSkipTypeNames`.
-- **suspected cause:** `sqliteconnpathtype/Variant.go` `MarshalJSON` likely wraps an already-quoted string with another `strconv.Quote`, or its `BasicEnumImpl` is constructed with the wrong stringer compared to sibling Variant packages (e.g. `dbaction`).
-- **owner:** AI
-- **plan:** Audit `sqliteconnpathtype/Variant.go` + `vars.go`; align with sibling pattern; remove the skip entry once round-trip passes.
+- **severity:** MEDIUM (resolved)
+- **discovered:** 2026-05-06 (Task AL-01)
+- **root cause:** Upstream `core-v9` `BasicString.UnmarshallToValue` → `GetValueByName(string(bytes))` looks the *quoted* JSON bytes (`"\"Invalid\""`) up in `jsonDoubleQuoteNameToValueHashMap`, but that hashset is built via `stringsToHashSet(rawNames)` so its keys are raw (`Invalid`). Round-trip therefore fails. MarshalJSON itself is fine.
+- **fix (Cycle 60):** Overrode `Variant.MarshalJSON` to emit `strconv.Quote(string(it))` and `Variant.UnmarshalJSON` to `strconv.Unquote` first then dispatch to `BasicEnumImpl.GetValueByName(rawName)`. Added empty/`""`/nil fallback to local `MinValueString()` (PI-006 fix). Removed `jsonRoundTripSkipTypeNames` skip entry for sqliteconnpathtype.
 
-### PI-006: `sqliteconnpathtype.Variant` Format/NameValue/MinValueString defects
+### PI-006: `sqliteconnpathtype.Variant` Format/NameValue/MinValueString defects ✅ RESOLVED (2026-05-06, Cycle 60)
 
-- **severity:** MEDIUM
-- **discovered:** 2026-05-06 (Task AL-02, `Test_AllEnums_Format`)
-- **description:** Three related defects on `sqliteconnpathtype.Variant`:
-  1. `NameValue()` returns `"Invalid(%!d(string=Invalid))"` — wrong fmt verb (`%d` against a `string` arg). Should be `"Invalid(0)"` or similar.
-  2. `MinValueString()` returns `""` (empty), unlike every other Variant package which returns the min name (e.g. `"Invalid"`).
-  3. `MaxValueString()` is non-empty (`"Specific"`) so the asymmetry confirms a configuration bug rather than a free-form enum design.
-- **suspected cause:** Likely the same `enumimpl.New.BasicByte`/`BasicEnum` constructor mis-wiring as PI-005 — wrong stringer or wrong min/max accessor passed at registration time.
-- **owner:** AI (group with PI-005 fix)
-- **plan:** Inspect `sqliteconnpathtype/vars.go` enumimpl construction + `Variant.go` `NameValue` implementation; align with `dbaction` pattern; remove both PI-005 and PI-006 skip entries (`jsonRoundTripSkipTypeNames`, `formatSuiteSkipMinMaxAll`, `formatSuiteSkipNameValue`) once the type passes both suites.
+- **severity:** MEDIUM (resolved)
+- **discovered:** 2026-05-06 (Task AL-02)
+- **root cause:** Two upstream defects: (1) `enumimpl.NameWithValue` uses `EnumNameValueFormat = "%s(%d)"` which produces `"Invalid(%!d(string=Invalid))"` for string-backed enums; (2) `newBasicStringCreator.CreateUsingStringersSpread` initialises `min := ""` then assigns under `if name < min`, which never fires because every non-empty name is `> ""`, so `BasicString.Min()` always returns "" for spread-constructed enums.
+- **fix (Cycle 60):** Overrode `Variant.NameValue` to return `it.String()` (mirrors upstream's `StringEnumNameValueFormat = "%s"`); overrode `Variant.MinValueString` to compute the lexicographic min from `BasicEnumImpl.StringRanges()` locally. Removed `formatSuiteSkipMinMaxAll` and `formatSuiteSkipNameValue` entries for sqliteconnpathtype, plus the `numericRangeSuiteSkipMinValueString` entry.
 
-### PI-007: `sqliteconnpathtype.Variant.IsAnyNamesOf()` returns true for empty input
+### PI-007: `sqliteconnpathtype.Variant.IsAnyNamesOf()` returns true for empty input ✅ RESOLVED (2026-05-06, Cycle 60)
 
-- **severity:** LOW
-- **discovered:** 2026-05-06 (Task AL-03, `Test_AllEnums_Predicates`)
-- **description:** `sqliteconnpathtype.Invalid.IsAnyNamesOf()` (no args) returns `true`. Every other Variant (`dbaction`, `strtype`, `inttype`, etc.) correctly returns `false` for the same call. Likely vacuous-truth bug in the empty-args path — possibly an early-return on `len(names)==0` inverted, or a default-true branch.
-- **owner:** AI (group with PI-005 + PI-006 in the sqliteconnpathtype audit pass)
-- **plan:** Trace `IsAnyNamesOf` through `sqliteconnpathtype/Variant.go` and the `BasicEnumImpl` wiring; align with sibling pattern; remove `predicateSuiteSkipEmptyAnyNames` entry once fixed.
+- **severity:** LOW (resolved)
+- **discovered:** 2026-05-06 (Task AL-03)
+- **root cause:** `Variant.IsAnyNamesOf` was dispatching to upstream `BasicString.IsAnyOf`, which has an early `if len(checkingItems) == 0 { return true }` (vacuous truth). Upstream provides a separate `BasicString.IsAnyNamesOf` with the correct empty→false semantics — wrong helper was wired.
+- **fix (Cycle 60):** Switched dispatch from `BasicEnumImpl.IsAnyOf` to `BasicEnumImpl.IsAnyNamesOf`. Removed `predicateSuiteSkipEmptyAnyNames` entry.
 
 ### PI-008: `quotes/unWrapBoth` and `brackets/unWrapBoth` off-by-one ✅ RESOLVED (2026-05-06, Cycle 59)
 

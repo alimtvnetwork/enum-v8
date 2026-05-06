@@ -26,16 +26,15 @@ import (
 // implementations in a single sweep over allBasicEnumsCollection.
 //
 // Skip notes:
-//   - `sqliteconnpathtype.Variant.IsAnyNamesOf()` (empty args) returns true
-//     while every other Variant correctly returns false. Tracked as PI-007;
-//     the empty-args assertion is skipped for that type.
+//   - PI-007 (sqliteconnpathtype) was RESOLVED in Cycle 60 by switching the
+//     local `IsAnyNamesOf` dispatch from the upstream vacuous-truth
+//     `BasicString.IsAnyOf` to the correct `BasicString.IsAnyNamesOf`. The
+//     skip entry is gone.
 //   - `strtype.Variant.ValueByte()` (and the other numeric-width accessors)
 //     panic because strtype is a string-backed enum — those accessors are
 //     present on the interface but unimplemented for non-numeric backings.
 //     The numeric-width consistency block is therefore skipped for strtype.
-var predicateSuiteSkipEmptyAnyNames = map[string]string{
-	"sqliteconnpathtype.Variant": "PI-007 — IsAnyNamesOf() with no args returns true",
-}
+var predicateSuiteSkipEmptyAnyNames = map[string]string{}
 
 var predicateSuiteSkipNumericWidth = map[string]string{
 	"strtype.Variant": "string-backed enum; numeric-width accessors panic",

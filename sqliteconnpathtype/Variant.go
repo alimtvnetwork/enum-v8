@@ -1,6 +1,8 @@
 package sqliteconnpathtype
 
 import (
+	"strconv"
+
 	"github.com/alimtvnetwork/core-v9/coredata/corejson"
 	"github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
 )
@@ -45,8 +47,29 @@ func (it Variant) MinMaxAny() (min, max interface{}) {
 	return BasicEnumImpl.MinMaxAny()
 }
 
+// MinValueString
+//
+// PI-006 (2026-05-06, Cycle 60): the upstream
+// `enumimpl.newBasicStringCreator.CreateUsingStringersSpread` initialises
+// `min := ""` and then only assigns under `if name < min`, which never
+// fires (every real name is `> ""`). The upstream `BasicString.Min()` /
+// `MinValueString()` therefore always returns "". We compute the
+// lexicographically smallest registered name locally to provide the value
+// every caller actually expects.
 func (it Variant) MinValueString() string {
-	return BasicEnumImpl.MinValueString()
+	names := BasicEnumImpl.StringRanges()
+	if len(names) == 0 {
+		return ""
+	}
+
+	min := names[0]
+	for _, n := range names[1:] {
+		if n < min {
+			min = n
+		}
+	}
+
+	return min
 }
 
 func (it Variant) MaxValueString() string {
@@ -89,16 +112,31 @@ func (it Variant) IsInvalid() bool {
 	return it == Invalid
 }
 
+// NameValue
+//
+// PI-006 (2026-05-06, Cycle 60): the upstream `BasicString.NameWithValue`
+// uses `enumimpl.NameWithValue` which formats with `EnumNameValueFormat =
+// "%s(%d)"`. Passing the string-backed value as both args yields a Go
+// fmt error string: `"Invalid(%!d(string=Invalid))"`. For a string-backed
+// enum the meaningful representation is just the name, mirroring upstream's
+// `StringEnumNameValueFormat = "%s"`.
 func (it Variant) NameValue() string {
-	return BasicEnumImpl.NameWithValue(it.String())
+	return it.String()
 }
 
 func (it Variant) IsNameEqual(name string) bool {
 	return it.Name() == name
 }
 
+// IsAnyNamesOf
+//
+// PI-007 (2026-05-06, Cycle 60): the upstream `BasicString.IsAnyOf`
+// returns true on empty `checkingItems` (vacuous-truth bug). The correct
+// dispatch for the "is this name in any of these names" question is
+// `BasicString.IsAnyNamesOf` (matches `BasicByte` semantics: empty list →
+// false). Switched dispatch instead of overriding the loop locally.
 func (it Variant) IsAnyNamesOf(names ...string) bool {
-	return BasicEnumImpl.IsAnyOf(it.Name(), names...)
+	return BasicEnumImpl.IsAnyNamesOf(it.Name(), names...)
 }
 
 func (it Variant) TypeName() string {
@@ -149,18 +187,54 @@ func (it Variant) UnmarshallEnumToValue(
 		jsonUnmarshallingValue)
 }
 
+// MarshalJSON
+//
+// PI-005 (2026-05-06, Cycle 60): the upstream `BasicString.ToEnumJsonBytes`
+// returns the name already wrapped in JSON double-quotes (built via
+// `toJsonName` -> `fmt.Sprintf("\"%s\"", name)`). That part is fine for
+// emit. The breakage is on the inverse: upstream `GetValueByName` looks
+// the *raw* name up in `jsonDoubleQuoteNameToValueHashMap`, which is built
+// from the raw name slice via `stringsToHashSet` — so the quoted bytes
+// from MarshalJSON cannot round-trip. We use `strconv.Quote` here for
+// clarity and provide a matching local UnmarshalJSON below that strips
+// the quotes before lookup.
 func (it Variant) MarshalJSON() ([]byte, error) {
-	return BasicEnumImpl.ToEnumJsonBytes(it.String())
+	return []byte(strconv.Quote(string(it))), nil
 }
 
+// UnmarshalJSON
+//
+// PI-005 (2026-05-06, Cycle 60): unquote the incoming bytes locally
+// before consulting `BasicEnumImpl.GetValueByName`, bypassing the upstream
+// `UnmarshallToValue` -> `GetValueByName(quotedString)` mismatch. Empty /
+// `""` / nil bytes still fall back to the registered min (matches upstream
+// `BasicString.UnmarshallToValue` semantics — minus the broken Min(): we
+// use our local `MinValueString()` which actually returns a registered
+// name).
 func (it *Variant) UnmarshalJSON(data []byte) error {
-	dataConv, err := it.UnmarshallEnumToValue(data)
-
-	if err == nil {
-		*it = Variant(dataConv)
+	if len(data) == 0 || string(data) == `""` {
+		*it = Variant(it.MinValueString())
+		return nil
 	}
 
-	return err
+	raw, err := strconv.Unquote(string(data))
+	if err != nil {
+		// Fall back to the upstream path so callers still see the upstream
+		// error shape for genuinely malformed input.
+		dataConv, upstreamErr := it.UnmarshallEnumToValue(data)
+		if upstreamErr == nil {
+			*it = Variant(dataConv)
+		}
+		return upstreamErr
+	}
+
+	resolved, err := BasicEnumImpl.GetValueByName(raw)
+	if err != nil {
+		return err
+	}
+
+	*it = Variant(resolved)
+	return nil
 }
 
 func (it Variant) StringRangesPtr() []string {

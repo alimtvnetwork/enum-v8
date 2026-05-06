@@ -26,17 +26,14 @@ import (
 //   - `strtype.Variant` is a free-form string enum with no fixed ranges, so
 //     `MinValueString` / `MaxValueString` / `AllNameValues` are intentionally
 //     empty and excluded from the non-empty assertions.
-//   - `sqliteconnpathtype.Variant` has an empty `MinValueString()` and a
-//     malformed `NameValue()` (`"Invalid(%!d(string=Invalid))"` — wrong fmt
-//     verb). Tracked as PI-006; skipped here so the suite stays green.
+//   - PI-006 (sqliteconnpathtype) was RESOLVED in Cycle 60 by overriding
+//     `MinValueString` and `NameValue` locally to bypass the upstream
+//     `BasicString.Min()` / `NameWithValue` defects. The skip entry is gone.
 var formatSuiteSkipMinMaxAll = map[string]string{
-	"strtype.Variant":            "free-form string enum, no fixed ranges",
-	"sqliteconnpathtype.Variant": "PI-006 — MinValueString returns empty",
+	"strtype.Variant": "free-form string enum, no fixed ranges",
 }
 
-var formatSuiteSkipNameValue = map[string]string{
-	"sqliteconnpathtype.Variant": "PI-006 — NameValue uses wrong fmt verb",
-}
+var formatSuiteSkipNameValue = map[string]string{}
 
 func Test_AllEnums_Format(t *testing.T) {
 	for _, current := range allBasicEnumsCollection {
