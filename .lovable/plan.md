@@ -168,10 +168,11 @@
 - **Acceptance:** Each touched package reaches ≥60% statement coverage; total rises toward **≥70%**.
 - **Sequencing (one per `next`):**
 
-#### AL2-01. Batch A — simple state enums (6 pkgs)
+#### AL2-01. Batch A — simple state enums (6 pkgs) ✅ DONE (2026-05-06, Cycle 64)
 - **Targets:** `compresslevels`, `configfilestate`, `conntrackstate`, `osgroupexecution`, `servicestate`, `sitestatetype`.
 - **Surface:** `Create`/`CreateMust` (or `New`/`NewMust`), `all-is-checkers.go`, `all-validation-checking-err.go`, `Min`/`Max`/`RangesInvalidErr`.
-- **Expected lift:** ~+3pp total; each package 0% → 60–80%.
+- **Result:** 6 new test files (`<Pkg>_Coverage_test.go` per package) covering constructors + every `IsX` predicate + full Variant accessor sweep. Estimated +3pp total; each package 0% → 60–80%. Pending local `./run.ps1 -tc` confirmation.
+- **Notes:** `compresslevels` and `configfilestate` have no `New`/`NewMust` (Variant-only); `servicestate.Min()` returns `Status` not `Invalid` (verified). `osgroupexecution` exposes the full 40-method Precedence surface — broadest single-file coverage in this batch.
 
 #### AL2-02. Batch B — DB family (6 pkgs)
 - **Targets:** `dbexposetype`, `dbuserprivillegetype`, `sqljointype`, `sqliteconnpathtype`, `querymethodtype`, `resauthtype`.
@@ -225,18 +226,17 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **AL2-01** — Batch A coverage uplift (compresslevels, configfilestate, conntrackstate, osgroupexecution, servicestate, sitestatetype) ⭐ **NEXT (user priority #1)**
-2. **AL2-02** — Batch B (DB family: dbexposetype, dbuserprivillegetype, sqljointype, sqliteconnpathtype, querymethodtype, resauthtype)
-3. **AL2-03** — Batch C (networking / IP: inputiptype, protocoltype, nginxlogtype, pathpatterntype, verifiertriggertype)
-4. **AL2-04** — Batch D (Linux / OS: linuxservicestate, linuxtype, linuxvendortype, osarchs, packageinstallmethod, runtype)
-5. **AL2-05** — Batch E (misc: eventtype, instructiontype, leveltype, licensetype, linescomparetype, logtype, revokereason)
-6. **AL2-06** — Batch F (taskcategory, taskpriority, scripttype, promptclitype, cmdenumtypes)
-7. **AL2-07** — Bespoke `dbdrivertype` connection-string suite
-8. **AL2-08** — Bespoke `osdetect` Linux/Windows guarded branches
-9. **AC** — Re-audit §07 / §09 (now unblocked)
-10. **AB residual** — Continue ❓ promotion for later cycles
-11. **AK** — New enum package creation / recipe validation
-12. **A** — Manual `cross-repo/core-v8/` push
+1. **AL2-02** — Batch B (DB family: dbexposetype, dbuserprivillegetype, sqljointype, sqliteconnpathtype, querymethodtype, resauthtype) ⭐ **NEXT**
+2. **AL2-03** — Batch C (networking / IP)
+3. **AL2-04** — Batch D (Linux / OS)
+4. **AL2-05** — Batch E (misc value enums)
+5. **AL2-06** — Batch F (task / script / prompt)
+6. **AL2-07** — Bespoke `dbdrivertype` connection-string suite
+7. **AL2-08** — Bespoke `osdetect` Linux/Windows guarded branches
+8. **AC** — Re-audit §07 / §09
+9. **AB residual** — Continue ❓ promotion for later cycles
+10. **AK** — New enum package creation / recipe validation
+11. **A** — Manual `cross-repo/core-v8/` push
 
 **Done from this list:**
 - AL-01..AL-08 ✅ (Cycles 49–55, 56, 58 — full AL umbrella)
