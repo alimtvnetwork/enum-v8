@@ -48,6 +48,7 @@ func Test_AllEnums_Predicates(t *testing.T) {
 		current := current
 		typeName := current.TypeName()
 		_, skipEmptyAnyNames := predicateSuiteSkipEmptyAnyNames[typeName]
+		_, skipNumericWidth := predicateSuiteSkipNumericWidth[typeName]
 
 		Convey(typeName+" — predicate / equality / value-width surface", t, func() {
 			name := current.Name()
