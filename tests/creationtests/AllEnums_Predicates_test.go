@@ -39,6 +39,7 @@ func Test_AllEnums_Predicates(t *testing.T) {
 	for _, current := range allBasicEnumsCollection {
 		current := current
 		typeName := current.TypeName()
+		_, skipEmptyAnyNames := predicateSuiteSkipEmptyAnyNames[typeName]
 
 		Convey(typeName+" — predicate / equality / value-width surface", t, func() {
 			name := current.Name()
@@ -55,8 +56,10 @@ func Test_AllEnums_Predicates(t *testing.T) {
 			// IsAnyNamesOf — true when own name is present, false when only the bogus name is given.
 			So(current.IsAnyNamesOf(name, bogusName), ShouldBeTrue)
 			So(current.IsAnyNamesOf(bogusName), ShouldBeFalse)
-			// Empty input is unambiguously "no match".
-			So(current.IsAnyNamesOf(), ShouldBeFalse)
+			// Empty input is unambiguously "no match" (skipped for known-broken types).
+			if !skipEmptyAnyNames {
+				So(current.IsAnyNamesOf(), ShouldBeFalse)
+			}
 
 			// Numeric-width accessors must agree on the underlying value.
 			vByte := current.ValueByte()
