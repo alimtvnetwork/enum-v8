@@ -14,6 +14,65 @@
 
 ---
 
+## Sub-Pattern: GoConvey-Only (Local Wrapper)
+
+> **Scope:** This sub-pattern is a documented variation of Styles A/B for downstream consumers (e.g. `enum-v4`) that intentionally do NOT depend on the upstream `coretests` / `args` / `results` framework. It is a worked example, not a replacement.
+
+Some downstream packages (notably `github.com/alimtvnetwork/enum-v4`) implement test cases using **GoConvey only** — `Convey` / `So` with assertions like `ShouldEqual`, `ShouldResemble`, `ShouldBeNil`, `ShouldBeTrue`, `ShouldBeEmpty` — combined with **local wrapper structs** (e.g. `EnumTestWrapper`, `PathPatternTypeCreationTestWrapper`) and module-level slice/map registries.
+
+### When to use
+
+- Downstream package whose test surface only needs construction + invariant assertions (no `args.Map`/`results.*` typed-slice ergonomics).
+- You want zero dependency on `coretests` so the test build stays minimal.
+- You still want AAA discipline (`// Arrange` / `// Act` / `// Assert` comments are mandatory — see §05).
+
+### Worked example: `enum-v4/tests/creationtests/`
+
+```go
+// EnumTestWrapper.go (local — NOT from coretests)
+type EnumTestWrapper struct {
+    Title    string
+    Enum     enuminf.BasicEnumer
+    Expected string
+}
+
+// AllEnums_ContractsTesting_test.go
+func Test_AllEnums_Contracts(t *testing.T) {
+    Convey("All enums satisfy contract", t, func() {
+        for _, tc := range allEnumGeneralTestCases {
+            // Arrange
+            actualEnumDynamicMap := dynamicEnumMapOf(tc.Enum)
+
+            // Act
+            diff := actualEnumDynamicMap.LogShouldDiffMessage(true, header, expected)
+
+            // Assert
+            So(diff, ShouldBeEmpty)
+        }
+    })
+}
+```
+
+The diff-based assertion (`LogShouldDiffMessage` + `So(diff, ShouldBeEmpty)`) is the GoConvey-only equivalent of `ShouldBeEqualMap` — it reports the exact field mismatch on failure.
+
+### Equivalence table
+
+| Upstream framework (Styles A–D) | GoConvey-only sub-pattern |
+|---|---|
+| `CaseV1` struct | Local wrapper struct (e.g. `EnumTestWrapper`) |
+| `coretests.GetAssert.ShouldBeEqualMap` | `LogShouldDiffMessage` + `So(diff, ShouldBeEmpty)` |
+| `args.Map` semantic-key input | Module-level registry slice/map |
+| `t.Run` sub-tests | `Convey` nested scopes |
+| `tc.ShouldBeEqualFirst(t, ...)` | `So(actual, ShouldEqual, expected)` |
+
+### Constraints
+
+- AAA comments are still mandatory.
+- This sub-pattern does NOT exempt a package from the framework-limitations section below if it later adopts `coretests`.
+- Cross-link `spec/01-app/13-testing-patterns.md` §6.1 when introducing this in a new downstream consumer.
+
+---
+
 ## CaseV1
 
 The primary workhorse. Use for any test where you explicitly control Arrange → Act → Assert.
