@@ -61,15 +61,15 @@
 - **acceptance criteria:** `rg integratedtests spec/00-llm-integration-guide.md` returns only the anti-pattern callout lines.
 - **status:** open
 
-### S-108: Restore missing `scripts/coverage/Generate-CoveragePrompts.ps1`
+### S-110: Restore standalone coverage utilities documented alongside S-108
 
 - **createdAt:** 2026-05-06
-- **source:** Lovable (Cycle 27 — AB scripts deep-probe, surfaced D-CVS-62)
+- **source:** Lovable (Cycle 31 follow-up to S-108 completion)
 - **affectedProject:** enum-v4
-- **description:** `scripts/CoverageRunner.psm1:313-316` and `scripts/PackageCoverage.psm1:150` both call `& $promptScript ... -BatchSize 500` against `scripts/coverage/Generate-CoveragePrompts.ps1`, but that file is **missing** from the repo. The call-sites guard with `if (Test-Path $promptScript)` so the missing-file case silently no-ops — meaning the documented "per-batch coverage prompt files capped at 500 functions" feature (`spec/03-powershell-test-run/06-coverage-prompt-generator.md`) does not run today.
-- **rationale:** Either the spec promises a feature that doesn't exist (drift) OR the script was lost in a previous refactor. Since the call-sites are still wired, restoration is the lower-friction fix.
-- **proposed change:** Restore the script (read `spec/03-powershell-test-run/06-coverage-prompt-generator.md` for the contract: input = cover.out + go-tool-cover func output; output = batched prompt files with `-BatchSize 500`; per-package grouping).
-- **acceptance criteria:** `Test-Path scripts/coverage/Generate-CoveragePrompts.ps1` → True; `./run.ps1 -tc` produces files under `data/prompts/`.
+- **description:** `spec/03-powershell-test-run/06-coverage-prompt-generator.md` documents three standalone helpers in `scripts/coverage/` that are still missing: `Get-UncoveredLines.ps1`, `Get-FunctionCoverage.ps1`, `Get-PackageCoverageReport.ps1` (the latter with `-Format text|markdown|json`). They are not invoked by any `.psm1` (so no silent no-op like S-108) but are advertised in the spec as user-facing standalone tools.
+- **rationale:** Closes the remaining drift between `spec/03-powershell-test-run/06-coverage-prompt-generator.md` and the actual `scripts/coverage/` directory.
+- **proposed change:** Implement each helper per the spec's parameter tables; reuse the regex/range-collapse logic from the restored `Generate-CoveragePrompts.ps1`.
+- **acceptance criteria:** All four scripts in `scripts/coverage/` exist; spec drift D-CVS-62 fully closed (currently only the auto-invoked one is restored).
 - **status:** open
 
 ### S-109: Cycle-15 deep-probe of `tests/creationtests/` patterns to clear 21 ❓
@@ -86,6 +86,13 @@
 ---
 
 ## Completed Suggestions
+
+### S-108: Restore missing `scripts/coverage/Generate-CoveragePrompts.ps1`
+
+- **completed:** 2026-05-06 (Cycle 31)
+- **source:** Lovable (Cycle 27 — AB scripts deep-probe, surfaced D-CVS-62)
+- **resolution:** Created `scripts/coverage/Generate-CoveragePrompts.ps1` per the contract in `spec/03-powershell-test-run/06-coverage-prompt-generator.md`. Parses `coverage.out` (statement blocks with `count==0`) + `go tool cover -func` output, sorts functions ascending by coverage, batches at `-BatchSize` (default 500) into `data/prompts/coverage-prompt-N.txt`, emits `prompts-summary.json`. Smoke-tested end-to-end via `nix run nixpkgs#powershell` against synthetic `coverage.out` + func output: produced exactly the spec sample format including range-collapsed uncovered-line ranges (`L15-L17, L22`) and ascending coverage sort. Both call-sites in `scripts/CoverageRunner.psm1:313-316` and `scripts/PackageCoverage.psm1:150` now resolve. Standalone utilities (`Get-UncoveredLines.ps1` etc.) tracked separately as **S-110**.
+- **acceptance criteria:** ✅ `Test-Path scripts/coverage/Generate-CoveragePrompts.ps1` → True. ✅ Smoke run produces `coverage-prompt-1.txt` matching spec format and `prompts-summary.json`.
 
 ### S-100: Add `cmd/main/` smoke-test policy carve-out to spec §12
 

@@ -34,6 +34,11 @@
 
 ## Resolved Issues
 
+### D-CVS-62: Missing `scripts/coverage/Generate-CoveragePrompts.ps1`
+
+- **resolved:** 2026-05-06 (Cycle 31, S-108)
+- **fix:** Created the script per `spec/03-powershell-test-run/06-coverage-prompt-generator.md`. Smoke-tested end-to-end. Three sibling standalone utilities still missing — tracked as **S-110**.
+
 ### PI-001: Upstream `core-v9` `go.mod` module path mismatch (Task W + AG)
 
 - **resolved:** 2026-05-05

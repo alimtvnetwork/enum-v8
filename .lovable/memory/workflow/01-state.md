@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 27 — AB residual deep-probe: promoted 11 ❓ via direct script/workflow evidence; surfaced D-CVS-62 [missing prompt-generator script → S-108] + D-CVS-63 [spec JSON schema missing `source` field, fixed]. AB-residual ❓ 53 → 42. Cumulative AB ❌ unchanged at 49, CRITICAL = 22).
+> **Last updated:** 2026-05-06 (Cycle 31 — S-108 RESOLVED: restored `scripts/coverage/Generate-CoveragePrompts.ps1` per `spec/03-powershell-test-run/06-coverage-prompt-generator.md`; smoke-tested via nix-pwsh, produces spec-shaped prompt files + summary JSON. D-CVS-62 closed; 3 sibling standalone utilities still missing → tracked as new S-110).
 
 ## ✅ Done
 
@@ -29,6 +29,7 @@
 - **CI integration of S-106** — ✅ Wired into `scripts/CoveragePreChecks.psm1` as a "Spec-API Lint" dashboard phase (Cycle 27, 2026-05-06). Runs after safeTest boundary lint, before Go auto-fixer. Soft gate (warn-only) by default so the 49 known fabrications don't block runs. Flags via `run.ps1`: `--no-spec-api` skips, `--strict-spec-api` fails TC on any fabrication (for CI). Auto-skips when upstream clone, spec dir, or lint module is absent.
 - **CI workflow gate (S-106)** — ✅ Added `spec-api-lint` job to `.github/workflows/ci-guards.yml` (Cycle 28, 2026-05-06). Clones `core-v9 @ v1.5.8` to `/tmp/core-v9-upstream` and runs `Invoke-SpecApiCheck` via pwsh. PRs touching `spec/` or `scripts/spec-api-check.psm1` run with `-StrictExitCode`; all other runs are warn-only.
 - **S-106 v1.1** — ✅ False-positive cleanup (Cycle 29, 2026-05-06). Indented-fence detection (`^\s*\`\`\``), local enum-v4 indexing in `Get-UpstreamPackages -LocalDir`, expanded allow-list (stdlib `unsafe`/`runtime`/`path`/etc., template names `emailvalidator`/`corev8`/`expected`/`validator`/`downstream`/`registry`, CommonLocalVarNames bucket of 25 frequent var names), `vN` versioned-local skip, and receiver-name binding (`func (it Variant)` → `it` local). Pkg-fab FP drop 22 → 0; sym-fab list now matches AB findings 1:1.
+- **S-108. Restore prompt-generator script** — ✅ Cycle 31 (2026-05-06). Created `scripts/coverage/Generate-CoveragePrompts.ps1` (~210 LOC, PS 5.1+) per `spec/03-powershell-test-run/06-coverage-prompt-generator.md`. Robust input handling (file path / multi-line string / array), `coverage.out` block parser (zero-count statement blocks), range-collapse formatter (`L15-L17, L22`), ascending-coverage sort, batched output at `-BatchSize 500`, summary JSON. Avoids the `$Input` automatic-variable shadowing pitfall (uses `$Source`). Smoke-tested via `nix run nixpkgs#powershell` against synthetic inputs — output matches spec sample byte-for-byte. Both call-sites in `scripts/CoverageRunner.psm1:313` and `scripts/PackageCoverage.psm1:145` now resolve. **D-CVS-62 closed.** Sibling standalone utilities (`Get-UncoveredLines.ps1`, `Get-FunctionCoverage.ps1`, `Get-PackageCoverageReport.ps1`) tracked as new suggestion **S-110**.
 
 ## 🔄 In Progress
 
