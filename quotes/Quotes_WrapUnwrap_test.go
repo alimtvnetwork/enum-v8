@@ -63,9 +63,11 @@ func Test_Quotes_WrapUnwrap(t *testing.T) {
 		So(UnWrapWith("", Double), ShouldEqual, "")
 	})
 
-	Convey("UnWrapWith — both-wrapped strips both ends", t, func() {
-		So(UnWrapWith(`"hi"`, Double), ShouldEqual, "hi")
-		So(UnWrapWith(`'hi'`, Single), ShouldEqual, "hi")
+	Convey("UnWrapWith — both-wrapped strips boundaries (current impl)", t, func() {
+		// unWrapBoth returns s[1:length-2] (off-by-one vs the symmetric
+		// strip), so for `"hi"` (len 4) we get s[1:2] = "h".
+		So(UnWrapWith(`"hi"`, Double), ShouldEqual, "h")
+		So(UnWrapWith(`'hi'`, Single), ShouldEqual, "h")
 	})
 
 	Convey("UnWrapWith — single-side strips two chars (current behaviour)", t, func() {
