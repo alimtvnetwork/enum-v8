@@ -453,3 +453,36 @@ a `case map[string]any:` branch and will fall through to the `default` case (Pre
 via `CompileToStrings()` before it reaches `ExpectedLines()`. The `ShouldBeEqualMap`
 method handles this automatically — never set `ExpectedInput` to a raw `args.Map`
 and then call `ShouldBe` directly.
+
+---
+
+## Sub-Pattern: GoConvey-Only Diff Assertion
+
+> **Scope:** Companion to the [GoConvey-Only sub-pattern in §02](./02-test-case-types.md#sub-pattern-goconvey-only-local-wrapper). Use when a downstream package (e.g. `enum-v4`) opts out of `coretests` entirely.
+
+The GoConvey-only equivalent of `ShouldBeEqualMap` is the **diff-based assertion**:
+
+```go
+// Arrange
+actualEnumDynamicMap := dynamicEnumMapOf(tc.Enum)
+
+// Act
+diff := actualEnumDynamicMap.LogShouldDiffMessage(true, header, expected)
+
+// Assert
+So(diff, ShouldBeEmpty)
+```
+
+**Why diff-based:** Returns the empty string on success and a human-readable field-by-field diff on failure. `So(diff, ShouldBeEmpty)` then surfaces the diff in the GoConvey report — same failure ergonomics as `ShouldBeEqualMap`, no `coretests` dependency.
+
+**Companion assertions** routinely paired with this pattern:
+
+| Assertion | Purpose |
+|---|---|
+| `So(value, ShouldEqual, expected)` | Scalar comparison |
+| `So(value, ShouldResemble, expected)` | Deep struct/slice comparison |
+| `So(value, ShouldBeNil)` | Nil-safety check |
+| `So(value, ShouldBeTrue)` / `ShouldBeFalse` | Boolean invariants |
+| `So(diff, ShouldBeEmpty)` | Diff-based map/struct equality (above) |
+
+**Worked example:** `github.com/alimtvnetwork/enum-v4/tests/creationtests/AllEnums_ContractsTesting_test.go`.
