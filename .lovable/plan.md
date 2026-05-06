@@ -171,20 +171,21 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **Local verification** — Re-run `./run.ps1 -tc` and confirm AL-08 + Cycle 57 fixes are green ⭐ verify
-2. **PI-008** — Audit `unWrapBoth`/`unWrapSingle` off-by-one (quotes + brackets) — semantic bug, not a test issue
-3. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
+1. **Local verification** — Re-run `./run.ps1 -tc` and confirm AL-08 + PI-008 fixes are green ⭐ verify
+2. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
+3. **AI** — Mark `spec/01-app/` as frozen in `spec/CHANGELOG.md` (quick win)
 4. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
-5. **AI** — Mark `spec/01-app/` as frozen (quick win)
-6. **AB** — Already done in sandbox; status entry pending
+5. **AB** — Already done in sandbox; status entry pending
+6. **AC** — Re-audit §07 / §09 (waits on AB)
 7. **AK** — New enum package creation / recipe validation
 8. **A** — Manual `cross-repo/core-v8/` push
 
 **Done from this list:**
 - AL-01..AL-06 ✅ (Cycles 49–55)
-- AL-07 ✅ (Cycle 56, strtype + inttype constructor & GetSet + IsCompareResult; expected +2–4pp)
-- Cycle 57 ✅ (test fixes for 6 failures from first `-tc` run after AL-04..AL-07)
-- AL-08 ✅ (Cycle 58, osdetect cross-platform safe coverage; expected +1pp)
+- AL-07 ✅ (Cycle 56, strtype + inttype)
+- Cycle 57 ✅ (test fixes for 6 failures)
+- AL-08 ✅ (Cycle 58, osdetect cross-platform safe coverage)
+- PI-008 ✅ (Cycle 59, fixed off-by-one in quotes/brackets unwrap helpers + tests)
 
 **Done — full AL umbrella:**
 - AL-01 ✅ (Cycle 49, 15.5% → 21.6%, +6.1pp)
