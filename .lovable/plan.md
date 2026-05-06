@@ -170,11 +170,19 @@
 
 ## Next Task Selection
 
-**Recommended next task:** Pick from this list:
+**Recommended next task:** Pick from this list (in order):
 
-1. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/` (highest leverage spec task)
-2. **AI** — Mark `spec/01-app/` as frozen (quick win, 5 minutes)
-3. **AB** — Fetch upstream `core-v9` source for ❓ claim verification
+1. **AL-01** — Json round-trip suite (highest coverage leverage, ~+10%)
+2. **AL-02** — Format & string conversion suite
+3. **AL-03** — Comparison & predicate suite
+4. **AL-04** — Numeric width & range suite
+5. **AL-05** — Constructor suite for lowest-coverage packages
+6. **AL-06** — `quotes/` and `brackets/` dedicated suites
+7. **AL-07** — `strtype` / `inttype` constructor & GetSet suites
+8. **AL-08** — `osdetect` cross-platform parts
+9. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
+10. **AI** — Mark `spec/01-app/` as frozen (quick win)
+11. **AB** — Already done in sandbox; status entry pending
 
 ---
 
