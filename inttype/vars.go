@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	typeName = coredynamic.TypeName(Variant(-1))
+	typeName = coredynamic.SafeTypeName(Variant(-1))
 
 	bytesToDeserializer = corejson.
 				Deserialize.

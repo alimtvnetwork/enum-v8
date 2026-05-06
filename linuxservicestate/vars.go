@@ -45,6 +45,6 @@ var (
 	rawMappingLength = byte(len(RawMapping))
 
 	BasicEnumImpl = enumimpl.New.BasicByte.UsingTypeSlice(
-		coredynamic.TypeName(ActiveRunning),
+		coredynamic.SafeTypeName(ActiveRunning),
 		StringRanges[:])
 )

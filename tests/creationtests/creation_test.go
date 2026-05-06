@@ -11,7 +11,7 @@ import (
 func Test_Creation(t *testing.T) {
 	for i, invalidChecker := range simpleEnumCollectionTestCases {
 		// Arrange
-		name := coredynamic.TypeName(invalidChecker)
+		name := coredynamic.SafeTypeName(invalidChecker)
 		invalidHeader := fmt.Sprintf(
 			"%d - %s - IsInvalid",
 			i,

@@ -25,6 +25,7 @@
 - **AA. Spec-audit cycles** — Cycle 15 target: `spec/06-testing-guidelines/`.
 - **AH. Cross-`spec/` cleanup sweep** — folded into upcoming directory audits.
 - **AM. core-v9 API migration** — Fixing broken converter/coredynamic calls. Awaiting `stringTo` method list from user.
+  - 2026-05-06: Applied confirmed renames (53 `TypeName`→`SafeTypeName`, 6 `AnyToValueString`→`AnyTo.ValueString`, 1 `Any.ToFullNameValueString`→`AnyTo.ToFullNameValueString`). 11 `StringTo*` sites still pending method-list confirmation.
 
 ## ⏳ Pending
 

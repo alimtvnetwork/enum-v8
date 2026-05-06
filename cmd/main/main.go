@@ -110,7 +110,7 @@ func serializeDeserializeTesterByInput(input interface{}) {
 	json := corejson.NewPtr(input)
 	
 	if json.HasIssuesOrEmpty() {
-		fmt.Println(coredynamic.TypeName(input))
+		fmt.Println(coredynamic.SafeTypeName(input))
 		fmt.Println("Marshalling Err", json.MeaningfulErrorMessage())
 	}
 	
@@ -118,7 +118,7 @@ func serializeDeserializeTesterByInput(input interface{}) {
 	
 	if finalErr != nil {
 		fmt.Println(finalErr)
-		fmt.Println(coredynamic.TypeName(input))
+		fmt.Println(coredynamic.SafeTypeName(input))
 		fmt.Println("Json", json.PrettyJsonString())
 	}
 }

@@ -22,6 +22,6 @@ var (
 	}
 
 	BasicEnumImpl = enumimpl.New.BasicByte.UsingTypeSlice(
-		coredynamic.TypeName(Success),
+		coredynamic.SafeTypeName(Success),
 		Ranges[:])
 )

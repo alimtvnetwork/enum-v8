@@ -97,5 +97,5 @@ func (it BothBrackets) WrapSkipOnExist(
 }
 
 func (it BothBrackets) String() string {
-	return converters.AnyToValueString(it)
+	return converters.AnyTo.ValueString(it)
 }
