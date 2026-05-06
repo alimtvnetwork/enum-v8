@@ -16,9 +16,9 @@
 
 ## Sub-Pattern: GoConvey-Only (Local Wrapper)
 
-> **Scope:** This sub-pattern is a documented variation of Styles A/B for downstream consumers (e.g. `enum-v4`) that intentionally do NOT depend on the upstream `coretests` / `args` / `results` framework. It is a worked example, not a replacement.
+> **Scope:** This sub-pattern is a documented variation of Styles A/B for downstream consumers (e.g. `enum-v5`) that intentionally do NOT depend on the upstream `coretests` / `args` / `results` framework. It is a worked example, not a replacement.
 
-Some downstream packages (notably `github.com/alimtvnetwork/enum-v4`) implement test cases using **GoConvey only** — `Convey` / `So` with assertions like `ShouldEqual`, `ShouldResemble`, `ShouldBeNil`, `ShouldBeTrue`, `ShouldBeEmpty` — combined with **local wrapper structs** (e.g. `EnumTestWrapper`, `PathPatternTypeCreationTestWrapper`) and module-level slice/map registries.
+Some downstream packages (notably `github.com/alimtvnetwork/enum-v5`) implement test cases using **GoConvey only** — `Convey` / `So` with assertions like `ShouldEqual`, `ShouldResemble`, `ShouldBeNil`, `ShouldBeTrue`, `ShouldBeEmpty` — combined with **local wrapper structs** (e.g. `EnumTestWrapper`, `PathPatternTypeCreationTestWrapper`) and module-level slice/map registries.
 
 ### When to use
 
@@ -26,7 +26,7 @@ Some downstream packages (notably `github.com/alimtvnetwork/enum-v4`) implement 
 - You want zero dependency on `coretests` so the test build stays minimal.
 - You still want AAA discipline (`// Arrange` / `// Act` / `// Assert` comments are mandatory — see §05).
 
-### Worked example: `enum-v4/tests/creationtests/`
+### Worked example: `enum-v5/tests/creationtests/`
 
 ```go
 // EnumTestWrapper.go (local — NOT from coretests)

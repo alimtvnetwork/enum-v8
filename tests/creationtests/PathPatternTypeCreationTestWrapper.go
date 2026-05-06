@@ -1,6 +1,6 @@
 package creationtests
 
-import "github.com/alimtvnetwork/enum-v4/pathpatterntype"
+import "github.com/alimtvnetwork/enum-v5/pathpatterntype"
 
 type PathPatternTypeCreationTestWrapper struct {
 	PathType                      pathpatterntype.Variant

@@ -2,7 +2,7 @@
 
 ## Description
 
-`enum-v4` source code still uses old `core-v8`-era function signatures that no longer exist in `core-v9 v1.5.8`. The upstream library moved from package-level functions to struct-based namespaces (e.g., `converters.AnyToValueString()` → `converters.AnyTo.ValueString()`).
+`enum-v5` source code still uses old `core-v8`-era function signatures that no longer exist in `core-v9 v1.5.8`. The upstream library moved from package-level functions to struct-based namespaces (e.g., `converters.AnyToValueString()` → `converters.AnyTo.ValueString()`).
 
 ## Root Cause
 
@@ -11,7 +11,7 @@
 ## Steps to Reproduce
 
 ```bash
-cd enum-v4
+cd enum-v5
 go build ./...
 # Expected: clean build
 # Actual: undefined: converters.AnyToValueString, undefined: coredynamic.TypeName, etc.
