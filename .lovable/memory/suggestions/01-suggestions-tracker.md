@@ -61,17 +61,6 @@
 - **acceptance criteria:** `rg integratedtests spec/00-llm-integration-guide.md` returns only the anti-pattern callout lines.
 - **status:** open
 
-### S-110: Restore standalone coverage utilities documented alongside S-108
-
-- **createdAt:** 2026-05-06
-- **source:** Lovable (Cycle 31 follow-up to S-108 completion)
-- **affectedProject:** enum-v4
-- **description:** `spec/03-powershell-test-run/06-coverage-prompt-generator.md` documents three standalone helpers in `scripts/coverage/` that are still missing: `Get-UncoveredLines.ps1`, `Get-FunctionCoverage.ps1`, `Get-PackageCoverageReport.ps1` (the latter with `-Format text|markdown|json`). They are not invoked by any `.psm1` (so no silent no-op like S-108) but are advertised in the spec as user-facing standalone tools.
-- **rationale:** Closes the remaining drift between `spec/03-powershell-test-run/06-coverage-prompt-generator.md` and the actual `scripts/coverage/` directory.
-- **proposed change:** Implement each helper per the spec's parameter tables; reuse the regex/range-collapse logic from the restored `Generate-CoveragePrompts.ps1`.
-- **acceptance criteria:** All four scripts in `scripts/coverage/` exist; spec drift D-CVS-62 fully closed (currently only the auto-invoked one is restored).
-- **status:** open
-
 ### S-109: Cycle-15 deep-probe of `tests/creationtests/` patterns to clear 21 ❓
 
 - **createdAt:** 2026-05-06
@@ -86,6 +75,17 @@
 ---
 
 ## Completed Suggestions
+
+### S-110: Restore standalone coverage utilities documented alongside S-108
+
+- **completed:** 2026-05-06 (Cycle 32)
+- **source:** Lovable (Cycle 31 follow-up to S-108 completion)
+- **resolution:** Created the three standalone utilities listed in `spec/03-powershell-test-run/06-coverage-prompt-generator.md`:
+  - `scripts/coverage/Get-UncoveredLines.ps1` — emits a single-row object `{SourceFile, UncoveredCount, Ranges}` with collapsed line ranges (e.g. `L15-L17, L22`).
+  - `scripts/coverage/Get-FunctionCoverage.ps1` — parses `go tool cover -func` output, filters below `-Threshold` (default 100.0), returns objects sorted ascending by coverage.
+  - `scripts/coverage/Get-PackageCoverageReport.ps1` — combines both for a single `-Package`; supports `-Format text|markdown|json` and optional `-OutputFile`.
+  All three reuse the same regexes and range-collapse helper as the S-108 main script and avoid the `$Input` automatic-variable shadowing pitfall (use `$Source`). Smoke-tested via `nix run nixpkgs#powershell` against synthetic 6-block `coverage.out` + 3-line func output: each utility produces exactly the spec-shaped output (correct sort order, correct ranges, all 3 formats). `package.json` 0.1.0 → 0.2.0.
+- **acceptance criteria:** ✅ All four scripts now exist in `scripts/coverage/`. ✅ Spec drift D-CVS-62 is **fully** closed (was partially closed by S-108).
 
 ### S-108: Restore missing `scripts/coverage/Generate-CoveragePrompts.ps1`
 
