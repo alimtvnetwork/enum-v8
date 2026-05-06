@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 38 — closed **S-112 + S-113** in one pass. `Invoke-GitPull` now probes `origin` remote with `git remote get-url` + `git ls-remote --exit-code origin HEAD` before any `git pull`, and returns `{Status, Message}` so `CoverageRunner` registers the Phase Summary truthfully. Phase row will now render `⊘ Git Pull remote unreachable` instead of the lying `✓ Git Pull pulled from remote`. Smoke test at `tests/scripts/Test-InvokeGitPull.ps1` — both cases pass. `package.json` 0.7.0 → 0.8.0). Open suggestions: S-002 (deferred), S-111 (cosmetic GoConvey-only sub-pattern note for spec/06 — falls under Task AC)).
+> **Last updated:** 2026-05-06 (Cycle 39 — closed **S-111** with cosmetic spec/06 callouts. Added "Sub-Pattern: GoConvey-Only (Local Wrapper)" to `02-test-case-types.md` and "Sub-Pattern: GoConvey-Only Diff Assertion" to `05-assertion-patterns.md`. Both cross-link `tests/creationtests/AllEnums_ContractsTesting_test.go` and provide an equivalence table mapping `CaseV1`/`args.Map`/`ShouldBeEqualMap` ↔ local-wrapper/registry/`So(diff, ShouldBeEmpty)`. Resolves D-CVS-64. Spec changelog → spec-v0.45.0. `package.json` 0.8.0 → 0.9.0.). Open suggestions: S-002 (deferred to Task AC).
 
 ## ✅ Done
 
