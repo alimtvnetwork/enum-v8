@@ -9,6 +9,20 @@
 
 ---
 
+## [spec-v0.29.0] — 2026-05-06 (Cycle 15 baseline & closed — `spec/06-testing-guidelines/` directory at 100 % verifiable)
+
+### Added
+- **`spec/07-code-vs-spec-audits/16-cycle15-testing-guidelines.md`** — Cycle 15 audit covering all 10 files in `spec/06-testing-guidelines/` (32 representative claims). Closes the directory at **100 % of its verifiable subset** (22 ✅ / 10 ❓; the 10 ❓ are upstream-`core-v9` behavioural claims pending task **AB**). Introduces **D-CVS-43** (LOW) — same upstream-vs-`enum-v4` scope mismatch already resolved at `01-app/13` and `01-app/14` — and resolves it in the same cycle via the README + 01-folder-structure callout pattern.
+
+### Fixed
+- **`spec/06-testing-guidelines/README.md`** (resolves **D-CVS-43** part 1) — added a "**Consumer-coverage note (`enum-v4`)**" callout immediately after the title block, scoping the entire portable testing-guideline folder to **upstream `core-v9`** and redirecting `enum-v4` readers at `spec/01-app/13-testing-patterns.md` §6.1 and `spec/01-app/14-tests-folder-walkthrough.md` for this module's actual `tests/creationtests/` layout.
+- **`spec/06-testing-guidelines/01-folder-structure.md`** (resolves **D-CVS-43** part 2) — added a `⚠️ Scope` warning at the top of the file marking the per-package `tests/integratedtests/<pkg>tests/` directory tree as upstream-only and redirecting to the same `01-app/13-` §6.1 anchor. Other in-text references in `03-args-reference.md` and `06-branch-coverage.md` are now covered by the README callout (no per-token rewrite — the spec is deliberately portable).
+
+### Changed
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — added Cycle 15 history row; lifted top-line milestone string to include **`spec/06-testing-guidelines/` baselined**; bumped open-❓ aggregate from **148 → 158** (10 from `spec/06`).
+
+---
+
 ## [spec-v0.28.0] — 2026-05-04 (Tooling — surface blocked-package compile diagnostics inline)
 
 ### Fixed
