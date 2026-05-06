@@ -4,10 +4,11 @@
 
 ### Pin Go toolchain to 1.22 as a stopgap for Task W
 
-- **Status:** Pending (offered repeatedly across recent sessions; user has not accepted).
-- **Priority:** Medium
+- **Status:** Obsolete — Task W is now ✅ Done. This stopgap is no longer needed.
+- **Priority:** N/A
 - **Description:** Go 1.25 rejects the dual-path `replace` bridge between `core-v9` (import path) and `core-v8` (cached module path) with `used for two different module paths`. Pinning the toolchain to Go 1.22 in `go.mod` would unblock builds while waiting for the upstream `core-v9` `go.mod` rename + `v1.5.8` tag (Task W). Trade-off: locks the project to an older toolchain and silently masks the underlying issue.
 - **Added:** 2026-05-05 (Cycle 13 turn).
+- **Superseded:** 2026-05-05 — Task W completed, bridge removed, suggestion no longer applicable.
 
 ### Promote `errcore.VarTwoNoType` from ❓ to ✅ in Cycle 6's §08 audit
 
