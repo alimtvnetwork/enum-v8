@@ -10,7 +10,7 @@
 
 Dual-dimension probe:
 
-1. **Code-vs-spec** — probe `enum-v5` source for any consumer usage of the spec's claimed APIs (`coretests.GetAssert`, `args.Map`, `CaseV1`, `tests/integratedtests/<pkg>tests/`, `Coverage*_test.go`, in-package framework imports).
+1. **Code-vs-spec** — probe `enum-v6` source for any consumer usage of the spec's claimed APIs (`coretests.GetAssert`, `args.Map`, `CaseV1`, `tests/integratedtests/<pkg>tests/`, `Coverage*_test.go`, in-package framework imports).
 2. **Spec-internal-consistency** — cross-refs resolve, no banned-pattern occurrences (`enum-v1`, mojibake `core-v9 → core-v9`, `.lovable/user-preferences`), no contradiction with sibling files in `spec/01-app/13-testing-patterns.md` and `14-tests-folder-walkthrough.md`.
 
 ```bash
@@ -20,7 +20,7 @@ rg -n 'Coverage.*_test\.go' --type go --glob '!cross-repo/**'
 ls spec/01-app/{13-testing-patterns,14-tests-folder-walkthrough}.md
 ```
 
-**Result of the consumer probe:** zero hits. `enum-v5` does not import or call any of the upstream `coretests`/`coretestcases`/`args`/`results` framework symbols. Tests live in `tests/creationtests/` (single package, Goconvey-based, registry over `EnumTestWrapper`) — already documented at `spec/01-app/13-testing-patterns.md` §6.1.
+**Result of the consumer probe:** zero hits. `enum-v6` does not import or call any of the upstream `coretests`/`coretestcases`/`args`/`results` framework symbols. Tests live in `tests/creationtests/` (single package, Goconvey-based, registry over `EnumTestWrapper`) — already documented at `spec/01-app/13-testing-patterns.md` §6.1.
 
 ## 2. Claim-by-claim table
 
@@ -28,13 +28,13 @@ ls spec/01-app/{13-testing-patterns,14-tests-folder-walkthrough}.md
 
 | # | File | Claim | Verdict | Evidence |
 |---|------|-------|---------|----------|
-| 1  | README | "Portable guideline — drop this folder into any Go project that uses the `coretests` framework" | ✅ | Self-describing scope. Cycle adds `enum-v5` consumer-coverage callout (D-CVS-43). |
+| 1  | README | "Portable guideline — drop this folder into any Go project that uses the `coretests` framework" | ✅ | Self-describing scope. Cycle adds `enum-v6` consumer-coverage callout (D-CVS-43). |
 | 2  | README | 6 numbered table-of-contents entries (`01-`, `02-`, `03-`, `05-`, `06-`, `08-`, `09-`) | ⚠️→✅ | All 7 file refs resolve. README omits `04-results-reference.md` and `07-diagnostics-output-standards.md` from the TOC — pre-existing minor incompleteness (NOT a Cycle 15 finding; tracked separately as low-priority polish). |
 | 3  | README | Core principle — separation of `_testcases.go` vs `_test.go` | ✅ | Consistent with `01-folder-structure.md` §"Separation Rules". |
 | 4  | README | Core principle — AAA comments mandatory | ✅ | Consistent with `05-assertion-patterns.md` and `01-app/13-testing-patterns.md` Style D. |
 | 5  | README | Core principle — no raw `t.Error` / `t.Errorf` | ✅ | Consistent with `01-app/13-testing-patterns.md` §3 framework-only assertion rule. |
 | 6  | README | Core principle — internal-package coverage policy with callout to `06-branch-coverage.md` | ✅ | Cross-ref resolves. |
-| 7  | 01-folder-structure | Directory tree shows `tests/integratedtests/<pkg>tests/` as the prescribed layout | ⚠️→✅ | **D-CVS-43** — same upstream-vs-`enum-v5` mismatch already resolved at `01-app/13` and `14`. Cycle 15 adds an `enum-v5` scope warning at the top of `01-folder-structure.md` redirecting to `01-app/13-testing-patterns.md` §6.1. |
+| 7  | 01-folder-structure | Directory tree shows `tests/integratedtests/<pkg>tests/` as the prescribed layout | ⚠️→✅ | **D-CVS-43** — same upstream-vs-`enum-v6` mismatch already resolved at `01-app/13` and `14`. Cycle 15 adds an `enum-v6` scope warning at the top of `01-folder-structure.md` redirecting to `01-app/13-testing-patterns.md` §6.1. |
 | 8  | 01-folder-structure | Naming rule `{package}tests/` lowercase + `tests` suffix | ✅ | Spec-internal; consistent with upstream `core-v9` mirror in `cross-repo/core-v8/tests/integratedtests/`. |
 | 9  | 01-folder-structure | File pattern `{Feature}_test.go` + `{Feature}_testcases.go` | ✅ | Same. |
 | 10 | 01-folder-structure | Test fn pattern `Test_{TypeOrFeature}_{Scenario}_Verification` | ✅ | Consistent with `01-app/13-testing-patterns.md` §3 rule 1. |
@@ -49,9 +49,9 @@ ls spec/01-app/{13-testing-patterns,14-tests-folder-walkthrough}.md
 | 19 | 05-assertion-patterns | `ShouldBeEqual`, `ShouldBeEqualMap`, `ShouldBeSafe` assertion API | ❓ | Pending AB. |
 | 20 | 05-assertion-patterns | Diff-based assertion pattern | ❓ | Pending AB. |
 | 21 | 06-branch-coverage | Positive/negative/boundary 4-quadrant coverage matrix | ✅ | Spec-internal methodology, no contradiction. |
-| 22 | 06-branch-coverage | Internal-Package-Coverage-Policy section (MUST NOT write `Coverage*_test.go` for `internal/`) | ✅ | `rg 'Coverage.*_test\.go' --type go --glob '!cross-repo/**'` → zero hits in `enum-v5`. Consistent with `02-app-issues/02-internal-package-coverage-policy.md`. |
-| 23 | 06-branch-coverage | "Existing internal tests under `tests/integratedtests/` (csvinternaltests/, fsinternaltests/, jsoninternaltests/) MUST NOT be removed" | ✅ | Upstream-scope, covered by README callout. Internal `csv*`/`fs*`/`json*` packages do not exist in `enum-v5` (verified — `enum-v5/internal/` directory is absent). Rule applies to upstream consumers only. |
-| 24 | 06-branch-coverage | In-Package-Test-Import-Restrictions: `_test.go` inside source package must use only stdlib `testing`, never heavy frameworks | ✅ | `rg 'coretests/args' enum-v5/**/*_test.go` and similar → zero hits. `enum-v5` complies trivially: it has no in-package `_test.go` files at all (all tests are under `tests/creationtests/`). |
+| 22 | 06-branch-coverage | Internal-Package-Coverage-Policy section (MUST NOT write `Coverage*_test.go` for `internal/`) | ✅ | `rg 'Coverage.*_test\.go' --type go --glob '!cross-repo/**'` → zero hits in `enum-v6`. Consistent with `02-app-issues/02-internal-package-coverage-policy.md`. |
+| 23 | 06-branch-coverage | "Existing internal tests under `tests/integratedtests/` (csvinternaltests/, fsinternaltests/, jsoninternaltests/) MUST NOT be removed" | ✅ | Upstream-scope, covered by README callout. Internal `csv*`/`fs*`/`json*` packages do not exist in `enum-v6` (verified — `enum-v6/internal/` directory is absent). Rule applies to upstream consumers only. |
+| 24 | 06-branch-coverage | In-Package-Test-Import-Restrictions: `_test.go` inside source package must use only stdlib `testing`, never heavy frameworks | ✅ | `rg 'coretests/args' enum-v6/**/*_test.go` and similar → zero hits. `enum-v6` complies trivially: it has no in-package `_test.go` files at all (all tests are under `tests/creationtests/`). |
 | 25 | 06-branch-coverage | "[setup failed] with no logs" failure mode + remediation | ✅ | Spec-internal diagnostic guidance, consistent with `04-tooling/04-ci-guards.md` coverage-compile-check job. |
 | 26 | 07-diagnostics-output-standards | (entire file — 78 lines) diagnostic output standards | ❓ (5 of 5 sub-claims) | Behavioural; pending AB. Cross-refs internal. |
 | 27 | 08-good-vs-bad | Examples of good vs bad tests using `args.Map` / `CaseV1` | ❓ | Pending AB on API; spec-internal: ✅ (no contradictions). |
@@ -67,7 +67,7 @@ ls spec/01-app/{13-testing-patterns,14-tests-folder-walkthrough}.md
 
 ## 3. Drift findings
 
-### D-CVS-43 — `tests/integratedtests/` references in portable testing guideline lack `enum-v5` redirect
+### D-CVS-43 — `tests/integratedtests/` references in portable testing guideline lack `enum-v6` redirect
 
 **Severity:** LOW (documentation scope clarification; no runtime impact).
 
@@ -77,19 +77,19 @@ ls spec/01-app/{13-testing-patterns,14-tests-folder-walkthrough}.md
 - `spec/06-testing-guidelines/03-args-reference.md:525` — back-fill rationale
 - `spec/06-testing-guidelines/06-branch-coverage.md:216,225,226,234,235,255,260` — internal-package coverage policy + in-package import restrictions
 
-**Root cause:** the entire `spec/06-testing-guidelines/` folder is explicitly portable ("drop this folder into any Go project that uses the `coretests` framework" — README line 4). It documents **upstream `core-v9`** conventions. `enum-v5` consumes none of them.
+**Root cause:** the entire `spec/06-testing-guidelines/` folder is explicitly portable ("drop this folder into any Go project that uses the `coretests` framework" — README line 4). It documents **upstream `core-v9`** conventions. `enum-v6` consumes none of them.
 
 **Fix applied this cycle (consistent with Cycle 12 D-CVS-39 / D-CVS-40 / D-CVS-42 pattern):**
 
-1. **README.md** — added a "**Consumer-coverage note (`enum-v5`)**" callout after the title block, scoping the entire folder to upstream `core-v9` and redirecting `enum-v5` readers to `spec/01-app/13-testing-patterns.md` §6.1 and `spec/01-app/14-tests-folder-walkthrough.md`.
-2. **01-folder-structure.md** — added a `⚠️ Scope` warning at the top of the file (before the directory layout) marking the per-package `tests/integratedtests/<pkg>tests/` layout as upstream-only and pointing `enum-v5` readers at the same `13` §6.1 anchor.
+1. **README.md** — added a "**Consumer-coverage note (`enum-v6`)**" callout after the title block, scoping the entire folder to upstream `core-v9` and redirecting `enum-v6` readers to `spec/01-app/13-testing-patterns.md` §6.1 and `spec/01-app/14-tests-folder-walkthrough.md`.
+2. **01-folder-structure.md** — added a `⚠️ Scope` warning at the top of the file (before the directory layout) marking the per-package `tests/integratedtests/<pkg>tests/` layout as upstream-only and pointing `enum-v6` readers at the same `13` §6.1 anchor.
 
-**Why not rewrite each `tests/integratedtests/` token individually:** the spec deliberately uses upstream nomenclature because it is portable. Rewriting individual tokens to `tests/creationtests/` would (a) break the upstream-`core-v9` accuracy, (b) misrepresent the per-package layout (`enum-v5` has a single shared package), and (c) contradict `01-app/13-testing-patterns.md` §6.1 which already documents the divergence. The README + 01-folder-structure scope warnings are the same approach Cycle 12 took for `01-app/14`.
+**Why not rewrite each `tests/integratedtests/` token individually:** the spec deliberately uses upstream nomenclature because it is portable. Rewriting individual tokens to `tests/creationtests/` would (a) break the upstream-`core-v9` accuracy, (b) misrepresent the per-package layout (`enum-v6` has a single shared package), and (c) contradict `01-app/13-testing-patterns.md` §6.1 which already documents the divergence. The README + 01-folder-structure scope warnings are the same approach Cycle 12 took for `01-app/14`.
 
 ## 4. Spec-internal consistency
 
 Specifically checked-and-clean:
-- No `tests/creationtests/` mis-references inside `spec/06-` (this folder is upstream-only by design — `enum-v5` shape is documented in `01-app/13` §6.1 and `01-app/14`).
+- No `tests/creationtests/` mis-references inside `spec/06-` (this folder is upstream-only by design — `enum-v6` shape is documented in `01-app/13` §6.1 and `01-app/14`).
 - No `enum-v1`.
 - No `enum-v3` (post-rename verified).
 - No mojibake `core-v9 → core-v9`.

@@ -303,7 +303,7 @@ function Invoke-SpecApiCheck {
 
     Write-Host '  ▶ Indexing upstream packages...' -ForegroundColor Yellow
     $pkgMap = Get-UpstreamPackages -UpstreamDir $UpstreamDir -LocalDir $LocalDir
-    Write-Host "    Found $($pkgMap.Count) Go packages (upstream + local enum-v5)"
+    Write-Host "    Found $($pkgMap.Count) Go packages (upstream + local enum-v6)"
 
     Write-Host '  ▶ Indexing upstream top-level symbols...' -ForegroundColor Yellow
     $symMap = Get-UpstreamTopLevelSymbols -PackageMap $pkgMap

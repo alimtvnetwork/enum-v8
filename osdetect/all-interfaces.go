@@ -1,8 +1,8 @@
 package osdetect
 
 import (
-	"github.com/alimtvnetwork/enum-v5/inttype"
-	"github.com/alimtvnetwork/enum-v5/strtype"
+	"github.com/alimtvnetwork/enum-v6/inttype"
+	"github.com/alimtvnetwork/enum-v6/strtype"
 )
 
 type windowsSysDetailDefiner interface {

@@ -9,16 +9,16 @@
 `spec/01-app/12-cmd-entrypoints.md` originally asserted: "no `cmd/` directory anywhere; `core-v9` is a pure library." But reality:
 
 - Upstream `core-v9` truly has zero `cmd/` directories.
-- `enum-v5` ships exactly one: `cmd/main/main.go` (`package main` + `func main()`), used as a smoke-test harness.
+- `enum-v6` ships exactly one: `cmd/main/main.go` (`package main` + `func main()`), used as a smoke-test harness.
 
-So the spec was wrong about `enum-v5`'s reality.
+So the spec was wrong about `enum-v6`'s reality.
 
 ## Decision
 
 Rewrite §1 of `12-cmd-entrypoints.md` as a **library-first, smoke-test allowed** policy:
 
 1. Upstream `core-v9` MUST have zero `cmd/` entrypoints (unchanged).
-2. `enum-v5` MAY ship exactly ONE `cmd/main/` smoke-test harness (the existing one).
+2. `enum-v6` MAY ship exactly ONE `cmd/main/` smoke-test harness (the existing one).
 3. Any additional `cmd/<name>/` is forbidden.
 
 Cross-link `cmd/README.md` documents the smoke-test usage.
@@ -31,5 +31,5 @@ Cross-link `cmd/README.md` documents the smoke-test usage.
 
 ## Don't
 
-- Do NOT add a second `cmd/<name>/` directory in `enum-v5`.
+- Do NOT add a second `cmd/<name>/` directory in `enum-v6`.
 - Do NOT add ANY `cmd/` directory in upstream `core-v9`.
