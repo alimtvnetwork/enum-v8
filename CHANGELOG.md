@@ -14,6 +14,8 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ### Planned
 
+- **AL2 coverage uplift Phase 2 (v0.35.0):** After AL-01..AL-08 raised total coverage but per-package figures still sit below 50–60% for ~40 packages, added a new umbrella **AL2** in `.lovable/plan.md` with 8 sequenced sub-tasks (**AL2-01..AL2-08**): 6 batches of ~6 packages applying a shared template (`New`/`NewMust` round-trip, every `IsX()` predicate from `all-is-checkers.go`, every `*Err()` helper from `all-validation-checking-err.go`, `Min`/`Max`/`RangesInvalidErr`), plus 2 bespoke suites for `dbdrivertype` connection-string compiler and `osdetect` platform-guarded branches. Target: total ≥65%, every per-package ≥60%. AL2-01 (Batch A) is the next `next` task. `package.json` 0.34.0 → 0.35.0.
+
 - **AL coverage expansion plan (v0.19.0):** Broke umbrella Task AL into 8 sequenced sub-tasks (AL-01..AL-08) targeting 15.5% → ~60% total statement coverage by adding shared-loop tests over `allBasicEnumsCollection` (Json round-trip, Format, predicates, numeric widths, constructors) plus bespoke suites for `quotes/`, `brackets/`, `strtype`, `inttype`, `osdetect`. Recorded in `.lovable/plan.md` so the `next` loop can pick AL-01 first.
 
 ### Changed
