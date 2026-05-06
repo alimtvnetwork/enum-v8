@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 15 closed — `spec/06-testing-guidelines/` baselined at 100 %).
+> **Last updated:** 2026-05-06 (Task AI done — `spec/01-app/` declared DRIFT-FROZEN as spec-v0.30.0).
 
 ## ✅ Done
 
@@ -13,6 +13,7 @@
   - New audit dimension introduced: **spec-internal consistency** (Cycle 13).
   - `spec/01-app/` directory cleared of `tests/integratedtests/` (genuine clean as of Cycle 12).
 - **Cycle 15** — `spec/06-testing-guidelines/` directory baselined and closed at **100 % verifiable** (32 claims sampled across 10 files; 22 ✅ / 10 ❓ pending AB). Resolved D-CVS-43 (LOW) via README + `01-folder-structure.md` consumer-coverage callouts (same pattern as Cycle 12). Spec changelog → **spec-v0.29.0**. Audit file: `spec/07-code-vs-spec-audits/16-cycle15-testing-guidelines.md`.
+- **AI** — `spec/01-app/` declared **🧊 DRIFT-FROZEN** in `spec/CHANGELOG.md` as **spec-v0.30.0** (2026-05-06). Allowed future edits limited to: AB-driven ❓→✅ promotions, AC re-audit of §07/§09, upstream-API-change additions (paired with new audit cycle row), typo/formatting fixes. Scoreboard top-line carries the 🧊 marker.
 - **Reliability risk report v2** produced → `/mnt/documents/02-reliability-risk-report-v2.md` (2026-05-06; supersedes v1)
 - **Suggestions tracker** consolidated → `.lovable/memory/suggestions/01-suggestions-tracker.md`
 - **Pending issues** consolidated → `.lovable/memory/pending-issues/01-all-pending-issues.md`
@@ -32,7 +33,6 @@
 
 - **AB.** Fetch upstream `core-v9` source to resolve 158 ❓ claims (148 in `spec/01-app/` + 10 in `spec/06-testing-guidelines/`).
 - **AC.** Re-audit §07 and §09 against the spec-internal-consistency dimension.
-- **AI.** Mark `spec/01-app/` as frozen for code-vs-spec drift in `spec/CHANGELOG.md`.
 - **AJ.** Implement any follow-on fixes from Cycle 15+ findings (currently none open).
 - **AK.** New enum package creation (template validation).
 - **AL.** Test coverage expansion.
@@ -43,6 +43,6 @@
 
 ## Next logical step
 
-1. **AI** — Mark `spec/01-app/` as frozen (quick win, 1 spec edit).
-2. **AA/Cycle 16** — Audit `spec/03-powershell-test-run/` (4 files; carries the `tests/integratedtests/` sweep AH owes).
-3. **AB** — Fetch upstream `core-v9` source for ❓ verification (unblocks 158 claims + Cycle 7/9 closure).
+1. **AA/Cycle 16** — Audit `spec/03-powershell-test-run/` (4 files; carries the `tests/integratedtests/` sweep AH owes).
+2. **AB** — Fetch upstream `core-v9` source for ❓ verification (unblocks 158 claims + Cycle 7/9 closure).
+3. **AK** — New enum package creation / template validation.
