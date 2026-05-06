@@ -21,14 +21,14 @@ import (
 //   - IntegerEnumRanges() returns a non-nil structure (where applicable).
 //
 // Skip notes:
-//   - sqliteconnpathtype.Variant has known-broken MinValueString (PI-006);
-//     non-empty MinValueString assertion is skipped for that type.
+//   - PI-006 (sqliteconnpathtype) RESOLVED in Cycle 60 — local
+//     MinValueString override now returns the lexicographic min name
+//     instead of empty. The skip entry for sqliteconnpathtype is gone.
 //   - strtype.Variant is a string-backed enum: numeric MinInt/MaxInt are
 //     present on the interface but their semantic meaning differs; only the
 //     MinInt <= MaxInt invariant is skipped (not asserted) for that type.
 var numericRangeSuiteSkipMinValueString = map[string]string{
-	"sqliteconnpathtype.Variant": "PI-006 — MinValueString returns empty",
-	"strtype.Variant":            "string-backed enum; MinValueString is empty by design",
+	"strtype.Variant": "string-backed enum; MinValueString is empty by design",
 }
 
 var numericRangeSuiteSkipMaxValueString = map[string]string{
