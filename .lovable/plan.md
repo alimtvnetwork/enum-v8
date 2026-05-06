@@ -171,27 +171,31 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **Cycle 57 verification** — Re-run `./run.ps1 -tc` and confirm all 6 fixed tests pass ⭐ verify
-2. **AL-08** — `osdetect` cross-platform parts (next NEW work)
-3. **PI-008** — Audit `unWrapBoth`/`unWrapSingle` off-by-one (quotes + brackets) — may flip cycle-57 expectations
-4. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
-5. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
-6. **AI** — Mark `spec/01-app/` as frozen (quick win)
-7. **AB** — Already done in sandbox; status entry pending
+1. **Local verification** — Re-run `./run.ps1 -tc` and confirm AL-08 + Cycle 57 fixes are green ⭐ verify
+2. **PI-008** — Audit `unWrapBoth`/`unWrapSingle` off-by-one (quotes + brackets) — semantic bug, not a test issue
+3. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
+4. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
+5. **AI** — Mark `spec/01-app/` as frozen (quick win)
+6. **AB** — Already done in sandbox; status entry pending
+7. **AK** — New enum package creation / recipe validation
+8. **A** — Manual `cross-repo/core-v8/` push
 
 **Done from this list:**
 - AL-01..AL-06 ✅ (Cycles 49–55)
 - AL-07 ✅ (Cycle 56, strtype + inttype constructor & GetSet + IsCompareResult; expected +2–4pp)
-- Cycle 57 ✅ (test fixes for 6 failures from first `-tc` run after AL-04..AL-07: iptype/overwritetype/onofftype/quotes/brackets/AllEnums_NumericRange)
+- Cycle 57 ✅ (test fixes for 6 failures from first `-tc` run after AL-04..AL-07)
+- AL-08 ✅ (Cycle 58, osdetect cross-platform safe coverage; expected +1pp)
 
-**Done from this list:**
+**Done — full AL umbrella:**
 - AL-01 ✅ (Cycle 49, 15.5% → 21.6%, +6.1pp)
 - AL-02 ✅ (Cycle 50, 21.6% → 26.1%, +4.5pp)
 - AL-03 ✅ (Cycle 51, 26.1% → 33.8%, +7.7pp; cumulative +18.3pp)
 - AL-04 ✅ (Cycle 52, +4–6pp expected; pending local `./run.ps1 -tc` confirmation)
 - AL-05 pass-1 ✅ (Cycle 53, 4 packages: accesstype/certaction/completionstate/compressformats)
 - AL-05 pass-2 ✅ (Cycle 54, 6 packages: dbaction/envtype/iptype/onofftype/overwritetype/timeunit)
-- AL-06 ✅ (Cycle 55, quotes/+brackets/ bespoke wrap-unwrap suites; expected +1–2pp + lifts both packages from 7–12% into 50–70% band)
+- AL-06 ✅ (Cycle 55, quotes/+brackets/ bespoke wrap-unwrap suites)
+- AL-07 ✅ (Cycle 56, strtype + inttype)
+- AL-08 ✅ (Cycle 58, osdetect)
 
 ---
 
