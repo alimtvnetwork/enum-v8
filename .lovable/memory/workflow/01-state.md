@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 27 — S-106 WIRED into `run.ps1 -tc` pre-checks via `scripts/CoveragePreChecks.psm1`; soft warn-only gate by default, `--strict-spec-api` for CI, `--no-spec-api` to skip; auto-skips when `/tmp/core-v9-upstream` absent. Cumulative AB ❌ unchanged at 49, CRITICAL = 22).
+> **Last updated:** 2026-05-06 (Cycle 28 — S-106 WIRED into GitHub Actions via new `spec-api-lint` job in `.github/workflows/ci-guards.yml`; strict on PRs touching `spec/` or the lint script, warn-only otherwise. Cumulative AB ❌ unchanged at 49, CRITICAL = 22).
 
 ## ✅ Done
 
@@ -27,6 +27,7 @@
 - **core-v9 API investigation** — Mapped converter/coredynamic API changes (2026-05-06). See `.lovable/memory/06-core-v9-api-migration.md`.
 - **S-106. Spec-API fabrication lint** — ✅ Built `scripts/spec-api-check.psm1` v1.0.0 (2026-05-06). Indexes 182 upstream packages and 10,216 symbols; scans spec for `package.Symbol` references; flags pkg/sym fabrications. Local-var tracking per-fence + ProseLooseMode heuristic. First run retracted 2 wrong audit findings (R-CVS-01/02). Limits: presence-only; does NOT catch arity/return-type drift (S-106 v2 needs Go AST pass).
 - **CI integration of S-106** — ✅ Wired into `scripts/CoveragePreChecks.psm1` as a "Spec-API Lint" dashboard phase (Cycle 27, 2026-05-06). Runs after safeTest boundary lint, before Go auto-fixer. Soft gate (warn-only) by default so the 49 known fabrications don't block runs. Flags via `run.ps1`: `--no-spec-api` skips, `--strict-spec-api` fails TC on any fabrication (for CI). Auto-skips when upstream clone, spec dir, or lint module is absent.
+- **CI workflow gate (S-106)** — ✅ Added `spec-api-lint` job to `.github/workflows/ci-guards.yml` (Cycle 28, 2026-05-06). Clones `core-v9 @ v1.5.8` to `/tmp/core-v9-upstream` and runs `Invoke-SpecApiCheck` via pwsh. PRs touching `spec/` or `scripts/spec-api-check.psm1` run with `-StrictExitCode`; all other runs are warn-only.
 
 ## 🔄 In Progress
 
@@ -41,7 +42,6 @@
 - **AJ.** **49 open items: AJ-01..43** (all blocked by `spec/01-app/` freeze, but **S-106 v1.0 now in place** so rewrites are safe). AJ-15 split → AJ-15a (path-qualify `coredata/coredynamic`) + AJ-15b (purge fabricated symbols). AJ-36/37/38 re-scoped (keep `corestr` package, purge fabricated symbols only). Highest-impact: AJ-42 (rewrite §6 trust-boundary example — built on fabricated `corevalidator.New.Line` API), AJ-32 (replace fabricated test-failure format in §15.4), AJ-29 (re-frame §15.2 helpers — return strings not errors), AJ-33 (rewrite §15.3 stack-enhancement rationale — `HandleErr` doesn't wrap), AJ-27 (rewrite `versionindexes` §2 — wrong purpose), AJ-08..14 (rewrite almost all of `08-validators.md`).
 - **S-106 v1.1.** Refine prose-token allow-list; reduce residual ~40 pkg-fab false positives.
 - **S-106 v2.** Go AST-based signature lint (catches arity/return-type/receiver-shape drift like C-CVS-44/45/49).
-- **CI workflow gate.** `run.ps1 -tc` integration is DONE; remaining work is to add a GitHub Actions step that runs `pwsh ./run.ps1 -tc --strict-spec-api` (or directly invokes `Invoke-SpecApiCheck -StrictExitCode`) on PRs touching `spec/`.
 - **AK.** New enum package creation (template validation).
 - **AL.** Test coverage expansion.
 

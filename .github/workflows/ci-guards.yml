@@ -107,3 +107,48 @@ jobs:
         with:
           path: .ci-cache/lint-baseline.json
           key: lint-baseline-v1.64.8-refs/heads/main
+
+  spec-api-lint:
+    # S-106 fabrication lint — verifies every `package.Symbol` reference in
+    # spec/01-app/ resolves to a real package + top-level symbol in the
+    # pinned upstream `core-v9` clone. Strict on PRs that touch spec/ or the
+    # lint script itself; warn-only otherwise (so unrelated PRs aren't
+    # blocked by the 49 known AB-flagged fabrications still pending AJ-01..43).
+    needs: python-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Clone upstream core-v9 @ v1.5.8
+        run: |
+          git clone --depth 1 --branch v1.5.8 \
+            https://github.com/alimtvnetwork/core-v9 /tmp/core-v9-upstream
+
+      - name: Detect spec-touching PR
+        id: detect
+        run: |
+          STRICT=0
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+            git fetch --no-tags --depth=1 origin "$BASE" 2>/dev/null || true
+            CHANGED=$(git diff --name-only "$BASE" "$HEAD" 2>/dev/null || echo "")
+            if echo "$CHANGED" | grep -E '^(spec/|scripts/spec-api-check\.psm1$)' > /dev/null; then
+              STRICT=1
+            fi
+          fi
+          echo "strict=$STRICT" >> "$GITHUB_OUTPUT"
+          echo "Strict mode: $STRICT"
+
+      - name: Run S-106 spec-API fabrication lint
+        shell: pwsh
+        run: |
+          Import-Module ./scripts/spec-api-check.psm1 -Force -DisableNameChecking
+          $strict = '${{ steps.detect.outputs.strict }}' -eq '1'
+          if ($strict) {
+            Write-Host "STRICT mode: any fabrication fails the job."
+            Invoke-SpecApiCheck -SpecDir spec/01-app -UpstreamDir /tmp/core-v9-upstream -StrictExitCode
+          } else {
+            Write-Host "WARN-ONLY mode: reporting fabrications without failing."
+            Invoke-SpecApiCheck -SpecDir spec/01-app -UpstreamDir /tmp/core-v9-upstream
+          }
