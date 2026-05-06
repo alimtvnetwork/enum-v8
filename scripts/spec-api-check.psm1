@@ -179,6 +179,10 @@ function Get-SpecApiReferences {
             foreach ($vm in [regex]::Matches($line, '(?:func[^(]*\(|,\s*)([a-z][a-zA-Z0-9_]*)\s+\*?[A-Za-z]')) {
                 [void]$localVars.Add($vm.Groups[1].Value)
             }
+            # Method receiver binding: `func (it Variant) Name() ...`
+            foreach ($vm in [regex]::Matches($line, '\bfunc\s+\(\s*([a-z][a-zA-Z0-9_]*)\s+\*?[A-Z]')) {
+                [void]$localVars.Add($vm.Groups[1].Value)
+            }
         }
 
         # Match `package.Symbol` — lowercase package, Capitalised symbol.
