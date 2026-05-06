@@ -1245,7 +1245,7 @@ var allEnumGeneralTestCases = []*EnumTestWrapper{
 		 ExpectedEnumType: enumtype.Byte,
 		 ExpectedMapValues: map[string]interface{} {
 			 "Invalid": 0 ,
-			 """: 34 ,
+			 "\"": 34 ,
 			 "'": 39 ,
 			 "`": 96 ,
 		 },
