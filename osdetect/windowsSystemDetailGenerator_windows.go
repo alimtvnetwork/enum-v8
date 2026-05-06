@@ -65,7 +65,7 @@ func (it windowsSystemDetailGenerator) CompiledErrorWithStackTraces() error {
 		return nil
 	}
 	
-	stackTraces := codestack.StacksStringDefault()
+	stackTraces := codestack.StacksTo.StringDefault()
 	it.rawErrCollection.AddString(stackTraces)
 	
 	return it.rawErrCollection.CompiledErrorWithStackTraces()
