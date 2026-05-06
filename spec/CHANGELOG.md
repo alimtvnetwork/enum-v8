@@ -9,6 +9,23 @@
 
 ---
 
+## [spec-v0.43.0] — 2026-05-06 (Cycle 36 — S-103 portable runner reorg)
+
+### Changed
+- Moved `spec/03-powershell-test-run/08-generic-go-test-coverage-runner.md` → `spec/03-powershell-test-run/portable/01-generic-go-test-coverage-runner.md`.
+- Moved `spec/03-powershell-test-run/09-ai-agent-complete-reference.md` → `spec/03-powershell-test-run/portable/02-ai-agent-complete-reference.md`.
+- Updated live cross-refs in `spec/00-llm-integration-guide.md` (line 2380) and `spec/04-tooling/03-powershell-implementation.md` (line 456) to the new paths.
+- Updated internal cross-ref inside the new `portable/02-ai-agent-complete-reference.md` (table row pointing to its sibling).
+
+### Added
+- `spec/03-powershell-test-run/portable/README.md` — explains the scope split (portable vs `enum-v4`-specific), lists the two files, and lays out three editor rules to keep the portability promise intact.
+
+### Notes
+- Historical `08-`/`09-` filename references in `spec/CHANGELOG.md` (Cycle-16 entry), `spec/07-code-vs-spec-audits/17-cycle16-powershell-test-run.md`, and `spec/99-audits/01-original-11-step-plan.md` are intentionally left as-is — they document the audit history at the time those cycles ran.
+- Closes **S-103**. The structural split makes it easier for future portable-runner edits to ship without touching `enum-v4`-specific files, and replaces the reliance on top-of-file consumer-coverage callouts (D-CVS-47/48 from Cycle 16) with a directory-level signal.
+
+---
+
 ## [spec-v0.42.0] — 2026-05-06 (Cycle 27 — AB residual deep-probe of scripts + workflows)
 
 ### Added
