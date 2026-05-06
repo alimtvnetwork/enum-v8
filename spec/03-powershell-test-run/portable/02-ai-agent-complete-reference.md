@@ -1001,7 +1001,7 @@ All four functions are defined in `ErrorExtractor.psm1`. The chain is used by `E
 | Path | Purpose |
 |------|---------|
 | `spec/03-powershell-test-run/01-overview.md` | run.ps1 command reference |
-| `spec/03-powershell-test-run/08-generic-go-test-coverage-runner.md` | Generic runner architecture with sample script |
+| `spec/03-powershell-test-run/portable/01-generic-go-test-coverage-runner.md` | Generic runner architecture with sample script |
 | `spec/04-tooling/03-powershell-implementation.md` | Full implementation spec (includes §8 Error Attribution) |
 | `spec/06-testing-guidelines/README.md` | Testing guidelines index |
 | `spec/06-testing-guidelines/08-good-vs-bad.md` | Good vs bad test examples |

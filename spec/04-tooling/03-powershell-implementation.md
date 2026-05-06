@@ -453,7 +453,7 @@ $context = Extract-SetupFailedContext $rawOutput -ContextLineCount 10
 | `run.ps1` | Thin dispatcher — read this first |
 | `scripts/README.md` | Module map + dependency graph |
 | `spec/04-tooling/02-powershell-dashboard-ui.md` | UI rendering spec |
-| `spec/03-powershell-test-run/09-ai-agent-complete-reference.md` | Complete AI agent reference |
+| `spec/03-powershell-test-run/portable/02-ai-agent-complete-reference.md` | Complete AI agent reference (portable) |
 | `.lovable/memory/workflow/06-powershell-refactor-plan.md` | Refactoring roadmap |
 
 ---

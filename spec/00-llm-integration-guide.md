@@ -2377,7 +2377,7 @@ minKey := coregeneric.MinKeyHashmapOrDefault(config, "")
 | **Assertion patterns** | [`/spec/06-testing-guidelines/05-assertion-patterns.md`](./06-testing-guidelines/05-assertion-patterns.md) |
 | **Known issues & tradeoffs** | [`/spec/02-app-issues/`](./02-app-issues/) |
 | **Failing-test post-mortems** | [`/spec/05-failing-tests/`](./05-failing-tests/) |
-| **AI agent test command reference** | [`/spec/03-powershell-test-run/09-ai-agent-complete-reference.md`](./03-powershell-test-run/09-ai-agent-complete-reference.md) |
+| **AI agent test command reference** | [`/spec/03-powershell-test-run/portable/02-ai-agent-complete-reference.md`](./03-powershell-test-run/portable/02-ai-agent-complete-reference.md) |
 | **CI pipeline spec** | [`/spec/04-tooling/01-ci-pipeline.md`](./04-tooling/01-ci-pipeline.md) |
 | **PowerShell dashboard UI spec** | [`/spec/04-tooling/02-powershell-dashboard-ui.md`](./04-tooling/02-powershell-dashboard-ui.md) |
 | **PowerShell implementation spec** | [`/spec/04-tooling/03-powershell-implementation.md`](./04-tooling/03-powershell-implementation.md) |
