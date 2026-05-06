@@ -27,21 +27,16 @@
 - **acceptance criteria:** Cycle 6 audit report row 16 updated.
 - **status:** open (deferred — folded into Task AC consistency-dimension re-audit; will land with the §15 sweep after the freeze lifts)
 
-### S-111: Surface the GoConvey-only sub-pattern in spec/06
-
-- **createdAt:** 2026-05-06
-- **source:** Lovable (Cycle 37 — D-CVS-64 carry-forward)
-- **affectedProject:** enum-v4 spec
-- **description:** `spec/06-testing-guidelines/02-test-case-types.md` and `05-assertion-patterns.md` present the `coretests`-framework path (`CaseV1`/`args.Map`/`BaseTestCase`/custom `ShouldBeEqualMap`) as the only option. `enum-v4`'s own `tests/creationtests/` package is a worked example of a **simpler GoConvey-only sub-pattern** (plain `So(actual, ShouldEqual, expected)` + AAA comments + plain `[]*Wrapper` / `map[K]V` registries, no `args.*` bundling, no `BaseTestCase` extension) that the spec doesn't acknowledge.
-- **rationale:** Documenting the alternative makes the spec honest about consumer freedom and lets readers pick the lighter path when they don't need `args.Map` argument bundling.
-- **proposed change:** Add a top-of-file note to both files cross-linking `enum-v4/tests/creationtests/` (e.g. `AllEnums_ContractsTesting_test.go` for the diff-pattern). Map the diff-based assertion claim onto `enumimpl.DynamicMap.LogShouldDiffMessage(...) + So(diff, ShouldBeEmpty)` as the local-only equivalent.
-- **acceptance criteria:** Both files include the GoConvey-only callout. Cross-ref to `tests/creationtests/AllEnums_ContractsTesting_test.go` resolves.
-- **status:** open
-- **risk:** Low — additive cosmetic note; falls under Task AC consistency-dimension re-audit.
-
 ---
 
 ## Completed Suggestions
+
+### S-111: Surface the GoConvey-only sub-pattern in spec/06
+
+- **completed:** 2026-05-06 (Cycle 39)
+- **source:** Lovable (Cycle 37 — D-CVS-64 carry-forward)
+- **resolution:** Added a "Sub-Pattern: GoConvey-Only (Local Wrapper)" section to `spec/06-testing-guidelines/02-test-case-types.md` between the Style D footnote and the `CaseV1` heading — describes scope/when-to-use, gives a worked example from `enum-v4/tests/creationtests/AllEnums_ContractsTesting_test.go` (`Convey` + `EnumTestWrapper` registry + `LogShouldDiffMessage` + `So(diff, ShouldBeEmpty)`), and provides an equivalence table mapping upstream primitives (`CaseV1`, `coretests.GetAssert.ShouldBeEqualMap`, `args.Map`, `t.Run`, `tc.ShouldBeEqualFirst`) to GoConvey-only counterparts (local wrapper struct, diff-based assertion, module-level registry, `Convey` nested scopes, `So(actual, ShouldEqual, expected)`). Added a companion "Sub-Pattern: GoConvey-Only Diff Assertion" section to `spec/06-testing-guidelines/05-assertion-patterns.md` after the named-map-types pitfall — explains why diff-based returns empty-string-on-success / human-readable-diff-on-failure (matching `ShouldBeEqualMap` ergonomics with no `coretests` dependency), lists five companion assertions (`ShouldEqual`, `ShouldResemble`, `ShouldBeNil`, `ShouldBeTrue`/`ShouldBeFalse`, `ShouldBeEmpty`), cross-links the worked example. Cosmetic spec-only change. Treated as editorial under the `spec/01-app/` freeze (the freeze covers `spec/01-app/`; this edit lives in `spec/06-testing-guidelines/`). Spec changelog → spec-v0.45.0. `package.json` 0.8.0 → 0.9.0.
+- **acceptance criteria:** ✅ Both files include the GoConvey-only callout. ✅ Cross-ref to `tests/creationtests/AllEnums_ContractsTesting_test.go` resolves. ✅ Equivalence table covers all 5 framework primitive ↔ sub-pattern mappings.
 
 ### S-112 + S-113: Truthful Git-Pull phase + remote-probe skip
 
