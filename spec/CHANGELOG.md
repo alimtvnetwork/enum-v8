@@ -9,6 +9,25 @@
 
 ---
 
+## [spec-v0.41.0] — 2026-05-06 (Cycle 26 — S-106 self-audit & retractions)
+
+### Added
+- `spec/07-code-vs-spec-audits/27-cycle26-S106-self-audit-retractions.md` — first run of `scripts/spec-api-check.psm1` v1.0.0; surfaces 2 audit-author errors and 1 new aggregate finding.
+- 2 retraction findings:
+  - **R-CVS-01** retracts **C-CVS-29 (Cycle 22)** — `coredynamic` package exists at `coredata/coredynamic/` (20+ files). The 8 specific method symbols (`AllFields`/`SetField`/`InvokeMethod`/etc.) remain confirmed sym-fabrications. Original CRITICAL pkg-fab claim re-classified as LOW path-drift + HIGH sym-fab.
+  - **R-CVS-02** retracts **C-CVS-51 (Cycle 25)** — `corestr` package exists at `coredata/corestr/` (30+ files). `StringBuilder`/`IsValidUTF8`/`NewCollectionPtrUsingStrings` remain confirmed sym-fabrications.
+- 1 NEW aggregate finding **C-CVS-60 (LOW)** — bundles 4 individually-low-impact sym-fabs (`coronce.New`, `enumimpl.NewBasicByte`, `errcore.OverflowType`, `errcoreinf.SomeErrorer`).
+- AJ rescoping: **AJ-15** split into AJ-15a (path-qualify §2) + AJ-15b (purge 8 fabricated symbols); **AJ-36/37/38** re-scoped (keep `corestr` package, purge fabricated symbols only).
+
+### Changed
+- `spec/07-code-vs-spec-audits/01-scoreboard.md` — Cycle 26 row, headline updated (cumulative AB ❌ 50 → **49**, CRITICAL 24 → **22**, fabrication rate ~52 %), Open-findings list extended to C-CVS-11..60 with retractions noted.
+
+### Notes
+- **🛡️ S-106 v1.0 BUILT** at `scripts/spec-api-check.psm1`. Indexes 182 upstream packages and 10,216 top-level symbols; scans `spec/01-app/**/*.md` for `package.Symbol` refs; reports unresolved packages and unresolved symbols within existing packages. Local-variable tracking per-fence + `ProseLooseMode` heuristic for ≤3-char tokens eliminate most false positives. Known limits: presence-only (does NOT catch arity, return-type, or receiver-shape drift — C-CVS-44/45/49-class items remain undetected; tracked as S-106 v2 needing Go AST pass).
+- **AJ-01..43 may now safely proceed** with S-106 as a guardrail against fresh fabrications during rewrites.
+
+---
+
 ## [spec-v0.40.0] — 2026-05-06 (Cycle 25 — AB pass 7 on `01-app/16-security.md` — **completes AB sweep of `spec/01-app/`**)
 
 ### Added
