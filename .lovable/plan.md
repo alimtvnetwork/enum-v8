@@ -170,13 +170,12 @@
 
 **Recommended next task:** Pick from this list (in order):
 
-1. **AL-06** — `quotes/` and `brackets/` dedicated suites ⭐ next
-2. **AL-07** — `strtype` / `inttype` constructor & GetSet suites
-3. **AL-08** — `osdetect` cross-platform parts
-4. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
-5. **AI** — Mark `spec/01-app/` as frozen (quick win)
-6. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
-7. **AB** — Already done in sandbox; status entry pending
+1. **AL-07** — `strtype` / `inttype` constructor & GetSet suites ⭐ next
+2. **AL-08** — `osdetect` cross-platform parts
+3. **AA / Cycle 15** — Audit `spec/06-testing-guidelines/`
+4. **AI** — Mark `spec/01-app/` as frozen (quick win)
+5. **PI-005 + PI-006 + PI-007** — Fix sqliteconnpathtype cluster — unblocks 3 AL skip lists
+6. **AB** — Already done in sandbox; status entry pending
 
 **Done from this list:**
 - AL-01 ✅ (Cycle 49, 15.5% → 21.6%, +6.1pp)
@@ -185,6 +184,7 @@
 - AL-04 ✅ (Cycle 52, +4–6pp expected; pending local `./run.ps1 -tc` confirmation)
 - AL-05 pass-1 ✅ (Cycle 53, 4 packages: accesstype/certaction/completionstate/compressformats)
 - AL-05 pass-2 ✅ (Cycle 54, 6 packages: dbaction/envtype/iptype/onofftype/overwritetype/timeunit)
+- AL-06 ✅ (Cycle 55, quotes/+brackets/ bespoke wrap-unwrap suites; expected +1–2pp + lifts both packages from 7–12% into 50–70% band)
 
 ---
 
