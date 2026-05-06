@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 26 — **S-106 lint BUILT** at `scripts/spec-api-check.psm1` v1.0.0; first run RETRACTED C-CVS-29 + C-CVS-51 (both packages exist nested under `coredata/`); cumulative AB ❌ drops 50 → 49, CRITICAL 24 → 22; AJ-15/36/37/38 re-scoped; AJ-01..43 may now safely proceed with S-106 guardrail).
+> **Last updated:** 2026-05-06 (Cycle 26 carry-overs APPLIED — root `CHANGELOG.md` + scoreboard headline now both reflect S-106 build + R-CVS-01/02 retractions; cumulative AB ❌ = 49, CRITICAL = 22; ready for next cycle).
 
 ## ✅ Done
 
