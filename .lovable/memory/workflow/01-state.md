@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 23 — AB pass 5 on `11-versioning.md`: 8 more ❌ surfaced — `coreversion.Parse/Major/Minor/Patch/LessThan` and `versionindexes` "version eras" all fabricated; cumulative AB ❌ = 34; **WORST section in project at 18.2 %**).
+> **Last updated:** 2026-05-06 (Cycle 24 — AB pass 6 on `15-observability.md`: 7 more ❌ surfaced — `errcore.VarTwo` example missing `isIncludeType bool` param, helpers return `string` not `error`, `HandleErr` is bare `panic`, test-failure format fabricated; cumulative AB ❌ = 41; first AB pass to drop a clean baseline; §15 now at 74.1 %).
 
 ## ✅ Done
 
@@ -34,9 +34,9 @@
 
 ## ⏳ Pending
 
-- **AB. (in progress)** Upstream `core-v9 v1.5.8` cloned. **Done:** pass 1 §09 (66.7 %), pass 2 §07 (70.6 %), pass 3 §08 (33.3 %), pass 4 §10 (38.5 %), pass 5 §11 (**18.2 % — new worst**). **Pass-6 targets:** `15-observability.md` (13 ❓), `16-security.md` (13 ❓). Plus 14 workflow/script-internal ❓ and 5 audit-history ❓.
-- **AC.** Re-audit §07 / §08 / §09 / §10 / §11 against consistency dimension. Now partially unblocked by Cycles 19+20+21+22+23 — re-run after AJ-01..27 land.
-- **AJ.** **NEW open items: AJ-01..27** (all blocked by `spec/01-app/` freeze). Most-impactful: AJ-27 (rewrite entire `versionindexes` §2 — wrong purpose), AJ-15 (delete entire `coredynamic` §2 — package does not exist), and AJ-08..14 (rewrite almost all of `08-validators.md`). User decision needed on lifting freeze for an AB-fix waiver — but S-106 lint is now **MANDATORY** first so AJ rewrites don't introduce fresh fabrications (cumulative ❌ = 34, fabrication rate ~55 %, ~44 % CRITICAL).
+- **AB. (in progress)** Upstream `core-v9 v1.5.8` cloned. **Done:** pass 1 §09 (66.7 %), pass 2 §07 (70.6 %), pass 3 §08 (33.3 %), pass 4 §10 (38.5 %), pass 5 §11 (**18.2 % — worst**), pass 6 §15 (74.1 % — dropped from clean baseline). **Pass-7 target:** `16-security.md` (13 ❓). Plus 14 workflow/script-internal ❓ and 5 audit-history ❓.
+- **AC.** Re-audit §07 / §08 / §09 / §10 / §11 / §15 against consistency dimension. Now partially unblocked by Cycles 19-24 — re-run after AJ-01..34 land.
+- **AJ.** **NEW open items: AJ-01..34** (all blocked by `spec/01-app/` freeze). Highest-impact: AJ-32 (replace fabricated test-failure format in §15.4), AJ-29 (re-frame entire §15.2 helper family — they return strings not errors), AJ-33 (rewrite §15.3 stack-enhancement rationale — `HandleErr` doesn't wrap), AJ-27 (rewrite entire `versionindexes` §2 — wrong purpose), AJ-15 (delete entire `coredynamic` §2 — package does not exist), AJ-08..14 (rewrite almost all of `08-validators.md`). User decision needed on lifting freeze for an AB-fix waiver — but S-106 lint is now **MANDATORY** first (cumulative ❌ = 41, fabrication rate ~52 %, 18 CRITICAL).
 - **AK.** New enum package creation (template validation).
 - **AL.** Test coverage expansion.
 
@@ -62,14 +62,18 @@
 
 - **C-CVS-37..43** — 8 ❌ contradictions in `spec/01-app/11-versioning.md` — **new worst-drift section in the project** at 18.2 % verifiable. Severity: 4× CRITICAL, 3× HIGH, 1× LOW. Constructor (`Parse`), accessors (`Major()`/`Minor()`/`Patch()`), comparators (`LessThan`/`Equal`/`GreaterThanOrEqual`), error-wrapping rationale (`errcore.FailedToConvertType`), and package path (`versionindexes/`) all fabricated. **C-CVS-43 is conceptually unique:** `versionindexes` does not enumerate "version eras" (`V1=1, V2=2, V8=8`) — it enumerates **version-component positions** (`Major=0, Minor=1, Patch=2, Build=3, Invalid=4`), making the entire §2 framing wrong about the package's *purpose*. Real `coreversion.Version` is a public-field struct created via `coreversion.New.Default(s)` (no error) and compared via package-level `coreversion.Compare(left, right *Version)`. See `spec/07-code-vs-spec-audits/24-cycle23-AB-versioning.md`. Spawned **AJ-21..27**. **Cumulative fabrication rate is now ~55 %** across 5 audited sections.
 
+## 🆕 New findings (Cycle 24)
+
+- **C-CVS-44..50** — 7 ❌ contradictions in `spec/01-app/15-observability.md`. Severity: 4× CRITICAL, 2× HIGH, 1× MEDIUM. **First AB pass to drop a previously-clean section** (was 100 % at Cycle 13 baseline, now 74.1 %). Highlights: (a) `errcore.VarTwo` example omits the mandatory leading `isIncludeType bool` parameter — the spec example will not compile; (b) `VarTwo`/`VarTwoNoType`/`MessageVarMap` all return `string` (not `error`) — entire §2 framing as "error builders" is wrong; (c) `coretests/results/ResultAny.go` does not exist (real files: `Result.go`, `ResultAssert.go`, `Results.go`); (d) test-failure output format `Test #N — {scenario}: should be equal` with indented `expected:`/`actual:` is fabricated — `grep -rn "should be equal\|expected:\|actual:" coretests/results/` returns zero matches; (e) `errcore.HandleErr` is literally `func HandleErr(err error) { panic(err.Error()) }` — does NOT attach stack-enhanced wrapping as §3 rule 2 claims. See `spec/07-code-vs-spec-audits/25-cycle24-AB-observability.md`. Spawned **AJ-28..34**. **Cumulative AB ❌ = 41** across 6 audited sections; **18 CRITICAL** (~44 %); fabrication rate ~52 %.
+
 ## ⏭️ Manual user action (parked)
 
 - **A.** Push `cross-repo/core-v8/` mirror to its upstream GitHub repo.
 
 ## Next logical step
 
-1. **Build S-106** (`scripts/spec-api-check.psm1`) — lint to catch the fabrication pattern before AJ rewrites. **MANDATORY next given 34 ❌ accumulated and ~55 % fabrication rate.** OR
-2. **AB pass 6** — Cycle 24 on `15-observability.md` (13 ❓). OR
-3. **User decision: lift `spec/01-app/` freeze** for AJ-01..27 patches (highly risky without S-106). OR
+1. **Build S-106** (`scripts/spec-api-check.psm1`) — lint to catch the fabrication pattern before AJ rewrites. **MANDATORY next given 41 ❌ accumulated and ~52 % fabrication rate (18 CRITICAL).** OR
+2. **AB pass 7** — Cycle 25 on `16-security.md` (13 ❓; last 13-❓ section in `spec/01-app/`). OR
+3. **User decision: lift `spec/01-app/` freeze** for AJ-01..34 patches (highly risky without S-106). OR
 4. **AK** — New enum package creation / template validation. OR
 5. **AL** — Test-coverage expansion.
