@@ -163,7 +163,7 @@ func (it *Variant) UnmarshalJSON(data []byte) error {
 	return err
 }
 
-func (it Variant) StringRangesPtr() *[]string {
+func (it Variant) StringRangesPtr() []string {
 	return BasicEnumImpl.StringRangesPtr()
 }
 
