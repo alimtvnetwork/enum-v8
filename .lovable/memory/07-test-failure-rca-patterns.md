@@ -100,6 +100,8 @@ When `./run.ps1 -tc` reports failing tests, walk this checklist FIRST before rea
 | 2 — Sparse array gap | 63 | (this RCA) | osdetect lowerCaseNames |
 | 3 — BasicString defect | 60 | PI-005..007 | sqliteconnpathtype |
 | 4 — Goconvey conflation | 63 | (this RCA) | OnOff phantom |
+| 5 — OnlySupportedErr/RangesInvalidErr asserted nil | 65 | (this RCA) | compresslevels, conntrackstate, servicestate, sitestatetype |
+| 6 — Shorthand-input pinning vs fuzzy GetValueByName | 65 | (this RCA) | onofftype |
 
 ---
 
