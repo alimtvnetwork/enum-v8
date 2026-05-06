@@ -43,6 +43,13 @@
 
 ## Completed Suggestions
 
+### S-112 + S-113: Truthful Git-Pull phase + remote-probe skip
+
+- **completed:** 2026-05-06 (Cycle 38)
+- **source:** Lovable (user-reported `./run.ps1 -tc` run showing `✗ git pull failed` immediately followed by `✓ Git Pull pulled from remote` in the Phase Summary box)
+- **resolution:** Two related defects fixed in one pass against `scripts/TestRunnerCore.psm1` + `scripts/CoverageRunner.psm1`. **S-113 (root cause):** `Invoke-GitPull` ran `git pull` unconditionally and emitted `remote: Repository not found / fatal: repository '…/enum-v4.git/' not found` whenever the local clone had a misconfigured/private/missing `origin`. Added a two-step early probe BEFORE `git pull`: (1) `git remote get-url origin` → if missing return `Status='skip'/Message='no origin remote'`; (2) `git ls-remote --exit-code origin HEAD` → if unreachable return `Status='skip'/Message='remote unreachable'` and surface the URL. **S-112 (truthfulness):** `Invoke-GitPull` was void-return so `CoverageRunner.psm1:27-30` hard-coded `Register-Phase "Git Pull" "pass" "pulled from remote"` regardless of outcome. Refactored `Invoke-GitPull` to return `[pscustomobject]@{ Status='pass'|'warn'|'skip'; Message=... }`; `Invoke-FetchLatest` returns `@{ GitPull; Tidy }` with the same shape for `go mod tidy`; `CoverageRunner.psm1` uses both results. The dashboard already supports `skip → ⊘` and `warn → ⚠` glyphs in `scripts/DashboardPhases.psm1:45-51` so no UI changes were needed. Added regression test `tests/scripts/Test-InvokeGitPull.ps1` — both cases pass via `pwsh -File tests/scripts/Test-InvokeGitPull.ps1` (Test 1 no-origin → skip / no origin remote; Test 2 bogus unreachable → skip / remote unreachable). `package.json` 0.7.0 → 0.8.0.
+- **acceptance criteria:** ✅ Phase Summary now renders `⊘ Git Pull remote unreachable` (or `⊘ Git Pull no origin remote`) instead of the lying `✓ Git Pull pulled from remote` after a soft-fail. ✅ No more confusing `remote: Repository not found` for users with missing/private `origin`. ✅ Smoke tests cover both skip paths.
+
 ### S-109: Cycle-15 deep-probe of `tests/creationtests/` patterns to clear 21 ❓
 
 - **completed:** 2026-05-06 (Cycle 37)
