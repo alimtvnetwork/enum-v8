@@ -97,6 +97,39 @@ function Invoke-CoveragePreChecks {
                 } else {
                     if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "warn" "$fabCount fabrications (warn-only)" }
                 }
+
+                # ── S-106 v2 — signature/arity lint (depends on Go sig-index) ──
+                $sigIndexer = Join-Path $ScriptRoot "scripts" "specapisig"
+                $sigJson    = "/tmp/core-v9-sigindex.json"
+                $sigDriver  = Join-Path $ScriptRoot "scripts" "spec-api-sig-check.psm1"
+                if ((Test-Path $sigIndexer) -and (Test-Path $sigDriver)) {
+                    Write-Host ""
+                    Write-Host "  Running spec-API signature lint (S-106 v2)..." -ForegroundColor Yellow
+                    # Always regenerate the sig-index to stay current with upstream.
+                    $sigBuild = & go run "./scripts/specapisig" -roots "$upstreamDir,." -out $sigJson 2>&1
+                    if ($LASTEXITCODE -ne 0) {
+                        Write-Host ($sigBuild | Out-String) -ForegroundColor DarkYellow
+                        if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Sig" "warn" "indexer failed" }
+                    } else {
+                        try {
+                            Import-Module $sigDriver -Force -DisableNameChecking
+                            $sigResult = Invoke-SpecApiSigCheck -SigIndex $sigJson -SpecDir $specDir
+                            $sigMismatches = if ($sigResult) { $sigResult.ArityMismatches.Count } else { 0 }
+                            if ($sigMismatches -eq 0) {
+                                if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Sig" "pass" "no arity mismatches" }
+                            } elseif ($strict) {
+                                if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Sig" "fail" "$sigMismatches arity mismatches (strict)" }
+                                $s = Get-CallerSource; Write-Fail "Spec-API sig lint found $sigMismatches arity mismatches (strict mode). (source: $s)"
+                                return $false
+                            } else {
+                                if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Sig" "warn" "$sigMismatches arity mismatches (warn-only)" }
+                            }
+                        } catch {
+                            Write-Host "  Spec-API sig lint errored: $_" -ForegroundColor DarkYellow
+                            if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Sig" "warn" "sig lint errored" }
+                        }
+                    }
+                }
             } catch {
                 Write-Host "  Spec-API lint errored: $_" -ForegroundColor DarkYellow
                 if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "warn" "lint errored" }

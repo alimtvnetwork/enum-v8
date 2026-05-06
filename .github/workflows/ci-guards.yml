@@ -152,3 +152,27 @@ jobs:
             Write-Host "WARN-ONLY mode: reporting fabrications without failing."
             Invoke-SpecApiCheck -SpecDir spec/01-app -UpstreamDir /tmp/core-v9-upstream
           }
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build Go signature index (S-106 v2)
+        run: |
+          go run ./scripts/specapisig \
+            -roots /tmp/core-v9-upstream,. \
+            -out   /tmp/core-v9-sigindex.json
+
+      - name: Run S-106 v2 spec-API signature lint
+        shell: pwsh
+        run: |
+          Import-Module ./scripts/spec-api-sig-check.psm1 -Force -DisableNameChecking
+          $strict = '${{ steps.detect.outputs.strict }}' -eq '1'
+          if ($strict) {
+            Write-Host "STRICT mode: any arity mismatch fails the job."
+            Invoke-SpecApiSigCheck -SigIndex /tmp/core-v9-sigindex.json -SpecDir spec/01-app -StrictExitCode
+          } else {
+            Write-Host "WARN-ONLY mode: reporting arity mismatches without failing."
+            Invoke-SpecApiSigCheck -SigIndex /tmp/core-v9-sigindex.json -SpecDir spec/01-app
+          }
