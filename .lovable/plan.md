@@ -118,11 +118,10 @@
 - **Findings:** PI-005 (sqliteconnpathtype double-quoted MarshalJSON) — type skipped via `jsonRoundTripSkipTypeNames` map.
 - **Acceptance:** `./run.ps1 tc` green, total ≥ 21%. ✅
 
-#### AL-02. Format & string conversion suite
-- **Target:** `Format`, `ToNumberString`, `ValueString`, `String`, `NameValue`, `RangeNamesCsv`.
-- **Approach:** Loop collection; assert non-empty for valid items, format with `"%s=%v"`.
-- **Expected lift:** +4–6%.
-- **File:** `tests/creationtests/AllEnums_Format_test.go`
+#### AL-02. Format & string conversion suite ✅ DONE (2026-05-06, Cycle 50)
+- **Target:** `Format`, `Name`, `String`, `ValueString`, `ToNumberString`, `RangeNamesCsv`, `NameValue`, `MinValueString`, `MaxValueString`, `AllNameValues`.
+- **Result:** **21.6% → 26.1% (+4.5pp)** with `tests/creationtests/AllEnums_Format_test.go`. Cumulative AL-01+02: **15.5% → 26.1% (+10.6pp)**.
+- **Findings:** PI-006 (sqliteconnpathtype `NameValue` wrong fmt verb + empty `MinValueString`); strtype.Variant correctly excluded from min/max checks (free-form string enum).
 
 #### AL-03. Comparison & predicate suite
 - **Target:** `IsAnyOf`, `IsAnyNamesOf`, `IsAnyValuesEqual`, `IsByteValueEqual`, `IsNameEqual`, `IsValueEqual`, `IsEqual`, `IsAboveOrEqual`, `IsLowerOrEqual`, `IsInvalid`, `IsValid`.
