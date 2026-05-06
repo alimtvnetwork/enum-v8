@@ -2,7 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / §15 100.0 / §16 100.0 / spec/06 100.0 (verifiable)** *(12 sections in `spec/01-app/` + 2 baseline-only — §07, §09 — all closed; `spec/06-testing-guidelines/` baselined Cycle 15)* — **`spec/01-app/` directory audit COMPLETE; `spec/06-testing-guidelines/` directory baselined.**
+## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / §15 100.0 / §16 100.0 / spec/06 100.0 (verifiable)** *(12 sections in `spec/01-app/` + 2 baseline-only — §07, §09 — all closed; `spec/06-testing-guidelines/` baselined Cycle 15)* — **`spec/01-app/` directory audit COMPLETE & 🧊 DRIFT-FROZEN (spec-v0.30.0); `spec/06-testing-guidelines/` directory baselined.**
+
+> 🧊 **Freeze (spec-v0.30.0, 2026-05-06):** `spec/01-app/` is now closed for code-vs-spec drift work. Allowed edits: AB-driven ❓→✅ promotions, AC re-audit of §07/§09, upstream-API-change additions (paired with new audit cycle row), typo/formatting fixes. All other edits are out of scope until the freeze is explicitly lifted. See `spec/CHANGELOG.md` `[spec-v0.30.0]` entry. Drift work moves to `spec/03-powershell-test-run/`, `spec/04-tooling/`, `spec/02-app-issues/` (Cycles 16+).
 
 > 🆕 **Cycle 15 (`spec/06-testing-guidelines/` directory baseline) closed at 100% verifiable** with **1 LOW drift resolved (D-CVS-43)**: added an `enum-v4` consumer-coverage callout to `README.md` and a `⚠️ Scope` warning to `01-folder-structure.md` clarifying that the entire portable testing guideline describes upstream `core-v9` (not `enum-v4`). 32 representative claims sampled across 10 files: 22 ✅ / 10 ❓ (all pending AB). See [`16-cycle15-testing-guidelines.md`](./16-cycle15-testing-guidelines.md).
 
