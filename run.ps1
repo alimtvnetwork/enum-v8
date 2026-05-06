@@ -31,6 +31,8 @@
         --skip-bracecheck  Skip the Go syntax pre-check for faster runs
         --no-autofix       Skip the Go auto-fixer before bracecheck
         --dry-run          Run auto-fixer in preview mode (show fixes without applying)
+        --no-spec-api      Skip the spec-API fabrication lint (S-106)
+        --strict-spec-api  Fail TC if spec-API lint finds any fabrications (CI mode)
 
 .EXAMPLE
     ./run.ps1 T
