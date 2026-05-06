@@ -9,6 +9,36 @@
 
 ---
 
+## [spec-v0.36.0] — 2026-05-06 (Cycle 21 — AB pass 3 on `01-app/08-validators.md` — worst-drift section in project)
+
+### Added
+- `spec/07-code-vs-spec-audits/22-cycle21-AB-validators.md` — third AB promotion pass; 18 ❓ → 4 ✅ / 8 ❌ / 6 ❓ (verifiable score 33.3 % — lowest in project).
+- Scoreboard cycle history row 21.
+
+### Changed
+- Scoreboard top-line now leads with §08 = 33.3 % ahead of §09 = 66.7 % and §07 = 70.6 %.
+- Open-drift block now covers C-CVS-11..28 (18 ❌, 6 of which are CRITICAL severity).
+- Remaining-❓ count drops 110 → 98.
+
+### Discovered (NOT yet patched into spec — blocked by freeze)
+- **C-CVS-21 (CRITICAL)** Entire 5-method validator contract (`IsValid/IsSuccess/IsFailed/Message/Error`) fabricated; no `IsSuccessValidator` interface in `coreinterface/`.
+- **C-CVS-22 (CRITICAL)** Entire fluent-builder API (`corevalidator.New.Line.NotEmpty().MaxLength().Build()`, slice/range equivalents) fabricated; no `New` var, no fluent methods.
+- **C-CVS-23 (CRITICAL)** No `Validate(string) Result` method; real surface is `IsMatch(lineNumber, content, isCaseSensitive) bool`.
+- **C-CVS-24 (HIGH)** No `RangeValidator` type; numeric-range checks live in `coremath/integer*Within.go`.
+- **C-CVS-25 (HIGH)** `StringCompareAs` is a `Variant` enum in `enums/stringcompareas/`, not a "specialty validator".
+- **C-CVS-26 (HIGH)** No `corevalidator.Result` type.
+- **C-CVS-27 (HIGH)** "Authoring a Custom Validator" §4 template teaches the fabricated 5-method contract; uses wrong `*regexnew.Lazy` field type for what is actually `*regexnew.LazyRegex`.
+- **C-CVS-28 (CRITICAL)** "PowerShell runner parses validator output" attribution pipeline does not exist; runner parses `go test` output.
+
+### Bumped (pending action items, blocked)
+- **AJ-08..14** — corresponding rewrites of §1 contract / §2.1-2.4 examples / §2.5 enum reclassification / §3.1 result-slice / §4 custom-validator template / §5 attribution pipeline / §4 type fix.
+
+### Notes
+- Cumulative AB pattern: across the 3 sections audited so far, **41 % of API claims are fabricated** (18 ❌ vs 26 ✅). Validators chapter alone contributes 8 ❌.
+- **S-106 (`spec-api-check.psm1`) is now strongly recommended before lifting the freeze for any AJ rewrite** — every fabrication in this cycle would be caught by `go vet` against a synthesized stub file.
+
+---
+
 ## [spec-v0.35.0] — 2026-05-06 (Cycle 20 — AB pass 2 on `01-app/07-conditional-and-utilities.md`)
 
 ### Added
