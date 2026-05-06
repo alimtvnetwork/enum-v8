@@ -12,6 +12,64 @@
 #               Ensure-TestLogDir)
 # ─────────────────────────────────────────────────────────────────────────────
 
+function Get-GoconveyFailureSummary {
+    <#
+    .SYNOPSIS
+        Extract goconvey "Failures:" triplets from a captured failed-test block.
+    .DESCRIPTION
+        Implements suggestion S-107. Walks `$Block` (the lines captured for one
+        failed test in Pass-2) and emits compact `Expected: ... | Actual: ... | (Line N)`
+        triplets pulled from goconvey's `Failures:` blocks. Lines like
+        `<N> total assertions` / `* assertions: <N> ✓` are ignored — those are the
+        noise that buries the real signal in the current report.
+
+        Returns an array of pscustomobject { Expected; Actual; Line; Message } that
+        the caller can render however it wants. Returns @() if nothing is found.
+    #>
+    [CmdletBinding()]
+    param([string[]] $Block)
+
+    if (-not $Block -or $Block.Count -eq 0) { return @() }
+
+    $triplets = New-Object 'System.Collections.Generic.List[psobject]'
+    $i = 0
+    while ($i -lt $Block.Count) {
+        $line = $Block[$i].TrimEnd("`r")
+        # goconvey Expected/Actual lines look like:    Expected: '<value>'
+        if ($line -match '^\s*Expected:\s*(.*)$') {
+            $expected = $Matches[1].Trim().Trim("'")
+            $actual   = ''
+            $lineNo   = ''
+            $message  = ''
+            # Look ahead a small window for the matching Actual: / (Line N) / Message lines.
+            for ($j = $i + 1; $j -lt [math]::Min($i + 8, $Block.Count); $j++) {
+                $look = $Block[$j].TrimEnd("`r")
+                if ($look -match '^\s*Actual:\s*(.*)$' -and -not $actual) {
+                    $actual = $Matches[1].Trim().Trim("'")
+                }
+                elseif ($look -match '^\s*\(Line\s+(\d+)\)\s*$' -and -not $lineNo) {
+                    $lineNo = $Matches[1]
+                }
+                elseif ($look -match '^\s*Message:\s*(.*)$' -and -not $message) {
+                    $message = $Matches[1].Trim()
+                }
+                elseif ($look -match '^\s*Expected:\s*') {
+                    break   # next triplet starts
+                }
+            }
+            $triplets.Add([pscustomobject]@{
+                Expected = $expected
+                Actual   = $actual
+                Line     = $lineNo
+                Message  = $message
+            })
+        }
+        $i++
+    }
+
+    return $triplets.ToArray()
+}
+
 function Write-TestLogs {
     <#
     .SYNOPSIS
@@ -81,6 +139,20 @@ function Write-TestLogs {
             # Flush previous block if it was a failed test
             if ($currentTest -and $failedNames.Contains($currentTest)) {
                 $failing.Add("FAIL: $currentTest")
+                # S-107: surface goconvey Expected/Actual/Line triplets up front,
+                # before the noisy assertion-count tail buries them.
+                $summary = Get-GoconveyFailureSummary -Block $currentBlock
+                if ($summary -and $summary.Count -gt 0) {
+                    $failing.Add("  ── Failure summary ($($summary.Count)) ──")
+                    $idx = 1
+                    foreach ($t in $summary) {
+                        $loc = if ($t.Line) { " (Line $($t.Line))" } else { '' }
+                        $msg = if ($t.Message) { "  [$($t.Message)]" } else { '' }
+                        $failing.Add("    #$idx Expected: $($t.Expected)  |  Actual: $($t.Actual)$loc$msg")
+                        $idx++
+                    }
+                    $failing.Add("  ── Raw block ──")
+                }
                 foreach ($detail in $currentBlock) {
                     $failing.Add("  $detail")
                 }
@@ -124,6 +196,18 @@ function Write-TestLogs {
     # Flush last block
     if ($currentTest -and $failedNames.Contains($currentTest)) {
         $failing.Add("FAIL: $currentTest")
+        $summary = Get-GoconveyFailureSummary -Block $currentBlock
+        if ($summary -and $summary.Count -gt 0) {
+            $failing.Add("  ── Failure summary ($($summary.Count)) ──")
+            $idx = 1
+            foreach ($t in $summary) {
+                $loc = if ($t.Line) { " (Line $($t.Line))" } else { '' }
+                $msg = if ($t.Message) { "  [$($t.Message)]" } else { '' }
+                $failing.Add("    #$idx Expected: $($t.Expected)  |  Actual: $($t.Actual)$loc$msg")
+                $idx++
+            }
+            $failing.Add("  ── Raw block ──")
+        }
         foreach ($detail in $currentBlock) {
             $failing.Add("  $detail")
         }
@@ -211,5 +295,6 @@ function Write-TestLogs {
 # ═══════════════════════════════════════════════════════════════════════════════
 
 Export-ModuleMember -Function @(
-    'Write-TestLogs'
+    'Write-TestLogs',
+    'Get-GoconveyFailureSummary'
 )
