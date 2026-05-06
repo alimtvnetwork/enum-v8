@@ -17,7 +17,7 @@ func NewWindowsSystemDetailGetter() (windowsSysDetailDefiner, error) {
 			"registry.LOCAL_MACHINE",
 			"couldn't read registry key!"+err.Error(),
 			windowsRegistryKeyPathForOsInfo).ErrorNoRefs(
-			codestack.StacksStringDefault())
+			codestack.StacksTo.StringDefault())
 	}
 	
 	generator := &windowsSystemDetailGenerator{

@@ -40,7 +40,7 @@ func generateAllEnumGeneralTestCases(
 			continue
 		}
 
-		fullInvalidName := codestack.JoinPackageNameWithRelative(
+		fullInvalidName := codestack.NameOf.JoinPackageNameWithRelative(
 			typeName,
 			name)
 

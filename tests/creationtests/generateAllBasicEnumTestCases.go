@@ -17,7 +17,7 @@ func generateAllBasicEnumTestCases() {
 		item := simpleEnumCollectionTestCases[i]
 		typeName := item.TypeName()
 		name := item.Name()
-		fullInvalidName := codestack.JoinPackageNameWithRelative(
+		fullInvalidName := codestack.NameOf.JoinPackageNameWithRelative(
 			typeName,
 			name)
 

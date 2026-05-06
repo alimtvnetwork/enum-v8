@@ -111,7 +111,7 @@ func (it OperatingSystemDetail) IsVersion(
 ) bool {
 	return it.
 		ReleaseVersion().
-		IsExpectedComparisonUsingVersionString(
+		IsExpectedComparisonRawVersion(
 			corecomparator.Equal,
 			versionCompare,
 		)
@@ -121,7 +121,7 @@ func (it OperatingSystemDetail) IsVersionAtLeast(
 	versionCompare string,
 ) bool {
 	return it.ReleaseVersion().
-		IsExpectedComparisonUsingVersionString(
+		IsExpectedComparisonRawVersion(
 			corecomparator.LeftGreaterEqual,
 			versionCompare,
 		)
@@ -279,7 +279,7 @@ func (it *OperatingSystemDetail) ReleaseVersion() *coreversion.Version {
 		return it.releaseVersion
 	}
 	
-	it.releaseVersion = coreversion.New.Default(
+	it.releaseVersion = coreversion.New.DefaultPtr(
 		it.Release.String())
 	
 	return it.releaseVersion

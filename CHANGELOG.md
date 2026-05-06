@@ -13,18 +13,20 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ## [Unreleased]
 
 ### Changed
-- **core-v9 API migration (partial, Task AM)** — Applied confirmed renames across
-  all `enum-v4` Go source (53 sites): `coredynamic.TypeName(...)` →
+- **core-v9 API migration (Task AM)** — Applied all confirmed `core-v9 v1.5.8`
+  namespace rewrites across `enum-v4` Go source: `coredynamic.TypeName(...)` →
   `coredynamic.SafeTypeName(...)`, `converters.AnyToValueString(x)` →
-  `converters.AnyTo.ValueString(x)` (6 sites), and
-  `converters.Any.ToFullNameValueString` → `converters.AnyTo.ToFullNameValueString`
-  (1 site in `tests/creationtests/generateAllEnumGeneralTestCases.go`).
-  `cross-repo/` and `.release/` intentionally untouched. The remaining 11
-  `converters.StringTo*` call sites in `inttype/`, `strtype/`, and
-  `osdetect/` are still pending the upstream `stringTo` method list before
-  they can be safely rewritten.
+  `converters.AnyTo.ValueString(x)`, `converters.Any.ToFullNameValueString` →
+  `converters.AnyTo.ToFullNameValueString`, and the remaining
+  `converters.StringTo*` calls → `converters.StringTo.*` methods.
 
 ### Fixed
+- **Task AM / `tests/creationtests` compile blocker** — removed the obsolete
+  package-level converter calls that caused `undefined: converters.StringToInteger`,
+  `undefined: converters.StringToIntegerWithDefault`,
+  `undefined: converters.StringToIntegerDefault`, and `undefined: converters.StringToByte`
+  after upgrading to `core-v9 v1.5.8`.
+
 - **`scripts/CoverageRunner.psm1`, `scripts/CoverageCompileCheck.psm1`** — second
   pass at the `Blocked: (root) — : no such file or directory` failure that
   surfaced during parallel `./run.ps1 -tc` runs. Even with the prior multi-root

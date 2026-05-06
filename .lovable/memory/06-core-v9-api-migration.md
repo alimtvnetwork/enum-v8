@@ -32,10 +32,10 @@ var (
 | Old call (enum-v4 code today) | New call (core-v9 v1.5.8) | Verified? |
 |---|---|---|
 | `converters.AnyToValueString(x)` | `converters.AnyTo.ValueString(x)` | ✅ Applied 2026-05-06 (6 sites) |
-| `converters.StringToInteger(s)` | `converters.StringTo.Integer(s)` | ⏳ Awaiting `stringTo` method list |
-| `converters.StringToIntegerWithDefault(s, d)` | `converters.StringTo.IntegerWithDefault(s, d)` | ⏳ Awaiting `stringTo` method list |
-| `converters.StringToByte(s)` | `converters.StringTo.Byte(s)` | ⏳ Awaiting `stringTo` method list |
-| `converters.StringToIntegerDefault(s)` | `converters.StringTo.IntegerDefault(s)` | ⏳ Awaiting `stringTo` method list |
+| `converters.StringToInteger(s)` | `converters.StringTo.Integer(s)` | ✅ Applied 2026-05-06 |
+| `converters.StringToIntegerWithDefault(s, d)` | `converters.StringTo.IntegerWithDefault(s, d)` | ✅ Applied 2026-05-06 |
+| `converters.StringToByte(s)` | `converters.StringTo.Byte(s)` | ✅ Applied 2026-05-06 |
+| `converters.StringToIntegerDefault(s)` | `converters.StringTo.IntegerDefault(s)` | ✅ Applied 2026-05-06 |
 | `converters.Any.ToFullNameValueString(x)` | `converters.AnyTo.ToFullNameValueString(x)` | ✅ Applied 2026-05-06 (1 site) |
 | `coredynamic.TypeName(x)` | `coredynamic.SafeTypeName(x)` | ✅ Applied 2026-05-06 (53 sites) |
 
@@ -57,13 +57,15 @@ Bytes(anyItem any) []byte
 - `SafeTypeName(item any) string` — **this is the replacement for the missing `TypeName`**
 - No public `TypeName` function exists in `coredata/coredynamic/`
 
-## `stringTo` methods — PENDING
+## `stringTo` methods — confirmed from spec and applied
 
-User was asked to run:
-```powershell
-Select-String -Path "converters/*.go" -Pattern "func \(.*stringTo\)" | Select-Object -First 20
-```
-Response not yet received at session end. This is the next piece needed to complete the mapping.
+The consumer-facing converter spec documents these `core-v9` calls and the
+source now compiles against the struct namespace form:
+
+- `converters.StringTo.Integer(s)`
+- `converters.StringTo.IntegerWithDefault(s, d)`
+- `converters.StringTo.IntegerDefault(s)`
+- `converters.StringTo.Byte(s)`
 
 ## Where broken calls live in enum-v4
 
@@ -76,6 +78,5 @@ rg -n 'converters\.Any\.' --type go
 
 ## Next steps
 
-1. Get `stringTo` method list from user (pending PowerShell output) — blocks 11 remaining call sites in `inttype/Variant.go`, `strtype/Variant.go`, `osdetect/windowsSystemDetailGenerator_windows.go`.
-2. Apply `StringTo*` rewrites once method names confirmed.
-3. Run `go build ./...` to validate full migration.
+1. Run `./run.ps1 -tc` locally to validate Task AM in the Windows/Go environment.
+2. If new undefined symbols appear, inspect `data/coverage/blocked-packages.txt` and update this map.

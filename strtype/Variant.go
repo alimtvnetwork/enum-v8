@@ -156,7 +156,7 @@ func (it Variant) ToIntUsingMapValidationErr(
 }
 
 func (it Variant) ValueInt() int {
-	val, _ := converters.StringToIntegerWithDefault(
+	val, _ := converters.StringTo.IntegerWithDefault(
 		it.String(),
 		constants.InvalidIndex)
 
@@ -164,7 +164,7 @@ func (it Variant) ValueInt() int {
 }
 
 func (it Variant) ValueInt8() int8 {
-	val, _ := converters.StringToIntegerWithDefault(
+	val, _ := converters.StringTo.IntegerWithDefault(
 		it.String(),
 		constants.InvalidIndex)
 
@@ -176,7 +176,7 @@ func (it Variant) ValueInt8() int8 {
 }
 
 func (it Variant) ValueInt16() int16 {
-	val, _ := converters.StringToIntegerWithDefault(
+	val, _ := converters.StringTo.IntegerWithDefault(
 		it.String(),
 		constants.InvalidIndex)
 
@@ -188,7 +188,7 @@ func (it Variant) ValueInt16() int16 {
 }
 
 func (it Variant) ValueInt32() int32 {
-	val, _ := converters.StringToIntegerWithDefault(
+	val, _ := converters.StringTo.IntegerWithDefault(
 		it.String(),
 		constants.InvalidIndex)
 
@@ -220,14 +220,14 @@ func (it Variant) TypeName() string {
 }
 
 func (it Variant) ValueByte() byte {
-	b, err := converters.StringToByte(it.String())
+	b, err := converters.StringTo.Byte(it.String())
 	errcore.MustBeEmpty(err)
 
 	return b
 }
 
 func (it Variant) ByteType() (val bytetype.Variant, isValid bool) {
-	b, err := converters.StringToByte(it.String())
+	b, err := converters.StringTo.Byte(it.String())
 
 	if err != nil {
 		return 0, false
@@ -589,11 +589,11 @@ func (it Variant) String() string {
 }
 
 func (it Variant) ConvInteger() (int, error) {
-	return converters.StringToInteger(it.String())
+	return converters.StringTo.Integer(it.String())
 }
 
 func (it Variant) Integer() int {
-	return converters.StringToIntegerDefault(it.String())
+	return converters.StringTo.IntegerDefault(it.String())
 }
 
 func (it Variant) IntType() inttype.Variant {
@@ -601,11 +601,11 @@ func (it Variant) IntType() inttype.Variant {
 }
 
 func (it Variant) Version() *coreversion.Version {
-	return coreversion.New.Default(it.String())
+	return coreversion.New.DefaultPtr(it.String())
 }
 
 func (it Variant) IntegerDefaultVal(defaultVal int) (valueInt int, isSuccess bool) {
-	return converters.StringToIntegerWithDefault(it.String(), defaultVal)
+	return converters.StringTo.IntegerWithDefault(it.String(), defaultVal)
 }
 
 func (it Variant) Name() string {

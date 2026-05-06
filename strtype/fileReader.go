@@ -25,7 +25,7 @@ func (it fileReader) OpenFile() (*os.File, error) {
 			"cannot open file!"+err.Error(),
 			errcore.MessageWithRef(
 				"StackTraces",
-				codestack.StacksString(codestack.Skip1)))
+				codestack.StacksTo.StringNoCount(codestack.Skip1)))
 	}
 
 	return file, nil

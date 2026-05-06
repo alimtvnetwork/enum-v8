@@ -65,7 +65,7 @@ func (it windowsSystemDetailGenerator) CompiledErrorWithStackTraces() error {
 		return nil
 	}
 	
-	stackTraces := codestack.StacksStringDefault()
+	stackTraces := codestack.StacksTo.StringDefault()
 	it.rawErrCollection.AddString(stackTraces)
 	
 	return it.rawErrCollection.CompiledErrorWithStackTraces()
@@ -110,7 +110,7 @@ func (it windowsSystemDetailGenerator) SystemDetail() (*OperatingSystemDetail, e
 	var versionInNumber int
 	
 	if hasVersionNumber {
-		toNumber, err := converters.StringToInteger(
+		toNumber, err := converters.StringTo.Integer(
 			versionNumberStrings[0])
 		
 		it.rawErrCollection.AddError(err)
