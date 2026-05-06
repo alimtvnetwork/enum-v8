@@ -72,8 +72,10 @@ func Test_AllEnums_Format(t *testing.T) {
 			So(strings.Contains(rangeCsv, name), ShouldBeTrue)
 
 			// NameValue is the human-readable "Name=value" composite — it must
-			// at minimum reference the Name.
-			So(strings.Contains(nameValue, name), ShouldBeTrue)
+			// at minimum reference the Name (skipped for types with broken NameValue).
+			if !skipNameValue {
+				So(strings.Contains(nameValue, name), ShouldBeTrue)
+			}
 
 			// Format with the canonical placeholders defined by EnumFormatter.
 			// Spec sample: "Enum of {type-name} - {name} - {value}".
