@@ -61,6 +61,28 @@
 - **acceptance criteria:** `rg integratedtests spec/00-llm-integration-guide.md` returns only the anti-pattern callout lines.
 - **status:** open
 
+### S-108: Restore missing `scripts/coverage/Generate-CoveragePrompts.ps1`
+
+- **createdAt:** 2026-05-06
+- **source:** Lovable (Cycle 27 — AB scripts deep-probe, surfaced D-CVS-62)
+- **affectedProject:** enum-v4
+- **description:** `scripts/CoverageRunner.psm1:313-316` and `scripts/PackageCoverage.psm1:150` both call `& $promptScript ... -BatchSize 500` against `scripts/coverage/Generate-CoveragePrompts.ps1`, but that file is **missing** from the repo. The call-sites guard with `if (Test-Path $promptScript)` so the missing-file case silently no-ops — meaning the documented "per-batch coverage prompt files capped at 500 functions" feature (`spec/03-powershell-test-run/06-coverage-prompt-generator.md`) does not run today.
+- **rationale:** Either the spec promises a feature that doesn't exist (drift) OR the script was lost in a previous refactor. Since the call-sites are still wired, restoration is the lower-friction fix.
+- **proposed change:** Restore the script (read `spec/03-powershell-test-run/06-coverage-prompt-generator.md` for the contract: input = cover.out + go-tool-cover func output; output = batched prompt files with `-BatchSize 500`; per-package grouping).
+- **acceptance criteria:** `Test-Path scripts/coverage/Generate-CoveragePrompts.ps1` → True; `./run.ps1 -tc` produces files under `data/prompts/`.
+- **status:** open
+
+### S-109: Cycle-15 deep-probe of `tests/creationtests/` patterns to clear 21 ❓
+
+- **createdAt:** 2026-05-06
+- **source:** Lovable (Cycle 27 — carry-forward)
+- **affectedProject:** enum-v4 spec
+- **description:** 21 ❓ remain in `spec/06-testing-guidelines/` (Cycle 15 baseline). They're behavioural/observational claims about the Goconvey + `EnumTestWrapper` registry pattern that need a fresh probe of `tests/creationtests/` source — distinct probe technique from Cycle 27's grep-the-script approach.
+- **rationale:** Last large pool of unresolved ❓ outside the AJ/AC backlog.
+- **proposed change:** Run a dedicated cycle: read `tests/creationtests/EnumTestWrapper.go`, `tests/creationtests/all*.go`, and the `Test_AllEnums_*` registry; promote each Cycle-15 ❓ against direct source evidence.
+- **acceptance criteria:** Cycle-15 audit file shows ≤ 5 ❓ remaining; new cycle entry on the scoreboard.
+- **status:** open
+
 ---
 
 ## Completed Suggestions
