@@ -84,8 +84,21 @@ func (it Variant) MinInt() int {
 	return BasicEnumImpl.MinInt()
 }
 
+// RangesDynamicMap
+//
+// PI-006 follow-up (Cycle 63): the upstream `BasicString.RangesDynamicMap`
+// returns an empty map for spread-constructed string enums (same root cause
+// as `Min` / `MinValueString`: lazy state never populated by
+// `CreateUsingStringersSpread`). Build the {name -> name} map locally from
+// `StringRanges()`.
 func (it Variant) RangesDynamicMap() map[string]interface{} {
-	return BasicEnumImpl.RangesDynamicMap()
+	names := BasicEnumImpl.StringRanges()
+	out := make(map[string]interface{}, len(names))
+	for _, n := range names {
+		out[n] = n
+	}
+
+	return out
 }
 
 func (it Variant) Name() string {
