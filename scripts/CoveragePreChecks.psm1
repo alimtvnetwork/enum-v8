@@ -57,6 +57,53 @@ function Invoke-CoveragePreChecks {
     }
     if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "SafeTest Lint" "pass" "all clean" }
 
+    # ── Spec-API fabrication lint (S-106) ─────────────────────────────
+    # Soft gate: warn-only by default. Skipped if upstream clone or spec dir
+    # is absent (typical on contributor machines). Use --strict-spec-api to
+    # fail the run on any fabrication.
+    $skipSpecApi = $ExtraArgs -and ($ExtraArgs -contains '--no-spec-api')
+    if ($skipSpecApi) {
+        Write-Host "  Skipping spec-API fabrication lint (--no-spec-api)" -ForegroundColor DarkYellow
+        if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "skip" "skipped (--no-spec-api)" }
+    } else {
+        $specApiModule = Join-Path $ScriptRoot "scripts" "spec-api-check.psm1"
+        $specDir       = Join-Path $ScriptRoot "spec" "01-app"
+        $upstreamDir   = "/tmp/core-v9-upstream"
+        if (-not (Test-Path $specApiModule)) {
+            if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "skip" "spec-api-check.psm1 missing" }
+        } elseif (-not (Test-Path $specDir)) {
+            if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "skip" "spec/01-app/ missing" }
+        } elseif (-not (Test-Path $upstreamDir)) {
+            Write-Host "  Skipping spec-API lint (upstream clone $upstreamDir absent)" -ForegroundColor DarkYellow
+            Write-Host "    Hint: git clone --depth 1 --branch v1.5.8 https://github.com/alimtvnetwork/core-v9 $upstreamDir" -ForegroundColor DarkGray
+            if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "skip" "upstream clone absent" }
+        } else {
+            Write-Host ""
+            Write-Host "  Running spec-API fabrication lint (S-106)..." -ForegroundColor Yellow
+            try {
+                Import-Module $specApiModule -Force -DisableNameChecking
+                $strict = $ExtraArgs -and ($ExtraArgs -contains '--strict-spec-api')
+                $specResult = Invoke-SpecApiCheck -SpecDir $specDir -UpstreamDir $upstreamDir
+                $fabCount = 0
+                if ($specResult) {
+                    $fabCount = ($specResult.PkgFabrications.Count + $specResult.SymFabrications.Count)
+                }
+                if ($fabCount -eq 0) {
+                    if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "pass" "no fabrications" }
+                } elseif ($strict) {
+                    if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "fail" "$fabCount fabrications (strict)" }
+                    $s = Get-CallerSource; Write-Fail "Spec-API lint found $fabCount fabrications (strict mode). (source: $s)"
+                    return $false
+                } else {
+                    if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "warn" "$fabCount fabrications (warn-only)" }
+                }
+            } catch {
+                Write-Host "  Spec-API lint errored: $_" -ForegroundColor DarkYellow
+                if (Get-Command Register-Phase -ErrorAction SilentlyContinue) { Register-Phase "Spec-API Lint" "warn" "lint errored" }
+            }
+        }
+    }
+
     # ── Go auto-fixer ─────────────────────────────────────────────────
     $skipAutofix = $ExtraArgs -and ($ExtraArgs -contains '--no-autofix')
     $skipBrace = $ExtraArgs -and ($ExtraArgs -contains '--skip-bracecheck')
