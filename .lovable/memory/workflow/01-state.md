@@ -1,7 +1,7 @@
 # Workflow State
 
 > Snapshot of where the project stands. Update at the end of every "Write memory" run.
-> **Last updated:** 2026-05-06 (Cycle 18 closed — `spec/02-app-issues/` baselined; 🎉 cross-`spec/` AH sweep COMPLETE).
+> **Last updated:** 2026-05-06 (Cycle 19 — AB pass 1 on `09-converters.md`: first ❓→✅/❌ promotions, 5 NEW HIGH/CRITICAL contradictions surfaced).
 
 ## ✅ Done
 
@@ -34,11 +34,16 @@
 
 ## ⏳ Pending
 
-- **AB.** Fetch upstream `core-v9` source to resolve 158 ❓ claims (148 in `spec/01-app/` + 10 in `spec/06-testing-guidelines/`). Plus 14 workflow/script-internal ❓ (6 Cycle 16 + 8 Cycle 17) + 5 audit-history ❓ from Cycle 18 = **177 ❓ total**.
-- **AC.** Re-audit §07 and §09 against the spec-internal-consistency dimension.
-- **AJ.** Implement any follow-on fixes from Cycle 15/16+ findings (currently none open).
+- **AB. (in progress)** Upstream `core-v9 v1.5.8` cloned to `/tmp/core-v9-upstream` (35 MB, 3 172 .go files). Pass 1 done on `09-converters.md` (10 ✅ / 5 ❌ / 8 ❓ remaining). **Pass 2 targets:** `07-conditional-and-utilities.md` (17 ❓), `08-validators.md` (18 ❓), `10-reflection-and-dynamic.md` (15 ❓), `11-versioning.md` (11 ❓), `15-observability.md` (13 ❓), `16-security.md` (TBD ❓). Plus the 14 workflow/script-internal ❓ and 5 audit-history ❓.
+- **AC.** Re-audit §07 and §09 against the spec-internal-consistency dimension. Now partially unblocked for §09 by Cycle 19 — re-run after AJ-01..03 land.
+- **AJ.** **NEW open items: AJ-01, AJ-02, AJ-03** (all blocked by `spec/01-app/` freeze): rewrite `09-converters.md` §1.1, §2 + §4.3, and §1.3/§4 PrettyJson callsites against the verified upstream API. User decision needed on lifting freeze for an AB-fix waiver.
 - **AK.** New enum package creation (template validation).
 - **AL.** Test coverage expansion.
+
+## 🆕 New findings (Cycle 19)
+
+- **C-CVS-11..15** — 5 ❌ contradictions in `spec/01-app/09-converters.md`. See `spec/07-code-vs-spec-audits/20-cycle19-AB-converters-promotion.md` for evidence and proposed rewrites. Severity: 4× HIGH, 1× CRITICAL (`typesconv` §2 fully fabricated).
+- **M-CVS-01/02** — 2 stale Core-memory items, corrected in-turn (`enum-v3`→`enum-v4` module name; upstream `go.mod` rename declared complete with `replace` bridge removal).
 
 ## ⏭️ Manual user action (parked)
 
@@ -46,6 +51,7 @@
 
 ## Next logical step
 
-1. **AB** — Fetch upstream `core-v9` source for ❓ verification (unblocks 158 claims + Cycle 7/9 closure + 14 workflow/script-internal + 5 audit-history claims = 177 total).
-2. **AK** — New enum package creation / template validation.
-3. **AL** — Test-coverage expansion.
+1. **AB pass 2** — apply same promotion-and-grep pass to Cycles 5, 6, 8, 9 (each is expected to surface a similar number of ❌ findings because all four were authored against the pre-rename `core-v8` surface). OR
+2. **User decision: lift `spec/01-app/` freeze** for AJ-01..03 patches landing the corrected `09-converters.md` API. OR
+3. **AK** — New enum package creation / template validation.
+4. **AL** — Test-coverage expansion.

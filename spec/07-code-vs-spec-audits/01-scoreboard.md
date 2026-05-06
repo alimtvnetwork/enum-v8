@@ -2,7 +2,9 @@
 
 > **Single source of truth** for code-vs-spec drift. Updated after every cycle.
 
-## Current MEASURED drift score: **§03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / §15 100.0 / §16 100.0 / spec/06 100.0 / spec/03 100.0 / spec/04 100.0 / spec/02 100.0 (verifiable)** — **🎉 Cross-`spec/` AH sweep COMPLETE.** `spec/01-app/` 🧊 FROZEN (spec-v0.30.0); `spec/06-`, `spec/03-`, `spec/04-`, `spec/02-app-issues/` all baselined & closed (Cycles 15, 16, 17, 18).
+## Current MEASURED drift score: **§09 66.7 *(post-AB pass 1)* / §03 100.0 / §04 100.0 / §05 100.0 / §06 100.0 / §08 100.0 / §10 100.0 / §11 100.0 / §12 100.0 / §13 100.0 / §14 100.0 / §15 100.0 / §16 100.0 / spec/06 100.0 / spec/03 100.0 / spec/04 100.0 / spec/02 100.0 (verifiable)** — **🆕 Cycle 19 (AB pass 1 on `09-converters.md`) drops §09 from 100% N/A to 66.7% by surfacing 5 ❌ contradictions previously hidden inside the ❓ pool.** `spec/01-app/` remains 🧊 FROZEN; AJ-01..03 are blocked pending user waiver.
+
+> 🚨 **Cycle 19 (AB pass 1 on `spec/01-app/09-converters.md`)** — first ❓→ground-truth promotions. 23 ❓ → **10 ✅ / 5 ❌ / 8 ❓** (verifiable score 66.7 %). NEW contradictions: **C-CVS-11** (`StringTo.Integer64` does not exist), **C-CVS-12** (`StringTo.Float32` does not exist), **C-CVS-13** (`StringTo.Bool` does not exist; lives at `typesconv.StringToBool` with different signature), **C-CVS-14** (`PrettyJson.String` / `.FromAny` should be `PrettyString` / `SafePrettyString`), **C-CVS-15** (entire `typesconv` §2 + §4.3 example fabricated — actual surface is `*Ptr*` helpers, not numeric widening). See [`20-cycle19-AB-converters-promotion.md`](./20-cycle19-AB-converters-promotion.md). Also corrected 2 Core-memory drifts in-turn (M-CVS-01 enum-v3→enum-v4; M-CVS-02 upstream rename complete + bridge removed). All 5 ❌ are blocked pending freeze waiver.
 
 > 🎉 **Cycle 18 (`spec/02-app-issues/` directory baseline & closed at 100% verifiable) — closes the cross-`spec/` task AH sweep entirely.** 26 representative claims sampled across 11 files (402 lines). **5 LOW drifts (D-CVS-56 → D-CVS-60) raised and resolved in the same cycle**: 1 stale README index (5 open vs reality 9 resolved) + 4 upstream-vs-`enum-v4` scope footnotes (`02-internal-package-coverage-policy.md`, `03-getassert-undocumented-api.md`, `04-testwrappers-public-surface.md`, `05-missing-params-go-files.md`). 21 ✅ / 5 ❓ (audit-history claims). Marks task **AH** Done. See [`19-cycle18-app-issues.md`](./19-cycle18-app-issues.md).
 
@@ -58,10 +60,13 @@
 | 2026-05-06 | 16 (baseline / closed) | `03-powershell-test-run/` (9 files) | 28 | 22 | 5→0 | 0 | 6 | **100.0%** *(verifiable)* |
 | 2026-05-06 | 17 (baseline / closed) | `04-tooling/` (10 files) | 30 | 22 | 7→0 | 0 | 8 | **100.0%** *(verifiable)* |
 | 2026-05-06 | 18 (baseline / closed) | `02-app-issues/` (11 files) | 26 | 21 | 5→0 | 0 | 5 | **100.0%** *(verifiable)* |
+| 2026-05-06 | 19 (AB pass 1) | `01-app/09-converters.md` | 23 | 10 | 0 | **5** | 8 | **66.7%** *(verifiable, BLOCKED on freeze waiver for AJ-01..03)* |
 
 ## Open drift findings
 
-_None._ All 12 audited-and-closed sections in `spec/01-app/` plus the entire `spec/06-testing-guidelines/`, `spec/03-powershell-test-run/`, `spec/04-tooling/`, and `spec/02-app-issues/` directories are at 100 % of their verifiable subsets. §07 and §09 have no verifiable subset. **🎉 Cross-`spec/` AH sweep COMPLETE.** Remaining ❓s — 158 from `spec/01-app/` (task **AB**) + 10 spec/06 + 6 spec/03 + 8 spec/04 + **5 spec/02 audit-history** = **177 ❓** total — 158 require upstream `core-v9` source (task **AB**); 14 are workflow/script-internal behaviours requiring direct probes; 5 are audit-history claims pointing at `spec/99-audits/05-ai-audit-2026-04-23-gemini.md` (probe deferred).
+**Open (Cycle 19):** **C-CVS-11..15** — 5 ❌ contradictions in `spec/01-app/09-converters.md` (4 HIGH + 1 CRITICAL). All blocked by `spec/01-app/` 🧊 freeze; AJ-01..03 carry the proposed rewrites. See `20-cycle19-AB-converters-promotion.md` §3.
+
+All other audited sections (12 in `spec/01-app/` plus all of `spec/06-`, `spec/03-`, `spec/04-`, `spec/02-app-issues/`) are at 100 % of their verifiable subsets. **🎉 Cross-`spec/` AH sweep COMPLETE.** Remaining ❓s after Cycle 19 promotion: §09 8 + §07 17 + §08 18 + §10 15 + §11 11 + §15 13 + §16 13 (= 95 left in `spec/01-app/`) + 10 spec/06 + 6 spec/03 + 8 spec/04 + 5 spec/02 audit-history = **124 ❓** remaining (down from 177). Path: AB pass 2 onwards.
 
 > **Cross-spec sweep status:** `spec/01-app/` is now **genuinely clean** of stale `tests/integratedtests/` references after cycle 12 finished what cycle 11 thought it had finished. Remaining hits in `01-app/` are intentional anti-pattern callouts (`05-enum-system.md:417`) or retro-references inside cycle-11/12 fix notes themselves. Task **AH** still owes a sweep of `spec/03-powershell-test-run/` (4 files), `spec/04-tooling/04-bootstrap-into-new-repo.md`, and `spec/02-app-issues/02-internal-package-coverage-policy.md`. `spec/CHANGELOG.md` and `spec/99-audits/` are immutable history.
 
