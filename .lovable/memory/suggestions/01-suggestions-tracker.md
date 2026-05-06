@@ -92,6 +92,18 @@
 - **status:** open
 - **risk:** Low — structural reorganisation, no normative content change.
 
+### S-104: Add `cross-repo/core-v8/README.md` historical-naming top-of-file note
+
+- **createdAt:** 2026-05-06
+- **source:** Lovable (Cycle 17 carry-forward)
+- **affectedProject:** enum-v4
+- **description:** Cycle 17 surfaced 5 broken `cross-repo/core-v9/` paths in spec text (D-CVS-49, -52, -53, -55) — all stemming from the same root cause: readers who know the import path is `core-v9` instinctively type the wrong directory name (the actual directory keeps its historical `core-v8` name per Core memory). A prominent note inside `cross-repo/core-v8/README.md` would prevent future authors from making the same mistake.
+- **rationale:** Reduces future drift class entirely (point-of-truth fix vs. per-cite-site clarification).
+- **proposed change:** Add a top-of-file callout to `cross-repo/core-v8/README.md` explaining: (1) the directory name is historical, (2) the actual import path is `github.com/alimtvnetwork/core-v9`, (3) anyone editing spec text should write `cross-repo/core-v8/` even when discussing `core-v9` content.
+- **acceptance criteria:** `cross-repo/core-v8/README.md` head section includes the explanation; future audit cycles can cite it instead of repeating the Core-memory note inline.
+- **status:** open
+- **risk:** None — informational README edit only.
+
 ---
 
 ## Rejected Suggestions
