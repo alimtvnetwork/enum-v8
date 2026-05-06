@@ -105,15 +105,10 @@
 
 ### S-103: Extract portable runner specs into `spec/03-portable/` sub-directory
 
-- **createdAt:** 2026-05-06
+- **completed:** 2026-05-06 (Cycle 36)
 - **source:** Lovable (Cycle 16 carry-forward)
-- **affectedProject:** enum-v4 (spec only)
-- **description:** `spec/03-powershell-test-run/08-generic-go-test-coverage-runner.md` and `09-ai-agent-complete-reference.md` are explicitly portable ("any Go module / repository", "self-contained reference for any AI agent"). They currently sit alongside `enum-v4`-specific runner files and required top-of-file consumer-coverage callouts in Cycle 16 (D-CVS-47, D-CVS-48) to disambiguate scope.
-- **rationale:** A structural split (sub-directory) is more discoverable than a notational one (callouts) and would let future portable-runner edits ship without touching the `enum-v4`-specific files.
-- **proposed change:** Move `08-` and `09-` into a new `spec/03-powershell-test-run/portable/` sub-directory; renumber to `01-`/`02-` inside it; update cross-refs in `spec/04-tooling/` and `spec/06-testing-guidelines/` if any.
-- **acceptance criteria:** `rg -nc 'spec/03-powershell-test-run/(08|09)-' spec/` returns zero hits after the move; new portable sub-directory has its own README explaining the scope split.
-- **status:** open
-- **risk:** Low — structural reorganisation, no normative content change.
+- **resolution:** Moved `spec/03-powershell-test-run/08-generic-go-test-coverage-runner.md` → `spec/03-powershell-test-run/portable/01-generic-go-test-coverage-runner.md` and `09-ai-agent-complete-reference.md` → `portable/02-ai-agent-complete-reference.md`. Added `spec/03-powershell-test-run/portable/README.md` with the scope-split explanation, the 2-file table, and 3 editor rules. Updated 2 live cross-refs (`spec/00-llm-integration-guide.md:2380`, `spec/04-tooling/03-powershell-implementation.md:456`) and 1 internal cross-ref inside the moved `02-ai-agent-complete-reference.md`. Historical references in `spec/CHANGELOG.md`, `spec/07-code-vs-spec-audits/17-cycle16-powershell-test-run.md`, and `spec/99-audits/01-original-11-step-plan.md` left as-is (audit history). Spec changelog → spec-v0.43.0. `package.json` 0.5.0 → 0.6.0.
+- **acceptance criteria:** ✅ `rg -n 'spec/03-powershell-test-run/(08|09)-' spec/ --glob '!spec/CHANGELOG.md' --glob '!spec/07-code-vs-spec-audits/**' --glob '!spec/99-audits/**'` returns zero hits. ✅ `spec/03-powershell-test-run/portable/README.md` exists and documents the split.
 
 ### S-104: Add `cross-repo/core-v8/README.md` historical-naming top-of-file note
 
