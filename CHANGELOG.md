@@ -13,6 +13,16 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 ## [Unreleased]
 
 ### Changed
+- **Cycle 16 spec audit (Task AA + AH partial)** — closed
+  `spec/03-powershell-test-run/` (9 files, 2 519 lines) at **100 % verifiable**
+  (22 ✅ / 6 ❓; the 6 ❓ are runner-internal behaviours requiring a direct
+  `scripts/*.psm1` probe). Raised and resolved **5 LOW drifts (D-CVS-44 →
+  D-CVS-48)** in the same cycle via top-of-file consumer-coverage callouts
+  (`01-overview.md`, `04-pre-commit-api-checker.md`, `08-generic-go-test-coverage-runner.md`,
+  `09-ai-agent-complete-reference.md`) plus one inline rewrite
+  (`06-coverage-prompt-generator.md` line 71). Folds in Task AH debt for this
+  directory. See `spec/07-code-vs-spec-audits/17-cycle16-powershell-test-run.md`.
+  Spec changelog bumped to **spec-v0.31.0**.
 - **`spec/01-app/` DRIFT-FROZEN (Task AI)** — declared the directory closed for
   code-vs-spec drift work in `spec/CHANGELOG.md` as **spec-v0.30.0**. Allowed
   future edits: AB-driven ❓→✅ promotions, AC re-audit of §07/§09,
