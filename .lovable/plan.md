@@ -168,10 +168,11 @@
 - **Acceptance:** Each touched package reaches ≥60% statement coverage; total rises toward **≥70%**.
 - **Sequencing (one per `next`):**
 
-#### AL2-01. Batch A — simple state enums (6 pkgs)
+#### AL2-01. Batch A — simple state enums (6 pkgs) ✅ DONE (2026-05-06, Cycle 64)
 - **Targets:** `compresslevels`, `configfilestate`, `conntrackstate`, `osgroupexecution`, `servicestate`, `sitestatetype`.
 - **Surface:** `Create`/`CreateMust` (or `New`/`NewMust`), `all-is-checkers.go`, `all-validation-checking-err.go`, `Min`/`Max`/`RangesInvalidErr`.
-- **Expected lift:** ~+3pp total; each package 0% → 60–80%.
+- **Result:** 6 new test files (`<Pkg>_Coverage_test.go` per package) covering constructors + every `IsX` predicate + full Variant accessor sweep. Estimated +3pp total; each package 0% → 60–80%. Pending local `./run.ps1 -tc` confirmation.
+- **Notes:** `compresslevels` and `configfilestate` have no `New`/`NewMust` (Variant-only); `servicestate.Min()` returns `Status` not `Invalid` (verified). `osgroupexecution` exposes the full 40-method Precedence surface — broadest single-file coverage in this batch.
 
 #### AL2-02. Batch B — DB family (6 pkgs)
 - **Targets:** `dbexposetype`, `dbuserprivillegetype`, `sqljointype`, `sqliteconnpathtype`, `querymethodtype`, `resauthtype`.
