@@ -10,6 +10,25 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.54.0] — 2026-05-07 — Cycle 83 — AB-residual: re-audit §15 observability
+
+### Changed
+- `spec/07-code-vs-spec-audits/14-cycle13-observability.md`: appended §6
+  AB-residual re-audit verified against upstream `core-v9 v1.5.8`. Promoted
+  11 of 13 ❓ rows; verifiable score moves from 14/14 (100 %) to
+  **22 / 25 = 88.0 %** under the wider verifiable subset. Three new LOW
+  findings filed: **D-CVS-54** (`corejson` import path is wrong; real path is
+  `coredata/corejson`), **D-CVS-55** (upstream `var2WithTypeFormat` has a
+  missing space), **D-CVS-56** (verify test-failure line shape).
+
+### Notes
+- All major observability symbols (`errcore.VarTwo`/`VarTwoNoType`/
+  `MessageVarMap`/`StackEnhance`, `coretests/results.Result`/
+  `InvokeWithPanicRecovery`/`ExpectAnyError`, `corejson.NewPtr().PrettyJsonString()`)
+  verified ✅ against upstream.
+
+---
+
 ## [v0.53.0] — 2026-05-07 — Cycle 82 — AB-residual: re-audit §06 testing-guidelines
 
 ### Changed
