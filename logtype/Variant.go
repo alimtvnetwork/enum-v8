@@ -253,12 +253,17 @@ func (it Variant) UnmarshallEnumToValue(jsonUnmarshallingValue []byte) (byte, er
 		jsonUnmarshallingValue)
 }
 
+// MaxByte returns the highest valid (non-Invalid) variant byte.
+// Pattern-8 fix: BasicEnumImpl.Max() returns the trailing Invalid sentinel
+// here; return the last real member (Pattern) directly.
 func (it Variant) MaxByte() byte {
-	return BasicEnumImpl.Max()
+	return byte(Pattern)
 }
 
+// MinByte returns the lowest valid (non-Invalid) variant byte.
+// Pattern-8 fix: explicit value for API symmetry with MaxByte().
 func (it Variant) MinByte() byte {
-	return BasicEnumImpl.Min()
+	return byte(Silent)
 }
 
 func (it Variant) ValueByte() byte {
