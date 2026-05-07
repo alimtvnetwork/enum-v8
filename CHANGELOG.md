@@ -10,6 +10,25 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.56.0] — 2026-05-07 — Cycle 85 — AB-residual: re-audit §16 security
+
+### Changed
+- Appended Cycle 85 section to `spec/07-code-vs-spec-audits/15-cycle14-security.md` re-auditing all 13 ❓ rows against upstream `core-v9 v1.5.8`. Score moves from 17/17 (100%) to **18/28 (64.3%)** — the **lowest** AB-residual score to date because the spec cites several APIs that do not exist upstream.
+
+### Findings filed (D-CVS-57..63)
+- **D-CVS-60 (CRITICAL)** — `corevalidator.New.Slice.MaxLength(N)` and `corevalidator.New.Line.NotEmpty().MaxLength(255).Matches(...)` fluent builders do NOT exist in upstream `corevalidator/`; the real surface is `SliceValidator`/`LineValidator`/`TextValidator` with `SetActual*`/`IsValid*`/`VerifyError` methods. Spec §6 example is non-compilable.
+- **D-CVS-57 (HIGH)** — `coredynamic.AllFields` not found in `coredata/coredynamic/`; cited in §2 row 4, §4 rule 4, §5.
+- **D-CVS-59 (HIGH)** — `corestr.StringBuilder` not found in `coredata/corestr/`; cited in §4 table.
+- **D-CVS-61 (HIGH)** — `coredynamic.SetField` not found; cited in §5 rule 2.
+- **D-CVS-62 (HIGH)** — `coredynamic.InvokeMethod` not found; cited in §5 rule 3.
+- **D-CVS-63 (HIGH)** — `corestr.IsValidUTF8` not found; cited in §6 rule 3.
+- **D-CVS-58 (LOW)** — `00-llm-integration-guide.md` Pattern 7 cross-ref location not verified.
+
+### Recommendation
+- Treat `spec/01-app/16-security.md` as **rewrite-required** (not just patch-required) for AJ-NEW.
+
+---
+
 ## [v0.55.0] — 2026-05-07 — Cycle 84 — Fix 5 failing tests (Min/Max sentinel + level-cmp + AllNameValues round-trip)
 
 ### Fixed
