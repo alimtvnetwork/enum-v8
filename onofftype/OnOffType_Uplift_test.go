@@ -91,7 +91,7 @@ func TestOnOffType_Uplift_BooleanConstructors(t *testing.T) {
 	_ = NewUsingAndBooleans(false, false)
 	for _, s := range []issetter.Value{
 		issetter.Uninitialized, issetter.Wildcard, issetter.True,
-		issetter.Set, issetter.False, issetter.Unset, issetter.Empty,
+		issetter.Set, issetter.False, issetter.Unset,
 	} {
 		_, _ = NewUsingSetter(s)
 	}

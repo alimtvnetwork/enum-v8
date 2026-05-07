@@ -110,6 +110,15 @@ func (it Pair) WrapSkipOnExist(
 		true)
 }
 
+// String returns a deterministic representation of the Pair without
+// re-entering converters.AnyTo.ValueString — that path falls back to
+// fmt.Sprintf("%v", it) which calls back into String() (infinite recursion
+// → stack overflow). RCA pattern 9 (2026-05-07).
 func (it Pair) String() string {
-	return converters.AnyTo.ValueString(it)
+	_ = converters.AnyTo // retain import; helper still used elsewhere via package
+	return fmt.Sprintf(
+		"{Start:%s End:%s Category:%s}",
+		it.Start.String(),
+		it.End.String(),
+		it.Category.String())
 }
