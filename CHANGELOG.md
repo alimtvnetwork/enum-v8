@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The release pipeline extracts the matching `## [vX.Y.Z]` section as the
 GitHub Release body — keep entries small, sectioned, and human-readable.
 
+## [v1.15.0] - 2026-05-07
+### Fixed — CI collision-check false positives across 16 packages
+- `scripts/ci/check-collisions.py` now tracks `{`/`}` brace depth and only
+  records declarations at top level (depth 0). Function-local `var got Variant`,
+  `var n *T`, etc. were previously mis-counted as package-level vars, producing
+  ~16 cross-file "var collision" failures and one intra-file dupe in
+  `osdetect/OsDetect_Uplift_test.go`. Verified against the full module: 806 Go
+  files / 85 packages now report ✅ no collisions.
+
+### RCA pattern (added to memory)
+- **Pattern 10 — Brace-unaware Go declaration scanners.** Any tool that walks
+  Go source line-by-line MUST track brace depth before classifying a `var`,
+  `const`, `type`, or `func` as top-level. Otherwise every function-scoped
+  `var x T` looks identical to a package-scoped one. Reusable fix: increment
+  on `line.count("{")`, decrement on `line.count("}")`, gate emission on
+  `depth == 0` measured at the START of the line.
+
 ## [v1.14.0] - 2026-05-07
 ### Fixed — Real bugs in 4 packages previously masked by tooling false-positive guard
 - **`licensetype`** — `LicenseType_Uplift_test.go` referenced `Variant.IsAnyOf`, which did not exist. Added `licensetype/IsAnyOf.go` providing the standard variadic `IsAnyOf(...Variant) bool` (matches every other enum in the repo).
