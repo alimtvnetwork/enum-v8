@@ -46,16 +46,11 @@
 
 ### AH. Cross-`spec/` cleanup sweep
 
-- **Status:** 🔄 In Progress — folded into upcoming directory audits
-- **Objective:** Replace all stale `tests/integratedtests/` and `enum-v1` references outside `cross-repo/`.
-- **Dependencies:** None
-- **Expected outputs:** `rg integratedtests spec/` returns only anti-pattern callout lines.
-- **Remaining targets:**
-  - `spec/06-testing-guidelines/01-folder-structure.md` (line 13)
-  - `spec/03-powershell-test-run/` (4 files, TBD)
-  - `spec/04-tooling/04-bootstrap-into-new-repo.md`
-  - `spec/02-app-issues/02-internal-package-coverage-policy.md`
-  - `spec/00-llm-integration-guide.md` (line 36)
+- **Status:** ✅ Done (2026-05-07, audit during v0.98.0)
+- **Objective:** Replace all stale `tests/integratedtests/` references outside `cross-repo/`.
+- **Result:** All 5 plan-listed files (`spec/06-testing-guidelines/01-folder-structure.md`, `spec/03-powershell-test-run/01-overview.md` + 3 sibling/portable files, `spec/04-tooling/04-bootstrap-into-new-repo.md`, `spec/02-app-issues/02-internal-package-coverage-policy.md`, `spec/00-llm-integration-guide.md`) now carry explicit upstream-`core-v9` scope notes. Remaining `integratedtests/` mentions are intentional upstream-layout callouts (verified line-by-line); `spec/05-failing-tests/` is intentionally frozen as upstream-historical reference (PI-002 res. + Cycle 19). No source-tree path drift remains.
+- **Acceptance:** `rg integratedtests spec/` returns only callout / scope-note / upstream-reference lines.
+
 
 ### AB. Fetch upstream `core-v9` source
 

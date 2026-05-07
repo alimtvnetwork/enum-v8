@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.98.0] — 2026-05-07 — Close Task AH (cross-spec stale-path sweep)
+
+### Changed
+- **`.lovable/plan.md`** — Task AH (Cross-`spec/` cleanup sweep) marked ✅ Done. Audit confirmed all 5 plan-listed files carry explicit upstream-`core-v9` scope notes; remaining `tests/integratedtests/` mentions are intentional upstream-layout callouts, not stale paths. `spec/05-failing-tests/` remains intentionally frozen as upstream-historical reference (per PI-002 resolution + Cycle 19).
+
+### Notes
+- Verification command: `rg integratedtests spec/` returns only callout / scope-note / upstream-reference lines — no source-tree path drift.
+- Removes AH from the active backlog; `next` will now suggest from AL2-08 / AL2-02..06 / AJ-NEW / PI-003 / cross-repo push.
+
 ## [v0.97.0] — 2026-05-07 — Raise CI coverage gate 65% → 70%
 
 ### Changed
