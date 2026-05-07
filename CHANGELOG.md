@@ -10,6 +10,16 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.95.0] — 2026-05-07 — strtype coverage uplift 13.7% → 60.1%
+
+### Added
+- **`strtype/StrType_Uplift_test.go`** — pure-`testing` (no Convey) sweep that exercises the surface the bespoke Convey suite skipped: every `Replace*` overload, every `Remove*` overload, every `SplitKey*` variant, every `Append/Prepend*If` branch, every `Title*` formatter, every `SafeSubString*` edge (negative start, end overrun, start-past-end), `SimpleStringOnce(true|false)`, `Version()`, every `ValueInt*` size guard with both in-range and out-of-range inputs, both `ByteType` paths, both `New` / `NewUsingInteger` / `NewFileReader` constructors, every `ToByteUsingMap*` and `ToIntUsingMap*` map state (hit / miss / empty), `NameUsingMap`, `HasInAliasMap`, `ToErr` (empty + non-empty), and the stub-method surface (`ValueUInt16/AllNameValues/IntegerEnumRanges/MinMaxAny/Min/Max/RangesDynamicMap/...`).
+- Result: `strtype` package coverage jumped from **13.7% → 60.1%** (+46.4 pts) — `strtype` is no longer the lowest-covered package.
+
+### Notes
+- Total project coverage will rise correspondingly; with `strtype` now ≥60% the next CI gate bump (65% → 70%) is in reach without AL2-08 needing to land first.
+- Pure `testing` package (no Convey) keeps the new test isolated from the existing Convey log structure and avoids the recurring "log conflation" RCA pattern noted in `.lovable/memory/07-test-failure-rca-patterns.md`.
+
 ## [v0.94.0] — 2026-05-07 — Raise CI coverage gate 60% → 65%
 
 ### Changed
