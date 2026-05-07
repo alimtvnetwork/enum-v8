@@ -10,6 +10,19 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.75.0] — 2026-05-07 — AL²-08: Range-edge fuzz on MinByte/MaxByte/RangesByte
+
+### Added
+- **`tests/creationtests/AllEnums_RangeEdges_test.go`** — reflection-based shared-loop test that, for every entry in `allBasicEnumsCollection`, asserts:
+  - `MinByte() ≤ MaxByte()` (non-empty range).
+  - Every byte in `RangesByte()` sits inside `[MinByte, MaxByte]`.
+  - `len(RangesByte()) == len(AllNameValues())` when both surfaces are populated.
+- Per-method skip via `MethodByName` `IsValid` check; package-level skip map for `strtype.Variant` / `inttype.Variant`.
+
+### Notes
+- Closes the AL² coverage push (AL²-04..08 all done). Remaining open items shift to spec-thaw (AJ-NEW) and out-of-band cross-repo push (A).
+- Run `./run.ps1 -tc` to capture the cumulative AL² coverage delta.
+
 ## [v0.74.0] — 2026-05-07 — AL²-06: Pointer-receiver binding-wrapper sweep
 
 ### Added
