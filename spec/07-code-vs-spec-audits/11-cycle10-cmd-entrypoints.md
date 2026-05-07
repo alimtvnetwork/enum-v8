@@ -62,3 +62,16 @@ Read the spec end-to-end, extracted every checkable claim, then verified each ag
 - [`01-scoreboard.md`](./01-scoreboard.md) — Cycle 10 row + C-CVS-10 / D-CVS-32 entries
 - [`/cmd/README.md`](../../cmd/README.md) — the permitted smoke-test harness
 - Prior `integratedtests` fixes: C-CVS-01 (cycle 1), D-CVS-17 (cycle 3), D-CVS-26 (cycle 6), D-CVS-27 (cycle 9)
+
+---
+
+## Cycle 89 AB-residual findings
+
+### D-CVS-70 — `coregeneric` import path drift — **LOW**
+Spec writes `coregeneric.New.Collection.String.Items(...)`. Real import path is `github.com/alimtvnetwork/core-v9/coredata/coregeneric` (note the `coredata/` prefix). All API names match (`vars.go:34 var New = &newCreator{}`, `Collection[T]` + `SimpleSlice[T]` typed creators with `.String.Cap/.From/.Empty/.Items`). Same drift pattern as D-CVS-54 in Cycle 83. Spec fix: prepend `coredata/` to the import path everywhere `coregeneric` is referenced.
+
+### D-CVS-71 — `errcore.FailedType` does not exist as a bare constant — **HIGH (fabricated symbol)**
+Spec §2 line 52 references `errcore.FailedType.Fmt(...)`. Upstream `errcore/RawErrorType.go:86-121` has only **specific** `*FailedType` variants (`MarshallingFailedType`, `ParsingFailedType`, `ValidationFailedType`, `PathRemoveFailedType`, …) — no bare `FailedType`. The `.Fmt(message string, vars ...any) error` method is on the underlying `RawErrorType` (`RawErrorType.go:234`). Spec fix: cite a concrete variant (e.g. `errcore.ValidationFailedType.Fmt(...)`) or refer generically to `errcore.RawErrorType.Fmt`.
+
+### D-CVS-72 — `args.IsEmpty()`/`args.First()` references a non-existent top-level `args` package — **MEDIUM**
+Spec §4 lines 102-104 reads as if `args` is a top-level core-v9 package. Reality: there is no `core-v9/args`; only `core-v9/coretests/args` (test-fixture holder types) which expose `HasFirst()` (not `First()`). The `cmd/main` smoke-test example actually uses `os.Args` + `corestr.New.Collection`. Spec fix: replace pseudo-`args.IsEmpty()/First()` with the real `len(os.Args) <= 1` / `os.Args[1]` pattern, or with `corestr.Collection.HasItems()/Items()[0]`.
