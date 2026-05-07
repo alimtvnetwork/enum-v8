@@ -35,13 +35,13 @@ var (
 		Custom:  "Custom",
 	}
 
-	iptablesProtocols = [...]bool{
+	iptablesProtocols = map[Variant]bool{
 		Tcp:  true,
 		Udp:  true,
 		Icmp: true,
 	}
 
-	transactionProtocols = [...]bool{
+	transactionProtocols = map[Variant]bool{
 		Tcp:   true,
 		Udp:   true,
 		Grpc:  true,
@@ -50,20 +50,20 @@ var (
 		Rest:  true,
 	}
 
-	mailProtocols = [...]bool{
+	mailProtocols = map[Variant]bool{
 		Smtp: true,
 		Imap: true,
 		Pop3: true,
 	}
 
-	signInProtocols = [...]bool{
+	signInProtocols = map[Variant]bool{
 		OAuth: true,
 		Ssh:   true,
 		Pam:   true,
 		Sso:   true,
 	}
 
-	ipProtocols = [...]bool{
+	ipProtocols = map[Variant]bool{
 		Ip:   true,
 		IpV6: true,
 	}

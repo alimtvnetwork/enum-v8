@@ -19,6 +19,7 @@ var (
 		RevokeSsl:             "RevokeSsl",
 		AutoSsl:               "AutoSsl",
 		AutoRenewSsl:          "AutoRenewSsl",
+		RemoveSslAll:          "RemoveSslAll",
 		RemoveAll:             "RemoveAll",
 		ExpireSsl:             "ExpireSsl",
 		SslChallenge:          "SslChallenge",
