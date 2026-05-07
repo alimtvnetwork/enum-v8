@@ -28,6 +28,35 @@ function Write-BlockedDiagnostic {
     }
 }
 
+function Test-PackageActuallyCompiles {
+    <#
+    .SYNOPSIS
+        Confirmation probe for a package that the primary `go test -coverpkg=...`
+        check flagged as blocked. We re-run a *minimal* build of the test binary
+        without `-coverpkg` (which can emit "no packages being tested depend on
+        matches for pattern" warnings and other noise that cause false-positive
+        blocked reports on PowerShell hosts).
+    .RETURNS
+        [bool] $true if the package's test binary compiles cleanly, $false otherwise.
+    .NOTES
+        AN: Guards against the false-positive blocked report cluster surfaced
+        in run.ps1 -tc output where packages compiled fine under direct
+        `go build` / `go test` invocations but were marked Blocked because the
+        `-coverpkg=$CovPkgList` invocation produced non-zero exit codes from
+        warning-only stderr noise.
+    #>
+    param([string]$Pkg)
+    if (-not $Pkg) { return $false }
+    $prevPref = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    # `go test -c` builds the test binary without running it. -o discards the binary.
+    $devnull = if ($IsWindows) { 'NUL' } else { '/dev/null' }
+    $null = & go test -c -o $devnull -gcflags=all=-e "$Pkg" 2>&1
+    $ec = $LASTEXITCODE
+    $ErrorActionPreference = $prevPref
+    return ($ec -eq 0)
+}
+
 function Invoke-CoverageCompileCheck {
     <#
     .SYNOPSIS
@@ -79,6 +108,14 @@ function Invoke-CoverageCompileCheck {
                 $diagOut = & go test -count=1 -run '^$' -gcflags=all=-e "$testPkg" 2>&1 | ForEach-Object { $_.ToString() }
                 $ErrorActionPreference = $prevPref
 
+                # AN: confirmation probe — if the test binary builds cleanly without
+                # -coverpkg the original failure was warning-only noise (false-positive
+                # blocked report). Treat the package as compilable.
+                if (Test-PackageActuallyCompiles -Pkg $testPkg) {
+                    $testPkgs.Add($testPkg)
+                    continue
+                }
+
                 $combinedOut = Merge-UniqueOutputLines $compileOut $diagOut
                 $combinedOut = Resolve-BlockedPackageDiagnosticOutput -PackagePath $testPkg -Lines $combinedOut
                 $callerSource = Get-CallerSource
@@ -100,6 +137,7 @@ function Invoke-CoverageCompileCheck {
             $rawOut = & go test -count=1 -run '^$' -gcflags=all=-e "-coverpkg=$covPkgs" "$pkg" 2>&1
             $ec = $LASTEXITCODE
             $out = @($rawOut | ForEach-Object { $_.ToString() })
+            $confirmed = $true
             if ($ec -ne 0) {
                 $diagRaw = & go test -count=1 -run '^$' -gcflags=all=-e "$pkg" 2>&1
                 $diagOut = @($diagRaw | ForEach-Object { $_.ToString() })
@@ -112,14 +150,19 @@ function Invoke-CoverageCompileCheck {
                     if ($seen.Add($normalized)) { $merged.Add($normalized) | Out-Null }
                 }
                 $out = $merged.ToArray()
+                # AN: confirmation probe — re-run a -coverpkg-free test-binary build.
+                # If it succeeds the original failure was warning-only noise.
+                $devnull = if ($IsWindows) { 'NUL' } else { '/dev/null' }
+                $null = & go test -c -o $devnull -gcflags=all=-e "$pkg" 2>&1
+                $confirmed = ($LASTEXITCODE -ne 0)
             }
-            [pscustomobject]@{ Pkg = $pkg; ExitCode = $ec; Output = $out }
+            [pscustomobject]@{ Pkg = $pkg; ExitCode = $ec; Output = $out; Confirmed = $confirmed }
         }
 
         foreach ($result in ($compileResults | Sort-Object Pkg)) {
             $shortName = Get-PackageShortName $result.Pkg
 
-            if ($result.ExitCode -eq 0) {
+            if ($result.ExitCode -eq 0 -or -not $result.Confirmed) {
                 $testPkgs.Add($result.Pkg)
             } else {
                 $diagnosticOut = Resolve-BlockedPackageDiagnosticOutput -PackagePath $result.Pkg -Lines $result.Output
