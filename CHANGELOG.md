@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.0.1] — 2026-05-07 — Unblock `osdetect` compile + drop nil-WinVer panic
+
+### Fixed
+- `osdetect/OsDetect_Uplift_test.go` referenced a non-existent `osdetect.IsWindows()` helper, blocking the whole `osdetect` package from compiling under coverage (1/81 packages blocked, dragging coverage to 9.1%). Replaced with the real `IsWindows10()` / `IsWindows11()` host-smoke calls.
+- Removed the `n.WinVer()` call on a nil `*WindowsSystemDetail`. `WinVer` reads `it.IsClient` / `it.IsServer` directly and is **not** nil-safe — the test panicked with SIGSEGV on Linux. Added a comment documenting the constraint.
+
+### Notes
+- Once `osdetect` compiles cleanly, its coverage should jump back up from the 9.1% reported during the blocked run to roughly the 70%+ delivered by AL2-08, unblocking the 75% gate locally on next `./run.ps1 TC`.
+
 ## [v1.0.0] — 2026-05-07 — Raise CI coverage gate 70% → 75%
 
 ### Changed
