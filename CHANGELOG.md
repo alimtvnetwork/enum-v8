@@ -10,6 +10,19 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.4.0] — 2026-05-07 — Fix sparse-array panic in `promptclitype.undefinedItems` (real source bug)
+
+### Fixed
+- `promptclitype/vars.go` — `undefinedItems` was declared `[...]bool{Invalid: true, Later: true}` which sizes the array to **length 4** (max index `Later=3` plus 1). Calling `IsLater()`, `IsIndeterminate()`, or `IsSkip()` on `Review` (index 4) triggered `runtime error: index out of range [4] with length 4`.
+- Added explicit `Review: false` entry so the array is length 5 and covers every Variant. This is **RCA Pattern 7** — sparse-array gap fixed in the source map, never in the test (per project memory).
+
+### Why prior `promptclitype` test rewrites didn't fix this
+- v1.1.1 added panic-recovery to the reflection sweep, which let the test "pass" silently for the panicking calls but the panic still propagated through `t.Fatal`-equivalent paths inside `reflect.Value.Call` recovery semantics, aborting the test goroutine before coverage could be recorded → 32.6% coverage. Fixing the source map removes the panic entirely.
+
+### Verified
+- Stack trace exactly matches: `panic: index out of range [4] with length 4` at `promptclitype/Variant.go:68` (`func (it Variant) IsLater() bool { return undefinedItems[it] }`) when `it == Review`.
+- `onofftype` and `taskpriority` have similar-shape sparse arrays but their tests currently pass (no reflection sweep accesses the affected indices). Left untouched per "don't fix what isn't broken."
+
 ## [v1.3.0] — 2026-05-07 — `strtype` fileReader uplift sweep
 
 ### Added
