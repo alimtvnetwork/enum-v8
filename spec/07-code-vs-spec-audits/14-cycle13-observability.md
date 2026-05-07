@@ -79,3 +79,38 @@ This makes §15 the **first cycle-on-first-pass to close at 100% with zero corre
 - Cycle row added: `2026-05-05 | 13 (baseline / closed) | 01-app/15-observability.md | 27 | 14 | 0 | 0 | 13 | 100.0% (verifiable)`
 - "Current MEASURED drift score" line gains §15 100.0; closed-section count goes from 10 → 11; baseline-only count stays at 2 (§07, §09).
 - Open drift findings: still _none_; ❓ tally 122 → 135 (+13 from §15).
+
+---
+
+## 6. AB-residual re-audit (Cycle 83, 2026-05-07) — upstream verification against `core-v9 v1.5.8`
+
+> **Method**: cloned upstream at `/tmp/core-v9-upstream` (tag `v1.5.8`); inspected `errcore/`, `coredata/corejson/`, `coretests/results/` directly. Promoted the 13 ❓ rows from §2.
+
+| #  | Original | New | Evidence |
+|----|----------|-----|----------|
+| 1  | ❓ | ❓ | Version provenance — still out-of-band, not source-checkable. |
+| 3  | ❓ | ✅ | `errcore/VarTwo.go:29` — `func VarTwo(isIncludeType bool, firstName string, firstValue any, secondName string, secondValue any) string`. |
+| 5  | ❓ | ✅ | `errcore/MessageVarMap.go:27` — `func MessageVarMap(message string, mappedItems map[string]any) string`. |
+| 6  | ❓→✅ | ✅ | `errcore/vars.go:29` `StackEnhance = stackTraceEnhance{}`. Methods include `Error`, `ErrorSkip`, `MsgToErrSkip`, `FmtSkip`, `Msg`, `MsgSkip`, `MsgErrorSkip`, `MsgErrorToErrSkip` (all on `errcore/stackTraceEnhance.go`). Spec's `StackEnhance.{Error,Msg}` shorthand is correct (both methods exist). |
+| 7  | ❓ | ✅ | `coretests/results/Result.go:43` defines `Result[T any]`; `ResultAssert.go:41` `var ExpectAnyError = …`; `Invoke.go:46` `InvokeWithPanicRecovery(...)` — full test-failure framing surface confirmed. |
+| 8  | ❓ | ⚠️ | `corejson` lives at **`coredata/corejson/`** (not top-level `corejson/`). `coredata/corejson/NewPtr.go:32` `func NewPtr(anyItem any) *Result` and `coredata/corejson/Result.go:193` `func (it *Result) PrettyJsonString() string` confirmed. Spec needs import-path fix. Filed as **D-CVS-54 (LOW — wrong import path; relates to D-CVS-33)**. |
+| 10 | ❓ | ⚠️ | Actual `var2WithTypeFormat` constant (`errcore/consts.go:45`) is `"(%s [t:%T], %s[t:%T]) = (%v, %v)"` — note **missing space** between `%s` and `[t:%T]` for the second var. Spec quotes a clean `"(a [t:int64], b [t:string]) = (...)"` form. Filed as **D-CVS-55 (LOW — format-string typo or doc rendering of upstream typo)**. |
+| 11 | ❓ | ✅ | `VarTwoNoType` delegates to `VarTwo(false, …)` (`errcore/VarTwoNoType.go:25`). Output format is `var2NoTypeFormat`-equivalent shape `"(a, b) = (...)"`. |
+| 12 | ❓ | ✅ | `MessageVarMap` accepts `mappedItems map[string]any` per `errcore/MessageVarMap.go:30`. |
+| 14 | ❓ | ✅ | `errcore/stackTraceEnhance.go` `Error`/`ErrorSkip`/`MsgErrorSkip`/`MsgErrorToErrSkip` all wrap with `methodName(skip)` + `trace(skip)` (file/line + partial stack). |
+| 18 | ❓ | ⚠️ | Test-failure shape — needs targeted probe of `coretests/results/Result.go` formatting and `coretests/messagePrinter.go`; surface exists but exact line-shape `Test #N — {scenario}: should be equal\n  expected: …\n  actual: …` not verbatim-confirmed in this cycle. Filed as **D-CVS-56 (LOW — verify formatter line shape)**. |
+| 25 | ❓ | ❓ | "Closes F-V16-01" feature-tracker provenance still out-of-band. |
+| 26 | ❓ | ✅ | `coretests/results/Result.go` `Result[T]` exposes `Error()`/`Message()` accessors on the assertion contract per `ResultAssert.go` — OTel pattern compatibility verified at API-shape level. |
+
+### Updated score row
+
+| Date       | Cycle | Spec audited                  | Claims | ✅ | ⚠️ | ❌ | ❓ | Score (verifiable) |
+|------------|-------|-------------------------------|--------|----|-----|----|----|--------------------|
+| 2026-05-07 | 83 (AB-residual) | `01-app/15-observability.md` | 27 | 22 | 3   | 0  | 2  | **22 / 25 = 88.0%** |
+
+### New findings opened (Cycle 83)
+
+- **D-CVS-54 (LOW)** — Spec import path `corejson` is wrong; real path is `coredata/corejson` (related to D-CVS-33).
+- **D-CVS-55 (LOW)** — Upstream `var2WithTypeFormat` has a missing space (`"%s[t:%T]"` for the second var). Spec quotes a cleaned-up form. Either fix the spec quote or file an upstream typo.
+- **D-CVS-56 (LOW)** — Verify `coretests/results/Result.go` formatter line shape matches the documented `"Test #N — {scenario}: should be equal\n  expected: …\n  actual: …"`.
+
