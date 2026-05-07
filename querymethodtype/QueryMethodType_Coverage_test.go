@@ -127,8 +127,8 @@ func TestQueryMethod_PtrAndBinders(t *testing.T) {
 	if p.AsJsonContractsBinder() == nil || p.AsJsoner() == nil {
 		t.Error("ptr binders nil")
 	}
-	if v.Json().IsEmpty() && v.JsonPtr() == nil {
-		t.Error("Json/JsonPtr broken")
+	if v.JsonPtr() == nil {
+		t.Error("JsonPtr nil")
 	}
 	jr := v.Json()
 	var dst Variant
