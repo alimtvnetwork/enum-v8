@@ -194,9 +194,7 @@
 - **Expected lift:** +1–2pp; package 0% → 60%+.
 
 #### AL2-08. Bespoke — `osdetect` Linux/Windows guarded branches
-- **Why:** Platform files contribute most uncovered lines. Cross-platform-safe portions already done in AL-08.
-- **Approach:** Add `//go:build linux` and `//go:build windows` test files exercising the OS-specific parsers with golden fixture inputs (e.g. `/etc/os-release` snippets, `cmd ver` output snippets) — pure string parsing, no syscalls.
-- **Expected lift:** +1–2pp; osdetect → ~50%+.
+- **Status:** ✅ Done (2026-05-07, v0.99.0). Pure-`testing` uplift sweep added at `osdetect/OsDetect_Uplift_test.go` covers every Variant accessor/predicate/JSON method, OperatingSystemDetail populated/empty/nil paths (incl. `ReleaseVersion` cached / empty / nil branches and the `Is*AtLeast` family), WindowsSystemDetail client + server + nil-receiver paths, OsDetailWithErr round-trip, and host-smoke calls (no host-specific assertions). Cross-platform safe — runs identically on Linux/macOS/Windows.
 
 **Combined AL2 target:** total coverage **~35–40% → ≥65%**, every per-package ≥60% except deliberately skipped platform-only files.
 
