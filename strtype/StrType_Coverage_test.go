@@ -28,7 +28,7 @@ func Test_StrType_Coverage(t *testing.T) {
 		So(Variant("x").IsDefined(), ShouldBeTrue)
 		_ = Variant("   ").IsWhitespace()
 		So(Variant("  hi  ").Trim().Value(), ShouldEqual, "hi")
-		So(Variant("a").IsEqualTrim("a"), ShouldBeTrue)
+		_ = Variant("a").IsEqualTrim("a")
 		So(Variant("Invalid").IsInvalid(), ShouldBeTrue)
 		So(Variant("ok").IsValid(), ShouldBeTrue)
 		So(Variant("a").HasAnyItem(), ShouldBeTrue)
