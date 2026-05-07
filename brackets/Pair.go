@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/alimtvnetwork/core-v9/constants"
-	"github.com/alimtvnetwork/core-v9/converters"
 )
 
 type Pair struct {
@@ -115,7 +114,6 @@ func (it Pair) WrapSkipOnExist(
 // fmt.Sprintf("%v", it) which calls back into String() (infinite recursion
 // → stack overflow). RCA pattern 9 (2026-05-07).
 func (it Pair) String() string {
-	_ = converters.AnyTo // retain import; helper still used elsewhere via package
 	return fmt.Sprintf(
 		"{Start:%s End:%s Category:%s}",
 		it.Start.String(),
