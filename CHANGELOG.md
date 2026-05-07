@@ -10,6 +10,27 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.7.0] — 2026-05-07 — `onofftype` uplift + defensive sparse-array patches
+
+### Fixed (preventive)
+- `onofftype/vars.go` — expanded `undefinedItems` from length 2 to length 4 (added explicit `On: false`, `Off: false`). Same RCA pattern 7 shape that caused the v1.4.0 `promptclitype` panic; preventive — no current callers reach the gap.
+- `taskpriority/vars.go` — expanded `lockEnforcedMap` from length 5 (sparse) to length 7, covering `Default`, `Reminder`, `Notification`, `LowerPriority`, `Invalid` explicitly. Preventive RCA pattern 7 fix.
+
+### Added
+- `onofftype/OnOffType_Uplift_test.go` — reflection sweep over all 4 Variants:
+  - Nullary method sweep with `recover()` (value + pointer receivers).
+  - JSON marshal/unmarshal round-trip.
+  - `New` / `NewMust` over 18 alias names (`yes`, `y`, `1`, `*`, `ask`, `n`, `no`, `0`, `Off`, bogus, empty…).
+  - `NewUsingBool`, `NewUsingAndBooleans` (0/1/2/3-arg variants), `NewUsingSetter` over all 7 `issetter` values.
+  - Cross-variant comparators (`IsByteValueEqual`, `IsValueEqual`, `IsNameEqual`, `IsAnyValuesEqual`, `IsAnyOf`, `IsAnyNamesOf`, `IsNameOf`).
+  - All `IsX` predicates (`IsLater`, `IsIndeterminate`, `IsSkip`, `IsAccept/Reject`, `IsYes/No`, `IsOn/Off`, `IsOnLogically/OffLogically`, `IsDefinedAccepted/Rejected`, `IsValid/Invalid`, …).
+  - Name accessors (`OnOffName`, `OnOffNameLower`, `TrueFalseName`, `NameLower`, `YesNoLower`, `Format`).
+  - Top-level helpers: `Min`, `Max`, `RangesInvalidErr`, `Is(name, variant)`.
+
+### Notes
+- Last `-tc` run: `onofftype` at **70.1%**. Expected lift: **~85%+**.
+
+
 ## [v1.6.0] — 2026-05-07 — `cmdenumtypes/rootcmdnames` reflection uplift sweep
 
 ### Added

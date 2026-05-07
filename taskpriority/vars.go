@@ -38,8 +38,13 @@ var (
 	}
 
 	lockEnforcedMap = [...]bool{
-		DefaultLock:  true,
-		SystemUpdate: true,
+		Default:       false,
+		DefaultLock:   true,
+		Reminder:      false,
+		Notification:  false,
+		SystemUpdate:  true,
+		LowerPriority: false,
+		Invalid:       false,
 	}
 
 	priorityMapString = converters.AnyTo.ValueString(
