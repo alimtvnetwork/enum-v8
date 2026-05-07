@@ -233,7 +233,7 @@ function Invoke-TestCoverage {
         }
         foreach ($result in ($coverResults | Sort-Object Pkg)) {
             $shortName = $result.Pkg -replace '.*(integratedtests|creationtests)/?', ''; if (-not $shortName) { $shortName = "(root)" }
-            if ($result.ExitCode -ne 0) {
+            if ($result.ExitCode -ne 0 -and -not (Test-IsCoverpkgWarningOnlyOutput $result.Output)) {
                 $overallExit = $result.ExitCode
                 Add-BuildErrorsForPackage $buildErrorsByPackage $shortName $result.Output
                 Add-RuntimeFailuresForPackage $runtimeFailuresByPackage $shortName $result.Output
