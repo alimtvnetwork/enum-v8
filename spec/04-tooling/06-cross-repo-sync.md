@@ -16,7 +16,7 @@ adaptations.
 
 Lovable can only edit files inside this project, so adapted copies
 intended for sister repos live under `cross-repo/<repo-name>/` and are
-copied across by a maintainer (see `cross-repo/core-v8/README.md` for
+copied across by a maintainer (see `cross-repo/core-v9/README.md` for
 the exact `cp` recipe — the directory intentionally retains its
 `core-v8` name even though the upstream import path is now `core-v9`,
 per Core memory).
@@ -79,7 +79,7 @@ maintainer should:
 3. Add a comment to the target-repo workflow header pointing back at
    this spec, e.g.:
    ```yaml
-   # Synced from github.com/alimtvnetwork/enum-v8/cross-repo/core-v8/
+   # Synced from github.com/alimtvnetwork/enum-v8/cross-repo/core-v9/
    # See: spec/04-tooling/06-cross-repo-sync.md
    ```
 
@@ -102,7 +102,7 @@ Once any of those lands, delete `cross-repo/` and update
 
 ## See Also
 
-- `cross-repo/core-v8/README.md` — concrete install recipe for the
+- `cross-repo/core-v9/README.md` — concrete install recipe for the
   current target. (Directory keeps `core-v8` name; import path is `core-v9`.)
 - [`01-ci-pipeline.md`](./01-ci-pipeline.md), [`02-release-pipeline.md`](./02-release-pipeline.md),
   [`03-vulnerability-scanning.md`](./03-vulnerability-scanning.md),

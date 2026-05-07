@@ -85,7 +85,7 @@ Results:
 
 Both lines describe historical era bumps (the v8→v9 rename) but render as nonsensical `core-v9 → core-v9`. Artifacts of the bulk `v8`→`v9` rewrite that the user invoked across all spec docs.
 
-**Fix**: rewrite to `core-v8` → `core-v9` (the legitimate historical reference). These are exactly the two spots where mentioning `core-v8` outside `cross-repo/core-v8/` is correct, since they describe a past migration boundary.
+**Fix**: rewrite to `core-v8` → `core-v9` (the legitimate historical reference). These are exactly the two spots where mentioning `core-v8` outside `cross-repo/core-v9/` is correct, since they describe a past migration boundary.
 
 ### D-CVS-27 — `tests/integratedtests/` (§4 line 108) — **LOW (path-string)**
 

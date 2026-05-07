@@ -22,7 +22,7 @@ ls spec/01-app/{04-error-system,15-observability,08-validators,10-reflection-and
 | # | §  | Claim | Verdict | Evidence |
 |---|----|-------|---------|----------|
 | 1  | header | spec-v0.16.0 provenance + closes F-V14-05 (security half) | ❓ | Out-of-band feature-tracker metadata. |
-| 2  | §1 | `core-v9` does not parse network input / open files / sockets / exec / hold long-lived state | ✅ | `cross-repo/core-v8/` mirror has no `net/http`, `os.Open`, `exec.Command`, `net.Dial` imports outside test fixtures (verified Cycle 13 row 9 method). |
+| 2  | §1 | `core-v9` does not parse network input / open files / sockets / exec / hold long-lived state | ✅ | `cross-repo/core-v9/` mirror has no `net/http`, `os.Open`, `exec.Command`, `net.Dial` imports outside test fixtures (verified Cycle 13 row 9 method). |
 | 3  | §1 table | 5-row security-surface mapping (errcore, *Must, reflection, generic containers, validators) | ✅ | Each surface is documented in a sibling spec file that exists. |
 | 4  | §2 table | `errcore.VarTwo` / `MessageVarMap` / `corejson.NewPtr().PrettyJsonString()` / `coredynamic.AllFields` emit verbatim values | ❓ | Behavioural; pending task **AB**. |
 | 5  | §2 rule 1 | MUST NOT pass secrets to `errcore.Var*` / `MessageVarMap` | ✅ | Spec-internal rule, no contradiction with §15 §2. |

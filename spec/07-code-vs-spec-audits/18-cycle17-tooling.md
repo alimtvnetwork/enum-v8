@@ -11,7 +11,7 @@
 Dual-dimension probe (same as Cycles 13–16):
 
 1. **Code-vs-spec** — confirm referenced workflow files exist (`.github/workflows/{ci,release,vulncheck,ci-guards,python-tests}.yml`), `cross-repo/<dir>/` actually exists with the documented layout, and the staged `cross-repo/` README path is reachable.
-2. **Spec-internal-consistency** — cross-refs resolve, no banned tokens (`enum-v1`, `enum-v2`, `enum-v3`, mojibake `core-v9 → core-v9`, `.lovable/user-preferences`), no contradiction with Core memory rule "the `cross-repo/core-v8/` directory intentionally keeps its `core-v8` name."
+2. **Spec-internal-consistency** — cross-refs resolve, no banned tokens (`enum-v1`, `enum-v2`, `enum-v3`, mojibake `core-v9 → core-v9`, `.lovable/user-preferences`), no contradiction with Core memory rule "the `cross-repo/core-v9/` directory intentionally keeps its `core-v8` name."
 
 ```bash
 rg -nc 'integratedtests|enum-v1|enum-v2|enum-v3|core-v9 → core-v9|\.lovable/user-preferences|cross-repo/core-v9' spec/04-tooling/*.md
@@ -20,7 +20,7 @@ ls cross-repo/ .github/workflows/ scripts/ci/ 2>&1
 
 **Result of the consumer probe:**
 - All 5 referenced workflows exist: `.github/workflows/{ci,ci-guards,python-tests,release,vulncheck}.yml`.
-- `cross-repo/` contains exactly **one** sub-directory: `cross-repo/core-v8/` — confirming the Core memory rule (the directory keeps its historical `core-v8` name even though the import path is now `core-v9`).
+- `cross-repo/` contains exactly **one** sub-directory: `cross-repo/core-v9/` — confirming the Core memory rule (the directory keeps its historical `core-v8` name even though the import path is now `core-v9`).
 - `scripts/ci/` exists (referenced by `06-cross-repo-sync.md` §2 "Out of scope").
 - `tests/creationtests/` exists; `tests/integratedtests/` does not exist in `enum-v8`.
 
@@ -31,7 +31,7 @@ ls cross-repo/ .github/workflows/ scripts/ci/ 2>&1
 | # | File | Claim | Verdict | Evidence |
 |---|------|-------|---------|----------|
 | 1  | 00-overview | spec-v0.7.0 (2026-05-04) status header | ❓ | Out-of-band metadata. |
-| 2  | 00-overview | Map table — 9 sub-spec rows with companion-code paths | ⚠️→✅ | **D-CVS-49** — row 06 cited `cross-repo/core-v9/` (broken — actual dir is `cross-repo/core-v8/`). Fixed inline this cycle with explicit Core-memory note. |
+| 2  | 00-overview | Map table — 9 sub-spec rows with companion-code paths | ⚠️→✅ | **D-CVS-49** — row 06 cited `cross-repo/core-v9/` (broken — actual dir is `cross-repo/core-v9/`). Fixed inline this cycle with explicit Core-memory note. |
 | 3  | 00-overview | Duplicate `02-` / `03-` / `04-` prefixes are intentional (paired specs) | ✅ | Note at line 28 explains; renumbering would break cross-refs. |
 | 4  | 00-overview | "Maintenance" §3 references `cross-repo/core-v9/` | ⚠️→✅ | **D-CVS-49** part 2 — same cross-repo path drift fixed inline. |
 | 5  | 00-overview | All 5 reading-path cross-refs resolve | ✅ | Verified — every `[NN — Title](./NN-...)` link targets a present file. |
@@ -53,8 +53,8 @@ ls cross-repo/ .github/workflows/ scripts/ci/ 2>&1
 | 21 | 04-ci-guards | Cross-ref to upstream `coding-guidelines-v20/spec/12 §03-reusable-ci-guards` | ✅ | URL well-formed. |
 | 22 | 05-branch-protection | Repo-admin guidance for branch protection rules | ✅ | Process spec; no API surface to verify. |
 | 23 | 06-cross-repo-sync | "`enum-v2` depends on `core-v9`" (line 11) | ⚠️→✅ | **D-CVS-51** — `enum-v2` is stale (project is now `enum-v8` after two renames). Fixed inline. |
-| 24 | 06-cross-repo-sync | "`cross-repo/core-v9/README.md`" (line 19) | ⚠️→✅ | **D-CVS-52** — broken path (actual dir is `cross-repo/core-v8/`). Fixed inline with Core-memory clarification. |
-| 25 | 06-cross-repo-sync | Comment template "Synced from github.com/alimtvnetwork/enum-v2/cross-repo/core-v9/" (line 80) | ⚠️→✅ | **D-CVS-53** — combines both stale tokens (`enum-v2` + `cross-repo/core-v9`). Fixed inline to `enum-v8/cross-repo/core-v8/`. |
+| 24 | 06-cross-repo-sync | "`cross-repo/core-v9/README.md`" (line 19) | ⚠️→✅ | **D-CVS-52** — broken path (actual dir is `cross-repo/core-v9/`). Fixed inline with Core-memory clarification. |
+| 25 | 06-cross-repo-sync | Comment template "Synced from github.com/alimtvnetwork/enum-v2/cross-repo/core-v9/" (line 80) | ⚠️→✅ | **D-CVS-53** — combines both stale tokens (`enum-v2` + `cross-repo/core-v9`). Fixed inline to `enum-v8/cross-repo/core-v9/`. |
 | 26 | 06-cross-repo-sync | "both `enum-v2` and `core-v9` calling it via `uses:`" (line 91) | ⚠️→✅ | **D-CVS-54** — `enum-v2` stale. Fixed inline to `enum-v8`. |
 | 27 | 06-cross-repo-sync | "See Also: `cross-repo/core-v9/README.md`" (line 103) | ⚠️→✅ | **D-CVS-55** — broken path. Fixed inline with Core-memory note. |
 | 28 | 06-cross-repo-sync | §3 sync rules (workflows are source of truth, deltas documented, `actionlint` gate) | ✅ | Spec-internal best practice; consistent with `04-tooling/01-ci-pipeline.md`. |
@@ -71,7 +71,7 @@ ls cross-repo/ .github/workflows/ scripts/ci/ 2>&1
 
 ### D-CVS-49 — `00-overview.md` cites `cross-repo/core-v9/` but directory is `core-v8/`
 
-**Severity:** LOW (broken link in landing index). **Locations:** lines 26 (Map table) + 80 (Maintenance §3). **Fix:** inline rewrite to `cross-repo/core-v8/` with explicit Core-memory note explaining the directory keeps its historical name even though the import path is `core-v9`.
+**Severity:** LOW (broken link in landing index). **Locations:** lines 26 (Map table) + 80 (Maintenance §3). **Fix:** inline rewrite to `cross-repo/core-v9/` with explicit Core-memory note explaining the directory keeps its historical name even though the import path is `core-v9`.
 
 ### D-CVS-50 — `04-bootstrap-into-new-repo.md` §7 doesn't name the `enum-v8` test-layout precedent
 
@@ -83,11 +83,11 @@ ls cross-repo/ .github/workflows/ scripts/ci/ 2>&1
 
 ### D-CVS-52 — `06-cross-repo-sync.md` line 19 cites broken `cross-repo/core-v9/README.md`
 
-**Severity:** LOW. **Fix:** inline rewrite to `cross-repo/core-v8/README.md` with Core-memory clarification.
+**Severity:** LOW. **Fix:** inline rewrite to `cross-repo/core-v9/README.md` with Core-memory clarification.
 
 ### D-CVS-53 — `06-cross-repo-sync.md` line 80 comment template combines two stale tokens
 
-**Severity:** LOW (the template is meant to be copy-pasted into other repos, so propagates the drift). **Fix:** inline rewrite of both `enum-v2 → enum-v8` and `cross-repo/core-v9 → cross-repo/core-v8`.
+**Severity:** LOW (the template is meant to be copy-pasted into other repos, so propagates the drift). **Fix:** inline rewrite of both `enum-v2 → enum-v8` and `cross-repo/core-v9 → cross-repo/core-v9`.
 
 ### D-CVS-54 — `06-cross-repo-sync.md` line 91 cites stale `enum-v2`
 
@@ -95,7 +95,7 @@ ls cross-repo/ .github/workflows/ scripts/ci/ 2>&1
 
 ### D-CVS-55 — `06-cross-repo-sync.md` line 103 "See Also" cites broken `cross-repo/core-v9/`
 
-**Severity:** LOW. **Fix:** inline rewrite to `cross-repo/core-v8/` with Core-memory clarification.
+**Severity:** LOW. **Fix:** inline rewrite to `cross-repo/core-v9/` with Core-memory clarification.
 
 > **Aggregate:** 7 LOW drifts (D-CVS-49 → D-CVS-55) raised + resolved in one cycle. No HIGH or MEDIUM drift, no contradictions. The 5 cross-repo-path drifts (D-CVS-49, -52, -53, -55) all stem from the same root cause: the spec text was written assuming `cross-repo/<dirname>` would mirror the import path (`core-v9`), but the actual convention (per Core memory) keeps the historical `core-v8` directory name. Cycle 17 makes the convention explicit at every cite site.
 
@@ -105,7 +105,7 @@ Specifically checked-and-clean (after fixes):
 - No `enum-v1` / `enum-v2` / `enum-v3` references remain (post-rename verified).
 - No mojibake `core-v9 → core-v9`.
 - No `.lovable/user-preferences` citations.
-- All `cross-repo/...` paths resolve (only `cross-repo/core-v8/` exists).
+- All `cross-repo/...` paths resolve (only `cross-repo/core-v9/` exists).
 - All `.github/workflows/*.yml` paths resolve.
 - All inter-spec cross-refs resolve.
 - No contradiction with the **`spec/01-app/` freeze** (`spec-v0.30.0`) — Cycle 17 touches only `spec/04-` files.
@@ -132,4 +132,4 @@ With Cycle 17, `spec/04-tooling/` is **baselined and closed at 100 % verifiable*
 
 - **AH** — `spec/04-tooling/` debt cleared this cycle. Final residual AH item: `spec/02-app-issues/02-internal-package-coverage-policy.md` (folds into Cycle 18).
 - **AB** — 8 ❓ workflow-internal claims need direct probes of `.github/workflows/*.yml` (release-pipeline triggers, dashboard rendering) and `scripts/*.psm1` (module loading). Not blocking; can fold into a future "workflows + scripts audit" cycle.
-- **Suggestion** — the 5 `cross-repo/core-v9 → cross-repo/core-v8` drifts (D-CVS-49, -52, -53, -55) point at a teaching-friction in the spec corpus: readers who know the import path is `core-v9` will instinctively type the wrong directory name. Consider adding a `cross-repo/core-v8/README.md` top-of-file note explaining the historical naming. Tracked in suggestions as **S-104**.
+- **Suggestion** — the 5 `cross-repo/core-v9 → cross-repo/core-v9` drifts (D-CVS-49, -52, -53, -55) point at a teaching-friction in the spec corpus: readers who know the import path is `core-v9` will instinctively type the wrong directory name. Consider adding a `cross-repo/core-v9/README.md` top-of-file note explaining the historical naming. Tracked in suggestions as **S-104**.

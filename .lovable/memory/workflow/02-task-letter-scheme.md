@@ -11,7 +11,7 @@
 
 | Letter | Task | Status |
 |---|---|---|
-| A | Manual `cross-repo/core-v8/` push | ⏭️ Manual |
+| A | Manual `cross-repo/core-v9/` push | ⏭️ Manual |
 | W | Upstream `core-v9` `go.mod` rename + `v1.5.8` tag | ✅ Done |
 | AA | Spec-audit cycles (next: Cycle 15 `spec/06-testing-guidelines/`) | 🔄 In Progress |
 | AB | Fetch upstream `core-v9` source for ❓ resolution | ⏳ Pending |

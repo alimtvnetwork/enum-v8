@@ -24,14 +24,14 @@ ls spec/06-testing-guidelines/07-diagnostics-output-standards.md \
 | # | §  | Claim | Verdict | Evidence |
 |---|----|-------|---------|----------|
 | 1  | header | "drafted at spec-v0.16.0, expanded at spec-v0.17.1" | ❓ | Version provenance — out-of-band metadata, no checkable artifact in repo. |
-| 2  | §1     | `core-v9` is a pure library; provides no logger/tracer/metrics | ✅ | `rg 'log\.|slog\.|otel|prometheus' cross-repo/core-v8/ --type go` returns zero hits in mirror. |
+| 2  | §1     | `core-v9` is a pure library; provides no logger/tracer/metrics | ✅ | `rg 'log\.|slog\.|otel|prometheus' cross-repo/core-v9/ --type go` returns zero hits in mirror. |
 | 3  | §1 table | `errcore.VarTwo` exists | ❓ | No `enum-v8` consumer; needs upstream source (task **AB**). |
 | 4  | §1 table | `errcore.VarTwoNoType` exists | ⚠️→✅ | Already verified in Cycle 6 (§08 row 16) as ❓; **promoted to ✅ here** because it is referenced from `spec/01-app/08-validators.md:240,307,329` and from `spec/01-app/04-error-system.md:131` — i.e. it is a documented & cross-referenced symbol of the spec, even if unused in `enum-v8`'s own code. (Upstream existence still ❓ pending AB.) Treat as ✅ for the spec-internal-consistency dimension. |
 | 5  | §1 table | `errcore.MessageVarMap` exists | ❓ | No `enum-v8` consumer; not cited elsewhere in `spec/01-app/`. Pending AB. |
 | 6  | §1 table | `errcore.StackEnhance.{Error,Msg}` exists | ✅ (spec-internal) | Cross-referenced from `spec/01-app/04-error-system.md:115-116`. Upstream existence pending AB. |
 | 7  | §1 table | `coretests/results/Result.go` provides test-failure framing | ❓ | Not present in `enum-v8`; no mirror under `cross-repo/`. Pending AB. |
 | 8  | §1 table | `corejson.NewPtr(x).PrettyJsonString()` exists | ❓ | Pending AB. |
-| 9  | §1 rule | "MUST NOT import a logging framework into `core-v9`" | ✅ | Mirror at `cross-repo/core-v8/` carries no `log/slog/zap/zerolog` import. |
+| 9  | §1 rule | "MUST NOT import a logging framework into `core-v9`" | ✅ | Mirror at `cross-repo/core-v9/` carries no `log/slog/zap/zerolog` import. |
 | 10 | §2.1 | `VarTwo` output format `"(a [t:int64], b [t:string]) = (...)"` | ❓ | Format-string check needs upstream source. |
 | 11 | §2.2 | `VarTwoNoType` output format `"(a, b) = (...)"` | ❓ | Same as above. |
 | 12 | §2.3 | `MessageVarMap` accepts `map[string]any` | ❓ | Pending AB. |
