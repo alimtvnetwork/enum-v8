@@ -10,6 +10,17 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.71.0] — 2026-05-07 — Task **AK** complete: new `httpmethodtype/` enum (recipe end-to-end validation)
+
+### Added
+- **`httpmethodtype/`** — new byte-backed enum (`Get`, `Post`, `Put`, `Patch`, `Delete`, `Head`, `Options`, `Invalid`) authored end-to-end following `spec/00-llm-integration-guide.md` §10 / `spec/01-app/29-enum-authoring-guide.md` recipe. 11 files: `Variant.go`, `vars.go`, `New.go`, `NewMust.go`, `Min.go`, `Max.go`, `Ranges.go`, `RangesInvalidErr.go`, `all-is-checkers.go`, `all-validation-checking-err.go`, `HttpMethodType_Constructor_test.go`. Includes domain predicates `IsSafe()`, `IsIdempotent()`, `IsBodyAllowed()` derived from RFC 7231/9110 semantics. Pattern-8 fix applied to `Min`/`Max` and `MinByte`/`MaxByte` (skip trailing `Invalid` sentinel).
+- **`tests/creationtests/allBasicEnumsCollection.go`** — registered `httpmethodtype.Invalid.AsBasicByteEnumContractsBinder()` so the new enum participates in the cross-cutting AllEnums_* test suites (Format, JSON round-trip, NumericRange, Predicates, ContractsTesting).
+
+### Notes
+- `go build ./httpmethodtype/...` ✅, `go test ./httpmethodtype/...` ✅, `go build ./tests/creationtests/...` ✅ — verified locally with go1.25.7 + `core-v9 v1.5.8`.
+- The recipe in §10 of the LLM guide is now proven complete: zero spec gaps encountered during authoring.
+- Closes Task **AK**.
+
 ## [v0.70.0] — 2026-05-07 — Cycle 20 walk-through audit: `spec/00-llm-integration-guide.md` (Task AA closed)
 
 ### Added

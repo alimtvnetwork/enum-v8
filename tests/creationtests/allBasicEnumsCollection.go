@@ -43,6 +43,7 @@ import (
 	"github.com/alimtvnetwork/enum-v7/dbdrivertype"
 	"github.com/alimtvnetwork/enum-v7/dbexposetype"
 	dbuserprivilegetype "github.com/alimtvnetwork/enum-v7/dbuserprivillegetype"
+	"github.com/alimtvnetwork/enum-v7/httpmethodtype"
 	"github.com/alimtvnetwork/enum-v7/eventtype"
 	"github.com/alimtvnetwork/enum-v7/instructiontype"
 	"github.com/alimtvnetwork/enum-v7/inttype"
@@ -103,6 +104,7 @@ var allBasicEnumsCollection = [...]enuminf.BasicEnumer{
 	dbdrivertype.Invalid.AsBasicByteEnumContractsBinder(),
 	dbuserprivilegetype.Invalid.AsBasicEnumContractsBinder(),
 	eventtype.Invalid.AsBasicByteEnumContractsBinder(),
+	httpmethodtype.Invalid.AsBasicByteEnumContractsBinder(),
 	
 	instructiontype.Invalid.AsBasicByteEnumContractsBinder(),
 	inttype.Variant(0).AsBasicEnumer(),
