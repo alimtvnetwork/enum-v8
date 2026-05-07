@@ -7,6 +7,6 @@ Communication style:
 
 Project-specific quirks the user expects the AI to know without re-asking:
 - Never propose anything email-related.
-- Never reintroduce `core-v8` outside `cross-repo/core-v8/`.
+- Never reintroduce `core-v8` outside `cross-repo/core-v9/`.
 - Never write `tests/integratedtests/` in new spec content.
 - The `go.mod` rename-bridge is BLOCKED until upstream `core-v9` ships a `module github.com/alimtvnetwork/core-v9` declaration. Don't propose alternative bridges that require non-existent predecessor tags.
