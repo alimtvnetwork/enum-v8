@@ -201,3 +201,24 @@ func TestOsDetect_OsDetailWithErr_JsonAndString(t *testing.T) {
 		t.Error("nil receiver should return empty string")
 	}
 }
+
+// Pattern-7: AllNameValues ↔ New round-trip (skips Invalid sentinel).
+func TestOsDetect_AllNameValuesRoundTrip(t *testing.T) {
+	names := osdetect.Invalid.AllNameValues()
+	if len(names) == 0 {
+		t.Fatal("AllNameValues empty")
+	}
+	for _, n := range names {
+		if n == "Invalid" {
+			continue
+		}
+		v, err := osdetect.New(n)
+		if err != nil {
+			t.Errorf("New(%q) error: %v", n, err)
+			continue
+		}
+		if v == osdetect.Invalid {
+			t.Errorf("New(%q) returned Invalid", n)
+		}
+	}
+}
