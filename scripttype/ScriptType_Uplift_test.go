@@ -114,7 +114,6 @@ func TestScriptType_UpliftAllSurface(t *testing.T) {
 	if OsDefaultScriptType() == Invalid {
 		t.Fatal("OsDefaultScriptType Invalid")
 	}
-	_ = OsDefaultScriptName()
 
 	// New / NewMust paths
 	if v, err := New("Bash"); err != nil || v != Bash {
