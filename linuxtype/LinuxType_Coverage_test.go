@@ -31,7 +31,7 @@ func TestLinuxType_GroupMaps(t *testing.T) {
 	if len(UbuntuServer.UbuntuServerMap()) == 0 {
 		t.Error("UbuntuServerMap empty")
 	}
-	if len(Ubuntu := UbuntuServer.UbuntuMap()); Ubuntu == 0 {
+	if len(UbuntuServer.UbuntuMap()) == 0 {
 		t.Error("UbuntuMap empty")
 	}
 	if len(DebianServer.DebianMap()) == 0 {
