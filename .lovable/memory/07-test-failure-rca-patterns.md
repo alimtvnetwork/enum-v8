@@ -135,3 +135,35 @@ When `./run.ps1 -tc` reports failing tests, walk this checklist FIRST before rea
 **Prevention:** When writing constructor tests, only pin results for names that appear verbatim in the package's `Ranges` slice. Treat all alias/shorthand inputs as exercise-only.
 
 **First observed:** 2026-05-06, Cycle 65 fix-up — affected `onofftype`.
+
+---
+
+## Pattern 5 — Inverted receiver/argument in level-comparison helpers
+
+**Symptom:** `IsAboveOrEqual` / `IsLowerOrEqual` (or similar level helpers) return the opposite of what the call-site name implies. E.g. `Error.IsAboveOrEqual(Notice) == false`.
+
+**Root cause:** Body compares `level.ValueByte() >= it.ValueByte()` (arg vs receiver) instead of `it.ValueByte() >= level.ValueByte()`. Easy to write by accident; both compile.
+
+**Fix recipe:** Always read as "receiver IS-(verb) argument" → `it OP level`. Real example: `nginxlogtype/Variant.go` (Cycle 84).
+
+---
+
+## Pattern 6 — Trailing `Invalid` sentinel makes `Min()` / `Max()` return the sentinel
+
+**Symptom:** `Min()` or `Max()` returns `Invalid`. Tests like `if Max() == Invalid { t.Error("Max should not be Invalid") }` fire.
+
+**Root cause:** Convention in this repo is `Invalid Variant = iota` FIRST (so 0 == Invalid). When a package puts `Invalid` LAST in the const block (e.g. `osarchs`, `scripttype`), `BasicEnumImpl.Max()` returns the highest byte == `Invalid`, and `Min()` defaulting to `Invalid` constant is wrong because `Invalid` is no longer 0.
+
+**Fix recipe:** When `Invalid` is the trailing sentinel, hand-write `Min()` to return the first real value (e.g. `Default`, `X32`) and `Max()` to return the last real value (e.g. `X64`) — do NOT use `BasicEnumImpl.Min()`/`Max()`. Real examples: `osarchs/Max.go`, `scripttype/Min.go` (Cycle 84).
+
+**Prevention:** Audit any package where `Invalid` is not the first const — every such package needs custom Min/Max.
+
+---
+
+## Pattern 7 — `AllNameValues()` returns `"Name(value)"` strings, not bare names
+
+**Symptom:** A coverage test loops `for _, name := range v.AllNameValues() { New(name) }` and every call fails with `"cannot find in the enum map"` for inputs like `"Root(1)"`, `"App(3)"`.
+
+**Root cause:** Upstream `enumimpl.AllNameValues` formats each entry with `constants.EnumNameValueFormat` == `"%s(%v)"`. Bare names go to the `Hashmap`, but `"Name(value)"` strings do not.
+
+**Fix recipe:** In the package's `New()`, after `BasicEnumImpl.GetValueByName` fails, strip a trailing `(...)` suffix and retry the lookup. Real example: `pathpatterntype/New.go` (Cycle 84). Pattern is generic — apply to any package whose coverage test round-trips `AllNameValues`.
