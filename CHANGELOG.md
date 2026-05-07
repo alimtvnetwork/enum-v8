@@ -10,6 +10,27 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.57.0] — 2026-05-07 — Cycle 86 — AB-residual: §12 tests-folder + CRITICAL regression D-CVS-64
+
+### Changed
+- `spec/07-code-vs-spec-audits/13-cycle12-tests-folder-walkthrough.md`: promoted **all 10 ❓ rows** against upstream `core-v9 v1.5.8` clone (`/tmp/core-v9-upstream`). Verifiable score 14/14 → **24/24 (100 %)**, 0 ❓ remaining.
+- Confirmed ✅ upstream: 92 `tests/integratedtests/` subfolders, all 4 `tests/testwrappers/` packages (`stringstestwrapper`, `chmodhelpertestwrappers`, `coredynamictestwrappers`, `corevalidatortestwrappers`), `coretests.GetAssert` with 13+ documented methods, `coretestcases.CaseV1` exact type-alias cast.
+
+### Discovered
+- **D-CVS-64 — CRITICAL REGRESSION**: prior cycles (1, 3, 6, 9, 10, 11, 12) treated `tests/integratedtests/` as stale and rewrote the spec to `tests/creationtests/`. Upstream actually *has* `tests/integratedtests/` with 92 subfolders; `tests/creationtests/` is just one of those 92 (and also the top-level convention used by `enum-v5` consumer). Spec rewrites C-CVS-01 / D-CVS-17 / D-CVS-26 / D-CVS-27 / D-CVS-32 / D-CVS-36 / D-CVS-39 / D-CVS-40 / D-CVS-41 are now wrong in the opposite direction. AJ-NEW HIGH: rewrite §1/§3/§5 of `14-tests-folder-walkthrough.md`, §8 of `01-package-map.md`, line 183 of `02-design-philosophy.md` to keep upstream `tests/integratedtests/` AND add `enum-v5` redirect to `creationtests/`.
+- **D-CVS-65 — LOW**: filename typo, spec says `TextValidatorWrapper.go`, actual is `TextValidatorsWrapper.go` (plural).
+
+### Remaining Tasks
+- **AB residual** ⭐ Next pick: §09 versioning (11 ❓), §10 cmd-entrypoints (10 ❓), §11 testing-patterns (10 ❓), §02 error-system (6 ❓)
+- **AJ-NEW HIGH** — apply spec fixes from D-CVS-26..65 (now **5 CRITICAL** including D-CVS-64, **11 HIGH**, plus LOW/MEDIUM); §16 still rewrite-required
+- **Pattern-6 / Pattern-7 audits** — sweep `Invalid` not first const, and `AllNameValues` round-trip in test files
+- **AA / Cycles 16–20** — audit remaining spec dirs
+- **AI** — mark `spec/01-app/` as frozen
+- **AK** — new enum recipe validation
+- **A** — manual `cross-repo/core-v8/` push
+
+---
+
 ## [v0.56.0] — 2026-05-07 — Cycle 85 — AB-residual: re-audit §16 security
 
 ### Changed
