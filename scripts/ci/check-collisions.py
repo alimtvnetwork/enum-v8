@@ -100,6 +100,7 @@ def parse_decls(path: Path):
     in_raw = False        # inside `...` (Go raw string)
     in_block_comment = False
     block_kind: str | None = None  # "const" or "var" if inside ( ... )
+    brace_depth = 0       # only top-level (depth==0) decls count
 
     try:
         text = path.read_text(encoding="utf-8", errors="replace")
