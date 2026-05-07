@@ -32,8 +32,9 @@ Read the spec end-to-end, extracted every checkable claim, then verified each ag
 | 21 | `00-repo-overview.md` exists | See Also | ✅ Match | present | ✅ Match |
 | 22 | `/cmd/README.md` exists & describes `bin/main` | (post-fix added) | ✅ Match | verified | ✅ Match |
 
-**Total:** 22 claims · baseline 9 ✅ / 3 ⚠️ / 4 ❌ / 6 ❓ → **56.3 % verifiable** ([9/(22-6)] excluding ❓ subsumed; raw 9/16 = 56.3 %).
-**Post-fix:** 16 ✅ / 0 ⚠️ / 0 ❌ / 6 ❓ → **100 % verifiable**.
+**Total:** 22 claims · baseline 9 ✅ / 3 ⚠️ / 4 ❌ / 6 ❓ → **56.3 % verifiable**.
+**Post-Cycle-10 fix:** 16 ✅ / 0 ⚠️ / 0 ❌ / 6 ❓ → **100 % verifiable**.
+**Cycle 89 AB-residual:** 14 ✅ / 4 ⚠️ / 3 ❌ / 1 ❓ (#20 latent) → **21/22 = 95.5 % verifiable**. 3 fabricated/drift findings opened (D-CVS-70/71/72).
 
 ## Findings opened & closed in this cycle
 
