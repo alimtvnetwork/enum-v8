@@ -106,3 +106,19 @@ Comment says `V8 // 8 (current era — core-v9)`. **Fix**: rewrite to `V8 // 8 (
 1. Apply the 4 fixes above to `spec/01-app/11-versioning.md` (done in this cycle).
 2. Update scoreboard with Cycle 9 baseline + closed rows; add resolved findings C-CVS-09a/b, D-CVS-27, D-CVS-30, D-CVS-31.
 3. Continue to Cycle 10 → `12-cmd-entrypoints.md` on next `next`.
+
+---
+
+## 6. Cycle 88 AB-residual findings (new)
+
+### D-CVS-66 — `coreversion.Parse(s)` does not exist — **HIGH (fabricated API)**
+Real construction surface: `coreversion.New.Major(...)`, `MajorMinor(...)`, `MajorMinorPatch(...)`, `MajorMinorPatchBuild(...)`, plus `MajorInt`/`MajorMinorInt`/`MajorMinorPatchInt` integer variants (see `/tmp/core-v9-upstream/coreversion/newCreator.go`).
+
+### D-CVS-67 — `Version.Major()/Minor()/Patch() int` does not exist — **HIGH (fabricated API)**
+Real accessors return `string`: `MajorString()`, `MinorString()`, `PatchString()`, `BuildString()` on `*Version` (`Version.go:108-132`). The methods named `Major`/`MajorMinor`/`MajorMinorPatch` on `Version` are **comparators** that return `corecomparator.Compare`, not int accessors.
+
+### D-CVS-68 — `Version.{LessThan,Equal,GreaterThanOrEqual}` do not exist — **HIGH (fabricated API)**
+Real method names (`Version.go:518-546`): `IsEqual`, `IsLeftLessThan`, `IsLeftGreaterThan`, `IsLeftLessThanOrEqual`, `IsLeftGreaterThanOrEqual`. Spec must be rewritten to use the actual `IsLeft*` family.
+
+### D-CVS-69 — `versionindexes.V1..V8` is fabricated; constants are component indexes — **CRITICAL**
+Upstream `enums/versionindexes/Index.go:33-39` defines `Major(0)`, `Minor(1)`, `Patch(2)`, `Build(3)`, `Invalid(4)` — these index a Version's *components*, not consecutive `core-vN` *eras*. The §2 era-counter narrative in the spec is completely invented. Rewrite §2 to describe component indexing; drop the era-counter framing entirely.
