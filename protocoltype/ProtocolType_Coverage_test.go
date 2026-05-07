@@ -20,8 +20,8 @@ func TestProtocolType_MinMax(t *testing.T) {
 	if !Invalid.IsInvalid() || Invalid.IsValid() {
 		t.Error("invalid predicate wrong")
 	}
-	if !Tcp.IsValid() || !Tcp.IsAnyOf(Tcp, Udp) {
-		t.Error("valid/IsAnyOf wrong")
+	if !Tcp.IsValid() || !Tcp.IsAnyValuesEqual(byte(Tcp), byte(Udp)) {
+		t.Error("valid/IsAnyValuesEqual wrong")
 	}
 }
 
