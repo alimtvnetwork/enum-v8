@@ -10,6 +10,13 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.40.0] — 2026-05-07 — Cycle 68 — AL2-02 Batch B coverage uplift (DB family)
+
+### Added
+- New coverage suites for the DB family: `dbexposetype/DbExposeType_Coverage_test.go`, `resauthtype/ResAuthType_Coverage_test.go`, `sqljointype/SqlJoinType_Coverage_test.go`, `dbuserprivillegetype/DbUserPrivilegeType_Coverage_test.go`. Exercise New/NewMust/Min/Max/RangesInvalidErr, every Is* predicate (incl. logical-group maps), all numeric/string accessors, JSON round-trip, and As*-binder surface. `dbuserprivilegetype` suite also asserts the seven `notImplemented()` panics so coverage reflects intended behaviour.
+
+---
+
 ## [v0.39.0] — 2026-05-07 — Cycle 67 — Bulk rename enum-v6 → enum-v7
 
 ### Changed
