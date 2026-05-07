@@ -12,17 +12,17 @@ Read the spec end-to-end, extracted every checkable claim, then verified each ag
 | 1 | "AI agents writing tests for `core-v9`" — implies upstream-only | §header line 5 | ⚠️ Drift (**D-CVS-38**) | spec lives in `enum-v7` and reads as authoritative for both | ✅ Match — added explicit consumer-coverage callout naming the upstream-only types and pointing `enum-v7` readers at `creationtests` |
 | 2 | Cross-ref `/spec/06-testing-guidelines/` exists with 9 files | §intro line 7 | ✅ Match | `01-folder-structure.md`..`09-creating-custom-cases.md` + README = 10 files | ✅ Match |
 | 3 | Cross-ref `14-tests-folder-walkthrough.md` exists | §intro line 7 | ✅ Match | present | ✅ Match |
-| 4 | Style A example uses `coretestcases.CaseV1` + `args.Map` | §1 row A, §2 | ❓ Unverifiable (`enum-v7`); ❓ upstream | zero `enum-v7` consumers (`rg coretestcases.CaseV1` → 0 hits) | ❓ Unverifiable (→ AB) |
-| 5 | Style B example uses `coretests.BaseTestCase` + `[]testWrapper` | §1 row B, §3 | ❓ Unverifiable | zero `enum-v7` consumers | ❓ Unverifiable (→ AB) |
-| 6 | Style C example uses `args.Map.ShouldBeEqual` | §1 row C, §4 | ❓ Unverifiable | zero `enum-v7` consumers | ❓ Unverifiable (→ AB) |
-| 7 | Style D example uses `coretests.GetAssert` | §1 row D, §5 | ❓ Unverifiable | zero `enum-v7` consumers | ❓ Unverifiable (→ AB) |
+| 4 | Style A example uses `coretestcases.CaseV1` + `args.Map` | §1 row A, §2 | ❓ Unverifiable (`enum-v7`); ❓ upstream | zero `enum-v7` consumers (`rg coretestcases.CaseV1` → 0 hits) | ✅ Match (Cycle 90 AB) — `coretests/coretestcases/` declares `type CaseV1 coretests.BaseTestCase`; `coretests/args/` declares `type Map map[string]any` |
+| 5 | Style B example uses `coretests.BaseTestCase` + `[]testWrapper` | §1 row B, §3 | ❓ Unverifiable | zero `enum-v7` consumers | ✅ Match (Cycle 90 AB) — `coretests/BaseTestCase.go` declares `type BaseTestCase struct{...}` |
+| 6 | Style C example uses `args.Map.ShouldBeEqual` | §1 row C, §4 | ❓ Unverifiable | zero `enum-v7` consumers | ✅ Match (Cycle 90 AB) — `func (it Map) ShouldBeEqual(...)` defined in `coretests/args/` |
+| 7 | Style D example uses `coretests.GetAssert` | §1 row D, §5 | ❓ Unverifiable | zero `enum-v7` consumers | ✅ Match (Cycle 90 AB) — `coretests/vars.go` declares `GetAssert = getAssert{}` |
 | 8 | Style D example: `tests/integratedtests/GetAssert_*_test.go` | §1 row D line 20 | ⚠️ Drift (**D-CVS-37**) | folder doesn't exist; correct upstream is `tests/creationtests/GetAssert_*_test.go` | ✅ Match — rewritten + cross-ref to D-CVS-37 |
 | 9 | Cross-ref `/spec/02-app-issues/01-style-b-style-a-coexistence.md` exists | §1 line 22 | ✅ Match | present | ✅ Match |
 | 10 | Cross-ref `/spec/06-testing-guidelines/02-test-case-types.md` exists | §2 line 28 | ✅ Match | present | ✅ Match |
-| 11 | `stringstestwrapper.StringsTestWrapper` exists | §3.1 line 88 | ❓ Unverifiable | upstream | ❓ Unverifiable (→ AB) |
-| 12 | `coretests.VerifyTypeOf` exists with the listed fields | §3.2 line 97 | ❓ Unverifiable | upstream | ❓ Unverifiable (→ AB) |
+| 11 | `stringstestwrapper.StringsTestWrapper` exists | §3.1 line 88 | ❓ Unverifiable | upstream | ✅ Match (Cycle 90 AB) — `tests/testwrappers/stringstestwrapper/` declares `type StringsTestWrapper struct{...}` |
+| 12 | `coretests.VerifyTypeOf` exists with the listed fields | §3.2 line 97 | ❓ Unverifiable | upstream | ✅ Match (Cycle 90 AB) — `coretests/VerifyTypeOf.go` declares `type VerifyTypeOf struct{...}` |
 | 13 | `issetter.True` is the required boilerplate | §3.2 line 117 | ✅ Match | `issetter` is imported at `tests/creationtests/allEnumGeneralTestCases.go:7` and `osgroupexecution/Precedence.go` etc. — symbol exists | ✅ Match |
-| 14 | `coretestcases.CaseV1(testCase.BaseTestCase)` cast idiom is valid | §3.3 line 141 | ❓ Unverifiable | upstream | ❓ Unverifiable (→ AB) |
+| 14 | `coretestcases.CaseV1(testCase.BaseTestCase)` cast idiom is valid | §3.3 line 141 | ❓ Unverifiable | upstream | ✅ Match (Cycle 90 AB) — `CaseV1` is a `type CaseV1 coretests.BaseTestCase` rename, so the conversion is a legal Go type conversion (identical underlying struct) |
 | 15 | Cross-ref `/spec/06-testing-guidelines/03-args-reference.md` exists | §4 line 176 | ✅ Match | present | ✅ Match |
 | 16 | Per-package layout: `tests/integratedtests/footests/` | §6 line 201 | ⚠️ Drift (**D-CVS-36**, 6th occurrence) | actual upstream layout is `tests/creationtests/footests/`; `enum-v7` has no per-pkg `*tests/` folders at all | ✅ Match — §6 retitled "upstream `core-v9`", path corrected, NEW §6.1 added documenting the `enum-v7`-specific `creationtests` layout file-by-file |
 | 17 | Cross-ref `/spec/06-testing-guidelines/01-folder-structure.md` exists | §6 line 219 | ✅ Match | present | ✅ Match |
@@ -34,7 +34,8 @@ Read the spec end-to-end, extracted every checkable claim, then verified each ag
 | 23 | `spec/01-app/README.md` line 25 references `tests/integratedtests/` | (collateral) | ⚠️ Drift (collateral, in-scope) | line 25 stale | ✅ Match — rewritten to `tests/creationtests/ (this module) + upstream tests/testwrappers/` |
 
 **Total:** 23 claims · baseline 11 ✅ / 4 ⚠️ / 0 ❌ / 8 ❓ → **73.3 % verifiable** (11/15).
-**Post-fix:** 15 ✅ / 0 ⚠️ / 0 ❌ / 8 ❓ → **100 % verifiable**.
+**Post-fix (cycle 11):** 15 ✅ / 0 ⚠️ / 0 ❌ / 8 ❓ → **100 % verifiable** subset.
+**Cycle 90 AB-residual:** 23 ✅ / 0 ❓ → **100 % verifiable** (23/23). All 8 prior ❓ resolved against upstream `core-v9 v1.5.8`. No new D-CVS findings.
 
 ## Findings opened & closed in this cycle
 
