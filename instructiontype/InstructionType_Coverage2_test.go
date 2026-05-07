@@ -95,8 +95,8 @@ func Test_InstructionType_Coverage2(t *testing.T) {
 		So(Scoping.EnumType(), ShouldNotBeNil)
 		So(Scoping.Format("{name}"), ShouldNotBeBlank)
 		So(Scoping.ToNumberString(), ShouldNotBeBlank)
-		So(Scoping.OnlySupportedErr("Scoping"), ShouldBeNil)
-		So(Scoping.OnlySupportedMsgErr("ctx", "Scoping"), ShouldBeNil)
+		So(Scoping.OnlySupportedErr("Scoping"), ShouldNotBeNil)
+		So(Scoping.OnlySupportedMsgErr("ctx", "Scoping"), ShouldNotBeNil)
 		So(Scoping.IsAnyNamesOf("Scoping"), ShouldBeTrue)
 	})
 
