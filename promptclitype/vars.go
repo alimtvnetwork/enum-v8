@@ -17,9 +17,14 @@ var (
 		Review:  "Review",
 	}
 
+	// NOTE: must include every Variant index (Review = 4) so the array is
+	// length 5. Omitting Review caused index-out-of-range panics in
+	// IsLater / IsIndeterminate / IsSkip when called on Review (RCA pattern 7:
+	// sparse-array gap — fix in source map, never in test).
 	undefinedItems = [...]bool{
 		Invalid: true,
 		Later:   true,
+		Review:  false,
 	}
 
 	lowerCaseNames = map[Variant]string{
