@@ -1,5 +1,26 @@
 # Test Failure RCA Patterns
 
+## Pattern 9 — `Stringer` infinite recursion via `converters.AnyTo.ValueString(self)` (added 2026-05-07)
+
+**Symptom:** A package's tests crash with `fatal error: stack overflow`, the trace alternating between `runtime/fmt/print.go` frames and one specific source line, e.g. `brackets/Pair.go:114` or `brackets/BothBrackets.go:100`. Go test runner reports it as a runtime failure for the package even though no `t.Error` was called.
+
+**Root cause:** A `func (it T) String() string` implementation that returns `converters.AnyTo.ValueString(it)`. The helper falls through to `fmt.Sprintf("%v", it)`, which invokes the type's own `String()` method again — infinite recursion → stack overflow.
+
+**Fix:** Never call `converters.AnyTo.ValueString` (or any `%v`/`fmt.Sprint` formatter) on the receiver inside a `String()` method. Always format the struct's fields explicitly:
+
+```go
+func (it Pair) String() string {
+    return fmt.Sprintf("{Start:%s End:%s Category:%s}",
+        it.Start.String(), it.End.String(), it.Category.String())
+}
+```
+
+**Detection sweep:** `rg "converters\.AnyTo\.ValueString" --type go | rg -v _test.go` — review every hit; any one that passes `it`, `*it`, or the receiver's value to a `String()`/`MarshalJSON` method is a recursion bomb.
+
+**Manifested as:** `brackets` package reported as RUNTIME FAILURE with stack overflow originating in `Pair.String` and `BothBrackets.String` (v1.14.0 fix).
+
+---
+
 ## Pattern 8 — `-coverpkg` warning-only false-positive (added 2026-05-07)
 
 **Symptom:** Packages reported as `Blocked` in pre-coverage compile check, or as `RUNTIME FAILURE` after the coverage run, but the captured diagnostic contains ONLY repeated lines like:
