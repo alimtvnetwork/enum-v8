@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.0.0] — 2026-05-07 — Raise CI coverage gate 70% → 75%
+
+### Changed
+- **`.github/workflows/ci.yml`** — coverage gate threshold raised from `70%` to `75%`. Headroom: after AL2-08 (`osdetect` uplift, v0.99.0) on top of v0.95.0 (`strtype`) and v0.96.0 (eventtype/httpmethodtype/scripttype), `total` now sits comfortably ≥77%. Step name (`Coverage gate (75%)`), `awk` threshold, and error message updated in lock-step.
+
+### Notes
+- This is the third tightening cycle: 60% → 65% (v0.94.0) → 70% (v0.97.0) → 75% (v1.0.0). Further bumps require an AL2 verification pass via `-tc` and any newly-spawned bespoke tasks.
+- Marks **v1.0.0** — all Phase-3 (AL2) coverage uplift work and Phase-2 cross-spec sweep (AH) are landed; Phase-2 freeze-gated work (AJ-NEW) and Phase-4 manual tasks (A) remain.
+
 ## [v0.99.0] — 2026-05-07 — AL2-08 osdetect coverage uplift
 
 ### Added
