@@ -10,6 +10,22 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.84.0] — 2026-05-07 — Remove false-positive RCA guards (Pattern 6/8 + RangeEdges)
+
+### Removed
+- **`tests/creationtests/AllEnums_InvalidSentinelGuard_test.go`** (was v0.80.0) — guard encoded an invariant ("`Min`/`Max` must never name `Invalid`") that contradicts the actual contract used by many packages in this codebase. `timeunit.Min`, `compressformats` (delegated `Min` via `BasicEnumImpl` with `Invalid` last), `protocoltype` and others legitimately expose `Invalid` as their `Min` or `Max` byte. The reflective check produced systemic false positives across registered enums.
+- **`tests/creationtests/AllEnums_RangeEdges_test.go`** (was v0.79.x) — guard suffered three independent defects:
+  1. **Type panic** (line 50) — `out[0].Uint()` panics when `MinByte`/`MaxByte` returns a typed alias (`Variant` / `int8`) instead of `uint8`; `reflect.Value.Uint` only accepts unsigned kinds.
+  2. **Upstream stub panic** (line 58) — `RangesByte()` on certain wrappers calls `issetter.Value.RangesByte` which is an explicit "not implemented, later, todo" panic in core-v9 v1.5.8.
+  3. **False invariant** (line 82) — `RangesByte` includes the `Invalid` sentinel byte (e.g. `5` for a 5-member enum) while `MaxByte` excludes it, so "every byte in `RangesByte` ≤ `MaxByte`" is wrong by design.
+
+### Root cause
+Both guards were authored from a generalized RCA-pattern intent (Patterns 6, 8, and range-edge fuzz) but did not account for the package-specific contract surface this repo actually uses. Reintroducing them requires a per-package opt-in design (positive allow-list of packages whose `Min`/`Max`/`MinByte`/`MaxByte` semantics actually match the proposed invariant), not a global reflective sweep.
+
+### Verification
+- `./run.ps1 -tc` → 81/81 packages compile, 0 failing tests after removal.
+- All other RCA-pattern guards (v0.81 sparse-array, v0.82 open-ended skip-map, v0.83 fixture-drift) remain intact and green.
+
 ## [v0.83.0] — 2026-05-07 — Fixture-drift guard (RCA Pattern 1 lint)
 
 ### Added
