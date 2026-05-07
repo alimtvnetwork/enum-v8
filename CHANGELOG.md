@@ -10,6 +10,24 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.51.0] — 2026-05-07 — Cycle 80 — AB-residual: re-audit §09 converters
+
+### Changed
+- `spec/07-code-vs-spec-audits/08-cycle7-converters.md`: appended §6
+  AB-residual re-audit verified against upstream `core-v9 v1.5.8`. Promoted
+  21 of 23 ❓ rows; verifiable score moves from baseline N/A to
+  **6 / 21 = 28.6 %**. Nine new findings filed: **D-CVS-37** (CRITICAL —
+  entire `typesconv` numeric-conversion surface fictitious; real package is
+  pointer-utility helpers), **D-CVS-40** (HIGH — `StringTo.Bool` does not
+  exist), **D-CVS-38** / **D-CVS-39** / **D-CVS-41** / **D-CVS-44** (LOW),
+  **D-CVS-42** / **D-CVS-43** / **D-CVS-45** (MEDIUM).
+
+### Notes
+- Re-audit basis: upstream `core-v9` clone at `/tmp/core-v9-upstream` tag
+  `v1.5.8`. Audit-report-only update — no spec body rewrites this cycle.
+
+---
+
 ## [v0.50.0] — 2026-05-07 — Cycle 79 — AC: re-audit §07 / §09 against upstream `core-v9 v1.5.8`
 
 ### Changed
