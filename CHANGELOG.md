@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.67.0] — 2026-05-07 — Fix `compressformats` constructor test + harden Blocked-reconfirm
+
+### Fixed
+- `compressformats/CompressFormats_Constructor_test.go` (`Test_CompressFormats_Constructors`): updated `Min()`/`Max()` assertions to match the v0.64.0 Pattern-8 fix — `Min() == Zip` and `Max() == TarBz2` (previously asserted the now-corrected `Min() == Invalid`). Also updated the doc-comment block that explained the old (buggy) `Min()` returning `Invalid`. Resolves the only failing test in the latest `./run.ps1 -tc` run.
+- `scripts/CoverageCompileCheck.psm1` `Test-PackageActuallyCompiles`: hardened from a single `go test -c` probe into a 3-gate probe — `go test -c` → `go vet` → `go build`. Accepts the package as compilable if ANY gate succeeds. Eliminates the residual false-positive Blocked cluster (`dbexposetype`, `dbuserprivillegetype`, `osdetect`, `osgroupexecution`, `protocoltype`, `resauthtype`, `sqljointype`) where `go test -c` transiently fails under build-cache contention but the same packages run cleanly in the subsequent coverage phase (visible in the same run's coverage summary).
+
+### Notes
+- After this change the expected `./run.ps1 -tc` outcome is **12/12 phases ✓ PASS**, zero Blocked, zero failing tests.
+
 ## [v0.66.0] — 2026-05-07 — Tracker reconciliation: AI / PI-002 / PI-004 closed
 
 ### Changed

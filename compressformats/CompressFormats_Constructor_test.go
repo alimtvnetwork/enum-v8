@@ -8,10 +8,10 @@ import (
 
 // AL-05: Constructor surface coverage for compressformats.
 //
-// Note: in this package the iota ordering is unusual — `Invalid = 5` is the
-// largest underlying byte while `Min()` is hand-written to return `Invalid`.
-// We therefore do NOT assert `int(Max()) >= int(Min())` here; we only check
-// that the constructors and bounds return sensible Variants.
+// Note: iota ordering is unusual — `Invalid = 5` is the largest underlying
+// byte. As of v0.64.0 (Pattern-8 fix) `Min()` returns `Zip` (the first real
+// member, iota 0) and `Max()` returns `TarBz2` (the last real member),
+// bypassing the trailing-Invalid sentinel defect in BasicEnumImpl.
 func Test_CompressFormats_Constructors(t *testing.T) {
 	knownNames := []string{"Zip", "Tar", "TarGZ", "TarXZ", "TarBz2", "Invalid"}
 
@@ -37,8 +37,8 @@ func Test_CompressFormats_Constructors(t *testing.T) {
 	})
 
 	Convey("compressformats.Max / Min / RangesInvalidErr", t, func() {
-		So(Min(), ShouldEqual, Invalid)
-		So(Max().IsValid() || Max() == Invalid, ShouldBeTrue)
+		So(Min(), ShouldEqual, Zip)
+		So(Max(), ShouldEqual, TarBz2)
 		So(RangesInvalidErr(), ShouldNotBeNil)
 	})
 }
