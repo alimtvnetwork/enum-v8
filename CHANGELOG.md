@@ -10,6 +10,13 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.62.0] — 2026-05-07 — Cycle 90 — AB-residual: §13 testing-patterns
+
+### Changed
+- `spec/07-code-vs-spec-audits/12-cycle11-testing-patterns.md`: promoted all 8 ❓ rows against upstream `core-v9 v1.5.8`. Verifiable score 15/15 → **23/23 (100%)**. No new D-CVS findings.
+- Verified upstream: `coretests/coretestcases/` declares `type CaseV1 coretests.BaseTestCase` (rows 4 + 14), `coretests/args/` declares `type Map map[string]any` and `func (Map) ShouldBeEqual(...)` (rows 4 + 6), `coretests/BaseTestCase.go` (row 5), `coretests/vars.go` declares `GetAssert = getAssert{}` (row 7), `tests/testwrappers/stringstestwrapper/StringsTestWrapper.go` (row 11), `coretests/VerifyTypeOf.go` (row 12).
+- This completes the AB-residual sweep (cycles 88–90): all 4 cycles' ❓ rows resolved (§09 versioning, §10 cmd-entrypoints, §02 error-system, §13 testing-patterns).
+
 ## [v0.61.0] — 2026-05-07 — Cycle 90 — AB-residual: §02 error-system
 
 ### Changed
