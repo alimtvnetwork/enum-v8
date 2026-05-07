@@ -33,6 +33,15 @@ import (
 //
 // Skip notes: none. The interface contract for these methods is uniform.
 
+// Skip notes:
+//   - inttype.Variant / strtype.Variant: their OnlySupportedErr impls are
+//     unimplemented stubs that panic with "not implemented for generic
+//     {int,string} enum". Skipped from the OnlySupportedErr block only.
+var formatAndSupportSkipOnlySupported = map[string]string{
+	"inttype.Variant": "OnlySupportedErr panics: not implemented for generic int enum",
+	"strtype.Variant": "OnlySupportedErr panics: not implemented for generic string enum",
+}
+
 func Test_AllEnums_FormatAndSupport(t *testing.T) {
 	const fmtTemplate = "Enum of {type-name} - {name} - {value}"
 
@@ -40,6 +49,7 @@ func Test_AllEnums_FormatAndSupport(t *testing.T) {
 		current := current
 		typeName := current.TypeName()
 		name := current.Name()
+		_, skipOnlySupported := formatAndSupportSkipOnlySupported[typeName]
 
 		Convey(typeName+" — Format / OnlySupportedErr / MarshalJSON dispatch", t, func() {
 			// 1. Format — must produce a non-blank string containing the
