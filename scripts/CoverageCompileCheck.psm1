@@ -31,32 +31,24 @@ function Write-BlockedDiagnostic {
 function Test-PackageActuallyCompiles {
     <#
     .SYNOPSIS
-        Confirmation probe for a package that the primary `go test -coverpkg=...`
-        check flagged as blocked. We attempt three independent compile gates
-        and accept the package as compilable if ANY of them succeed:
-          1. `go test -c -o /dev/null` — full test-binary link.
-          2. `go vet ./pkg`             — full type-check incl. test files.
-          3. `go build ./pkg`           — production-only type-check + link.
-        The triple-gate eliminates the residual false-positive cluster (osdetect,
-        dbexposetype, protocoltype, etc.) where `go test -c` transiently fails
-        under build-cache contention or cgo init quirks but the package still
-        runs cleanly in the subsequent coverage phase.
+        Confirmation probe — re-run a -coverpkg-free `go test -c` build.
+        If the test binary links cleanly the original failure was warning-only
+        noise from `-coverpkg=` (false-positive Blocked report).
+    .NOTES
+        IMPORTANT: must NOT fall back to `go vet` or `go build` — those check
+        only production code and would mask genuine *_test.go compile errors,
+        causing real failures to be silently re-classified as "compiles fine"
+        and then surface later as runtime/build failures during the coverage
+        run. (Bug introduced in v0.67.0; reverted in v0.69.0.)
     .RETURNS
-        [bool] $true if any gate passes, $false only if all three fail.
+        [bool] $true if `go test -c` exits 0, $false otherwise.
     #>
     param([string]$Pkg)
     if (-not $Pkg) { return $false }
     $prevPref = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
     $devnull = if ($IsWindows) { 'NUL' } else { '/dev/null' }
-
     $null = & go test -c -o $devnull -gcflags=all=-e "$Pkg" 2>&1
-    if ($LASTEXITCODE -eq 0) { $ErrorActionPreference = $prevPref; return $true }
-
-    $null = & go vet "$Pkg" 2>&1
-    if ($LASTEXITCODE -eq 0) { $ErrorActionPreference = $prevPref; return $true }
-
-    $null = & go build "$Pkg" 2>&1
     $ec = $LASTEXITCODE
     $ErrorActionPreference = $prevPref
     return ($ec -eq 0)
