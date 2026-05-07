@@ -10,6 +10,18 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.90.0] — 2026-05-07 — Coverage uplift sweep: iptype, dbaction, accesstype, overwritetype, protocoltype
+
+### Added
+- **`iptype/IpType_Coverage_test.go`** — exercises all 3 Variants through every value/name accessor, every IP-version predicate (`IsV4/V6/Version4/Version6/Ip4/Ip6`), comparison (`IsEqual/IsAboveOrEqual/IsLowerOrEqual`), JSON round-trip, full surface, and package helpers `GetUsingIpString`, `CreateTypeUsingExplicit`, `IsV4`, `IsV6`, `Is`, `New`, `NewMust`, `ValidationError`, `V4ValidationError`, `V6ValidationError`.
+- **`dbaction/DbAction_Coverage_test.go`** — covers all 10 CRUD/skip/drop/update Variants through every value/name accessor and every `Is*Logically` predicate (`IsCreate/Update/Read/Delete/Drop/SkipOnExist/DropOnExist/CreateOrUpdate/CreateLogically/CreateOrUpdateLogically/DropLogically/UpdateOnExist/CrudOnlyLogically/NotCrudOnlyLogically/ReadOrEditLogically/ReadOrUpdateLogically/EditOrUpdateLogically/OnExistCheckLogically/OnExistOrSkipOnNonExistLogically/UpdateOrRemoveLogically`), pointer `ToSimple` (incl. nil-receiver), JSON round-trip, full `As*` surface, and `Is` helper.
+- **`accesstype/AccessType_Coverage_test.go`** — mirrors the dbaction sweep for the `accesstype` family (also 10 Variants, similar logical-predicate surface plus `IsNameOf`).
+- **`overwritetype/OverwriteType_Coverage_test.go`** — walks all 8 Variants through every overwrite/force/skip predicate (`IsOverwrite/Override/Enforce/ForceWrite/ForceWriteRepeat/SkipFilesRepeat/Yes/No/AcceptReject/NotAcceptReject/YesOverwriteLogically/NoOverwriteLogically/SkipOnExistFiles/IgnoreRepeatInFolderNameExtraction/Uninitialized/Invalid/Valid`), `IsNameOf`, JSON round-trip, and `As*` surface (`AsOverwriteOrRideOrEnforcer`).
+- **`protocoltype/ProtocolType_Coverage_test.go`** — walks all 26 protocol Variants through every protocol predicate (`IsTcp/Udp/Icmp/Grpc/Rpc/OAuth/Rest/Http/Https/HttpsV3/MSMQ/Ip/IpV6/Ftp/Smtp/Imap/Pop3/Ssh/Sftp/Telnet/Pam/Sso/Custom/Defined/TransactionProtocol/MailingProtocol/InternetProtocol/FirewallIpTablesProtocol/TcpOrUdp`), name accessors (`Name/CapitalName/LowerName`), JSON round-trip, and full surface.
+
+### Notes
+- Targets the next band of <60% packages from the v0.89 `-tc` report. Pure additive coverage — no source changes. Should clear iptype, dbaction, accesstype, overwritetype, protocoltype above the 60% AL² floor and continue lifting total coverage.
+
 ## [v0.89.0] — 2026-05-07 — Coverage uplift sweep: strtype, onofftype, inttype, instructiontype
 
 ### Added

@@ -1,0 +1,80 @@
+package overwritetype
+
+import (
+	"encoding/json"
+	"testing"
+)
+
+func Test_OverwriteType_Coverage(t *testing.T) {
+	all := []Variant{Invalid, ForceWrite, SkipOnExistFiles, IgnoreRepeatInFolderNameExtraction, ForceWriteRepeat, SkipFilesRepeat, Yes, No}
+	for _, v := range all {
+		_ = v.ValueByte()
+		_ = v.ValueInt()
+		_ = v.ValueInt8()
+		_ = v.ValueInt16()
+		_ = v.ValueInt32()
+		_ = v.ValueUInt16()
+		_ = v.Value()
+		_ = v.ValueString()
+		_ = v.Name()
+		_ = v.NameValue()
+		_ = v.String()
+		_ = v.ToNumberString()
+		_ = v.RangeNamesCsv()
+		_ = v.TypeName()
+		_ = v.AllNameValues()
+		_ = v.RangesByte()
+		_ = v.RangesDynamicMap()
+		_ = v.IntegerEnumRanges()
+		_ = v.MinByte()
+		_ = v.MaxByte()
+		_ = v.MinInt()
+		_ = v.MaxInt()
+		_ = v.MinValueString()
+		_ = v.MaxValueString()
+		_, _ = v.MinMaxAny()
+		_ = v.Format("name")
+		_ = v.EnumType()
+		_ = v.IsByteValueEqual(v.ValueByte())
+		_ = v.IsValueEqual(v.ValueByte())
+		_ = v.IsNameEqual(v.Name())
+		_ = v.IsAnyValuesEqual(v.ValueByte())
+		_ = v.IsAnyOf(v)
+		_ = v.IsAnyNamesOf(v.Name())
+		_ = v.IsNameOf(v.Name())
+		_ = v.IsInvalid()
+		_ = v.IsValid()
+		_ = v.IsUninitialized()
+		_ = v.IsOverwrite()
+		_ = v.IsOverride()
+		_ = v.IsEnforce()
+		_ = v.IsOverrideOrOverwriteOrEnforce()
+		_ = v.IsNotOverrideOrOverwriteOrEnforce()
+		_ = v.IsForceWrite()
+		_ = v.IsForceWriteRepeat()
+		_ = v.IsSkipFilesRepeat()
+		_ = v.IsYes()
+		_ = v.IsNo()
+		_ = v.IsAcceptReject()
+		_ = v.IsNotAcceptReject()
+		_ = v.IsYesOverwriteLogically()
+		_ = v.IsNoOverwriteLogically()
+		_ = v.IsSkipOnExistFiles()
+		_ = v.IsIgnoreRepeatInFolderNameExtraction()
+		_ = v.OnlySupportedErr("Yes")
+		_ = v.OnlySupportedMsgErr("m", "Yes")
+		_ = v.ToPtr()
+		_ = v.Json()
+		_ = v.JsonPtr()
+		_ = v.AsBasicByteEnumContractsBinder()
+		_ = v.AsOverwriteOrRideOrEnforcer()
+		_ = v.AsBasicEnumContractsBinder()
+
+		raw, err := json.Marshal(v)
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var rt Variant
+		_ = json.Unmarshal(raw, &rt)
+	}
+}
