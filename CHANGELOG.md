@@ -10,6 +10,14 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.79.1] — 2026-05-07 — Sibling typo sweep + RCA Pattern 11
+
+### Audited
+- **`osdetect/` `IsWindowsSever*` family** — swept all five wrappers (`IsWindowsSever`, `…2016`, `…2019`, `…GreaterEqual2016`, `…GreaterEqual2019`) for the v0.79.0 client-vs-server-helper dispatch class. Only `IsWindowsSeverGreaterEqual2016` was wrong (already fixed). Siblings dispatch correctly to `IsWindowsServerEqual` / `IsWindowsServerGreaterEqual`. No other instances repo-wide.
+
+### Documentation
+- **`.lovable/memory/07-test-failure-rca-patterns.md`** — added **Pattern 11: "Server-side wrapper dispatched to client-side helper (and vice versa)"** capturing the v0.79.0 root cause, sibling-sweep recipe, and prevention rule (copy from same-side sibling, never opposite-side).
+
 ## [v0.79.0] — 2026-05-07 — Triage of `./run.ps1 -tc` failing-tests-7
 
 Three failing tests resolved with one real bugfix and two test-suite hardenings.

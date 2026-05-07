@@ -208,3 +208,17 @@ When `./run.ps1 -tc` reports failing tests, walk this checklist FIRST before rea
 **Fix (already applied 2026-05-07, v0.63.0):** in `scripts/CoverageCompileCheck.psm1` parallel branch, after the parallel dispatch, run a **serial re-confirmation pass** using the existing `Test-PackageActuallyCompiles` helper before reporting any package as Blocked. The serial probe runs without runspace contention and reliably distinguishes real failures from cache-contention noise.
 
 **Prevention:** Never trust a single in-runspace probe for a "blocked" verdict in parallel mode. Always re-confirm serially. If you ever add new pre-coverage probes, copy this two-stage pattern (parallel suspect detection → serial confirmation).
+
+---
+
+## Pattern 11 — Server-side wrapper dispatched to client-side helper (and vice versa)
+
+**Symptom:** A boolean helper named `IsWindowsSever<X>` / `IsWindowsServer<X>` (or any paired client/server method) silently returns `false` for inputs that should be `true`. Code compiles, signature looks right, no test failure points at the wrapper itself — only the high-level scenario assertion (`server >=2016 wrong`) fails.
+
+**Root cause:** The wrapper body delegates to the *opposite-side* generic helper. In `osdetect`, `IsWindowsGreaterEqual(n)` short-circuits to `false` when `IsServer == true` (it's the *client* generic), and `IsWindowsServerGreaterEqual(n)` short-circuits when `IsClient == true`. Calling the wrong one from a "Server" wrapper makes the gate always fail. Easy to typo because both names differ by one token (`Windows` vs `WindowsServer`) and both compile.
+
+**Fix recipe:** For every wrapper of the shape `IsWindows<Sever|Server><Suffix>`, confirm the body routes to `IsWindowsServer<…>`. Mirror rule for client wrappers → `IsWindows<…>` (no `Server`). Real example: `osdetect/WindowsSystemDetail.go:127-133` (v0.79.0).
+
+**Prevention:** When adding a new wrapper that pairs with an existing one (e.g. `Equal2022`, `GreaterEqual2022`), copy from the matching sibling — never from the opposite-side sibling. Grep `IsWindowsGreaterEqual\|IsWindowsServerGreaterEqual` after editing this file to spot mismatches.
+
+**First observed:** 2026-05-07, v0.79.0 — affected `osdetect.WindowsSystemDetail.IsWindowsSeverGreaterEqual2016`. Sibling sweep confirmed no other instances in `osdetect/`.
