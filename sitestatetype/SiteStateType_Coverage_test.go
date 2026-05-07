@@ -50,20 +50,23 @@ func TestSiteStateType_Ranges(t *testing.T) {
 	}
 }
 
-// Pattern-7: AllNameValues ↔ New round-trip.
+// Pattern-7: Ranges ↔ New round-trip (raw names, not the "Name(value)" format
+// emitted by AllNameValues()). Also exercises AllNameValues() for coverage.
 func TestSiteStateType_AllNameValuesRoundTrip(t *testing.T) {
-	names := Invalid.AllNameValues()
-	if len(names) == 0 {
+	if len(Invalid.AllNameValues()) == 0 {
 		t.Fatal("AllNameValues empty")
 	}
-	for _, n := range names {
-		v, err := New(n)
-		if err != nil {
-			t.Errorf("New(%q) error: %v", n, err)
+	for _, name := range Ranges {
+		if name == "" {
 			continue
 		}
-		if v.String() != n {
-			t.Errorf("round-trip mismatch: New(%q).String()=%q", n, v.String())
+		v, err := New(name)
+		if err != nil {
+			t.Errorf("New(%q) error: %v", name, err)
+			continue
+		}
+		if v.Name() != name {
+			t.Errorf("round-trip mismatch: New(%q).Name()=%q", name, v.Name())
 		}
 	}
 }

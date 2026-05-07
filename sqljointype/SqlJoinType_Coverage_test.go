@@ -151,8 +151,8 @@ func TestSqlJoin_PtrAndBinders(t *testing.T) {
 	if nilP.ToSimple() != Inner {
 		t.Error("ToSimple(nil) should be Inner")
 	}
-	if v.Json().HasError() {
-		t.Errorf("Json: %v", v.Json().Error)
+	if v.JsonPtr().HasError() {
+		t.Errorf("Json: %v", v.JsonPtr().Error)
 	}
 	if v.JsonPtr() == nil || v.AsJsoner() == nil || v.AsJsonContractsBinder() == nil ||
 		v.AsJsonMarshaller() == nil || v.AsBasicByteEnumContractsBinder() == nil ||
