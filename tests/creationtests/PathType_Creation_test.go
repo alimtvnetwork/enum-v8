@@ -6,7 +6,7 @@ import (
 
 	. "github.com/smartystreets/goconvey/convey"
 
-	"github.com/alimtvnetwork/enum-v6/pathpatterntype"
+	"github.com/alimtvnetwork/enum-v7/pathpatterntype"
 )
 
 func Test_PathType_Creation(t *testing.T) {

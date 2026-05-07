@@ -19,7 +19,7 @@ var (
 		OpenSuse:  "OpenSuse",
 	}
 
-	// github.com/alimtvnetwork/enum-v6/-/issues/4
+	// github.com/alimtvnetwork/enum-v7/-/issues/4
 	// https://t.ly/2KHe, https://prnt.sc/M9SPHl4GBYFN
 	aliasMap = map[string]byte{
 		"ubuntu": Ubuntu.ValueByte(),

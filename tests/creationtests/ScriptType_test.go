@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
-	"github.com/alimtvnetwork/enum-v6/scripttype"
+	"github.com/alimtvnetwork/enum-v7/scripttype"
 )
 
 // Test_AllEnums_ContractsTesting

@@ -2,24 +2,24 @@
 
 **Date:** 2026-05-04
 **Spec audited:** [`spec/01-app/04-error-system.md`](../01-app/04-error-system.md)
-**Method:** Manual claim extraction from spec; automated `rg` verification of consumer-side usage in `enum-v6`. Upstream `core-v9` source (where `errcore` is defined) is **not** checked into this repo and the sandbox has no Go toolchain, so the audit is **consumer-anchored**: a claim is "match" only if `enum-v6` actually exercises the named symbol in the documented shape.
+**Method:** Manual claim extraction from spec; automated `rg` verification of consumer-side usage in `enum-v7`. Upstream `core-v9` source (where `errcore` is defined) is **not** checked into this repo and the sandbox has no Go toolchain, so the audit is **consumer-anchored**: a claim is "match" only if `enum-v7` actually exercises the named symbol in the documented shape.
 **Auditor:** Lovable agent (evidence-driven)
 
 ---
 
 ## Audit scope & limitation
 
-`errcore` lives in `github.com/alimtvnetwork/core-v9` (declared module name: `core-v9`). The spec describes that upstream package, but `enum-v6` is the only artifact we can read. We can therefore verify:
+`errcore` lives in `github.com/alimtvnetwork/core-v9` (declared module name: `core-v9`). The spec describes that upstream package, but `enum-v7` is the only artifact we can read. We can therefore verify:
 
-1. **Symbols `enum-v6` calls** — direct evidence the documented API exists and is used.
-2. **Symbols `enum-v6` calls but the spec does NOT document** — drift: spec is incomplete relative to the API consumers actually rely on.
-3. **Symbols the spec documents but `enum-v6` never calls** — *unverifiable* from this repo (could exist upstream and just be unused here, or could be aspirational). Marked **❓** rather than ❌.
+1. **Symbols `enum-v7` calls** — direct evidence the documented API exists and is used.
+2. **Symbols `enum-v7` calls but the spec does NOT document** — drift: spec is incomplete relative to the API consumers actually rely on.
+3. **Symbols the spec documents but `enum-v7` never calls** — *unverifiable* from this repo (could exist upstream and just be unused here, or could be aspirational). Marked **❓** rather than ❌.
 
 Marking aspirational APIs ❓ instead of ❌ avoids false contradictions when the upstream `core-v9` checkout becomes available later (planned task **AB**).
 
 ---
 
-## Symbols actually used by `enum-v6` (`rg -o 'errcore\.\w+(\.\w+)?' -g '*.go'`)
+## Symbols actually used by `enum-v7` (`rg -o 'errcore\.\w+(\.\w+)?' -g '*.go'`)
 
 ```
 errcore.ComparatorShouldBeWithinRangeType.String
@@ -54,11 +54,11 @@ Spec claims are numbered C1..C18 in order of appearance.
 |---|-------|----------|
 | C5 | `HandleErr(err)` is the canonical panic helper for `*Must` variants — no-op if nil, panics otherwise (§1 row + §1.2 callout, F-V12-05) | 80+ `*Must` files invoke `errcore.HandleErr(err)` (e.g. `verifiertriggertype/NewMust.go:7`, `compressformats/NewMust.go:7`). Zero `panic(err)` calls in `*Must` files. |
 | C6 | `ShouldBe.StrEqMsg(actual, expected)` produces an assertion-style message (§1.3) | Used in `tests/creationtests/AllEnums_ContractsTesting_test.go:23` exactly as documented: `errcore.ShouldBe.StrEqMsg`. |
-| C18 | Decision tree: unparseable shape → `FailedToConvertType`; parses but rule-rejects → `ValidationFailedType` (§"Boundary Cases") | Pattern is *consistent* with how `enum-v6`'s `all-validation-checking-err.go` files segregate parse failure from range failure, though they call `RangeNotMeet` / `ValidationError` (helpers) rather than the raw type. No contradictory usage found. |
+| C18 | Decision tree: unparseable shape → `FailedToConvertType`; parses but rule-rejects → `ValidationFailedType` (§"Boundary Cases") | Pattern is *consistent* with how `enum-v7`'s `all-validation-checking-err.go` files segregate parse failure from range failure, though they call `RangeNotMeet` / `ValidationError` (helpers) rather than the raw type. No contradictory usage found. |
 
 ### ⚠️ Drift — spec is incomplete (8)
 
-These are the highest-impact findings: `enum-v6` depends on APIs the spec does not mention. A new contributor reading §04 would not learn the patterns the codebase actually uses.
+These are the highest-impact findings: `enum-v7` depends on APIs the spec does not mention. A new contributor reading §04 would not learn the patterns the codebase actually uses.
 
 | # | Claim missing from spec | Code evidence | Severity | Fix path |
 |---|-------------------------|---------------|----------|----------|
@@ -69,23 +69,23 @@ These are the highest-impact findings: `enum-v6` depends on APIs the spec does n
 | D-CVS-10 | `errcore.MessageWithRef(name, ref)` — message-only formatter (returns `string`, not `error`) | Used directly in source | LOW | Add row to §1.4 "Variable-Context Formatting" |
 | D-CVS-11 | `errcore.RangeNotMeet(...)` — domain-specific error builder for out-of-range enum values | Used in enum constructors | LOW | Add §1.6 "Enum-Specific Builders" or note in §7 table |
 | D-CVS-12 | `errcore.ToError(...)` and `errcore.ToString(err)` conversion helpers | `osdetect/vars.go:111` uses `errcore.ToString(err)` | LOW | Add §1.7 "Conversion Helpers" |
-| D-CVS-13 | Several `RawErrorType` values used in `enum-v6` are not in the §1.1 "Common categories" list: `FailedToExecuteType`, `NotSupportedType`, `PathInvalidErrorType`, `ComparatorShouldBeWithinRangeType` | Direct call sites listed above | LOW | Either expand the §1.1 examples or add a footnote pointing to the upstream `RawErrorType.go` enumeration |
+| D-CVS-13 | Several `RawErrorType` values used in `enum-v7` are not in the §1.1 "Common categories" list: `FailedToExecuteType`, `NotSupportedType`, `PathInvalidErrorType`, `ComparatorShouldBeWithinRangeType` | Direct call sites listed above | LOW | Either expand the §1.1 examples or add a footnote pointing to the upstream `RawErrorType.go` enumeration |
 
 ### ❓ Unverifiable from this repo (7)
 
-Spec lists these APIs but no `enum-v6` source calls them. They may exist upstream — pending the upstream-source audit (task **AB**), they cannot be confirmed or refuted here.
+Spec lists these APIs but no `enum-v7` source calls them. They may exist upstream — pending the upstream-source audit (task **AB**), they cannot be confirmed or refuted here.
 
 | # | Claim | Why unverifiable |
 |---|-------|------------------|
 | C1 | `RawErrorType` exposes 80+ predefined values (§1.1) | Need upstream `errcore/RawErrorType.go` to count |
-| C2 | `Error(name, ref)` constructor exists (§1.2) | No call site in `enum-v6` (uses `ErrorRefOnly` / `Error(...)` on specific types instead) |
-| C3 | `ErrorNoRefs`, `Fmt`, `FmtIf`, `MergeError`, `MergeErrorWithMessage` constructors (§1.2 table) | Zero call sites in `enum-v6` |
+| C2 | `Error(name, ref)` constructor exists (§1.2) | No call site in `enum-v7` (uses `ErrorRefOnly` / `Error(...)` on specific types instead) |
+| C3 | `ErrorNoRefs`, `Fmt`, `FmtIf`, `MergeError`, `MergeErrorWithMessage` constructors (§1.2 table) | Zero call sites in `enum-v7` |
 | C4 | `Expected.But`, `Expected.ButUsingType`, `StackEnhance.Error`, `StackEnhance.Msg` (§1.3) | Zero call sites |
 | C7 | `VarTwo`, `VarTwoNoType`, `MessageVarMap` (§1.4) | Zero call sites |
 | C8 | `MergeErrors`, `ManyErrorToSingle`, `SliceToError` (§3.1) | Zero call sites |
 | C9 | Type aliases `ErrFunc`, `ErrBytesFunc`, `ErrStringsFunc`, `ErrStringFunc`, `ErrAnyFunc` (§6) | Zero call sites |
 
-> ⚠️ The fact that **none** of the §3, §6, and most of §1.2 are exercised by `enum-v6` is itself a meta-finding: either the spec describes a much wider API than this repo needs (legitimate — `core-v9` serves many consumers), OR the spec drifted away from current upstream. Resolving this requires fetching `core-v9` source (task **AB**).
+> ⚠️ The fact that **none** of the §3, §6, and most of §1.2 are exercised by `enum-v7` is itself a meta-finding: either the spec describes a much wider API than this repo needs (legitimate — `core-v9` serves many consumers), OR the spec drifted away from current upstream. Resolving this requires fetching `core-v9` source (task **AB**).
 
 ### ❌ Contradiction (0)
 
@@ -105,7 +105,7 @@ None found. All consumer-side usage is consistent with the documented patterns; 
 
 **Verifiable subset:** 11 claims (3 match + 8 drift) → **3/11 = 27.3 %** verifiable match rate.
 
-Excluding the 7 ❓ from the denominator avoids penalising the spec for documenting upstream APIs unused by `enum-v6`. Once task **AB** brings in `core-v9` source, the 7 ❓ will be resolved into match/drift/contradiction and the score recomputed.
+Excluding the 7 ❓ from the denominator avoids penalising the spec for documenting upstream APIs unused by `enum-v7`. Once task **AB** brings in `core-v9` source, the 7 ❓ will be resolved into match/drift/contradiction and the score recomputed.
 
 ---
 

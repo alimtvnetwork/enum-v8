@@ -14,12 +14,12 @@
 - **severity:** HIGH
 - **description:** Multiple spec files outside `spec/01-app/` still reference `tests/integratedtests/` which doesn't exist. Known targets: `spec/06-testing-guidelines/01-folder-structure.md`, `spec/03-powershell-test-run/`, `spec/04-tooling/04-bootstrap-into-new-repo.md`, `spec/02-app-issues/02-internal-package-coverage-policy.md`, `spec/00-llm-integration-guide.md` line 36.
 - **owner:** AI (audit cycles)
-- **plan:** ✅ COMPLETE — resolved by re-framing (consumer-coverage callouts) across Cycles 12/15/17/18 + Cycle 34 (S-003/S-004 close-out). All `integratedtests/` references now correctly document the upstream `core-v9` consumer layout with explicit upstream-vs-enum-v6 scope disclaimers. Move to Resolved on the next cycle that touches this file.
+- **plan:** ✅ COMPLETE — resolved by re-framing (consumer-coverage callouts) across Cycles 12/15/17/18 + Cycle 34 (S-003/S-004 close-out). All `integratedtests/` references now correctly document the upstream `core-v9` consumer layout with explicit upstream-vs-enum-v7 scope disclaimers. Move to Resolved on the next cycle that touches this file.
 
 ### PI-003: 148 ❓ claims unresolved (Task AB)
 
 - **severity:** MEDIUM
-- **description:** 148 claims across `spec/01-app/` scored ❓ because they reference upstream `core-v9` APIs that have zero `enum-v6` consumers and no mirrored source. Need upstream source fetch to verify.
+- **description:** 148 claims across `spec/01-app/` scored ❓ because they reference upstream `core-v9` APIs that have zero `enum-v7` consumers and no mirrored source. Need upstream source fetch to verify.
 - **owner:** AI + User (fetch access)
 - **blocks:** Full spec verification, re-audit of §07/§09 (Task AC)
 
@@ -69,6 +69,6 @@
 ### PI-001: Upstream `core-v9` `go.mod` module path mismatch (Task W + AG)
 
 - **resolved:** 2026-05-05
-- **fix:** User renamed upstream `go.mod` → `module github.com/alimtvnetwork/core-v9`, tagged `v1.5.8`. AI dropped `replace` bridge in `enum-v6/go.mod`, pinned `core-v9 v1.5.8`.
+- **fix:** User renamed upstream `go.mod` → `module github.com/alimtvnetwork/core-v9`, tagged `v1.5.8`. AI dropped `replace` bridge in `enum-v7/go.mod`, pinned `core-v9 v1.5.8`.
 
 _(Consolidated from `.lovable/pending-issues/01-core-v9-go-mod-rename.md` and `02-cross-spec-stale-paths.md` — those files are now superseded by this tracker)_
