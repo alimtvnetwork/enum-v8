@@ -9,6 +9,18 @@
 
 ---
 
+## [spec-v0.55.0] — 2026-05-07 (Cycle 20 — Task **AA**: walk-through audit of `spec/00-llm-integration-guide.md` — **AA CLOSED**)
+
+### Added
+- `spec/07-code-vs-spec-audits/39-cycle20-llm-integration-guide-walkthrough.md` — final walk-through audit of the 2388-line LLM-onboarding monolith. Verified against upstream `core-v9 v1.5.8` source at `/tmp/core-v9-upstream`: module identity ✅, package map 34/34 dirs ✅, 11 import paths ✅, all 6 `enumimpl.New.Basic*` factory creators ✅, factory methods (`UsingTypeSlice`, `Default`, `CreateUsingMap`, …) ✅. The 3 remaining `tests/integratedtests/` references (lines 36, 825, 828) are explicitly upstream-consumer-scoped (line 825 carries the disclaimer + cross-links to the `enum-v7`-specific layout) and are policy-compliant under Task **AH** / PI-002 — no rewrite. Zero D-CVS / C-CVS findings.
+
+### Notes
+- **Task AA is now CLOSED.** All 6 walk-through targets are complete: Cycle 15 (`spec/06-testing-guidelines/`), Cycle 16 (`spec/03-powershell-test-run/`), Cycle 17 (`spec/04-tooling/`), Cycle 18 (`spec/02-app-issues/`), Cycle 19 (`spec/05-failing-tests/`), Cycle 20 (`spec/00-llm-integration-guide.md`).
+- Remaining `spec/`-scoped backlog is exclusively the **AJ rewrite queue** (~54 items, all blocked by `spec/01-app/` freeze per `spec-v0.53.0`).
+- No file inside `spec/00-llm-integration-guide.md` was modified.
+
+---
+
 ## [spec-v0.54.0] — 2026-05-07 (Cycle 19 — Task **AA**: walk-through audit of `spec/05-failing-tests/`)
 
 ### Added

@@ -10,6 +10,17 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.70.0] — 2026-05-07 — Cycle 20 walk-through audit: `spec/00-llm-integration-guide.md` (Task AA closed)
+
+### Added
+- `spec/07-code-vs-spec-audits/39-cycle20-llm-integration-guide-walkthrough.md` — final walk-through audit. 22 H2 / 63 H3 sections inventoried against `/tmp/core-v9-upstream` @ tag `v1.5.8`. Module identity ✅, package map (34/34 dirs) ✅, 11 import paths ✅, `enumimpl.New.{BasicByte,BasicInt8,BasicInt16,BasicInt32,BasicUInt16,BasicString}` ✅, all 3 `tests/integratedtests/` references confirmed appropriately upstream-scoped (PI-002 / Task AH compliant). **Zero D-CVS / C-CVS findings.**
+- `spec/CHANGELOG.md` `spec-v0.55.0` entry mirroring the above.
+
+### Notes
+- This **closes Task AA**. All 6 walk-through targets (Cycles 15–20) are audited.
+- Remaining `spec/` work is the AJ rewrite backlog (~54 items), all blocked by the `spec/01-app/` freeze (`spec-v0.53.0` policy).
+- `.lovable/plan.md` updated to reflect AA closure.
+
 ## [v0.69.0] — 2026-05-07 — Revert v0.67.0 triple-gate + fix 8 cascade test failures it masked
 
 ### Fixed
