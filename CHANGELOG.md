@@ -10,6 +10,19 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.72.0] — 2026-05-07 — AL-05: Format / OnlySupportedErr / MarshalJSON-dispatch sweep
+
+### Added
+- **`tests/creationtests/AllEnums_FormatAndSupport_test.go`** — new shared-loop test that, for every entry in `allBasicEnumsCollection`, exercises three previously-uncovered BasicEnumer surface areas in a single sweep:
+  1. `Format(template)` — drives every `Variant.Format` wrapper plus `enumimpl.Format`/`FormatUsingFmt` paths.
+  2. `OnlySupportedErr` / `OnlySupportedMsgErr` — drives the `OnlySupportedNamesErrorer` builders.
+  3. `MarshalJSON` via the BasicEnumer interface dispatch (separate from AL-01 which exercises the concrete-type call site).
+- Skip map `formatAndSupportSkipOnlySupported` for `inttype.Variant` and `strtype.Variant` whose `OnlySupportedErr` impls panic with `"not implemented for generic int/string enum"` — recorded as a known limitation, not a defect.
+
+### Notes
+- All `tests/creationtests/...` pass locally with go1.25.7 + `core-v9 v1.5.8`.
+- Expected coverage delta on next `./run.ps1 -tc`: pushes total past the **≥60%** AL acceptance threshold (was 59.1% post-AL-04).
+
 ## [v0.71.1] — 2026-05-07 — Fix `osdetect.Variant.IsWindows11` SIGSEGV on non-Windows hosts
 
 ### Fixed
