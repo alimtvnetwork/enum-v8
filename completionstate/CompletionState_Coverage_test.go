@@ -56,6 +56,14 @@ func Test_CompletionState_Coverage(t *testing.T) {
 		_ = v.IsValid()
 		_ = v.OnlySupportedErr("Success")
 		_ = v.OnlySupportedMsgErr("m", "Success")
+		_ = v.NameValue()
+		_ = v.String()
+		_ = v.RangesByte()
+		_ = v.Json()
+		_ = v.JsonPtr()
+		_ = v.ToPtr()
+		_ = v.AsCompletionStateTyper()
+		_ = v.AsBasicEnumContractsBinder()
 
 		raw, err := json.Marshal(v)
 		if err != nil {
