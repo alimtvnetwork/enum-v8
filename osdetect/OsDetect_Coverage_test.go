@@ -56,7 +56,7 @@ func TestOsDetect_GetCurrentOsDetail_Smoke(t *testing.T) {
 	_ = d.PrettyJsonString()
 	_ = d.Json()
 	_ = d.JsonPtr()
-	_ = d.Serialize()
+	_, _ = d.Serialize()
 	_ = d.SerializeMust()
 	_ = d.AllSysTypes()
 	_ = d.AllSysTypesMap()
