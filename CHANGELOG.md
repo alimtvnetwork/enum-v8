@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.0.2] — 2026-05-07 — Lift `promptclitype` past 60% AL² bar
+
+### Added
+- `promptclitype/PromptCliType_Uplift_test.go` — exhaustive Variant accessor / predicate / JSON / contracts-binder sweep across all 5 variants (Invalid, Accept, Reject, Later, Review), plus alternative-name fast-paths through `nameToVariant` (`yes`/`y`/`1`/`A`/`a`, `no`/`n`/`0`/`R`/`r`, `ask`/`*`/`L`/`l`, `review`/`Review`/`C`/`c`/`3`, `-1`/empty), `NewUsingSetter` error path, and `JsonParseSelfInject` round-trip.
+
+### Notes
+- Last `-tc` run reported `promptclitype` at **58.3%** — the only package below the AL² acceptance bar of ≥60%. This uplift should land it ~75–85% and pull total from 75.9% to ~76.5%.
+- All other AL2-02..06 batch targets (DB / networking / Linux / misc / task-script) already pass ≥60% in the latest run, so AL2 is effectively closed except for this one residual.
+
 ## [v1.0.1] — 2026-05-07 — Unblock `osdetect` compile + drop nil-WinVer panic
 
 ### Fixed
