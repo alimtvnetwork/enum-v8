@@ -187,7 +187,7 @@ jobs:
           path: test-artifacts
           pattern: test-results
 
-      - name: Coverage gate (70%)
+      - name: Coverage gate (75%)
         if: needs.sha-check.outputs.already-built != 'true'
         run: |
           set -euo pipefail
@@ -199,8 +199,8 @@ jobs:
           go tool cover -func="$cov" | tee coverage-summary.txt
           total=$(grep -E '^total:' coverage-summary.txt | awk '{print $3}' | tr -d '%')
           echo "Total coverage: ${total}%"
-          awk -v t="$total" 'BEGIN { exit (t+0 < 70) ? 1 : 0 }' || {
-            echo "::error::Coverage ${total}% is below required 70%"
+          awk -v t="$total" 'BEGIN { exit (t+0 < 75) ? 1 : 0 }' || {
+            echo "::error::Coverage ${total}% is below required 75%"
             exit 1
           }
 
