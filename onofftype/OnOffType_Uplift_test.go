@@ -76,7 +76,7 @@ func TestOnOffType_Uplift_ConstructorAliases(t *testing.T) {
 		"n", "no", "Off", "off", "0", "false", "bogus-not-real",
 	}
 	for _, n := range names {
-		_ = New(n)
+		_, _ = New(n)
 		safeCall(t, "NewMust:"+n, func() { _ = NewMust(n) })
 	}
 }
@@ -93,7 +93,7 @@ func TestOnOffType_Uplift_BooleanConstructors(t *testing.T) {
 		issetter.Uninitialized, issetter.Wildcard, issetter.True,
 		issetter.Set, issetter.False, issetter.Unset, issetter.Empty,
 	} {
-		_ = NewUsingSetter(s)
+		_, _ = NewUsingSetter(s)
 	}
 }
 
