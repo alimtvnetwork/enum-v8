@@ -10,6 +10,14 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.86.0] — 2026-05-07 — BasicString defect detector (RCA Pattern 3 lint)
+
+### Added
+- **`tests/creationtests/AllEnums_BasicStringDefectDetector_test.go`** — new AST-walking suite `Test_AllEnums_BasicStringDefectDetector` that scans the entire repo (skipping `cross-repo/`, `tests/`, `spec/`, `node_modules/`, `src/`, `data/`, `scripts/`, `.lovable/`, `.git/`) for `type Variant string` declarations. For every package found, asserts the package overrides the canonical BasicString method set: `MinValueString`, `MarshalJSON`, `UnmarshalJSON`, `IsAnyNamesOf`, `RangesDynamicMap`. Required because upstream `core-v9 v1.5.8` `BasicString` returns zero values for spread-constructed enums (PI-005..007 cluster). Failure message lists the exact missing method names.
+
+### Notes
+- Sixth RCA-pattern lint (Patterns 1, 2, 3, 7, 9 covered). Remaining: Pattern 5 (level-comparison receiver inversion AST scan).
+
 ## [v0.85.0] — 2026-05-07 — AllNameValues round-trip guard (RCA Pattern 7 lint)
 
 ### Added
