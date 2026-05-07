@@ -10,6 +10,19 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.43.0] — 2026-05-07 — Cycle 71 — AL2-04 Batch D coverage uplift (Linux / OS)
+
+### Added
+- New coverage suites for Linux/OS family:
+  - `linuxservicestate/LinuxServiceState_Coverage_test.go` — `New`/`NewMust` for all 7 ExitCode names, `NewCode` and `NewCodeMapping` boundary cases (negative, oversize, in-range), full accessor sweep, JSON round-trip.
+  - `linuxtype/LinuxType_Coverage_test.go` — `New` round-trip across full `Ranges` table, group maps (`UbuntuMap`/`UbuntuServerMap`/`DebianMap`/`DockerMap`), accessor sweep on `UbuntuServer`, JSON round-trip, full binder surface (incl. `AsLinuxTyper`).
+  - `linuxvendortype/LinuxVendorType_Coverage_test.go` — `New`/`NewMust` for all 10 vendor names, accessor sweep, JSON round-trip.
+  - `osarchs/OsArchs_Coverage_test.go` — `New` for `x32`/`x64`, alias `Get` mappings (`amd64`, `386`, unknown), `IsX32`/`IsX64` predicates, accessor sweep, JSON round-trip, and `CurrentArch` smoke.
+  - `packageinstallmethod/PackageInstallMethod_Coverage_test.go` — `New`/`NewMust`, accessor sweep, JSON round-trip.
+  - `runtype/RunType_Coverage_test.go` — `New`/`NewMust` across all 11 schedule variants, accessor sweep, JSON round-trip.
+
+---
+
 ## [v0.42.0] — 2026-05-07 — Cycle 70 — AL2-03 Batch C coverage uplift (networking / IP)
 
 ### Added
