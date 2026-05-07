@@ -10,6 +10,13 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.12.0] — 2026-05-07 — Rename `cross-repo/core-v8/` → `cross-repo/core-v9/`
+
+### Changed
+- Mirror directory renamed from `cross-repo/core-v8/` to `cross-repo/core-v9/` to align with the upstream module path (`github.com/alimtvnetwork/core-v9`). All path references updated across `.lovable/`, specs, and tooling. Historical narrative references to the old `core-v8` upstream name are preserved where they describe past state.
+
+---
+
 ## [v1.11.0] — 2026-05-07 — Module rename `enum-v7` → `enum-v8`
 
 ### Changed
