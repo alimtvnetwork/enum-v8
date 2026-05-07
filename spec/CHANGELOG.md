@@ -9,6 +9,18 @@
 
 ---
 
+## [spec-v0.54.0] — 2026-05-07 (Cycle 19 — Task **AA**: walk-through audit of `spec/05-failing-tests/`)
+
+### Added
+- `spec/05-failing-tests/README.md` — directory-level scope/provenance disclaimer. The 25 files in this folder are upstream `core-v9` test post-mortems imported for institutional memory and reference packages (`corepayload`, `coredynamic`, `corejson`, `corestr`, `errcore`, `corevalidator`, etc.) and test paths (`tests/integratedtests/<pkg>tests/`) that **do not exist inside `enum-v7`**. README pins the legend (5 RESOLVED / 20 historical) and instructs future AI cycles NOT to rewrite `integratedtests/` → `creationtests/` here, since those paths refer to upstream layout (per Task **AH** policy / PI-002).
+- `spec/07-code-vs-spec-audits/38-cycle19-failing-tests-walkthrough.md` — full walk-through audit. 25/25 files inventoried. Every referenced package confirmed absent from `enum-v7`. Zero D-CVS / C-CVS spawned (advisory-only directory). Score: N/A (no per-claim AB sweep applicable).
+
+### Notes
+- This closes Task **AA** Cycle 19. The only remaining un-walk-through'd `spec/` target is `spec/00-llm-integration-guide.md` (2388 lines) → Cycle 20.
+- No file inside `spec/05-failing-tests/` was modified.
+
+---
+
 ## [spec-v0.53.0] — 2026-05-06 (Cycle 61 — Task **AI**: `spec/01-app/` formally FROZEN)
 
 ### Changed

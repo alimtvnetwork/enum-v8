@@ -10,6 +10,16 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.68.0] — 2026-05-07 — Cycle 19 audit: `spec/05-failing-tests/` walk-through (Task AA)
+
+### Added
+- `spec/05-failing-tests/README.md` — directory-level provenance disclaimer (25 upstream `core-v9` post-mortems; `tests/integratedtests/` paths describe upstream layout, NOT `enum-v7`).
+- `spec/07-code-vs-spec-audits/38-cycle19-failing-tests-walkthrough.md` — full inventory + frame-of-reference verification. 0 D-CVS / 0 C-CVS spawned.
+- `spec/CHANGELOG.md` `spec-v0.54.0` entry.
+
+### Notes
+- Closes Task **AA** Cycle 19. Only Cycle 20 (`spec/00-llm-integration-guide.md`, 2388 lines) remains in the AA cycle plan.
+
 ## [v0.67.0] — 2026-05-07 — Fix `compressformats` constructor test + harden Blocked-reconfirm
 
 ### Fixed
