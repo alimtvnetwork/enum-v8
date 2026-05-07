@@ -144,7 +144,7 @@ jobs:
           fi
           exit "$exit_code"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always() && needs.sha-check.outputs.already-built != 'true'
         with:
           name: test-results
@@ -204,7 +204,7 @@ jobs:
             exit 1
           }
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always() && needs.sha-check.outputs.already-built != 'true'
         with:
           name: coverage-summary
