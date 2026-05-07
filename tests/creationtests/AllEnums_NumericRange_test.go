@@ -43,6 +43,7 @@ var numericRangeSuiteSkipRangesDynamicMap = map[string]string{
 	"strtype.Variant":             "string-backed enum; RangesDynamicMap is intentionally empty",
 	"compresslevels.Variant":      "int8-backed enum with negative range; RangesDynamicMap returns empty in upstream impl",
 	"sqliteconnpathtype.Variant":  "string-backed enum; upstream BasicString.AllNameValues/RangesDynamicMap empty for spread-constructed enums (PI-006 cluster)",
+	"inttype.Variant":             "open-ended numeric enum (Min..Max int range); RangesDynamicMap intentionally returns empty map — has no discrete enumerable members",
 }
 
 func Test_AllEnums_NumericRange(t *testing.T) {
