@@ -10,6 +10,20 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.74.0] — 2026-05-07 — AL²-06: Pointer-receiver binding-wrapper sweep
+
+### Added
+- **`tests/creationtests/AllEnums_PointerReceiverBindings_test.go`** — reflection-based shared-loop test that, for every entry in `allBasicEnumsCollection`, invokes the pointer-receiver binding wrappers (when present) and asserts the returned value is non-nil:
+  - `AsJsoner()`, `AsJsonContractsBinder()`, `AsJsonMarshaller()`
+  - `AsBasicByteEnumContractsBinder()`, `AsBasicEnumContractsBinder()`
+  - `ToSimple()`, `ToPtr()`
+- Per-method skip via `MethodByName` `IsValid` check — packages without a given binder are silently skipped per-method instead of failing the suite.
+- Skip map for `strtype.Variant` / `inttype.Variant` whose bindings panic.
+
+### Notes
+- 5–7 wrappers × ~70 packages → expected 300+ thin wrappers covered in one sweep — primary AL²-06 leverage.
+- Run `./run.ps1 -tc` to capture the coverage delta.
+
 ## [v0.73.0] — 2026-05-07 — AL-07: Concrete-Variant byte-predicate cluster sweep
 
 ### Added
