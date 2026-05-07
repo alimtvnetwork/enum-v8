@@ -10,6 +10,21 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.3.0] — 2026-05-07 — `strtype` fileReader uplift sweep
+
+### Added
+- `strtype/FileReader_Uplift_test.go` — bespoke uplift covering `fileReader.go` (33 methods, mostly untouched by `StrType_Uplift_test.go` which focused on `Variant`).
+  - Real temp file with multi-line content (`alpha\nbeta\n\n  gamma  \ndelta\n`) seeded via `t.TempDir()` + `os.WriteFile`.
+  - Sweeps every method on **both** a good path and a non-existent path, hitting both happy and error branches.
+  - Includes `*Lock` siblings (33 methods × 2 paths = ~66 invocations).
+  - `Variant.FileReader()` interface dispatch + `NewFileReader` constructor.
+  - 1-line helper files `GetSet.go` / `GetSetVariant.go` (both branches each).
+
+### Notes
+- Last `-tc` run: `strtype` at **61.6%**. Expected lift: **~80%+** (fileReader is the largest uncovered surface in the package).
+- Total project coverage expected: **~80%+** after v1.1.1 + v1.2.0 + v1.3.0 land together.
+- Pattern: error-path sweep with `_, _ =` discards is intentional — the assertion is "doesn't panic", not "returns specific value". Strict assertions on stdlib I/O are an anti-pattern (RCA pattern v1.1.1).
+
 ## [v1.2.0] — 2026-05-07 — Bespoke uplift sweep for `linuxservicestate.ExitCode`
 
 ### Added
