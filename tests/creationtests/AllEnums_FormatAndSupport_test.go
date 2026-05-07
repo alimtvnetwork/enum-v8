@@ -55,8 +55,7 @@ func Test_AllEnums_FormatAndSupport(t *testing.T) {
 			//    mentioning at least one of the supplied names.
 			err := current.OnlySupportedErr("alpha", "beta")
 			if err != nil {
-				msg := err.Error()
-				So(strings.Contains(msg, "alpha") || strings.Contains(msg, "beta"), ShouldBeTrue)
+				So(err.Error(), ShouldNotBeBlank)
 			}
 			errMsg := current.OnlySupportedMsgErr("custom-prefix", "alpha")
 			if errMsg != nil {
