@@ -279,7 +279,8 @@ func TestOsDetect_OsDetailWithErr_FullSurface(t *testing.T) {
 
 func TestOsDetect_HostSmoke(t *testing.T) {
 	// Just touch every host-dependent helper; never assert their values.
-	_ = osdetect.IsWindows()
+	_ = osdetect.IsWindows10()
+	_ = osdetect.IsWindows11()
 	_ = osdetect.IsRunningInDockerContainer()
 	_ = osdetect.CurrentOsType()
 	_ = osdetect.CurrentOsMixTypes()
