@@ -71,21 +71,21 @@ These are the highest-impact findings: `enum-v7` depends on APIs the spec does n
 | D-CVS-12 | `errcore.ToError(...)` and `errcore.ToString(err)` conversion helpers | `osdetect/vars.go:111` uses `errcore.ToString(err)` | LOW | Add §1.7 "Conversion Helpers" |
 | D-CVS-13 | Several `RawErrorType` values used in `enum-v7` are not in the §1.1 "Common categories" list: `FailedToExecuteType`, `NotSupportedType`, `PathInvalidErrorType`, `ComparatorShouldBeWithinRangeType` | Direct call sites listed above | LOW | Either expand the §1.1 examples or add a footnote pointing to the upstream `RawErrorType.go` enumeration |
 
-### ❓ Unverifiable from this repo (7)
+### ✅ Match — resolved via upstream `core-v9 v1.5.8` probe (Cycle 90, 2026-05-07)
 
-Spec lists these APIs but no `enum-v7` source calls them. They may exist upstream — pending the upstream-source audit (task **AB**), they cannot be confirmed or refuted here.
+All 7 previously-❓ rows confirmed against `/tmp/core-v9-upstream/errcore/` (upstream `core-v9 v1.5.8`).
 
-| # | Claim | Why unverifiable |
-|---|-------|------------------|
-| C1 | `RawErrorType` exposes 80+ predefined values (§1.1) | Need upstream `errcore/RawErrorType.go` to count |
-| C2 | `Error(name, ref)` constructor exists (§1.2) | No call site in `enum-v7` (uses `ErrorRefOnly` / `Error(...)` on specific types instead) |
-| C3 | `ErrorNoRefs`, `Fmt`, `FmtIf`, `MergeError`, `MergeErrorWithMessage` constructors (§1.2 table) | Zero call sites in `enum-v7` |
-| C4 | `Expected.But`, `Expected.ButUsingType`, `StackEnhance.Error`, `StackEnhance.Msg` (§1.3) | Zero call sites |
-| C7 | `VarTwo`, `VarTwoNoType`, `MessageVarMap` (§1.4) | Zero call sites |
-| C8 | `MergeErrors`, `ManyErrorToSingle`, `SliceToError` (§3.1) | Zero call sites |
-| C9 | Type aliases `ErrFunc`, `ErrBytesFunc`, `ErrStringsFunc`, `ErrStringFunc`, `ErrAnyFunc` (§6) | Zero call sites |
+| # | Claim | Upstream evidence |
+|---|-------|-------------------|
+| C1 | `RawErrorType` exposes 80+ predefined values (§1.1) | `errcore/RawErrorType.go` const block contains **85** members. ✅ |
+| C2 | `Error(name, ref)` constructor on `RawErrorType` (§1.2) | `func (RawErrorType) Error(...)` defined in upstream. ✅ |
+| C3 | `ErrorNoRefs`, `Fmt`, `FmtIf`, `MergeError`, `MergeErrorWithMessage` constructors (§1.2) | All present as `RawErrorType` methods (also `ErrorNoRefsSkip`, `MergeErrorWithMessageRef`, `MergeErrorWithRef`). ✅ |
+| C4 | `Expected.But`, `Expected.ButUsingType`, `StackEnhance.Error`, `StackEnhance.Msg` (§1.3) | `expected{}` exposes `But`, `ButUsingType`, `ButFoundAsMsg`, `ButFoundWithTypeAsMsg`, `PrimitiveButFound`, `ReflectButFound`. `stackTraceEnhance{}` exposes `Error`, `ErrorSkip`, `Msg`, `MsgSkip`, `FmtSkip`, `MsgToErrSkip`, `MsgErrorSkip`, `MsgErrorToErrSkip`. ✅ |
+| C7 | `VarTwo`, `VarTwoNoType`, `MessageVarMap` (§1.4) | `errcore/VarTwo.go`, `VarTwoNoType.go`, `MessageVarMap.go`, `MessageVarTwo.go`. ✅ |
+| C8 | `MergeErrors`, `ManyErrorToSingle`, `SliceToError` (§3.1) | `errcore/MergeErrors.go`, `ManyErrorToSingle.go` + `ManyErrorToSingleDirect.go`, `SliceToError.go` + `SliceToErrorPtr.go`. ✅ |
+| C9 | Type aliases `ErrFunc`, `ErrBytesFunc`, `ErrStringsFunc`, `ErrStringFunc`, `ErrAnyFunc` (§6) | `errcore/funcs.go:26-30` declares all five (plus `TaskWithErrFunc = ErrFunc`). ✅ |
 
-> ⚠️ The fact that **none** of the §3, §6, and most of §1.2 are exercised by `enum-v7` is itself a meta-finding: either the spec describes a much wider API than this repo needs (legitimate — `core-v9` serves many consumers), OR the spec drifted away from current upstream. Resolving this requires fetching `core-v9` source (task **AB**).
+> No new D-CVS findings — spec was accurate; the API simply isn't exercised by `enum-v7` (legitimate, since `core-v9` serves many consumers beyond this enum module).
 
 ### ❌ Contradiction (0)
 
