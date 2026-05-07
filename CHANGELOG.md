@@ -10,6 +10,14 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.83.0] — 2026-05-07 — Fixture-drift guard (RCA Pattern 1 lint)
+
+### Added
+- **`tests/creationtests/AllEnums_FixtureDriftGuard_test.go`** — new shared-loop suite `Test_AllEnums_FixtureDriftGuard` that walks every row of `allEnumGeneralTestCases` and asserts the pinned `StringMin` / `StringMax` match the live `MinValueString()` / `MaxValueString()` of `tc.InitialBasicEnumer`. Catches RCA Pattern 1 (stale fixture after a Variant override is added) automatically and reports the exact `(typeName, field, pinned, live)` tuple — pointing the author at the line in `allEnumGeneralTestCases.go` to update. Skip map covers `strtype.Variant`, `inttype.Variant`, and `sqliteconnpathtype.Variant` (PI-005..007 BasicString cluster, where pinned overrides are intentional).
+
+### Notes
+- Fourth RCA-pattern lint (Patterns 1, 2, 6, 8, 9 now covered). Remaining: Patterns 3 (BasicString defect detector), 4 (Goconvey conflation — log-side, not a runtime suite), 5 (level-comparison receiver inversion), 7 (`AllNameValues` round-trip), 10 (parallel-mode false positives — already fixed in v0.63.0), 11 (Windows server/client wrapper sweep — already swept in v0.79.1).
+
 ## [v0.82.0] — 2026-05-07 — Open-ended skip-map registration guard (RCA Pattern 9 lint)
 
 ### Added
