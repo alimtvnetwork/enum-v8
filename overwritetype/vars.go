@@ -11,6 +11,8 @@ var (
 		ForceWrite:                         "ForceWrite",
 		SkipOnExistFiles:                   "SkipOnExistFiles",
 		IgnoreRepeatInFolderNameExtraction: "IgnoreRepeatInFolderNameExtraction",
+		ForceWriteRepeat:                   "ForceWriteRepeat",
+		SkipFilesRepeat:                    "SkipFilesRepeat",
 		Yes:                                "Yes",
 		No:                                 "No",
 	}
@@ -20,6 +22,8 @@ var (
 		"ForceWrite":                         ForceWrite,
 		"SkipOnExistFiles":                   SkipOnExistFiles,
 		"IgnoreRepeatInFolderNameExtraction": IgnoreRepeatInFolderNameExtraction,
+		"ForceWriteRepeat":                   ForceWriteRepeat,
+		"SkipFilesRepeat":                    SkipFilesRepeat,
 		"Yes":                                Yes,
 		"No":                                 No,
 	}
