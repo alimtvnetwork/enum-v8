@@ -194,12 +194,15 @@ func (it Variant) IsEqual(level Variant) bool {
 	return level == it
 }
 
+// IsAboveOrEqual reports whether the receiver's severity is at or above level.
+// Higher numeric value == higher severity (Error=3 > Notice=1).
 func (it Variant) IsAboveOrEqual(level Variant) bool {
-	return level.ValueByte() >= it.ValueByte()
+	return it.ValueByte() >= level.ValueByte()
 }
 
+// IsLowerOrEqual reports whether the receiver's severity is at or below level.
 func (it Variant) IsLowerOrEqual(level Variant) bool {
-	return level.ValueByte() <= it.ValueByte()
+	return it.ValueByte() <= level.ValueByte()
 }
 
 func (it Variant) IsInvalid() bool {
