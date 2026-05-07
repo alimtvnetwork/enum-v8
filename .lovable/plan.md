@@ -31,21 +31,18 @@
 
 ### AA. Continue spec-audit cycles
 
-- **Status:** 🔄 In Progress
-- **Objective:** Audit remaining spec directories for code-vs-spec drift.
-- **Dependencies:** None
-- **Expected outputs:** Audit report per cycle in `spec/07-code-vs-spec-audits/`, scoreboard updates, spec fixes.
-- **Acceptance criteria:** Each audited directory reaches ≥95% verifiable.
-- **Cycle plan:**
+- **Status:** ✅ DONE (2026-05-07, Cycle 20, `spec-v0.55.0` / enum-v7 v0.70.0)
+- **Result:** All 6 walk-through targets audited. Final cycle (20) verified `spec/00-llm-integration-guide.md` against upstream `core-v9 v1.5.8` — zero drift, zero D-CVS/C-CVS findings.
+- **Cycle plan (closed):**
 
-| Cycle | Target | Priority | Reason |
-|-------|--------|----------|--------|
-| 15 | `spec/06-testing-guidelines/` (9 files) | **P0** | Most-referenced, known stale paths, never audited |
-| 16 | `spec/03-powershell-test-run/` (9 files) | P1 | Toolchain docs, likely stale |
-| 17 | `spec/04-tooling/` (10 files) | P1 | CI pipeline, bootstrap |
-| 18 | `spec/02-app-issues/` (10 files) | P2 | All resolved, quick verification |
-| 19 | `spec/05-failing-tests/` (25 files) | P3 | Post-mortems, reference-only |
-| 20 | `spec/00-llm-integration-guide.md` | P1 | 2386-line monolith, needs reconciliation with audited specs |
+| Cycle | Target | Status |
+|-------|--------|--------|
+| 15 | `spec/06-testing-guidelines/` (9 files) | ✅ Done |
+| 16 | `spec/03-powershell-test-run/` (9 files) | ✅ Done |
+| 17 | `spec/04-tooling/` (10 files) | ✅ Done |
+| 18 | `spec/02-app-issues/` (10 files) | ✅ Done |
+| 19 | `spec/05-failing-tests/` (25 files) | ✅ Done |
+| 20 | `spec/00-llm-integration-guide.md` | ✅ Done |
 
 ### AH. Cross-`spec/` cleanup sweep
 
