@@ -194,15 +194,23 @@ func TestSqliteConn_VariantPtrAndBinders(t *testing.T) {
 	if v.AsJsonContractsBinder() == nil {
 		t.Error("AsJsonContractsBinder nil")
 	}
-	jr := v.Json()
 	if v.JsonPtr() == nil {
 		t.Error("JsonPtr nil")
 	}
-	var dst Variant
-	if err := dst.JsonParseSelfInject(&jr); err != nil {
-		t.Errorf("JsonParseSelfInject: %v", err)
+	// PI-005 (Cycle 60): the upstream `corejson.Result.Unmarshal` and
+	// `BasicEnumImpl.UnmarshallToValue` both call `GetValueByName` with the
+	// raw quoted JSON bytes, which never matches the unquoted name keys.
+	// Only the locally overridden `Variant.UnmarshalJSON` (which strips
+	// quotes via `strconv.Unquote`) round-trips. Use that path here.
+	data, err := v.MarshalJSON()
+	if err != nil {
+		t.Fatalf("MarshalJSON: %v", err)
 	}
-	if _, err := v.UnmarshallEnumToValue([]byte(`"All"`)); err != nil {
-		t.Errorf("UnmarshallEnumToValue: %v", err)
+	var dst Variant
+	if err := dst.UnmarshalJSON(data); err != nil {
+		t.Errorf("UnmarshalJSON: %v", err)
+	}
+	if dst != v {
+		t.Errorf("round-trip via local UnmarshalJSON: got %v want %v", dst, v)
 	}
 }
