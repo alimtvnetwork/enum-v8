@@ -133,14 +133,14 @@ func Test_DbDriverType_ConnectionStringCompiler(t *testing.T) {
 				Host: "h", Port: "1", User: "u", Password: "pw", DbName: "d", Options: "o",
 			},
 		}
-		_, _ = c.CompileUsingConnection(conn)
-		_, _ = c.CompileUsingParams("h", "1", "d", "u", "pw", "o")
-		_, _ = c.CompileUsingAllDbConnectionFormat(conn)
-		_ = c.CompileUsingConnectionFormat(c.Format(), conn)
-		_, _ = c.CompileUsingParamsOptions(ConnectionOptions{Host: "h", Port: "1", DbName: "d", User: "u", Password: "pw"})
-		_, _ = c.CompileUsingMap(map[string]string{"{db}": "d"})
-		_ = c.FormatCompileUsingMap(c.Format(), map[string]string{"{db}": "d"})
-		_ = c.CompileUsingMapMust(map[string]string{"{db}": "d"})
+		_, _ = c.CompileUsingConnection(conn.ConnectionOptions)
+		_, _ = c.CompileUsingParams("h", "1", "d", "u", "pw")
+		_, _ = c.CompileUsingAllDbConnectionFormat(conn.ConnectionOptions)
+		_ = c.CompileUsingConnectionFormat(c.Format(), conn.ConnectionOptions)
+		_, _ = c.CompileUsingParamsOptions("h", "1", "d", "u", "pw", "o")
+		_, _ = c.CompileUsingMap(true, map[string]string{"{db}": "d"})
+		_, _ = c.FormatCompileUsingMap(c.Format(), true, map[string]string{"{db}": "d"})
+		_ = c.CompileUsingMapMust(true, map[string]string{"{db}": "d"})
 	}
 
 	bad := connectionStringCompiler{dbType: Invalid}
@@ -153,7 +153,7 @@ func Test_DbDriverType_ConnectionStringCompiler(t *testing.T) {
 	if bad.IsValidConnectionString() {
 		t.Fatal("Invalid compiler should not be valid")
 	}
-	_, err := bad.CompileUsingMap(map[string]string{})
+	_, err := bad.CompileUsingMap(true, map[string]string{})
 	if err == nil {
 		t.Fatal("Invalid compiler CompileUsingMap should error")
 	}
