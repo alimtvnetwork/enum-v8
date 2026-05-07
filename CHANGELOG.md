@@ -10,6 +10,12 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.61.0] — 2026-05-07 — Cycle 90 — AB-residual: §02 error-system
+
+### Changed
+- `spec/07-code-vs-spec-audits/03-cycle2-error-system.md`: promoted all 7 ❓ rows against upstream `core-v9 v1.5.8` `errcore/`. Verifiable score 11 → **18/18 (100%)**, match rate 10/18 = 55.6%. No new D-CVS findings; spec is accurate, just under-exercised by `enum-v7`.
+- Verified upstream: `RawErrorType` has 85 const members (C1 ✅), `Error/ErrorNoRefs/Fmt/FmtIf/MergeError/MergeErrorWithMessage` all present on `RawErrorType` (C2/C3 ✅), `Expected.But*` and `StackEnhance.*` present (C4 ✅), `VarTwo/VarTwoNoType/MessageVarMap` files exist (C7 ✅), `MergeErrors/ManyErrorToSingle/SliceToError` files exist (C8 ✅), `funcs.go` declares all 5 `Err*Func` aliases (C9 ✅).
+
 ## [v0.60.0] — 2026-05-07 — Cycle 89 — AB-residual: §10 cmd-entrypoints
 
 ### Changed
