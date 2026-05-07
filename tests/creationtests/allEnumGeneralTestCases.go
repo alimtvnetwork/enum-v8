@@ -2880,7 +2880,7 @@ var allEnumGeneralTestCases = []*EnumTestWrapper{
 			 "RevokeSsl": 10 ,
 			 "AutoSsl": 11 ,
 			 "AutoRenewSsl": 12 ,
-			 "": 13 ,
+			 "RemoveSslAll": 13 ,
 			 "RemoveAll": 14 ,
 			 "ExpireSsl": 15 ,
 			 "SslChallenge": 16 ,
@@ -2909,7 +2909,7 @@ var allEnumGeneralTestCases = []*EnumTestWrapper{
 		 },
 		 ExpectedInvalidName:"Invalid",
 		 ExpectedInvalidValueString:"0",
-		 ExpectedRangesNamesCsv: "Invalid(0), Help(1), AddDomain(2), RemoveDomain(3), AddSsl(4), DryRunSsl(5), RenewSsl(6), RemoveSsl(7), MoveSsl(8), BackupSsl(9), RevokeSsl(10), AutoSsl(11), AutoRenewSsl(12), (13), RemoveAll(14), ExpireSsl(15), SslChallenge(16), HttpSslChallenge(17), DnsSslChallenge(18), LastStates(19), Sync(20), SyncNow(21), SyncForce(22), CurrentStateName(23), Histories(24), ExportConfigSpecific(25), ExportConfigAll(26), ImportConfigSpecific(27), ImportConfigAll(28), SearchDomains(29), ListPorts(30), ListSslEnabledServers(31), SearchSslByDomain(32), SearchSslByUser(33), SearchSslByPackage(34), ListAboutToExpire(35), ListExpiredSsl(36), Backup(37), Import(38)",
+		 ExpectedRangesNamesCsv: "Invalid(0), Help(1), AddDomain(2), RemoveDomain(3), AddSsl(4), DryRunSsl(5), RenewSsl(6), RemoveSsl(7), MoveSsl(8), BackupSsl(9), RevokeSsl(10), AutoSsl(11), AutoRenewSsl(12), RemoveSslAll(13), RemoveAll(14), ExpireSsl(15), SslChallenge(16), HttpSslChallenge(17), DnsSslChallenge(18), LastStates(19), Sync(20), SyncNow(21), SyncForce(22), CurrentStateName(23), Histories(24), ExportConfigSpecific(25), ExportConfigAll(26), ImportConfigSpecific(27), ImportConfigAll(28), SearchDomains(29), ListPorts(30), ListSslEnabledServers(31), SearchSslByDomain(32), SearchSslByUser(33), SearchSslByPackage(34), ListAboutToExpire(35), ListExpiredSsl(36), Backup(37), Import(38)",
 		 IntegerMinMax: corerange.MinMaxInt {
  			Min:0,
  			Max:38,
