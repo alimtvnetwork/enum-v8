@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.41.0] — 2026-05-07 — Cycle 69 — AL2-02 Batch B coverage uplift (untested DB packages)
+
+### Added
+- New coverage suites for the previously-untested DB family packages:
+  - `querymethodtype/QueryMethodType_Coverage_test.go` — Min/Max, every Is* predicate, all numeric/string accessors, IsAny* equality, JSON round-trip, ToPtr/ToSimple (incl. nil receiver), and the full As*-binder surface. `RangesInvalidErr()` exercised as informational.
+  - `sqliteconnpathtype/SqliteConnPathType_Coverage_test.go` — `SqliteConnectionOption.CreateMap/Compile/String`, every `sqliteConnectionCompiler` Format/CompileUsing* helper, all 11 Variant constants, PI-005 `MarshalJSON`/`UnmarshalJSON` round-trip (incl. empty/nil/malformed paths), PI-006 local `MinValueString`/`RangesDynamicMap` overrides, and binder surface.
+
+---
+
 ## [v0.40.0] — 2026-05-07 — Cycle 68 — AL2-02 Batch B coverage uplift (DB family)
 
 ### Added
