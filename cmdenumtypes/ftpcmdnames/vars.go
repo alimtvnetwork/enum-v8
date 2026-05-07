@@ -31,6 +31,7 @@ var (
 		ChangeUserHomeDir:      "ChangeUserHomeDir",
 		ChangeUsersHomeDir:     "ChangeUsersHomeDir",
 		PerUserLimit:           "PerUserLimit",
+		PassivePortRange:       "PassivePortRange",
 		AssignHostingPackage:   "AssignHostingPackage",
 		EditConfig:             "EditConfig",
 		UpdateConfig:           "UpdateConfig",
