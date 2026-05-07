@@ -10,6 +10,17 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.96.0] — 2026-05-07 — eventtype / httpmethodtype / scripttype coverage uplift
+
+### Added
+- **`eventtype/EventType_Uplift_test.go`** — pure-`testing` sweep over every `Variant` accessor, every Is*/Has* predicate, ErrorMap-driven logical-error helpers, JSON marshal/unmarshal, `JsonParseSelfInject`, `OnlySupported*` error helpers, and the `HasPattern` panic path (recovered).
+- **`httpmethodtype/HttpMethodType_Uplift_test.go`** — pure-`testing` sweep over every accessor, predicate (`IsSafe` / `IsIdempotent` / `IsBodyAllowed` / per-method), JSON round-trip, `Json` / `JsonPtr` / `JsonParseSelfInject`, all `As*ContractsBinder` adapters, `Min` / `Max` / `NewMust` / `RangesInvalidErr`.
+- **`scripttype/ScriptType_Uplift_test.go`** — pure-`testing` sweep over every accessor, every script-family predicate, `ScriptDefault`-backed helpers (`ScriptDefault` / `ProcessName` / `DefaultArgs` / `IsImplemented` / `IsInvalidImplement`), `CondBool` / `CondFunc` both branches, `OsDefaultScriptType` / `DefaultOsScript`, JSON round-trip on pointer receivers, `As*ContractsBinder` adapters.
+
+### Notes
+- Three packages previously sitting in the 56–58% coverage band are now expected to move comfortably past 75% each, lifting the project total and giving safe headroom for a 65% → 70% CI gate bump in a follow-up.
+- Same pure-`testing` (no Convey) pattern as v0.95.0 — keeps tests isolated from the Convey log structure (`.lovable/memory/07-test-failure-rca-patterns.md`).
+
 ## [v0.95.0] — 2026-05-07 — strtype coverage uplift 13.7% → 60.1%
 
 ### Added
