@@ -10,6 +10,14 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.92.0] — 2026-05-07 — AL2-07: dbdrivertype Connection bespoke suite
+
+### Added
+- **`dbdrivertype/DbDriverType_Connection_Coverage_test.go`** — bespoke business-logic suite for the three source files the existing Variant-only `*_Coverage_test.go` doesn't reach: `Connection.go`, `ConnectionOptions.go`, `connectionStringCompiler.go`. Walks every Variant with a registered DSN format (`Sqlite`, `Redis`, `MySql`, `PostgreSql`, `MicrosoftSqlServer`, `MongoDb`); for each: builds a representative `Connection`, asserts `HasConnectionString`/`IsValid`/`!IsInvalidConnectionString`, exercises `ConnectionStringFormat`/`AllDbFormat`, all `CreateMap*` helpers, all `Compile*` helpers, and the same surface on bare `ConnectionOptions`. Also covers the `Invalid` Variant negative path (Compile / CompileUsingParams / CompileUsingParamsNoOptions all error). Separately exercises the unexported `connectionStringCompiler` struct against every supported driver and against `Invalid` (CompileUsingConnection, CompileUsingParams, CompileUsingAllDbConnectionFormat, CompileUsingConnectionFormat, CompileUsingParamsOptions, CompileUsingMap with curly-replace flag, FormatCompileUsingMap, CompileUsingMapMust).
+
+### Notes
+- AL2-07 is the first of the two bespoke AL2 sub-tasks; AL2-08 (`osdetect` Linux/Windows guarded branches) remains. Driver substring assertions verify rendered DSNs contain expected fragments — e.g. `mysql` compiled output must contain `tcp(`, host:port, and `/dbname`. Pure additive coverage; no source changes.
+
 ## [v0.91.0] — 2026-05-07 — Coverage uplift sweep: mimetype, completionstate
 
 ### Added
