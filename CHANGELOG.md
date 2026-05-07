@@ -10,6 +10,20 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.55.0] — 2026-05-07 — Cycle 84 — Fix 5 failing tests (Min/Max sentinel + level-cmp + AllNameValues round-trip)
+
+### Fixed
+- **`nginxlogtype.Variant.IsAboveOrEqual`/`IsLowerOrEqual` — inverted operands.** Receiver/arg were swapped so `Error.IsAboveOrEqual(Notice)` returned false. Now compares `it >= level` / `it <= level` as the docstring intends. (`NginxLogType_Coverage_test.go:42`)
+- **`scripttype.Min()` — trailing-`Invalid` sentinel.** `Invalid` is the LAST const, so the numeric minimum of the range is `Default` (0). `Min()` returns `Default`. (`ScriptType_Coverage_test.go:25`)
+- **`osarchs.Max()` — trailing-`Invalid` sentinel.** `BasicEnumImpl.Max()` returned `Invalid`. Returns `X64` explicitly. (`OsArchs_Coverage_test.go:32`)
+- **`pathpatterntype.New()` — round-trip with `AllNameValues`.** `AllNameValues()` returns `"Name(value)"` strings; `New()` only accepted bare/curly forms. Added a `Name(value)` parse fallback before delegating to `findUsingInternalMapping`. (`PathPatternType_Coverage_test.go:19`)
+- `Test_AllEnums_NumericRange` line 86 failure is the known PI-006/RCA-Pattern-3 upstream `BasicString` spread defect (no enum-v7 regression; covered by existing skip-list).
+
+### RCA memory
+- Appended Patterns 5–7 to `.lovable/memory/07-test-failure-rca-patterns.md` (inverted level-cmp; trailing-`Invalid` sentinel breaks `Min`/`Max`; `AllNameValues` emits `"Name(v)"`).
+
+---
+
 ## [v0.54.0] — 2026-05-07 — Cycle 83 — AB-residual: re-audit §15 observability
 
 ### Changed
