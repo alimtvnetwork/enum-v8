@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.81.0] — 2026-05-07 — Sparse-array gap guard (RCA Pattern 2 lint)
+
+### Added
+- **`tests/creationtests/AllEnums_SparseArrayGapGuard_test.go`** — new shared-loop suite `Test_AllEnums_SparseArrayGapGuard` that walks every byte in `[MinByte..MaxByte]` for every registered enum, constructs the Variant via reflection on `New(...)`, and asserts that every present derived string accessor (`NameLower`, `NameLowerSnakeCase`, `NameLowerKebabCase`, `ShortName`, `Description`, `Code`, `Symbol`) returns a non-blank string for every non-Invalid member. Catches RCA Pattern 2 — the silent "sparse `[...]string{Variant: …}` literal missing an enum constant" defect class — automatically, without per-package boilerplate. Skip map covers `strtype.Variant` and `inttype.Variant` (open-ended).
+
+### Notes
+- Failure messages identify both the enum, the offending accessor name, the member name, and its byte index — so a regression points directly at the missing `vars.go` map row to add.
+- Complements v0.80.0 Pattern-8 guard. Together the two suites cover Patterns 2, 6, and 8 with zero per-package boilerplate.
+
 ## [v0.80.0] — 2026-05-07 — Pattern-8 codegen guard (Invalid-sentinel suite)
 
 ### Added
