@@ -10,6 +10,37 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.45.0] — 2026-05-07 — Cycle 74 — AL2-06 Batch F coverage suites
+
+### Added
+- `taskcategory/TaskCategory_Coverage_test.go` — `New`/`NewMust` for
+  representative variants, accessor sweep, JSON round-trip,
+  `RangesInvalidErr`/`OnlySupportedErr*` exercise.
+- `taskpriority/TaskPriority_Coverage_test.go` — `New`/`NewMust` across
+  6 named variants, `GetPriorityMap`/`PriorityMapString` parity check
+  (Default=40), accessor sweep, JSON round-trip.
+- `scripttype/ScriptType_Coverage_test.go` — `New`/`NewMust` across
+  10 script variants, `Min`/`Max` boundary, helper coverage for
+  `CondBool`, `CondFunc`, `OsDefaultScriptType`, `DefaultOsScript`,
+  accessor sweep, JSON round-trip.
+- `promptclitype/PromptCliType_Coverage_test.go` — `New`/`NewMust` for
+  named variants plus `newOtherWays` aliases (`yes`/`no`/`ask`),
+  `NewUsingBool`, `NewUsingAndBooleans`, `NewUsingSetter`
+  (`issetter.True`/`False`), `IsAccept`/`IsReject`/`IsLater`
+  predicates, `Is(...)` helper, `OnOffLowercaseName`/`TrueFalseName`/
+  `ToNumberString`, accessor sweep, JSON round-trip, `ToIsSetter`.
+- `cmdenumtypes/rootcmdnames/RootCmdNames_Coverage_test.go` —
+  `New`/`NewMust` for representative root command names, accessor
+  sweep, JSON round-trip.
+
+### Notes
+- Pure additive coverage; no production code touched. Closes the
+  AL2-06 Batch F gap from the coverage report. The remaining
+  `cmdenumtypes/*` subpackages share one `Variant` shape and can be
+  swept later with the AL2-09 generator pass if needed.
+
+---
+
 ## [v0.44.0] — 2026-05-07 — Cycle 73 — AL2-05 Batch E coverage suites
 
 ### Added
