@@ -194,6 +194,14 @@ function Invoke-CoverageCompileCheck {
                 continue
             }
 
+            # AN-2026-05-07: Final guard — if the captured diagnostic is only
+            # `-coverpkg` warnings (no real go-loader/compile error), it's a
+            # false-positive Blocked. Treat as compilable.
+            if (Test-IsCoverpkgWarningOnlyOutput $result.Output) {
+                $testPkgs.Add($result.Pkg)
+                continue
+            }
+
             $diagnosticOut = Resolve-BlockedPackageDiagnosticOutput -PackagePath $result.Pkg -Lines $result.Output
             $callerSource = "CoverageCompileCheck.psm1 → Invoke-CoverageCompileCheck (parallel)"
             Write-Fail "Blocked: $shortName  ($($result.Pkg)) (source: $callerSource)"
