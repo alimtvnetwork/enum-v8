@@ -60,9 +60,19 @@ Read end-to-end, extracted every checkable claim, then verified each against `en
 
 ## Verifiable subset score
 
-**100.0 %** (14 ✅ / 14 verifiable claims). 10 ❓ (`coretests`, `GetAssert.*` 13 methods, 4 testwrapper packages, `coretestcases.CaseV1` cast — all upstream surface) deferred to **task AB**.
+**Cycle 86 AB residual:** 100.0 % (24 / 24 verifiable). 0 ❓ remain.
+
+## Cycle 86 new findings
+
+### D-CVS-64 — CRITICAL REGRESSION: prior `integratedtests` "fixes" inverted the upstream truth
+- Cycles 1, 3, 6, 9, 10, 11, 12 (C-CVS-01, D-CVS-17/26/27/32/36/39/40/41) treated `tests/integratedtests/` as a stale path and rewrote spec text to `tests/creationtests/`. Cycle 86 AB-clone of `core-v9 v1.5.8` shows the OPPOSITE: upstream has `tests/integratedtests/` with **92 subfolders** AND `tests/creationtests/` is one of those 92 subfolders. The path `tests/integratedtests/argstests/` is real. `enum-v5` happens to use `tests/creationtests/` at the top level for its enum-creation suite — that is the local convention only.
+- **Spec impact:** every "fixed" spec sentence that now reads `tests/creationtests/` for upstream context is now wrong in the opposite direction.
+- **Fix required (AJ-NEW HIGH):** rewrite §1, §3, §5 of `14-tests-folder-walkthrough.md`, §8 of `01-package-map.md`, line 183 of `02-design-philosophy.md` to: (a) keep `tests/integratedtests/` as the upstream canonical path; (b) add `enum-v5`-specific redirect "→ in this consumer, the enum-creation cases live under `tests/creationtests/` instead". Do NOT delete the upstream path.
+
+### D-CVS-65 — LOW: filename typo `TextValidatorsWrapper.go`
+- Spec §2.4 lists `TextValidatorWrapper.go` (singular). Actual file is `TextValidatorsWrapper.go` (plural). Update spec line.
 
 ## See also
-- [`01-scoreboard.md`](./01-scoreboard.md) — Cycle 12 row + D-CVS-39..42 entries
-- Prior `integratedtests` fixes (now 9 spec-corpus occurrences resolved): C-CVS-01 (cycle 1), D-CVS-17 (cycle 3), D-CVS-26 (cycle 6), D-CVS-27 (cycle 9), D-CVS-32 (cycle 10), D-CVS-36 (cycle 11), D-CVS-39/40/41 + 2 collateral (this cycle)
-- D-CVS-25 / D-CVS-38 — sibling consumer-coverage callouts
+- [`01-scoreboard.md`](./01-scoreboard.md) — Cycle 12 + Cycle 86 D-CVS-64/65 entries
+- D-CVS-64 supersedes/inverts: C-CVS-01, D-CVS-17, D-CVS-26, D-CVS-27, D-CVS-32, D-CVS-36, D-CVS-39, D-CVS-40, D-CVS-41
+- D-CVS-25 / D-CVS-38 — sibling consumer-coverage callouts (still valid)
