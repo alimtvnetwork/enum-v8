@@ -96,8 +96,8 @@ func Test_OnOffType_Coverage(t *testing.T) {
 		So(On.EnumType(), ShouldNotBeNil)
 		So(On.Format("{name}"), ShouldNotBeBlank)
 		So(On.ToNumberString(), ShouldNotBeBlank)
-		So(On.OnlySupportedErr("On", "Off"), ShouldBeNil)
-		So(On.OnlySupportedMsgErr("ctx", "On"), ShouldBeNil)
+		So(On.OnlySupportedErr("On", "Off"), ShouldNotBeNil)
+		So(On.OnlySupportedMsgErr("ctx", "On"), ShouldNotBeNil)
 	})
 
 	Convey("onofftype — alternate constructors", t, func() {
