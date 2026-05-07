@@ -77,3 +77,45 @@ _None._ All 17 claims are ❓ pending task **AB** (fetch upstream `core-v9` sour
 1. **AB** — pull upstream `core-v9` source so all 17 §07 claims (plus the existing 7 §04 + 1 §05 + 6 §06 ❓s) become verifiable in one pass.
 2. Until **AB** lands, continue Cycle 6 → [`08-validators.md`](../01-app/08-validators.md). Validators are partly consumed inside `enum-v7` (e.g. via `conditional`-style calls in `inttype`), so Cycle 6 is more likely to yield a measurable match rate.
 3. Note for §07 specifically: the spec is internally consistent and structurally sound — no obvious smell to flag pre-AB. Defer all judgement.
+
+---
+
+## 6. AB-residual re-audit (Cycle 81, 2026-05-07) — upstream verification against `core-v9 v1.5.8`
+
+> **Method**: cloned upstream at `/tmp/core-v9-upstream` (tag `v1.5.8`); inspected `conditional/`, `isany/`, `issetter/`, `regexnew/`, `coremath/`, `corecmp/`, `coresort/`, `corefuncs/`, `namevalue/`, `keymk/` directly.
+
+| #  | Original | New | Evidence |
+|----|----------|-----|----------|
+| 1  | ❓ | ✅ | `conditional/generic.go` exposes `If[T]` (l32), `IfFunc[T]` (l45), `NilDef[T]` (l88), `ValueOrZero[T]` (l167). `NilDefPtr[T]` exists in same file. |
+| 2  | ❓ | ✅ | 15 typed-wrapper files present (`typed_{bool,byte,float32,float64,int,int16,int32,int64,int8,string,uint,uint16,uint32,uint64,uint8}.go`) + `typed_wrappers.go`. Spot-check confirms `ValueOrZeroFloat32`, `ValueOrZeroByte`, `ValueOrZeroBool`, etc. |
+| 3  | ❓ | ✅ | `conditional/ErrorFunc.go:25` defines `ErrorFunc`; `conditional/TypedErrorFunctionsExecuteResults.go:41` defines `TypedErrorFunctionsExecuteResults[T any]`. |
+| 4  | ❓ | ❓ | Eager-vs-Func behavioural rule — no consumer to measure. |
+| 5  | ❓ | ✅ | `isany/Null.go:32`, `isany/Defined.go:30`, `isany/Zero.go:34`, `isany/DeepEqual.go:29`, `isany/JsonEqual.go:34` all exist. |
+| 6  | ❓ | ❓ | "Always use `isany.Null/Defined`" — guidance rule, no consumer. |
+| 7  | ❓ | ⚠️ | `issetter/vars.go:33` enumerates the 6 state names `Uninitialized, True, False, Unset, Set, Wildcard`. Backing-type encoding (byte vs other) needs deeper probe — promote to ✅ pending one more cycle. Filed as note **N-CVS-46 (LOW)**. |
+| 8  | ❓ | ✅ | `issetter/Value.go:148` `IsOn`, `:152` `IsOff`, `:321` `HasInitialized` (plus `HasInitializedAndSet`/`HasInitializedAndTrue` extras). |
+| 9  | ❓ | ✅ | `regexnew/unexported_test.go:378` exercises `New.Lazy(...)`; `:385` exercises `New.LazyLock(...)`. Constructors confirmed live. |
+| 10 | ❓ | ✅ | `LazyRegex.IsApplicable`, `IsDefined`, `IsFailedMatch`, `IsFailedMatchBytes` confirmed (regexnew/README.md table + unexported_test.go). |
+| 11 | ❓ | ⚠️ | `coremath/` has `MaxByte/MaxFloat32/MaxInt`, `MinByte/MinFloat32/MinInt`. Quick scan does not reveal `int16/int32/int64/float64` Min/Max files at top level — they may live in nested files. Filed as **D-CVS-47 (LOW — confirm coverage of all 7 primitives)**. |
+| 12 | ❓ | ✅ | `corecmp/` exposes `AnyItem`, `Byte`, `BytePtr`, `Integer`, `Integer16`, `Integer16Ptr`, `Integer32`, `Integer32Ptr`, `Integer64`, `Integer64Ptr`, `Time`, `TimePtr` — all six types + pointer variants confirmed. |
+| 13 | ❓ | ✅ | `coresort/strsort/Quick.go:44` `Quick(*[]string)` and `:63` `QuickDsc(*[]string)` confirmed (also `QuickPtr`, `QuickDscPtr`). Same shape in `coresort/intsort/Quick.go`. |
+| 14 | ❓ | ✅ | `corefuncs/` has `GetFuncName.go`, `GetFuncFullName.go`, `ActionReturnsErrorFuncWrapper.go`, `InOutErrFuncWrapper.go` (+ `IsSuccessFuncWrapper`, `NamedActionFuncWrapper`, etc.). |
+| 15 | ❓ | ❌ | **No `namevalue.NewInstance(name, value)` constructor.** Upstream uses generic `Instance[K comparable, V any]` struct constructed directly (`&Instance[K,V]{Name:..., Value:...}`). `NewCollection()` (`namevalue/NameValuesCollection.go:36`) and generic `Collection[K,V].Add(...)` (`Collection.go:82`) do exist. `ToMap()` not located by quick scan. Filed as **D-CVS-48 (HIGH)** + **D-CVS-49 (LOW — `ToMap` location)**. |
+| 16 | ❓ | ❌ | **`keymk.New` does not exist.** Upstream creators are `keymk.NewKey = &newKeyCreator{}` and `keymk.NewKeyWithLegend = &newKeyWithLegendCreator{}` (`keymk/vars.go:131-132`). Constructor is `NewKey.Create(...)` returning `*Key`, then `.Compile()`. Filed as **D-CVS-50 (HIGH — wrong namespace name + wrong call shape)**. |
+| 17 | ❓ | ⚠️ | Decision matrix mostly OK at conditional/isany/issetter/regexnew/coremath/corecmp/coresort/corefuncs rows; needs touch-up on `namevalue` (D-CVS-48) and `keymk` (D-CVS-50). Filed as **D-CVS-51 (MEDIUM)**. |
+
+### Updated score row
+
+| Date       | Cycle | Spec audited                      | Claims | ✅ | ⚠️ | ❌ | ❓ | Score (verifiable) |
+|------------|-------|-----------------------------------|--------|----|-----|----|----|--------------------|
+| 2026-05-07 | 81 (AB-residual) | `01-app/07-conditional-and-utilities.md` | 17 | 10 | 4   | 2  | 1  | **10 / 16 = 62.5%** |
+
+### New findings opened (Cycle 81)
+
+- **D-CVS-47 (LOW)** — Confirm `coremath` covers all 7 primitives claimed (visible: byte/float32/int; need to verify int16/int32/int64/float64).
+- **D-CVS-48 (HIGH)** — `namevalue.NewInstance` constructor does not exist; upstream uses direct struct literal of generic `Instance[K, V]`.
+- **D-CVS-49 (LOW)** — `Collection.ToMap()` location not found in quick scan; verify or remove.
+- **D-CVS-50 (HIGH)** — `keymk.New` namespace is wrong; real entry points are `keymk.NewKey` (returns `*newKeyCreator`) and `keymk.NewKeyWithLegend`. Call shape is `NewKey.Create(...).Compile()`, not `New.Compile(...)`.
+- **D-CVS-51 (MEDIUM)** — Decision matrix needs touch-up on namevalue + keymk rows.
+- **N-CVS-46 (LOW)** — Confirm `issetter.Value` byte-backed encoding claim.
+

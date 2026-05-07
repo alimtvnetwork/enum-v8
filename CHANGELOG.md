@@ -10,6 +10,27 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.52.0] — 2026-05-07 — Cycle 81 — AB-residual: re-audit §07 conditional + utilities
+
+### Changed
+- `spec/07-code-vs-spec-audits/06-cycle5-conditional-and-utilities.md`: appended
+  §6 AB-residual re-audit verified against upstream `core-v9 v1.5.8`. Promoted
+  16 of 17 ❓ rows; verifiable score moves from baseline N/A to
+  **10 / 16 = 62.5 %** (best-scoring re-audit so far). Five new findings filed:
+  **D-CVS-48** (HIGH — `namevalue.NewInstance` does not exist), **D-CVS-50**
+  (HIGH — `keymk.New` namespace wrong; real entry points are `keymk.NewKey`
+  and `keymk.NewKeyWithLegend`), **D-CVS-51** (MEDIUM), **D-CVS-47** /
+  **D-CVS-49** (LOW), plus note **N-CVS-46** (LOW — confirm `issetter.Value`
+  byte-backed encoding).
+
+### Notes
+- Re-audit basis: upstream `core-v9` clone at `/tmp/core-v9-upstream` tag
+  `v1.5.8`. Audit-report-only update — no spec body rewrites this cycle.
+- Most §07 surface (conditional, isany, issetter predicates, regexnew,
+  corecmp, coresort, corefuncs) verified ✅ against upstream.
+
+---
+
 ## [v0.51.0] — 2026-05-07 — Cycle 80 — AB-residual: re-audit §09 converters
 
 ### Changed
