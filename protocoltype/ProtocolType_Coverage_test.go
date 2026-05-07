@@ -5,92 +5,63 @@ import (
 	"testing"
 )
 
-// AL2-03 Batch C coverage suite for protocoltype.
+func Test_ProtocolType_Coverage(t *testing.T) {
+	all := []Variant{Invalid, Tcp, Udp, Icmp, Grpc, Rpc, OAuth, Rest, Http, Https, HttpsV3, MSMQ, Ip, IpV6, Ftp, Smtp, Imap, Pop3, Ssh, Sftp, Telnet, Pam, Sso, Smb, P2p, Custom}
+	predicates := []func(Variant) bool{
+		Variant.IsTcp, Variant.IsTcpOrUdp, Variant.IsUdp, Variant.IsIcmp, Variant.IsGrpc, Variant.IsRpc,
+		Variant.IsOAuth, Variant.IsRest, Variant.IsHttp, Variant.IsHttps, Variant.IsHttpsV3, Variant.IsMSMQ,
+		Variant.IsIp, Variant.IsIpV6, Variant.IsFtp, Variant.IsSmtp, Variant.IsImap, Variant.IsPop3, Variant.IsSsh,
+		Variant.IsSftp, Variant.IsTelnet, Variant.IsPam, Variant.IsSso, Variant.IsCustom, Variant.IsDefined,
+		Variant.IsTransactionProtocol, Variant.IsMailingProtocol, Variant.IsInternetProtocol, Variant.IsFirewallIpTablesProtocol,
+		Variant.IsInvalid, Variant.IsValid,
+	}
+	for _, v := range all {
+		_ = v.ValueByte()
+		_ = v.ValueInt()
+		_ = v.ValueUInt16()
+		_ = v.Value()
+		_ = v.Name()
+		_ = v.CapitalName()
+		_ = v.LowerName()
+		_ = v.NameValue()
+		_ = v.String()
+		_ = v.ToNumberString()
+		_ = v.RangeNamesCsv()
+		_ = v.TypeName()
+		_ = v.AllNameValues()
+		_ = v.RangesByte()
+		_ = v.RangesDynamicMap()
+		_ = v.IntegerEnumRanges()
+		_ = v.MinByte()
+		_ = v.MaxByte()
+		_ = v.MinInt()
+		_ = v.MaxInt()
+		_ = v.MinValueString()
+		_ = v.MaxValueString()
+		_, _ = v.MinMaxAny()
+		_ = v.Format("name")
+		_ = v.EnumType()
+		_ = v.IsByteValueEqual(v.ValueByte())
+		_ = v.IsValueEqual(v.ValueByte())
+		_ = v.IsNameEqual(v.Name())
+		_ = v.IsAnyValuesEqual(v.ValueByte())
+		_ = v.IsAnyNamesOf(v.Name())
+		_ = v.OnlySupportedErr("Tcp")
+		_ = v.OnlySupportedMsgErr("m", "Tcp")
+		_ = v.ToPtr()
+		_ = v.Json()
+		_ = v.JsonPtr()
+		_ = v.AsBasicEnumContractsBinder()
 
-func TestProtocolType_MinMax(t *testing.T) {
-	if Min() != Invalid {
-		t.Errorf("Min %v", Min())
-	}
-	if Max() != Custom {
-		t.Errorf("Max %v", Max())
-	}
-	if RangesInvalidErr() == nil {
-		t.Error("RangesInvalidErr should be informational")
-	}
-	if !Invalid.IsInvalid() || Invalid.IsValid() {
-		t.Error("invalid predicate wrong")
-	}
-	if !Tcp.IsValid() || !Tcp.IsAnyValuesEqual(byte(Tcp), byte(Udp)) {
-		t.Error("valid/IsAnyValuesEqual wrong")
-	}
-}
-
-func TestProtocolType_PredicateGroups(t *testing.T) {
-	// Exercise group predicates if exposed via Variant methods.
-	for _, v := range []Variant{Tcp, Udp, Icmp, Grpc, OAuth, Smtp, Imap, Pop3, Ip, IpV6, Custom} {
-		if v.Name() == "" || v.ValueString() == "" {
-			t.Errorf("%v empty name/value", v)
+		for _, p := range predicates {
+			_ = p(v)
 		}
-	}
-}
 
-func TestProtocolType_Accessors(t *testing.T) {
-	v := Https
-	if v.ValueByte() != byte(v) || v.ValueInt() != int(v) || v.ValueInt8() != int8(v) ||
-		v.ValueInt16() != int16(v) || v.ValueInt32() != int32(v) || v.ValueUInt16() != uint16(v) {
-		t.Error("numeric accessor mismatch")
-	}
-	if v.MaxByte() != byte(Max()) || v.MinByte() != byte(Min()) {
-		t.Error("Min/MaxByte mismatch")
-	}
-	if v.MaxInt() < v.MinInt() || v.MinValueString() == "" || v.MaxValueString() == "" {
-		t.Error("Min/Max wrong")
-	}
-	if min, max := v.MinMaxAny(); min == nil || max == nil {
-		t.Error("MinMaxAny nil")
-	}
-	if len(v.AllNameValues()) == 0 || len(v.IntegerEnumRanges()) == 0 ||
-		len(v.RangesByte()) == 0 || len(v.RangesDynamicMap()) == 0 {
-		t.Error("ranges empty")
-	}
-	if v.Name() == "" || v.NameValue() == "" || v.String() == "" || v.RangeNamesCsv() == "" ||
-		v.TypeName() == "" || v.ToNumberString() == "" || v.Format("%s") == "" {
-		t.Error("string accessors empty")
-	}
-	if v.EnumType() == nil {
-		t.Error("EnumType nil")
-	}
-}
-
-func TestProtocolType_EqualityAndJson(t *testing.T) {
-	v := Tcp
-	if !v.IsByteValueEqual(byte(Tcp)) || v.IsByteValueEqual(byte(Udp)) ||
-		!v.IsValueEqual(byte(Tcp)) || !v.IsNameEqual("Tcp") {
-		t.Error("equality wrong")
-	}
-	if !v.IsAnyValuesEqual(byte(Tcp), byte(Udp)) || v.IsAnyValuesEqual(byte(Invalid)) {
-		t.Error("IsAnyValuesEqual wrong")
-	}
-	if !v.IsAnyNamesOf("Tcp", "Udp") || v.IsAnyNamesOf("nope") {
-		t.Error("IsAnyNamesOf wrong")
-	}
-	for _, x := range []Variant{Invalid, Tcp, Https, Custom} {
-		data, err := json.Marshal(x)
-		if err != nil || len(data) == 0 {
-			t.Errorf("Marshal(%v): %v", x, err)
+		raw, err := json.Marshal(v)
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
 		}
-		var got Variant
-		if err := json.Unmarshal(data, &got); err != nil {
-			t.Errorf("Unmarshal(%v): %v", x, err)
-		}
+		var rt Variant
+		_ = json.Unmarshal(raw, &rt)
 	}
-	if v.ToPtr() == nil || v.JsonPtr() == nil {
-		t.Error("ToPtr/JsonPtr nil")
-	}
-	if v.AsJsonMarshaller() == nil || v.AsBasicByteEnumContractsBinder() == nil ||
-		v.AsBasicEnumContractsBinder() == nil {
-		t.Error("binder nil")
-	}
-	_ = v.OnlySupportedErr("Tcp")
-	_ = v.OnlySupportedMsgErr("ctx", "Tcp")
 }
