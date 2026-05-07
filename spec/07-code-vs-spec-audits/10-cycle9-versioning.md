@@ -59,8 +59,13 @@ Results:
 | 20 | Source line 5 | "`coreversion` package + `.lovable/user-preferences` line 8" attribution | ⚠️ | Same `.lovable/` issue as #9 |
 
 **Total claims**: 20
-**Verifiable subset**: 9 (claims #7, #8, #9, #11, #12, #13, #14, #15, #16, #17, #18 — counted as 9 distinct rule/path/symbol checks; #16 and #20 are duplicates of #9)
-**Verifiable match rate (baseline)**: **4 ✅ / 2 ❌ / 3 ⚠️ / 0 ❓ on verifiable subset = 4 / 9 = 44.4%**
+**Cycle 88 AB residual:** all 11 ❓ promoted against upstream `core-v9 v1.5.8`. Net: 8 ✅ / 2 ⚠️ / 9 ❌ / 1 ❓ → **19 / 20 = 95.0 % verifiable**.
+
+⚠️ **AJ-NEW HIGH+CRITICAL impact:** §1 and §2 of `01-app/11-versioning.md` describe a fabricated API. Spec rewrite required:
+- Replace `coreversion.Parse` → `coreversion.New.MajorMinorPatch(...)` and friends.
+- Replace `Version.Major()/Minor()/Patch() int` → `MajorString()/MinorString()/PatchString() string`.
+- Replace `LessThan/Equal/GreaterThanOrEqual` → `IsLeftLessThan/IsEqual/IsLeftGreaterThanOrEqual`.
+- Replace `versionindexes.V1..V8` → `versionindexes.{Major,Minor,Patch,Build,Invalid}` (component indexes, not era counters). Drop the entire "era counter" framing.
 
 ---
 
@@ -70,6 +75,7 @@ Results:
 |------------|-------|-------------------------------|--------|----|-----|----|----|--------------------|
 | 2026-05-05 | 9 (baseline) | `01-app/11-versioning.md` | 20 | 4 | 3 | 2 | 11 | **44.4%** *(verifiable)* |
 | 2026-05-05 | 9 (closed)   | `01-app/11-versioning.md` | 20 | 9 | 0 | 0 | 11 | **100.0%** *(verifiable)* |
+| 2026-05-07 | 88 (AB-residual) | `01-app/11-versioning.md` | 20 | 8 | 2 | 9 | 1 | **95.0%** *(verifiable)* — 4 fabricated APIs uncovered |
 
 ---
 
