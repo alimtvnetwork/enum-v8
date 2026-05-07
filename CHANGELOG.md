@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.82.0] — 2026-05-07 — Open-ended skip-map registration guard (RCA Pattern 9 lint)
+
+### Added
+- **`tests/creationtests/AllEnums_OpenEndedSkipMapRegistration_test.go`** — new shared-loop suite `Test_AllEnums_OpenEndedSkipMapRegistration` that detects any registered enum whose `MinInt() == constants.MinInt` AND `MaxInt() == constants.MaxInt` (i.e. open-ended numeric wrapper with no discrete members) and is NOT yet registered in `numericRangeSuiteSkipRangesDynamicMap`. Failure message points the author at the exact file/entry to add — preventing the recurring "RangesDynamicMap > 0 false positive" defect class (Pattern 9).
+- Asymmetric on purpose: registered-but-not-open-ended is allowed (compresslevels / sqliteconnpathtype are registered for unrelated reasons — negative range, BasicString upstream defects).
+
+### Notes
+- Completes the third of three planned RCA-pattern lints (Pattern 2 in v0.81.0, Patterns 6+8 in v0.80.0, Pattern 9 here). Patterns 1, 3, 4, 5, 10, 11 remain — Pattern 1 (fixture drift) and Pattern 3 (BasicString defect) are good follow-up candidates.
+
 ## [v0.81.0] — 2026-05-07 — Sparse-array gap guard (RCA Pattern 2 lint)
 
 ### Added
