@@ -88,3 +88,58 @@ All commands returned **zero matches**: no `enum-v7` package imports `converters
 1. Update the scoreboard (`01-scoreboard.md`) with the Cycle 7 baseline row and bump the §07/§08/§04/§05/§06 + §09 ❓ tally for task **AB**.
 2. Mark Cycle 7 as **baseline-only closed** (no fixes needed; nothing to re-verify).
 3. Continue to Cycle 8 → `10-reflection-and-dynamic.md` on next `next`.
+
+---
+
+## 6. AB-residual re-audit (Cycle 80, 2026-05-07) — upstream verification against `core-v9 v1.5.8`
+
+> **Method**: cloned upstream at `/tmp/core-v9-upstream` (tag `v1.5.8`); inspected `converters/`, `typesconv/`, `internal/jsoninternal/`, and `errcore/` directly.
+
+### Critical structural discrepancy
+
+Upstream `typesconv/` does **not** provide the narrowing/widening conversion helpers documented in §2 (`IntToInt64`, `Int64ToInt32`, `Float64ToInt`). Real `typesconv/` is a pointer-utility package: `IntPtr`, `IntPtrToSimple`, `IntPtrToSimpleDef`, `IntPtrToDefPtr`, `IntPtrDefValFunc`, plus the same Ptr-helper family for `Float`/`Byte`/`Bool`/`String`. The `string.go` file additionally provides `StringToBool`/`StringPointerToBool` top-level funcs. Filed as **D-CVS-37 (CRITICAL)**.
+
+| #  | Original | New | Evidence |
+|----|----------|-----|----------|
+| 1  | ❓ | ✅ | `converters/vars.go` exposes `StringTo`, `BytesTo`, `StringsTo`, `AnyTo`, `Map`, `PrettyJson`, `JsonString`, `Integers`, `KeyValuesTo`, `CodeFormatter` as struct-as-namespace vars. |
+| 2  | ❓ | ✅ | `(it stringTo) Integer(input string) (value int, err error)` at `converters/stringTo.go:154`. |
+| 3  | ❓ | ❌ | **No `Integer64` method.** Upstream surface: `Integer`, `IntegerMust`, `IntegerDefault`, `IntegerWithDefault`, `IntegersWithDefaults`, `IntegersConditional`. Filed as **D-CVS-38**. |
+| 4  | ❓ | ✅ | `(it stringTo) IntegerWithDefault(...)` at `converters/stringTo.go:39` — returns `(int, bool)` ok-mode. |
+| 5  | ❓ | ⚠️ | `Float64`/`Float64Must`/`Float64Default`/`Float64Conditional` exist; **no `Float32` method on `stringTo`**. Filed as **D-CVS-39 (LOW)**. |
+| 6  | ❓ | ✅ | `(it stringTo) Byte(input string) (byte, error)` at `converters/stringTo.go:260`. |
+| 7  | ❓ | ❌ | **No `Bool` method on `stringTo`.** String→bool lives at `typesconv/string.go:73` as the top-level `StringToBool` func — wrong package + wrong signature. F-V14-03 contract (rejects whitespace, no yes/no/on/off) cannot be verified at the documented location. Filed as **D-CVS-40 (HIGH)**. |
+| 8  | ❓ | ✅ | `(it bytesTo) String([]byte) string` at `converters/bytesTo.go:37` (zero-copy via internal helper). |
+| 9  | ❓ | ❌ | **No `BytesTo.PrettyJsonString` method.** `bytesTo` only has `PtrString`/`String`/`PointerToBytes`. Closest is `converters.PrettyJson.*` (separate namespace). Filed as **D-CVS-41**. |
+| 10 | ❓ | ⚠️ | `converters.PrettyJson` is a re-export of `internal/jsoninternal.Pretty` (`prettyConverter` struct). Concrete method names (`String`, `FromAny`) not enumerated by quick scan — needs deeper probe to fully verify. Promote to ✅ once methods listed. |
+| 11 | ❓ | ⚠️ | "PrettyJson is legacy; prefer `corejson.NewPtr(x).PrettyJsonString()`" — `corejson` exists upstream but `PrettyJson` is actively re-exported (not deprecated in vars.go). Guidance is **aspirational**, not enforced. |
+| 12 | ❓ | ⚠️ | `typesconv/` exists, but its purpose is **pointer-helper utilities**, not non-string ↔ non-string numeric conversions. Filed as **D-CVS-42**. |
+| 13 | ❓ | ❌ | **No `IntToInt64` func.** Closest is `IntPtr`/`IntPtrToSimple`. Subsumed by D-CVS-37. |
+| 14 | ❓ | ❌ | **No `Int64ToInt32` func.** Subsumed by D-CVS-37. |
+| 15 | ❓ | ❌ | **No `Float64ToInt` func.** Subsumed by D-CVS-37. |
+| 16 | ❓ | ⚠️ | Decision matrix depends on §1+§2; with §2 fictitious (D-CVS-37), matrix needs rewrite. Filed as **D-CVS-43 (MEDIUM)**. |
+| 17 | ❓ | ⚠️ | Two-return-mode contract partially holds: `Integer` returns `(int, error)`, `IntegerWithDefault` returns `(int, bool)`. ✅ for those two. Other claimed funcs (Bool, Integer64, Float32) don't exist so contract unverifiable for them. |
+| 18 | ❓ | ❓ | "No panics on bad input" — not exhaustively verified across all upstream funcs. |
+| 19 | ❓ | ✅ | `errcore.FailedToConvertType` exists at `errcore/RawErrorType.go:63` and is invoked from `errcore/RawErrCollection.go:283,289`. |
+| 20 | ❓ | ❓ | Locale-independence — implicit via `strconv.ParseInt`/`ParseFloat`, but not documented in upstream code. |
+| 21 | ❓ | ❓ | "Truncation silent in `*WithDefault`" — partially verifiable; not exhaustively checked. |
+| 22 | ❓ | ❌ | **`errcore.OverflowType` does not exist** in upstream `errcore/RawErrorType.go`. Filed as **D-CVS-44**. |
+| 23 | ❓ | ⚠️ | Common-mistakes table assumes the §1+§2 surface; needs review once §2 is reworked. Filed as **D-CVS-45 (MEDIUM)**. |
+
+### Updated score row
+
+| Date       | Cycle | Spec audited                | Claims | ✅ | ⚠️ | ❌ | ❓ | Score (verifiable) |
+|------------|-------|-----------------------------|--------|----|-----|----|----|--------------------|
+| 2026-05-07 | 80 (AB-residual) | `01-app/09-converters.md` | 23 | 6  | 8   | 7  | 2  | **6 / 21 = 28.6%** |
+
+### New findings opened (Cycle 80)
+
+- **D-CVS-37 (CRITICAL)** — Entire §2 `typesconv` surface fictitious. Real `typesconv/` is a pointer-utility package, not a numeric conversion package.
+- **D-CVS-38 (LOW)** — `StringTo.Integer64` does not exist.
+- **D-CVS-39 (LOW)** — `StringTo.Float32` does not exist.
+- **D-CVS-40 (HIGH)** — `StringTo.Bool` does not exist on `converters/stringTo`. String→bool conversion lives in `typesconv/string.go` as a top-level func with different signature.
+- **D-CVS-41 (LOW)** — `BytesTo.PrettyJsonString` does not exist; use `converters.PrettyJson.*`.
+- **D-CVS-42 (MEDIUM)** — `typesconv/` package purpose mis-stated.
+- **D-CVS-43 (MEDIUM)** — Decision matrix needs rewrite once §2 is corrected.
+- **D-CVS-44 (LOW)** — `errcore.OverflowType` symbol does not exist.
+- **D-CVS-45 (MEDIUM)** — Common-mistakes table needs review against real surface.
+
