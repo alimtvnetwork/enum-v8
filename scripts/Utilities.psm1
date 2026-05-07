@@ -221,6 +221,6 @@ function Resolve-TestSuiteRoot {
 
 Export-ModuleMember -Function @(
     'Write-Header', 'Write-Success', 'Write-Fail',
-    'Ensure-TestLogDir', 'Filter-TestWarnings', 'Merge-UniqueOutputLines',
-    'Get-CallerSource', 'Resolve-TestSuiteRoot'
+    'Ensure-TestLogDir', 'Filter-TestWarnings', 'Test-IsCoverpkgWarningOnlyOutput',
+    'Merge-UniqueOutputLines', 'Get-CallerSource', 'Resolve-TestSuiteRoot'
 )
