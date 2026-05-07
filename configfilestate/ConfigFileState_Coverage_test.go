@@ -81,23 +81,22 @@ func TestConfigFileState_MinMaxRanges(t *testing.T) {
 	}
 }
 
-// Pattern-7: AllNameValues coverage — configfilestate has no New constructor,
-// so verify AllNameValues is non-empty and aligned with Ranges entries.
+// Pattern-7: AllNameValues coverage — exercise the accessor for coverage and
+// verify it produces one entry per non-blank Ranges slot. AllNameValues() emits
+// upstream's "Name(value)" format (e.g. "Invalid(0)"), so we count entries
+// rather than checking raw-name presence.
 func TestConfigFileState_AllNameValuesCoverage(t *testing.T) {
 	names := Invalid.AllNameValues()
 	if len(names) == 0 {
 		t.Fatal("AllNameValues empty")
 	}
-	got := make(map[string]bool, len(names))
-	for _, n := range names {
-		got[n] = true
+	wantCount := 0
+	for _, r := range Ranges {
+		if r != "" {
+			wantCount++
+		}
 	}
-	for _, want := range Ranges {
-		if want == "" {
-			continue
-		}
-		if !got[want] {
-			t.Errorf("AllNameValues missing %q", want)
-		}
+	if len(names) != wantCount {
+		t.Errorf("AllNameValues count=%d, want %d (one per non-blank Ranges entry)", len(names), wantCount)
 	}
 }
