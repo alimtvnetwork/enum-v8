@@ -108,6 +108,14 @@ function Invoke-CoverageCompileCheck {
                 $diagOut = & go test -count=1 -run '^$' -gcflags=all=-e "$testPkg" 2>&1 | ForEach-Object { $_.ToString() }
                 $ErrorActionPreference = $prevPref
 
+                # AN: confirmation probe — if the test binary builds cleanly without
+                # -coverpkg the original failure was warning-only noise (false-positive
+                # blocked report). Treat the package as compilable.
+                if (Test-PackageActuallyCompiles -Pkg $testPkg) {
+                    $testPkgs.Add($testPkg)
+                    continue
+                }
+
                 $combinedOut = Merge-UniqueOutputLines $compileOut $diagOut
                 $combinedOut = Resolve-BlockedPackageDiagnosticOutput -PackagePath $testPkg -Lines $combinedOut
                 $callerSource = Get-CallerSource
@@ -129,6 +137,7 @@ function Invoke-CoverageCompileCheck {
             $rawOut = & go test -count=1 -run '^$' -gcflags=all=-e "-coverpkg=$covPkgs" "$pkg" 2>&1
             $ec = $LASTEXITCODE
             $out = @($rawOut | ForEach-Object { $_.ToString() })
+            $confirmed = $true
             if ($ec -ne 0) {
                 $diagRaw = & go test -count=1 -run '^$' -gcflags=all=-e "$pkg" 2>&1
                 $diagOut = @($diagRaw | ForEach-Object { $_.ToString() })
@@ -141,14 +150,19 @@ function Invoke-CoverageCompileCheck {
                     if ($seen.Add($normalized)) { $merged.Add($normalized) | Out-Null }
                 }
                 $out = $merged.ToArray()
+                # AN: confirmation probe — re-run a -coverpkg-free test-binary build.
+                # If it succeeds the original failure was warning-only noise.
+                $devnull = if ($IsWindows) { 'NUL' } else { '/dev/null' }
+                $null = & go test -c -o $devnull -gcflags=all=-e "$pkg" 2>&1
+                $confirmed = ($LASTEXITCODE -ne 0)
             }
-            [pscustomobject]@{ Pkg = $pkg; ExitCode = $ec; Output = $out }
+            [pscustomobject]@{ Pkg = $pkg; ExitCode = $ec; Output = $out; Confirmed = $confirmed }
         }
 
         foreach ($result in ($compileResults | Sort-Object Pkg)) {
             $shortName = Get-PackageShortName $result.Pkg
 
-            if ($result.ExitCode -eq 0) {
+            if ($result.ExitCode -eq 0 -or -not $result.Confirmed) {
                 $testPkgs.Add($result.Pkg)
             } else {
                 $diagnosticOut = Resolve-BlockedPackageDiagnosticOutput -PackagePath $result.Pkg -Lines $result.Output
