@@ -1,4 +1,4 @@
-# Active Plan — enum-v7
+# Active Plan — enum-v8
 
 > Single source of truth for the project roadmap. Letter IDs are stable across sessions.
 > Last updated: 2026-05-06 (Cycle 19 — AB pass 1 done; AJ-01..03 spawned, blocked by `spec/01-app/` freeze).
@@ -19,7 +19,7 @@
 ### AM. Fix broken `core-v9` API calls (converter + coredynamic migration)
 
 - **Status:** ✅ Done for reported blocker — `tests/creationtests` compile check passes in sandbox
-- **Objective:** Update all `enum-v7` source files that use old `core-v8`-era function signatures (`converters.AnyToValueString`, `coredynamic.TypeName`, etc.) to the new struct-namespace API (`converters.AnyTo.ValueString`, `coredynamic.SafeTypeName`, etc.).
+- **Objective:** Update all `enum-v8` source files that use old `core-v8`-era function signatures (`converters.AnyToValueString`, `coredynamic.TypeName`, etc.) to the new struct-namespace API (`converters.AnyTo.ValueString`, `coredynamic.SafeTypeName`, etc.).
 - **Dependencies:** None for the reported `creationtests` compile blocker.
 - **Expected outputs:** All affected `.go` files updated, `go build ./...` passes.
 - **Acceptance criteria:** `go build ./...` succeeds with `core-v9 v1.5.8`.
@@ -31,7 +31,7 @@
 
 ### AA. Continue spec-audit cycles
 
-- **Status:** ✅ DONE (2026-05-07, Cycle 20, `spec-v0.55.0` / enum-v7 v0.70.0)
+- **Status:** ✅ DONE (2026-05-07, Cycle 20, `spec-v0.55.0` / enum-v8 v0.70.0)
 - **Result:** All 6 walk-through targets audited. Final cycle (20) verified `spec/00-llm-integration-guide.md` against upstream `core-v9 v1.5.8` — zero drift, zero D-CVS/C-CVS findings.
 - **Cycle plan (closed):**
 

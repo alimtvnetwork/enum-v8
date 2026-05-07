@@ -1,4 +1,4 @@
-# Contributing to enum-v7
+# Contributing to enum-v8
 
 ## Local Development
 

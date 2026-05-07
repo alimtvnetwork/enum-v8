@@ -5,16 +5,16 @@ import (
 	"github.com/alimtvnetwork/core-v9/coredata/corejson"
 	"github.com/alimtvnetwork/core-v9/coreversion"
 	"github.com/alimtvnetwork/core-v9/ostype"
-	"github.com/alimtvnetwork/enum-v7/linuxvendortype"
-	"github.com/alimtvnetwork/enum-v7/osarchs"
-	"github.com/alimtvnetwork/enum-v7/strtype"
+	"github.com/alimtvnetwork/enum-v8/linuxvendortype"
+	"github.com/alimtvnetwork/enum-v8/osarchs"
+	"github.com/alimtvnetwork/enum-v8/strtype"
 )
 
 // OperatingSystemDetail
 //
 // References:
 // - Sample from other packages  : https://t.ly/Au3Q
-// - Enum all os detect examples : github.com/alimtvnetwork/enum-v7/-/issues/4
+// - Enum all os detect examples : github.com/alimtvnetwork/enum-v8/-/issues/4
 type OperatingSystemDetail struct {
 	OsMixType       Variant
 	Name            strtype.Variant         `json:"Name,omitempty"`            // eg. "CentOS Linux 7 (Core)",
