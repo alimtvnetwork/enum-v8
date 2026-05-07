@@ -37,25 +37,25 @@ Results:
 
 | #  | Spec § | Claim | Verdict | Note |
 |----|--------|-------|---------|------|
-| 1  | §1 | `coreversion.Parse(s) (Version, error)` | ❓ | No consumer |
-| 2  | §1 | `Version.{Major,Minor,Patch}() int` accessors | ❓ | No consumer |
-| 3  | §1 | `Version.{LessThan,Equal,GreaterThanOrEqual}(other) bool` | ❓ | No consumer |
-| 4  | §1 | `Version.String() string` | ❓ | No consumer |
+| 1  | §1 | `coreversion.Parse(s) (Version, error)` | ❌ **FABRICATED** | **Cycle 88 AB:** no such function in `/tmp/core-v9-upstream/coreversion/`. Real construction is via `coreversion.New.Major(...)` / `MajorMinor(...)` / `MajorMinorPatch(...)` (see `newCreator.go:228-511`). Filed **D-CVS-66 HIGH**. |
+| 2  | §1 | `Version.{Major,Minor,Patch}() int` accessors | ❌ **FABRICATED** | **Cycle 88 AB:** real accessors return `string`, not `int`: `MajorString()/MinorString()/PatchString()/BuildString()` (`Version.go:108-132`). `Major(comparingMajor int) corecomparator.Compare` is a *comparator*, not an accessor. Filed **D-CVS-67 HIGH**. |
+| 3  | §1 | `Version.{LessThan,Equal,GreaterThanOrEqual}(other) bool` | ❌ **FABRICATED** | **Cycle 88 AB:** real method names are `IsLeftLessThan`, `IsLeftGreaterThan`, `IsLeftLessThanOrEqual`, `IsLeftGreaterThanOrEqual`, `IsEqual` (`Version.go:518-546`). Spec method names don't exist. Filed **D-CVS-68 HIGH**. |
+| 4  | §1 | `Version.String() string` | ✅ Match | **Cycle 88 AB:** `Version.go:45 func (it Version) String() string` confirmed |
 | 5  | §1 (rationale) | Wraps stdlib errors via `errcore.FailedToConvertType` | ❓ | `FailedToConvertType` already ❓ in Cycle 2/7 |
-| 6  | §2 | `versionindexes.V1..V8` integer constants | ❓ | No consumer |
-| 7  | §2 line 59 (comment) | "`V8 // 8 (current era — core-v9)`" | ⚠️ | **Drift D-CVS-30** — V8 is the *legacy* era index; current era is V9 (core-v9). Comment is contradictory. |
-| 8  | §3 (CRITICAL rule) | "Code changes must bump at least minor version. Never touch the `.release/` folder." | ✅ | Rule honoured — `.release/` does not exist in repo, so no edits possible (vacuously satisfied). Documented as such. |
-| 9  | §3 (citation) | Rule sourced from `.lovable/user-preferences` line 8 | ⚠️ | **Drift D-CVS-31** — `.lovable/` directory does not exist in `enum-v7`. Citation is stale; rule lives in `mem://index.md` Core only. |
+| 6  | §2 | `versionindexes.V1..V8` integer constants | ❌ **FABRICATED** | **Cycle 88 AB:** `/tmp/core-v9-upstream/enums/versionindexes/Index.go:33-39` actually defines `Major(0), Minor(1), Patch(2), Build(3), Invalid(4)` — these are version-component indexes, NOT era counters `V1..V8`. The entire §2 of the spec is wrong. Filed **D-CVS-69 CRITICAL**. |
+| 7  | §2 line 59 (comment) | "`V8 // 8 (current era — core-v9)`" | ❌ **VOIDED** | Was D-CVS-30 ⚠️; supersedes to ❌ — no `V8` constant exists at all (see #6). |
+| 8  | §3 (CRITICAL rule) | "Code changes must bump at least minor version. Never touch the `.release/` folder." | ✅ | Rule honoured |
+| 9  | §3 (citation) | Rule sourced from `.lovable/user-preferences` line 8 | ⚠️ | D-CVS-31 — `.lovable/` does not exist |
 | 10 | §3 line 86 | "Bug fix → minor (project rule overrides standard semver patch)" | ❓ | Behavioural rule — no in-repo enforcer |
-| 11 | §3 line 95 | "Update `go.mod` major version path only on major bump (e.g. `core-v9` → `core-v9`)" | ❌ | **Contradiction C-CVS-09a** — nonsensical (same string both sides); must read `core-v8` → `core-v9` |
-| 12 | §4 line 105 | "imports from `github.com/alimtvnetwork/core-v9/<pkg>` will not break within an era" | ✅ | Verified — `enum-v7` imports use `core-v9` consistently (Cycle 1 + memory Core rule) |
-| 13 | §4 line 108 | "Diagnostic message formats stable when consumed by tests in `tests/integratedtests/`" | ⚠️ | **Drift D-CVS-27** — repeats the C-CVS-01 / D-CVS-17 / D-CVS-26 pattern; actual root is `tests/creationtests/` |
-| 14 | §4 line 112 | "Across eras: module path changes (`core-v9` → `core-v9`)" | ❌ | **Contradiction C-CVS-09b** — same mojibake as #11; must read `core-v8` → `core-v9` |
-| 15 | §5 | `.release/` is OFF-LIMITS — never create / modify / delete | ✅ | Rule honoured — `.release/` does not exist in repo (vacuously satisfied; no violations possible). |
-| 16 | §5 (citation) | "enforced via `.lovable/user-preferences` line 8 and `mem://index.md` Core" | ⚠️ | Same as #9 — `.lovable/` missing; only `mem://index.md` Core carries the rule |
-| 17 | §6 (anti-pattern) | "Using `golang.org/x/mod/semver` directly" — Common Mistake | ✅ | Verified — `rg "golang.org/x/mod/semver"` → 0 hits in `enum-v7` |
-| 18 | §6 (anti-pattern) | "Editing `.release/` to help" — Common Mistake | ✅ | Vacuously verified (folder absent) |
-| 19 | §6 (anti-pattern) | "Relying on a specific patch number in tests" → use `versionindexes.V<N>` | ❓ | `versionindexes.V*` not consumed; no in-repo violation either |
+| 11 | §3 line 95 | "Update `go.mod` major version path only on major bump (e.g. `core-v9` → `core-v9`)" | ❌ | C-CVS-09a (mojibake; should read `core-v8 → core-v9`) |
+| 12 | §4 line 105 | "imports from `github.com/alimtvnetwork/core-v9/<pkg>` will not break within an era" | ✅ | Verified |
+| 13 | §4 line 108 | "Diagnostic message formats stable when consumed by tests in `tests/integratedtests/`" | ⚠️→✅ | D-CVS-27 supersedes via D-CVS-64 — `tests/integratedtests/` is in fact the canonical upstream path; original spec was correct |
+| 14 | §4 line 112 | "Across eras: module path changes (`core-v9` → `core-v9`)" | ❌ | C-CVS-09b mojibake |
+| 15 | §5 | `.release/` is OFF-LIMITS — never create / modify / delete | ✅ | Rule honoured |
+| 16 | §5 (citation) | "enforced via `.lovable/user-preferences` line 8 and `mem://index.md` Core" | ⚠️ | Same as #9 |
+| 17 | §6 (anti-pattern) | "Using `golang.org/x/mod/semver` directly" — Common Mistake | ✅ | Verified |
+| 18 | §6 (anti-pattern) | "Editing `.release/` to help" — Common Mistake | ✅ | Vacuously verified |
+| 19 | §6 (anti-pattern) | "Relying on a specific patch number in tests" → use `versionindexes.V<N>` | ❌ **FABRICATED** | Same as #6 — `V<N>` constants don't exist; correct guidance would cite `versionindexes.{Major,Minor,Patch,Build}` |
 | 20 | Source line 5 | "`coreversion` package + `.lovable/user-preferences` line 8" attribution | ⚠️ | Same `.lovable/` issue as #9 |
 
 **Total claims**: 20
