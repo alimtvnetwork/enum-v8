@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/alimtvnetwork/core-v9/constants"
-	"github.com/alimtvnetwork/core-v9/converters"
 )
 
 type BothBrackets struct {
@@ -96,6 +95,15 @@ func (it BothBrackets) WrapSkipOnExist(
 		true)
 }
 
+// String avoids converters.AnyTo.ValueString — that helper falls back to
+// fmt.Sprintf("%v", it), which re-enters this method causing infinite
+// recursion / stack overflow. RCA pattern 9.
 func (it BothBrackets) String() string {
-	return converters.AnyTo.ValueString(it)
+	return fmt.Sprintf(
+		"{Start:%s End:%s Category:%s IsInvalid:%t}",
+		it.Start.String(),
+		it.End.String(),
+		it.Category.String(),
+		it.IsInvalid)
 }
+
