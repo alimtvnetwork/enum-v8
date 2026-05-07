@@ -10,6 +10,14 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.94.0] — 2026-05-07 — Raise CI coverage gate 60% → 65%
+
+### Changed
+- **`.github/workflows/ci.yml`** — coverage gate threshold raised from `60%` to `65%`. Headroom: latest `-tc` reports `total: 71.8%` (post-strtype-unblock), so the new gate has ~6.8 pts of slack. Both the step name (`Coverage gate (65%)`) and the `awk` threshold + error message updated in lock-step.
+
+### Notes
+- Next planned bump (→ 70%) is gated on AL2-08 (`osdetect` Linux/Windows guarded branches) shipping, since `osdetect` is the largest single-package drag on `total` after `strtype` (now 13.7% → uplift pending in a follow-up sweep).
+
 ## [v0.93.0] — 2026-05-07 — strtype compile fix + contracts fixture sync
 
 ### Fixed
