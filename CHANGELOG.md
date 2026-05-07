@@ -10,6 +10,14 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.11.0] — 2026-05-07 — Module rename `enum-v7` → `enum-v8`
+
+### Changed
+- Bulk rename of module path and all references from `github.com/alimtvnetwork/enum-v7` to `github.com/alimtvnetwork/enum-v8` across `go.mod`, source, tests, specs, CI workflows, PowerShell tooling, and `.lovable/` memory.
+- Per established convention, rename also applied inside `cross-repo/` (one-time exception, matches v5 / v6 / v7 precedent).
+
+---
+
 ## [v1.10.0] — 2026-05-07 — `licensetype` reflection uplift sweep
 
 ### Added
