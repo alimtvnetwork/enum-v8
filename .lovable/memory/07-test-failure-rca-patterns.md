@@ -191,3 +191,20 @@ When `./run.ps1 -tc` reports failing tests, walk this checklist FIRST before rea
 **Fix recipe:** Add the type's `TypeName()` (e.g. `"inttype.Variant"`) to `numericRangeSuiteSkipRangesDynamicMap` in `tests/creationtests/AllEnums_NumericRange_test.go` with an explanatory comment. Same skip set already used for `compresslevels`, `sqliteconnpathtype`, `strtype`. Real example: Cycle 87.
 
 **Prevention:** Whenever you add an open-ended numeric Variant (anything where `MinInt() == constants.MinInt` and `MaxInt() == constants.MaxInt`), pre-register it in the skip map at creation time.
+
+---
+
+## Pattern 10 — Parallel-mode false-positive Blocked packages (`CoverageCompileCheck.psm1`)
+
+**Symptom:** `./run.ps1 -tc` PHASE summary reports `⚠ Compile Check  N/M passed, K blocked` and lists 3–10 packages as `✗ Blocked: <pkg>`. The exact same packages then **also appear in the COVERAGE SUMMARY block with real coverage percentages** (e.g. `30%  github.com/.../dbuserprivillegetype`). The diagnostic for each blocked entry is identical "no packages being tested depend on matches for pattern …" warning spam — not a real compile error.
+
+**Root cause:** `CoverageCompileCheck.psm1` parallel branch dispatches `go test … -coverpkg=<all-pkgs>` per package across `ProcessorCount * 2` runspaces. When the coverpkg call exits non-zero (often just from warning-only stderr noise), the runspace re-runs `go test -c -o <devnull>` *inside the same runspace* as a confirmation probe. That probe contends on Go's shared build cache; under contention it occasionally returns non-zero transiently even though the package compiles fine — leaving `$confirmed = $true`, so the package is reported as Blocked. The subsequent serial coverage phase has no contention and runs the package successfully — hence it shows in BOTH lists.
+
+**How to recognise:**
+1. Blocked count > 0 in PHASE summary
+2. AT LEAST ONE blocked package name reappears in the COVERAGE SUMMARY with a coverage % (cross-check the two lists)
+3. The blocked diagnostic is dominated by `warning: no packages being tested depend on matches for pattern …` lines, not real `<file>.go:NN:NN: <error>` lines
+
+**Fix (already applied 2026-05-07, v0.63.0):** in `scripts/CoverageCompileCheck.psm1` parallel branch, after the parallel dispatch, run a **serial re-confirmation pass** using the existing `Test-PackageActuallyCompiles` helper before reporting any package as Blocked. The serial probe runs without runspace contention and reliably distinguishes real failures from cache-contention noise.
+
+**Prevention:** Never trust a single in-runspace probe for a "blocked" verdict in parallel mode. Always re-confirm serially. If you ever add new pre-coverage probes, copy this two-stage pattern (parallel suspect detection → serial confirmation).

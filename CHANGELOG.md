@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.63.0] — 2026-05-07 — Fix: parallel-mode false-positive Blocked packages
+
+### Fixed
+- `scripts/CoverageCompileCheck.psm1`: parallel branch now runs a **serial re-confirmation pass** (`Test-PackageActuallyCompiles`) before reporting any package as Blocked. Eliminates the long-standing false-positive cluster where 5–7 packages (`dbexposetype`, `dbuserprivillegetype`, `osdetect`, `osgroupexecution`, `protocoltype`, `resauthtype`, `sqljointype`) were reported as Blocked and **simultaneously appeared in the COVERAGE SUMMARY with real coverage percentages**.
+- Root cause: parallel runspaces share Go's build cache; the in-runspace `go test -c` confirmation probe contended on the cache and returned non-zero transiently, leaving `$confirmed = $true` for packages that subsequently ran cleanly in the serial coverage phase. Documented as Pattern 10 in `.lovable/memory/07-test-failure-rca-patterns.md`.
+
+### Documentation
+- Added Pattern 10 to test-failure RCA patterns memory: how to recognise the false-positive (Blocked package also showing in coverage summary), root cause (build-cache contention in runspaces), and the two-stage parallel-suspect-detection → serial-confirmation pattern for future probes.
+
 ## [v0.62.0] — 2026-05-07 — Cycle 90 — AB-residual: §13 testing-patterns
 
 ### Changed

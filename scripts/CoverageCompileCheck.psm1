@@ -164,15 +164,28 @@ function Invoke-CoverageCompileCheck {
 
             if ($result.ExitCode -eq 0 -or -not $result.Confirmed) {
                 $testPkgs.Add($result.Pkg)
-            } else {
-                $diagnosticOut = Resolve-BlockedPackageDiagnosticOutput -PackagePath $result.Pkg -Lines $result.Output
-                $callerSource = "CoverageCompileCheck.psm1 → Invoke-CoverageCompileCheck (parallel)"
-                Write-Fail "Blocked: $shortName  ($($result.Pkg)) (source: $callerSource)"
-                Write-BlockedDiagnostic $diagnosticOut
-                $blockedPkgs.Add($shortName)
-                $blockedErrors[$shortName] = ($diagnosticOut -join "`n")
-                Add-BuildErrorsForPackage $buildErrorsByPackage $shortName $diagnosticOut
+                continue
             }
+
+            # AN-2026-05-07: Serial re-confirmation pass.
+            # Parallel runspaces share Go's build cache; under contention the in-runspace
+            # `go test -c` confirmation probe occasionally fails transiently, producing
+            # false-positive Blocked reports for packages that subsequently run cleanly
+            # in the coverage phase (visible as packages appearing in BOTH the Blocked
+            # list and the coverage summary). Re-running the probe serially eliminates
+            # the contention and reliably resolves the noise.
+            if (Test-PackageActuallyCompiles -Pkg $result.Pkg) {
+                $testPkgs.Add($result.Pkg)
+                continue
+            }
+
+            $diagnosticOut = Resolve-BlockedPackageDiagnosticOutput -PackagePath $result.Pkg -Lines $result.Output
+            $callerSource = "CoverageCompileCheck.psm1 → Invoke-CoverageCompileCheck (parallel)"
+            Write-Fail "Blocked: $shortName  ($($result.Pkg)) (source: $callerSource)"
+            Write-BlockedDiagnostic $diagnosticOut
+            $blockedPkgs.Add($shortName)
+            $blockedErrors[$shortName] = ($diagnosticOut -join "`n")
+            Add-BuildErrorsForPackage $buildErrorsByPackage $shortName $diagnosticOut
         }
     }
 
