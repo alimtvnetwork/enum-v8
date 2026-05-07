@@ -10,6 +10,14 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.85.0] — 2026-05-07 — AllNameValues round-trip guard (RCA Pattern 7 lint)
+
+### Added
+- **`tests/creationtests/AllEnums_AllNameValuesRoundTrip_test.go`** — new shared-loop suite `Test_AllEnums_AllNameValuesRoundTrip` that asserts every entry of `AllNameValues()` matches the canonical `"%s(%d)"` format declared by `constants.EnumNameValueFormat` and that the parsed integer value sits within `[MinInt, MaxInt]`. Catches malformed `NameWithValue` overrides, off-by-one drift after a Variant member is added without updating overrides, and empty-name entries from sparse string-array gaps. Skip map covers string-backed (`strtype`, `sqliteconnpathtype`) and open-ended numeric (`inttype`) wrappers whose surface format intentionally differs.
+
+### Notes
+- Fifth RCA-pattern lint (Patterns 1, 2, 7, 9 now covered as live runtime guards; Patterns 6/8 deleted in v0.84 pending per-package opt-in redesign). Remaining: Pattern 3 (BasicString defect detector) and Pattern 5 (level-comparison receiver inversion AST scan).
+
 ## [v0.84.0] — 2026-05-07 — Remove false-positive RCA guards (Pattern 6/8 + RangeEdges)
 
 ### Removed
