@@ -10,6 +10,17 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.89.0] — 2026-05-07 — Coverage uplift sweep: strtype, onofftype, inttype, instructiontype
+
+### Added
+- **`strtype/StrType_Coverage_test.go`** — broad suite for `strtype` (was 16.2%, the second-lowest in the repo). Exercises value/length accessors, empty/whitespace/defined predicates, string ops (`Replace`, `Remove`, `RemoveMany`, `SplitBy`, `SplitByWhitespace`, `SplitTrimmedNonEmpty`, `AddSuffixOnMissing`, `AddPrefixOnMissing`, `Add`, `Append`, `Prepend`, `Join`, `JoinStrings`, `*If` variants), comparison/search (`IsContains`, `IsStartsWith`, `IsEndsWith`, `HasPrefix`, `HasSuffix`, `Index`, `LastIndexOf`, `IsEqual`, `IsEqualAnother`, `Is`, `IsGreater`, `IsLess`, `IsGreaterEqual`, `IsLessEqual`, `IsAnyNamesOf`), wraps (`QuotationWrap`, `CurlyWrap`, `SquareWrap`), `SafeSubString*`, boolean combinators (`OrEmpty`, `OrHasElement`, `AndHasElement`, `AndIsEmpty`), int conversions (`Integer`, `ConvInteger`, `IntegerDefaultVal`, `IntType`), surface accessors, and package helpers `New`/`NewUsingInteger`.
+- **`onofftype/OnOffType_Coverage_test.go`** — coverage suite for `onofftype` (was 39.6%). Walks all 4 Variants through every value/name accessor; tests every `Is*` predicate (`IsOn/Off/Yes/No/Ask/True/Accepted/Rejected/DefinedAccepted/DefinedRejected/Accept/Reject/AcceptReject/NotAcceptReject/OnLogically/OffLogically/YesNo/DefinedLogically/UndefinedLogically/Uninitialized/Initialized/UninitializedOrAsk/Invalid/Valid/Indeterminate/Later/Skip`); JSON round-trip; alternate constructors `NewUsingBool` / `NewUsingAndBooleans`; range/format/type surface; setter bridge `ToIsSetter`.
+- **`inttype/IntType_Coverage_test.go`** — coverage suite for `inttype` (was 47.9%). Walks 8-sample spectrum through every range predicate; tests `IsBetween/IsBetweenInt/IsNotBetween/IsAnyOf/IsNameOfValues`, arithmetic (`Add`, `AddStringAsNumber`), `ConvValueByte` / `ConvValueByteWithBoundaryDefault`, `IsNameOf`, surface accessors (`TypeName`, `AllNameValues`, `IntegerEnumRanges`, `MaxInt`/`MinInt`, `Min/MaxValueString`, `RangesDynamicMap`, `MinMaxAny`, `OnlySupportedErr`/`MsgErr`).
+- **`instructiontype/InstructionType_Coverage2_test.go`** — supplemental coverage for `instructiontype` (was 48.2%). Walks all 35 Variants through every `Is*()` predicate (`IsScoping/IsDependsOn/IsInstallPackages/IsOsServices/...IsVerify`, plus all value/name accessors); JSON round-trip; full surface.
+
+### Notes
+- Targets the four lowest-coverage packages in the repo from the latest `-tc` run (envtype 9.7% was already addressed in v0.88). All four suites are pure additive coverage — no source changes, no behavior risk. Should lift total coverage materially above 66.1% and clear sub-50% packages.
+
 ## [v0.88.0] — 2026-05-07 — envtype coverage uplift (9.7% → ≥60% target)
 
 ### Added
