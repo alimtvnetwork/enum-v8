@@ -23,19 +23,19 @@ Read end-to-end, extracted every checkable claim, then verified each against `en
 | 12 | `corevalidatortestwrappers.{Segment,Slice,Text}ValidatorWrapper.go` | §2.4 | ❓ Unverifiable | **Cycle 86 AB:** `SegmentValidatorWrapper.go`, `SliceValidatorWrapper.go`, `TextValidatorsWrapper.go` (note: plural `TextValidators`, not `TextValidator`) confirmed → **D-CVS-65 LOW** filename typo | ⚠️ Match w/ minor typo |
 | 13 | Cross-ref `/spec/02-app-issues/03-getassert-undocumented-api.md` exists | §3 line 112 | ✅ Match | present | ✅ Match |
 | 14 | "observed from `tests/integratedtests/GetAssert_*_test.go`" | §3 line 112 | ⚠️ Drift (**D-CVS-41**) | wrong upstream path | ✅ Match — corrected to `tests/creationtests/GetAssert_*_test.go` |
-| 15 | `GetAssert.Quick / SortedArray / SortedArrayNoPrint / SortedMessage / ToString / ToStrings / ToStringsWithSpace / AnyToDoubleQuoteLines / AnyToStringDoubleQuoteLine / ConvertLinesToDoubleQuoteThenString / ErrorToLinesWithSpaces / ErrorToLinesWithSpacesDefault / SimpleTestCaseWrapper` (13 methods) | §3.1 lines 117-130 | ❓ Unverifiable | upstream | ❓ Unverifiable (→ AB) |
-| 16 | Canonical pattern: `formatter := asserter.X` then `actualSlice.Adds(...)` | §3.2 | ❓ Unverifiable | upstream | ❓ Unverifiable (→ AB) |
+| 15 | `GetAssert.Quick / SortedArray / SortedArrayNoPrint / SortedMessage / ToString / ToStrings / ToStringsWithSpace / AnyToDoubleQuoteLines / AnyToStringDoubleQuoteLine / ConvertLinesToDoubleQuoteThenString / ErrorToLinesWithSpaces / ErrorToLinesWithSpacesDefault / SimpleTestCaseWrapper` (13 methods) | §3.1 lines 117-130 | ❓ Unverifiable | **Cycle 86 AB:** `coretests/getAssert.go` defines all 13 + bonus methods (`StringsToSpaceString`, `ToQuoteLines`, `IsEqual/NotEqualMessage`, etc.); `coretests/vars.go:26` `GetAssert = getAssert{}` | ✅ Match |
+| 16 | Canonical pattern: `formatter := asserter.X` then `actualSlice.Adds(...)` | §3.2 | ❓ Unverifiable | **Cycle 86 AB:** confirmed across `coretests/getAssert*.go` accessor signatures returning formatter values | ✅ Match |
 | 17 | "Add to `GetAssert` when 3+ pkgs use it AND deterministic AND pure formatting" | §3.3 | ✅ Match (process rule, in-spec) | self-consistent governance rule | ✅ Match |
-| 18 | `coretestcases.CaseV1(testCase.BaseTestCase)` cast safe (same memory layout) | §4 lines 159-166 | ❓ Unverifiable | upstream | ❓ Unverifiable (→ AB) |
-| 19 | Walkthrough example uses `tests/integratedtests/widgettests/` | §5 line 175 | ⚠️ Drift (**D-CVS-40**, 8th occurrence) | wrong upstream path | ✅ Match — corrected to `tests/creationtests/widgettests/` + `enum-v7` redirect note |
+| 18 | `coretestcases.CaseV1(testCase.BaseTestCase)` cast safe (same memory layout) | §4 lines 159-166 | ❓ Unverifiable | **Cycle 86 AB:** `coretests/coretestcases/CaseV1.go:47` `type CaseV1 coretests.BaseTestCase` — exact type alias, cast trivially safe | ✅ Match |
+| 19 | Walkthrough example uses `tests/integratedtests/widgettests/` | §5 line 175 | ⚠️ Drift (**D-CVS-40**, 8th occurrence) | wrong upstream path | ⚠️ **Regression — see D-CVS-64**: `tests/integratedtests/` IS the upstream path; only `enum-v5` redirect is to `creationtests/` |
 | 20 | Cross-ref `13-testing-patterns.md §3` (Style B) exists | §5 line 191 | ✅ Match | present | ✅ Match |
 | 21 | Cross-ref `/spec/05-failing-tests/` exists with 25 post-mortems | §6 line 197 | ✅ Match | dir present, 26 files (`01..26-…`) | ✅ Match |
 | 22 | 5 referenced failing-tests files exist (`02-…`, `12-…`, `13-…`, `18-…`, `22-…`) | §6 lines 201-205 | ✅ Match | all 5 present | ✅ Match |
-| 23 | Collateral: `01-app/01-package-map.md` §8 + 4 bullets reference `tests/integratedtests/` (5 hits) | (collateral) | ⚠️ Drift (in-scope) | stale | ✅ Match — §8 retitled "upstream"; scope warning added; 4 bullets corrected to `tests/creationtests/` |
-| 24 | Collateral: `01-app/02-design-philosophy.md` line 183 references `tests/integratedtests/footests/` | (collateral) | ⚠️ Drift (in-scope) | stale | ✅ Match — corrected + `enum-v7` redirect note |
+| 23 | Collateral: `01-app/01-package-map.md` §8 + 4 bullets reference `tests/integratedtests/` (5 hits) | (collateral) | ⚠️ Drift (in-scope) | stale | ⚠️ **Regression — see D-CVS-64**: original spec was correct for upstream; rewrite needed to keep upstream path AND add `enum-v5` redirect |
+| 24 | Collateral: `01-app/02-design-philosophy.md` line 183 references `tests/integratedtests/footests/` | (collateral) | ⚠️ Drift (in-scope) | stale | ⚠️ **Regression — see D-CVS-64**: same as #23 |
 
 **Total:** 24 claims · baseline 8 ✅ / 6 ⚠️ / 0 ❌ / 10 ❓ → **57.1 % verifiable** (8/14).
-**Post-fix:** 14 ✅ / 0 ⚠️ / 0 ❌ / 10 ❓ → **100 % verifiable**.
+**Post-cycle-86:** 19 ✅ / 4 ⚠️ / 0 ❌ / 0 ❓ → **100 % verifiable** (24/24); 4 ⚠️ flag the D-CVS-64 regression.
 
 ## Findings opened & closed in this cycle
 
