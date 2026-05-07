@@ -49,3 +49,21 @@ func TestSiteStateType_Ranges(t *testing.T) {
 		t.Error("Ranges mapping mismatch")
 	}
 }
+
+// Pattern-7: AllNameValues ↔ New round-trip.
+func TestSiteStateType_AllNameValuesRoundTrip(t *testing.T) {
+	names := Invalid.AllNameValues()
+	if len(names) == 0 {
+		t.Fatal("AllNameValues empty")
+	}
+	for _, n := range names {
+		v, err := New(n)
+		if err != nil {
+			t.Errorf("New(%q) error: %v", n, err)
+			continue
+		}
+		if v.String() != n {
+			t.Errorf("round-trip mismatch: New(%q).String()=%q", n, v.String())
+		}
+	}
+}

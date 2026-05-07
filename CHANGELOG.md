@@ -10,6 +10,17 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.65.0] — 2026-05-07 — Pattern-7 audit: AllNameValues round-trip coverage
+
+### Added
+- Audited 63 `*_Coverage_test.go` files for Pattern-7 (`AllNameValues` round-trip) coverage. 60/63 already exercised the contract; 3 gaps closed:
+  - `sitestatetype/SiteStateType_Coverage_test.go`: added `TestSiteStateType_AllNameValuesRoundTrip` — every `AllNameValues()` entry round-trips through `New(name)` and reproduces `String()`.
+  - `osdetect/OsDetect_Coverage_test.go`: added `TestOsDetect_AllNameValuesRoundTrip` — round-trips every name through `osdetect.New`, skipping the `Invalid` sentinel.
+  - `configfilestate/ConfigFileState_Coverage_test.go`: added `TestConfigFileState_AllNameValuesCoverage` — package has no `New` constructor, so the test asserts `AllNameValues()` is non-empty and contains every non-blank `Ranges` entry.
+
+### Notes
+- Pattern-7 audit closes the testing-pattern coverage column from the Cycle 90 AB-residual review.
+
 ## [v0.64.0] — 2026-05-07 — Pattern-6/8 audit sweep: trailing-Invalid Min/Max fixes
 
 ### Fixed
