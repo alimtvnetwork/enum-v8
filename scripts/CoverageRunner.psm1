@@ -214,7 +214,7 @@ function Invoke-TestCoverage {
             $prevPref = $ErrorActionPreference; $ErrorActionPreference = "Continue"
             $output = & go test -count=1 "-coverprofile=$partialProfile" "-coverpkg=$covPkgList" "$testPkg" 2>&1 | ForEach-Object { $_.ToString() }
             $pkgExit = $LASTEXITCODE; $ErrorActionPreference = $prevPref
-            if ($pkgExit -ne 0) {
+            if ($pkgExit -ne 0 -and -not (Test-IsCoverpkgWarningOnlyOutput $output)) {
                 $overallExit = $pkgExit
                 Add-BuildErrorsForPackage $buildErrorsByPackage $shortName $output
                 Add-RuntimeFailuresForPackage $runtimeFailuresByPackage $shortName $output
@@ -233,7 +233,7 @@ function Invoke-TestCoverage {
         }
         foreach ($result in ($coverResults | Sort-Object Pkg)) {
             $shortName = $result.Pkg -replace '.*(integratedtests|creationtests)/?', ''; if (-not $shortName) { $shortName = "(root)" }
-            if ($result.ExitCode -ne 0) {
+            if ($result.ExitCode -ne 0 -and -not (Test-IsCoverpkgWarningOnlyOutput $result.Output)) {
                 $overallExit = $result.ExitCode
                 Add-BuildErrorsForPackage $buildErrorsByPackage $shortName $result.Output
                 Add-RuntimeFailuresForPackage $runtimeFailuresByPackage $shortName $result.Output

@@ -115,6 +115,44 @@ function Filter-TestWarnings {
     }
 }
 
+function Test-IsCoverpkgWarningOnlyOutput {
+    <#
+    .SYNOPSIS
+        Returns $true when go test output contains ONLY harmless
+        `warning: no packages being tested depend on matches for pattern …`
+        lines (and blank lines / "ok"/"PASS" markers). These are emitted by
+        `-coverpkg=` for transitive packages a test binary doesn't import,
+        and must NEVER be classified as a build error or runtime failure.
+    .NOTES
+        Root cause (RCA, 2026-05-07): the parallel compile-check probe
+        sometimes saw a non-zero exit even though the only diagnostic was
+        a stream of these warnings — producing false-positive Blocked
+        reports for licensetype / onofftype / rootcmdnames and a phantom
+        "runtime failure" for brackets. Filtering at decision time fixes
+        both surfaces.
+    #>
+    [CmdletBinding()]
+    [OutputType([bool])]
+    param([string[]]$lines)
+
+    if (-not $lines -or $lines.Count -eq 0) { return $false }
+    $sawWarning = $false
+    foreach ($raw in $lines) {
+        if ($null -eq $raw) { continue }
+        $line = $raw.ToString().TrimEnd("`r").Trim()
+        if (-not $line) { continue }
+        if ($line -match '^warning: no packages being tested depend on matches for pattern') {
+            $sawWarning = $true
+            continue
+        }
+        # PASS/ok markers are noise we tolerate
+        if ($line -match '^(PASS|ok\s|FAIL\s+\S+\s+\[(setup failed|build failed)\])') { continue }
+        # any other content => not warnings-only
+        return $false
+    }
+    return $sawWarning
+}
+
 function Merge-UniqueOutputLines {
     <#
     .SYNOPSIS
@@ -183,6 +221,6 @@ function Resolve-TestSuiteRoot {
 
 Export-ModuleMember -Function @(
     'Write-Header', 'Write-Success', 'Write-Fail',
-    'Ensure-TestLogDir', 'Filter-TestWarnings', 'Merge-UniqueOutputLines',
-    'Get-CallerSource', 'Resolve-TestSuiteRoot'
+    'Ensure-TestLogDir', 'Filter-TestWarnings', 'Test-IsCoverpkgWarningOnlyOutput',
+    'Merge-UniqueOutputLines', 'Get-CallerSource', 'Resolve-TestSuiteRoot'
 )

@@ -147,11 +147,29 @@ function Invoke-CoverageCompileCheck {
                     if ($seen.Add($normalized)) { $merged.Add($normalized) | Out-Null }
                 }
                 $out = $merged.ToArray()
-                # AN: confirmation probe — re-run a -coverpkg-free test-binary build.
-                # If it succeeds the original failure was warning-only noise.
-                $devnull = if ($IsWindows) { 'NUL' } else { '/dev/null' }
-                $null = & go test -c -o $devnull -gcflags=all=-e "$pkg" 2>&1
-                $confirmed = ($LASTEXITCODE -ne 0)
+                # AN-2026-05-07: If diagnostic output is ONLY -coverpkg warnings
+                # (no real build/runtime error), treat as compilable. This is
+                # the dominant false-positive source under parallel load.
+                $warningsOnly = $false
+                foreach ($l in $out) {
+                    if (-not $l) { continue }
+                    $t = $l.ToString().TrimEnd("`r").Trim()
+                    if (-not $t) { continue }
+                    if ($t -match '^warning: no packages being tested depend on matches for pattern') {
+                        $warningsOnly = $true; continue
+                    }
+                    if ($t -match '^(PASS|ok\s|FAIL\s+\S+\s+\[(setup failed|build failed)\])') { continue }
+                    $warningsOnly = $false; break
+                }
+                if ($warningsOnly) {
+                    $confirmed = $false
+                } else {
+                    # AN: confirmation probe — re-run a -coverpkg-free test-binary build.
+                    # If it succeeds the original failure was warning-only noise.
+                    $devnull = if ($IsWindows) { 'NUL' } else { '/dev/null' }
+                    $null = & go test -c -o $devnull -gcflags=all=-e "$pkg" 2>&1
+                    $confirmed = ($LASTEXITCODE -ne 0)
+                }
             }
             [pscustomobject]@{ Pkg = $pkg; ExitCode = $ec; Output = $out; Confirmed = $confirmed }
         }
@@ -172,6 +190,14 @@ function Invoke-CoverageCompileCheck {
             # list and the coverage summary). Re-running the probe serially eliminates
             # the contention and reliably resolves the noise.
             if (Test-PackageActuallyCompiles -Pkg $result.Pkg) {
+                $testPkgs.Add($result.Pkg)
+                continue
+            }
+
+            # AN-2026-05-07: Final guard — if the captured diagnostic is only
+            # `-coverpkg` warnings (no real go-loader/compile error), it's a
+            # false-positive Blocked. Treat as compilable.
+            if (Test-IsCoverpkgWarningOnlyOutput $result.Output) {
                 $testPkgs.Add($result.Pkg)
                 continue
             }

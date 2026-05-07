@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The release pipeline extracts the matching `## [vX.Y.Z]` section as the
 GitHub Release body — keep entries small, sectioned, and human-readable.
 
+## [v1.13.0] - 2026-05-07
+### Fixed
+- **Coverage tooling false-positives.** `licensetype`, `onofftype`, `rootcmdnames` were intermittently reported as `Blocked` and `brackets` as `RUNTIME FAILURE` when the only diagnostic was harmless `warning: no packages being tested depend on matches for pattern …` lines emitted by `-coverpkg=`. Added `Test-IsCoverpkgWarningOnlyOutput` (Utilities.psm1) and applied it as a guard in `CoverageCompileCheck.psm1` (parallel runspace + post-pass) and `CoverageRunner.psm1` (sync + parallel coverage classifier). Packages whose only output is coverpkg warnings are now correctly treated as compiling cleanly.
+
 ---
 
 ## [v1.12.0] — 2026-05-07 — Rename `cross-repo/core-v8/` → `cross-repo/core-v9/`
