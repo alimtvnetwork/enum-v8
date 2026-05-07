@@ -10,6 +10,24 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.49.0] — 2026-05-07 — Cycle 78 — AN: CoverageCompileCheck false-positive guard
+
+### Fixed
+- `scripts/CoverageCompileCheck.psm1`: introduced `Test-PackageActuallyCompiles`
+  confirmation probe that re-runs `go test -c -o /dev/null -gcflags=all=-e <pkg>`
+  whenever the primary `go test -coverpkg=$CovPkgList` invocation returns a
+  non-zero exit code. If the test-binary build succeeds the package is
+  promoted back to `TestPkgs` (no longer reported as Blocked). Both the sync
+  loop and the parallel `ForEach-Object -Parallel` branch carry the
+  `Confirmed` flag so neither path reports false-positive blocked packages
+  caused by `-coverpkg` warning-only stderr noise (e.g. "no packages being
+  tested depend on matches for pattern").
+
+### Notes
+- Tooling-only fix; no production Go code touched. Closes task AN.
+
+---
+
 ## [v0.48.0] — 2026-05-07 — Cycle 77 — AL2-09 cmdenumtypes coverage sweep
 
 ### Added
