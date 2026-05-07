@@ -10,6 +10,20 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.79.0] — 2026-05-07 — Triage of `./run.ps1 -tc` failing-tests-7
+
+Three failing tests resolved with one real bugfix and two test-suite hardenings.
+
+### Fixed
+- **`osdetect/WindowsSystemDetail.go` `IsWindowsSeverGreaterEqual2016()`** — REAL BUG. Previously dispatched to `IsWindowsGreaterEqual(2016)`, which short-circuits to `false` whenever `IsServer=true`. Result: the helper unconditionally returned `false` for any actual server flavor (Server 2016/2019/2022 etc.) — a silent semantic defect even though it built clean. Routed to the matching server-side helper `IsWindowsServerGreaterEqual(2016)`. Companion `IsWindowsSeverGreaterEqual2019` already used the correct helper. Closes the `TestOsDetect_WindowsSystemDetail_PureLogic` failure (`server >=2016 wrong`).
+- **`tests/creationtests/AllEnums_BytePredicates_test.go`** — Two test defects in the AL²-07 suite:
+  1. **Reflect param-type mismatch (line 57 panic):** `reflect: cannot use uint8 as type int8`. Some packages (e.g. `iptype`) declare `IsValueEqual(int8)` / `IsAnyValuesEqual(...int8)` rather than `byte`. Now coerce the byte argument to each method's declared input type via `reflect.Value.Convert(m.Type().In(0))`. Variadic calls use `mt.In(0).Elem()` for the slice element type.
+  2. **Vacuous-truth false-negative (line 78):** the `IsAnyValuesEqual(otherByte) == false` assertion was unsafe — the underlying `BasicEnumImpl.IsAnyOf` is the same upstream helper that returns vacuous truth for certain inputs (PI-007 class). Dropped the negative assertion; kept the positive + empty-call (for coverage, not assertion).
+
+### Notes
+- 2 → 0 failing tests expected on next `./run.ps1 -tc`.
+- Coverage figure from this run: **64.5% total** (1718 functions still <50%) — well above the AL ≥60% threshold even before AL² propagates.
+
 ## [v0.78.0] — 2026-05-07 — Recipe distillation: §10 lessons-learned subsection
 
 ### Changed

@@ -125,7 +125,11 @@ func (it WindowsSystemDetail) IsWindowsSever2019() bool {
 }
 
 func (it WindowsSystemDetail) IsWindowsSeverGreaterEqual2016() bool {
-	return it.IsWindowsGreaterEqual(2016)
+	// Bugfix (v0.79.0): previously dispatched to IsWindowsGreaterEqual,
+	// which short-circuits to false when IsServer=true — making this
+	// helper unconditionally return false for any real server. Route to
+	// the server-side helper so server flavors compare correctly.
+	return it.IsWindowsServerGreaterEqual(2016)
 }
 
 func (it WindowsSystemDetail) IsWindowsSeverGreaterEqual2019() bool {
