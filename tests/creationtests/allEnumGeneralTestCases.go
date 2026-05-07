@@ -2407,7 +2407,7 @@ var allEnumGeneralTestCases = []*EnumTestWrapper{
 			 "ChangeUserHomeDir": 22 ,
 			 "ChangeUsersHomeDir": 23 ,
 			 "PerUserLimit": 24 ,
-			 "": 25 ,
+			 "PassivePortRange": 25 ,
 			 "AssignHostingPackage": 26 ,
 			 "EditConfig": 27 ,
 			 "UpdateConfig": 28 ,
@@ -2463,7 +2463,7 @@ var allEnumGeneralTestCases = []*EnumTestWrapper{
 		 },
 		 ExpectedInvalidName:"Invalid",
 		 ExpectedInvalidValueString:"0",
-		 ExpectedRangesNamesCsv: "Invalid(0), Help(1), Log(2), Status(3), Port(4), Install(5), Uninstall(6), Disable(7), InstallFix(8), ServiceStart(9), ServiceRestart(10), ServiceStop(11), ServiceEnable(12), ChangePort(13), Enable(14), WhitelistIps(15), BlacklistIps(16), AddUser(17), UpdateUser(18), RemoveUser(19), BanUser(20), BlockUser(21), ChangeUserHomeDir(22), ChangeUsersHomeDir(23), PerUserLimit(24), (25), AssignHostingPackage(26), EditConfig(27), UpdateConfig(28), ConfigKeyValUpdate(29), EnablePam(30), EnableUnixAuth(31), DisablePam(32), DisableUnixAuth(33), SetPassivePorts(34), SetSslFile(35), JsonConfigSet(36), ApplyDefaultConfig(37), RemoveConfigFiles(38), ApplyDefaultPermission(39), FixUserDirPermissions(40), RemoveCoreConfigByKeys(41), ConfigPerFile(42), AddOrUpdateConfig(43), AddSsl(44), RenewSsl(45), DryRunSsl(46), AutoSsl(47), AutoRenewSsl(48), RemoveSslAll(49), AddFtpDomain(50), RemoveFtpDomain(51), SetMaxLoad(52), Clear(53), Verify(54), VerifyExistingUsers(55), VerifyPortWorking(56), VerifySsl(57), RemoveAll(58), LastStates(59), Sync(60), SyncNow(61), SyncForce(62), CurrentStateName(63), Histories(64), ExportConfigSpecific(65), ExportConfigAll(66), ImportConfigSpecific(67), ImportConfigAll(68), ListConfig(69), WhichPort(70), List(71), ListJson(72), SearchUser(73), SearchUserByDomainName(74), SearchUserByDomain(75), Backup(76), Import(77)",
+		 ExpectedRangesNamesCsv: "Invalid(0), Help(1), Log(2), Status(3), Port(4), Install(5), Uninstall(6), Disable(7), InstallFix(8), ServiceStart(9), ServiceRestart(10), ServiceStop(11), ServiceEnable(12), ChangePort(13), Enable(14), WhitelistIps(15), BlacklistIps(16), AddUser(17), UpdateUser(18), RemoveUser(19), BanUser(20), BlockUser(21), ChangeUserHomeDir(22), ChangeUsersHomeDir(23), PerUserLimit(24), PassivePortRange(25), AssignHostingPackage(26), EditConfig(27), UpdateConfig(28), ConfigKeyValUpdate(29), EnablePam(30), EnableUnixAuth(31), DisablePam(32), DisableUnixAuth(33), SetPassivePorts(34), SetSslFile(35), JsonConfigSet(36), ApplyDefaultConfig(37), RemoveConfigFiles(38), ApplyDefaultPermission(39), FixUserDirPermissions(40), RemoveCoreConfigByKeys(41), ConfigPerFile(42), AddOrUpdateConfig(43), AddSsl(44), RenewSsl(45), DryRunSsl(46), AutoSsl(47), AutoRenewSsl(48), RemoveSslAll(49), AddFtpDomain(50), RemoveFtpDomain(51), SetMaxLoad(52), Clear(53), Verify(54), VerifyExistingUsers(55), VerifyPortWorking(56), VerifySsl(57), RemoveAll(58), LastStates(59), Sync(60), SyncNow(61), SyncForce(62), CurrentStateName(63), Histories(64), ExportConfigSpecific(65), ExportConfigAll(66), ImportConfigSpecific(67), ImportConfigAll(68), ListConfig(69), WhichPort(70), List(71), ListJson(72), SearchUser(73), SearchUserByDomainName(74), SearchUserByDomain(75), Backup(76), Import(77)",
 		 IntegerMinMax: corerange.MinMaxInt {
  			Min:0,
  			Max:77,
