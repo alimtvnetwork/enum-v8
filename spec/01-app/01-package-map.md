@@ -114,7 +114,7 @@
 
 ## 8. Test Packages (under `tests/creationtests/`)
 
-> ⚠️ **Scope:** the per-package mirror layout below is **upstream `core-v9`**. `enum-v7` uses one shared `tests/creationtests/` package — see [`13-testing-patterns.md` §6.1](./13-testing-patterns.md#61-enum-v7-specific-layout).
+> ⚠️ **Scope:** the per-package mirror layout below is **upstream `core-v9`**. `enum-v8` uses one shared `tests/creationtests/` package — see [`13-testing-patterns.md` §6.1](./13-testing-patterns.md#61-enum-v8-specific-layout).
 
 There is a **mirror** of public packages under upstream `tests/creationtests/` with the suffix `tests`. Examples:
 
