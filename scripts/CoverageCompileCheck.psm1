@@ -28,6 +28,35 @@ function Write-BlockedDiagnostic {
     }
 }
 
+function Test-PackageActuallyCompiles {
+    <#
+    .SYNOPSIS
+        Confirmation probe for a package that the primary `go test -coverpkg=...`
+        check flagged as blocked. We re-run a *minimal* build of the test binary
+        without `-coverpkg` (which can emit "no packages being tested depend on
+        matches for pattern" warnings and other noise that cause false-positive
+        blocked reports on PowerShell hosts).
+    .RETURNS
+        [bool] $true if the package's test binary compiles cleanly, $false otherwise.
+    .NOTES
+        AN: Guards against the false-positive blocked report cluster surfaced
+        in run.ps1 -tc output where packages compiled fine under direct
+        `go build` / `go test` invocations but were marked Blocked because the
+        `-coverpkg=$CovPkgList` invocation produced non-zero exit codes from
+        warning-only stderr noise.
+    #>
+    param([string]$Pkg)
+    if (-not $Pkg) { return $false }
+    $prevPref = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    # `go test -c` builds the test binary without running it. -o discards the binary.
+    $devnull = if ($IsWindows) { 'NUL' } else { '/dev/null' }
+    $null = & go test -c -o $devnull -gcflags=all=-e "$Pkg" 2>&1
+    $ec = $LASTEXITCODE
+    $ErrorActionPreference = $prevPref
+    return ($ec -eq 0)
+}
+
 function Invoke-CoverageCompileCheck {
     <#
     .SYNOPSIS
