@@ -121,8 +121,8 @@ func TestOsGroupExecution_FormatAndPtr(t *testing.T) {
 	if v.String() == "" || v.ValueString() == "" || v.ToNumberString() == "" {
 		t.Error("string method empty")
 	}
-	if v.Json().HasError() {
-		t.Errorf("Json error: %v", v.Json().Error)
+	if v.JsonPtr().HasError() {
+		t.Errorf("Json error: %v", v.JsonPtr().Error)
 	}
 	if v.JsonPtr() == nil {
 		t.Error("JsonPtr nil")

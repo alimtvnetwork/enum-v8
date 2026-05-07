@@ -114,8 +114,8 @@ func TestDbExposeType_FormatAndPtrAndBinders(t *testing.T) {
 	if nilP.ToSimple() != Invalid {
 		t.Error("ToSimple(nil) should be Invalid")
 	}
-	if v.Json().HasError() {
-		t.Errorf("Json error: %v", v.Json().Error)
+	if v.JsonPtr().HasError() {
+		t.Errorf("Json error: %v", v.JsonPtr().Error)
 	}
 	if v.JsonPtr() == nil {
 		t.Error("JsonPtr nil")
