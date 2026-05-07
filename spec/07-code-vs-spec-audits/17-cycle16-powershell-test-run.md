@@ -56,7 +56,7 @@ ls run.ps1 scripts/CoverageRunner.psm1 scripts/CoverageCompileCheck.psm1 scripts
 | 24 | All files | Zero `enum-v1` / `enum-v3` references | ✅ | Verified via post-rename Cycle (enum-v3 → enum-v8 sweep). |
 | 25 | All files | Zero mojibake `core-v9 → core-v9` | ✅ | Zero hits. |
 | 26 | All files | Zero `.lovable/user-preferences` citations | ✅ | Zero hits. |
-| 27 | All files | Zero raw `core-v8` references | ✅ | Zero hits (the cross-repo mirror lives under `cross-repo/core-v8/`, out of scope). |
+| 27 | All files | Zero raw `core-v8` references | ✅ | Zero hits (the cross-repo mirror lives under `cross-repo/core-v9/`, out of scope). |
 | 28 | Cross-spec | All inter-spec cross-refs resolve (`04-tooling/04-ci-guards.md`, `06-testing-guidelines/06-branch-coverage.md`, `01-app/13-testing-patterns.md` §6.1) | ✅ | All target files exist. |
 
 **Tally:** 28 claims → ✅ 22 (after Cycle 16 fixes), ⚠️ 0, ❌ 0, ❓ 6.
@@ -91,7 +91,7 @@ Specifically checked-and-clean:
 - No `enum-v1` / `enum-v3` (post-rename verified).
 - No mojibake `core-v9 → core-v9`.
 - No `.lovable/user-preferences` citations.
-- No `core-v8` outside `cross-repo/core-v8/` (which is out of scope).
+- No `core-v8` outside `cross-repo/core-v9/` (which is out of scope).
 - All inter-spec cross-references resolve.
 - No contradiction with the **`spec/01-app/` freeze** declared in `spec-v0.30.0` — Cycle 16 touches only `spec/03-` files.
 - No contradiction with `spec/06-testing-guidelines/` Cycle 15 callouts — both directories now follow the same upstream-vs-`enum-v8` scope-note convention.

@@ -8,7 +8,7 @@
 | 02 | [`cicd-issues/02-internal-package-rule.md`](./cicd-issues/02-internal-package-rule.md) | Go's `internal/` rule rejects consumers under `enum-v8/...` due to declared module path mismatch | ✅ Resolved — root cause (#01) fixed |
 | 03 | [`cicd-issues/03-pseudo-version-rejected.md`](./cicd-issues/03-pseudo-version-rejected.md) | Pseudo-version `v1.5.6-0.<date>-<sha>` rejected — needs non-existent `v1.5.5` predecessor tag | ✅ Documented; do not re-attempt |
 | 04 | [`cicd-issues/04-no-email-notifications.md`](./cicd-issues/04-no-email-notifications.md) | Constraint: never configure email-based CI notifications | 🚫 Permanent constraint |
-| 05 | [`cicd-issues/05-cross-repo-mirror-drift.md`](./cicd-issues/05-cross-repo-mirror-drift.md) | `cross-repo/core-v8/` can drift if main-repo CI changes aren't mirrored | 🔄 Procedural — handled per-change |
+| 05 | [`cicd-issues/05-cross-repo-mirror-drift.md`](./cicd-issues/05-cross-repo-mirror-drift.md) | `cross-repo/core-v9/` can drift if main-repo CI changes aren't mirrored | 🔄 Procedural — handled per-change |
 | 06 | [`cicd-issues/06-baseline-gate-seed.md`](./cicd-issues/06-baseline-gate-seed.md) | golangci-lint baseline gate is seed-then-gate; empty baseline = warnings only | ✅ Working as designed |
 | 07 | [`cicd-issues/07-coverage-gate-60.md`](./cicd-issues/07-coverage-gate-60.md) | Coverage gate ≥ 60% enforced in `.github/workflows/ci.yml` | ✅ Working as designed |
 

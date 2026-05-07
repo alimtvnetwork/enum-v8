@@ -202,7 +202,7 @@
 
 ## Phase 4: Manual / Parked
 
-### A. Manual `cross-repo/core-v8/` push
+### A. Manual `cross-repo/core-v9/` push
 
 - **Status:** ⏭️ Manual user action (credential-bound)
 - **Trigger:** When main-repo CI files change, mirror then user pushes.
@@ -223,7 +223,7 @@
 8. **AC** — Re-audit §07 / §09
 9. **AB residual** — Continue ❓ promotion for later cycles
 10. **AK** — New enum package creation / recipe validation
-11. **A** — Manual `cross-repo/core-v8/` push
+11. **A** — Manual `cross-repo/core-v9/` push
 
 **Done from this list:**
 - AL-01..AL-08 ✅ (Cycles 49–55, 56, 58 — full AL umbrella)

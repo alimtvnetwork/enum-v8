@@ -1,4 +1,4 @@
-# cross-repo/core-v8/
+# cross-repo/core-v9/
 
 > ℹ️ **Historical naming — intentional. Do not rename this directory.**
 >
@@ -9,7 +9,7 @@
 > token so it stays in lockstep with the upstream repo it mirrors.
 >
 > **When editing spec text or scripts that reference *this directory*,
-> always write `cross-repo/core-v8/`** — even when the surrounding sentence
+> always write `cross-repo/core-v9/`** — even when the surrounding sentence
 > is about `core-v9` content. The mismatch is by design.
 >
 > Historical body references below (`enum-v1`, `core-v8`) likewise track the
@@ -29,7 +29,7 @@ git checkout -b ci/initial-pipeline
 
 # Workflows
 mkdir -p .github/workflows
-cp <enum-v1>/cross-repo/core-v8/.github/workflows/*.yml .github/workflows/
+cp <enum-v1>/cross-repo/core-v9/.github/workflows/*.yml .github/workflows/
 
 # CI guard scripts (shared, repo-agnostic)
 mkdir -p scripts/ci
@@ -38,11 +38,11 @@ cp <enum-v1>/scripts/ci/lint-baseline-diff.py   scripts/ci/
 
 # Lint baseline seed
 mkdir -p .ci-baselines
-cp <enum-v1>/cross-repo/core-v8/.ci-baselines/golangci-lint.json .ci-baselines/
+cp <enum-v1>/cross-repo/core-v9/.ci-baselines/golangci-lint.json .ci-baselines/
 
 # Repo metadata
-cp <enum-v1>/cross-repo/core-v8/.golangci.yml .
-cp <enum-v1>/cross-repo/core-v8/.github/dependabot.yml .github/
+cp <enum-v1>/cross-repo/core-v9/.golangci.yml .
+cp <enum-v1>/cross-repo/core-v9/.github/dependabot.yml .github/
 
 git add .github scripts/ci .ci-baselines .golangci.yml
 git commit -m "ci: add CI/CD pipeline, vulncheck, release, guards, and Dependabot"

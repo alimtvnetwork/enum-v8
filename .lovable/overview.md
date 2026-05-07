@@ -14,13 +14,13 @@
 
 ## Directories the AI must respect
 
-- `cross-repo/core-v8/` — mirror of a separate upstream repo. **Never** rename `core-v8` → `core-v9` here. **Never** rewrite `enum-v1` → `enum-v8` here.
+- `cross-repo/core-v9/` — mirror of a separate upstream repo. **Never** rename `core-v8` → `core-v9` here. **Never** rewrite `enum-v1` → `enum-v8` here.
 - `tests/creationtests/` — actual test layout. The string `tests/integratedtests/` in any spec file is **stale** (audit finding C-CVS-01).
 
 ## Hard prohibitions
 
 - **No emails.** Never configure Dependabot recipients, SMTP, or any email-based notification flow. User explicitly rejects all email flows.
-- **No `core-v8` reintroduction** outside `cross-repo/core-v8/`.
+- **No `core-v8` reintroduction** outside `cross-repo/core-v9/`.
 - **No `tests/integratedtests/`** in new spec content.
 
 ## Workflow

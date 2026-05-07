@@ -4,11 +4,11 @@
 
 ## ⏭️ Manual user actions (parked)
 
-### Task A — Push `cross-repo/core-v8/` mirror to upstream GitHub
+### Task A — Push `cross-repo/core-v9/` mirror to upstream GitHub
 
 - **Why parked:** Credential-bound. The AI cannot perform git pushes to external repos.
 - **Trigger:** Whenever main-repo CI changes (`.github/workflows/`, `.golangci.yml`, `.github/dependabot.yml`, `.ci-baselines/`, `scripts/ci/test_*.py`, `CHANGELOG.md`).
-- **AI's role:** Mirror the file changes into `cross-repo/core-v8/` and commit. NEVER attempt the push.
+- **AI's role:** Mirror the file changes into `cross-repo/core-v9/` and commit. NEVER attempt the push.
 
 ### Task W — Upstream `core-v9` `go.mod` rename + tag `v1.5.8`
 
@@ -28,6 +28,6 @@
 These are not "skipped tasks" — they are forbidden categories. Listed here for completeness of the avoid surface:
 
 - Email-based notifications of any kind.
-- Reintroducing `core-v8` outside `cross-repo/core-v8/`.
+- Reintroducing `core-v8` outside `cross-repo/core-v9/`.
 - Writing `tests/integratedtests/` in new spec content.
-- Renaming or modifying `cross-repo/core-v8/` in v1→v2 or v8→v9 sweeps.
+- Renaming or modifying `cross-repo/core-v9/` in v1→v2 or v8→v9 sweeps.

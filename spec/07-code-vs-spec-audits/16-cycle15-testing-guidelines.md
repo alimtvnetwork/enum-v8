@@ -35,7 +35,7 @@ ls spec/01-app/{13-testing-patterns,14-tests-folder-walkthrough}.md
 | 5  | README | Core principle — no raw `t.Error` / `t.Errorf` | ✅ | Consistent with `01-app/13-testing-patterns.md` §3 framework-only assertion rule. |
 | 6  | README | Core principle — internal-package coverage policy with callout to `06-branch-coverage.md` | ✅ | Cross-ref resolves. |
 | 7  | 01-folder-structure | Directory tree shows `tests/integratedtests/<pkg>tests/` as the prescribed layout | ⚠️→✅ | **D-CVS-43** — same upstream-vs-`enum-v8` mismatch already resolved at `01-app/13` and `14`. Cycle 15 adds an `enum-v8` scope warning at the top of `01-folder-structure.md` redirecting to `01-app/13-testing-patterns.md` §6.1. |
-| 8  | 01-folder-structure | Naming rule `{package}tests/` lowercase + `tests` suffix | ✅ | Spec-internal; consistent with upstream `core-v9` mirror in `cross-repo/core-v8/tests/integratedtests/`. |
+| 8  | 01-folder-structure | Naming rule `{package}tests/` lowercase + `tests` suffix | ✅ | Spec-internal; consistent with upstream `core-v9` mirror in `cross-repo/core-v9/tests/integratedtests/`. |
 | 9  | 01-folder-structure | File pattern `{Feature}_test.go` + `{Feature}_testcases.go` | ✅ | Same. |
 | 10 | 01-folder-structure | Test fn pattern `Test_{TypeOrFeature}_{Scenario}_Verification` | ✅ | Consistent with `01-app/13-testing-patterns.md` §3 rule 1. |
 | 11 | 01-folder-structure | Package declaration `package errcoretests` (NOT `_test` suffix) | ✅ | Consistent with `01-app/13-testing-patterns.md` §6 rule 4. |

@@ -42,7 +42,7 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 - **Dependabot** (`.github/dependabot.yml`) — weekly `gomod` and
   `github-actions` updates, grouped minor/patch PRs, scheduled Mondays
   09:00 Asia/Kuala_Lumpur.
-- **Cross-repo staging** under `cross-repo/core-v8/` — mirrored
+- **Cross-repo staging** under `cross-repo/core-v9/` — mirrored
   workflows, `.golangci.yml`, `dependabot.yml`, baselines, and a
   README install guide so the `core-v8` upstream can adopt the same
   CI surface (governed by `spec/04-tooling/06-cross-repo-sync.md`).
@@ -59,7 +59,7 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 - **Core dependency renamed** `github.com/alimtvnetwork/core-v8` →
   `github.com/alimtvnetwork/core-v8` across all 307 source files
   (`go.mod`, all package imports, spec docs, CI configs, coverage
-  scripts, PR template). The `cross-repo/core-v8/` staging directory
+  scripts, PR template). The `cross-repo/core-v9/` staging directory
   name is intentionally retained — it tracks the upstream repo name,
   not the module path. Pseudo-version pin
   `v1.5.6-0.20260423064907-72bcd64c06b5` carries over unchanged.
