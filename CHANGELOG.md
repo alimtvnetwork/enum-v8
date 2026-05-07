@@ -10,6 +10,21 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.6.0] — 2026-05-07 — `cmdenumtypes/rootcmdnames` reflection uplift sweep
+
+### Added
+- `cmdenumtypes/rootcmdnames/RootCmdNames_Uplift_test.go` — reflection sweep over **all 60 Variant constants** (existing `RootCmdNames_Coverage_test.go` only touched 10).
+  - Nullary method sweep with `recover()` (value + pointer receivers) — RCA pattern 7 sparse-array safe.
+  - JSON marshal/unmarshal round-trip per constant.
+  - `New(name)` / `NewMust(name)` for every `Variant.Name()`.
+  - Alias-name fast-paths: `?`, `-?`, `/?`, `zipper`, `p-dns`, `d-load`, `iptables`, `pure-ftp`, `web-server`, `db`, `my-sql`, `m-sql`, `mySQL`, `postgre`, `postgresql`, `postgre-sql`, `p-sql`, `sync-n`, `sys-path`, `r-settings`, `default-settings`, `apply-default-config`, `def-setting`, `def-settings`, plus bogus + empty.
+  - Cross-variant comparators per constant: `IsByteValueEqual`, `IsValueEqual`, `IsNameEqual`, `IsAnyValuesEqual`, `IsAnyOf`, `IsAnyNamesOf`, `Is`.
+  - Top-level helpers: `Min`, `Max`, `RangesInvalidErr`, `Is(name, variant)`.
+
+### Notes
+- Last `-tc` run: `cmdenumtypes/rootcmdnames` at **67.6%**. Expected lift: **~85%+** (60-constant sweep × ~30 nullary methods = ~1800 method invocations vs ~10 in prior test).
+- `commandNamesMap` has gaps for `Tooling`, `Docker`, `System`, `Os`, `Update`, `Sync`, `Nginx`, `Apache`, `Paths`, `Env`, `Services`, `Restart`, `Reboot`, `Shutdown` — `FullName()` returns "" for these. Not a bug, just an incomplete map; documented for awareness but not patched (per "don't fix what isn't broken").
+
 ## [v1.5.0] — 2026-05-07 — `osdetect` internal-package uplift sweep
 
 ### Added
