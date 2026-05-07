@@ -10,6 +10,33 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.59.0] — 2026-05-07 — Cycle 88 — AB-residual: §09 versioning (4 fabricated APIs uncovered)
+
+### Changed
+- `spec/07-code-vs-spec-audits/10-cycle9-versioning.md`: promoted all 11 ❓ rows against upstream `core-v9 v1.5.8`. Verifiable score 9/9 → **19/20 (95.0 %)**, 1 ❓ remains (`errcore.FailedToConvertType`, already deferred from Cycle 2/7).
+
+### Discovered (4 new D-CVS findings — major API drift)
+- **D-CVS-66 — HIGH**: `coreversion.Parse(s) (Version, error)` is fabricated. Real construction is via `coreversion.New.Major(...)`, `MajorMinor(...)`, `MajorMinorPatch(...)`, `MajorMinorPatchBuild(...)`, etc. (`/tmp/core-v9-upstream/coreversion/newCreator.go`).
+- **D-CVS-67 — HIGH**: `Version.{Major,Minor,Patch}() int` accessors are fabricated. Real methods return `string`: `MajorString()`, `MinorString()`, `PatchString()`, `BuildString()`. The same-named methods on `Version` (`Major`, `MajorMinor`, …) are comparators returning `corecomparator.Compare`, not int accessors.
+- **D-CVS-68 — HIGH**: `Version.{LessThan,Equal,GreaterThanOrEqual}` are fabricated. Real comparator methods are `IsEqual`, `IsLeftLessThan`, `IsLeftGreaterThan`, `IsLeftLessThanOrEqual`, `IsLeftGreaterThanOrEqual`.
+- **D-CVS-69 — CRITICAL**: `versionindexes.V1..V8` is entirely fabricated. Upstream `enums/versionindexes/Index.go:33-39` defines `Major(0), Minor(1), Patch(2), Build(3), Invalid(4)` — these index version *components*, not `core-vN` *eras*. The §2 era-counter narrative in `01-app/11-versioning.md` must be rewritten from scratch.
+
+### Side effect
+- Claim #13 (`tests/integratedtests/`) re-promoted from ⚠️ (D-CVS-27) back to ✅ in light of D-CVS-64 (Cycle 86) — `tests/integratedtests/` IS the canonical upstream path; the original spec was correct.
+
+### Remaining Tasks
+- **AB residual** ⭐ Next pick: §10 cmd-entrypoints (10 ❓), §11 testing-patterns (10 ❓), §02 error-system (6 ❓)
+- **AJ-NEW HIGH+CRITICAL** — apply spec fixes from D-CVS-26..69 (now **6 CRITICAL** incl. D-CVS-64 + D-CVS-69, **14 HIGH**, plus LOW/MEDIUM); §16 + §09 both rewrite-required
+- **Pattern-6/8 audit** — sweep packages where `Invalid` isn't first const → custom `Min`/`Max` AND `MinByte`/`MaxByte`
+- **Pattern-7 audit** — sweep `*_Coverage_test.go` round-tripping `AllNameValues`
+- **Tooling** — investigate `CoverageCompileCheck.psm1` parallel false-positive (Cycle 87 note)
+- AA / Cycles 16–20 — audit remaining spec dirs
+- AI — mark `spec/01-app/` frozen
+- AK — new enum recipe validation
+- A — manual `cross-repo/core-v8/` push
+
+---
+
 ## [v0.58.0] — 2026-05-07 — Cycle 87 — fix 2 test failures (Patterns 8 & 9 added)
 
 ### Fixed
