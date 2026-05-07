@@ -201,11 +201,11 @@ func (it Variant) IsEqual(level Variant) bool {
 }
 
 func (it Variant) IsAboveOrEqual(level Variant) bool {
-	return level.ValueByte() >= it.ValueByte()
+	return it.ValueByte() >= level.ValueByte()
 }
 
 func (it Variant) IsLowerOrEqual(level Variant) bool {
-	return level.ValueByte() <= it.ValueByte()
+	return it.ValueByte() <= level.ValueByte()
 }
 
 func (it Variant) IsInvalid() bool {

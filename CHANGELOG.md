@@ -10,6 +10,17 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.87.0] — 2026-05-07 — Level-comparison receiver inversion fix + Pattern 5 lint
+
+### Fixed (real defect — found during lint authoring)
+- **12 packages had inverted `IsAboveOrEqual` / `IsLowerOrEqual` semantics** — the comparison was written `level.ValueByte() >= it.ValueByte()` instead of `it.ValueByte() >= level.ValueByte()`, silently swapping the operand roles. Calling `Error.IsAboveOrEqual(Notice)` returned `false` instead of `true`. Affected packages: `certaction`, `compressformats`, `compresslevels`, `configfilestate`, `conntrackstate`, `inputiptype`, `iptype`, `leveltype`, `runtype`, `sitestatetype`, `httpmethodtype`, `httpstatusfamily`. Reference impl `nginxlogtype` was already correct.
+
+### Added
+- **`tests/creationtests/AllEnums_LevelComparisonReceiverOrder_test.go`** — new AST-walking suite `Test_AllEnums_LevelComparisonReceiverOrder` that scans every non-test `.go` file for methods named `IsAboveOrEqual` / `IsAbove` / `IsLowerOrEqual` / `IsLower` whose body is `return X.ValueByte() OP Y.ValueByte()`, and asserts the LHS identifier matches the receiver name. Prevents regression of the v0.87.0 fix and catches the same Pattern 5 defect in any future enum.
+
+### Notes
+- Seventh and final RCA-pattern lint (Patterns 1, 2, 3, 5, 7, 9 are now active runtime guards). Patterns 4/6/8/10/11 are either log-side, deleted (false positives), or already-mitigated historically.
+
 ## [v0.86.0] — 2026-05-07 — BasicString defect detector (RCA Pattern 3 lint)
 
 ### Added
