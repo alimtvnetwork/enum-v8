@@ -10,6 +10,39 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.47.0] — 2026-05-07 — Cycle 76 — AL2-08 osdetect bespoke coverage
+
+### Added
+- `osdetect/OsDetect_Coverage_test.go` — bespoke cross-platform-safe
+  coverage for the previously thin areas of `osdetect`:
+  - **Platform-guarded wrappers** (`IsCentOs`, `IsDebian`, `IsRedhat`,
+    `IsUbuntu`, `IsWindows8/10/11`, `IsWindowsServer`,
+    `IsWindowsServer2016/2019`) — exercised for the no-panic + return
+    path on any host.
+  - **`CurrentOsTypesNotContainsError` / `CurrentOsTypesMustBePresent`**
+    — positive (current type present → nil/no panic) and negative
+    (`Invalid` not present → error) paths.
+  - **`GetCurrentOsDetail`** smoke (skip-guarded for hosts without a
+    cached detail) covering `Serialize`/`SerializeMust`/`AllSysTypes*`/
+    `HasWindowsDetail`/`IsEmptyWindowsDetail`.
+  - **`OperatingSystemDetail` pure logic** — constructed Ubuntu fixture
+    drives `IsName`/`IsNameContains`/`IsNameStartsWith`/`IsNameEndsWith`,
+    `IsArch`/`Is64BitArch`, `IsType`/`IsAnyOfTypes`,
+    `ReleaseVersion` (incl. cached re-call), plus nil-receiver paths
+    (`IsNull`/`IsEmpty`/`HasWindowsDetails`) and empty-name short-circuits.
+  - **`WindowsSystemDetail` pure logic** — client (Win10) and server
+    (2019) fixtures cover `IsWindows10`/`IsWindows11`/`IsWindowsSever*`/
+    `IsWindowsSeverGreaterEqual2016`/`WinVer`, plus nil-receiver
+    `IsNull`/`IsDefined`/`IsNullOr`/`IsDefinedPlus`.
+  - **`OsDetailWithErr`** — populated `String`/`PrettyJsonString`/`Json`/
+    `JsonPtr` happy path and nil-receiver short-circuits.
+
+### Notes
+- Pure additive coverage; no production code touched. Closes the AL2-08
+  bespoke gap from the coverage report.
+
+---
+
 ## [v0.46.0] — 2026-05-07 — Cycle 75 — AL2-07 dbdrivertype connection-string suite
 
 ### Added
