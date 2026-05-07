@@ -98,14 +98,12 @@ None found. All consumer-side usage is consistent with the documented patterns; 
 | Bucket | Count |
 |---|---|
 | Claims extracted | 18 |
-| ✅ Match | 3 |
+| ✅ Match | 10 (3 original + 7 resolved Cycle 90) |
 | ⚠️ Drift (spec gap) | 8 |
-| ❓ Unverifiable | 7 |
+| ❓ Unverifiable | 0 |
 | ❌ Contradiction | 0 |
 
-**Verifiable subset:** 11 claims (3 match + 8 drift) → **3/11 = 27.3 %** verifiable match rate.
-
-Excluding the 7 ❓ from the denominator avoids penalising the spec for documenting upstream APIs unused by `enum-v7`. Once task **AB** brings in `core-v9` source, the 7 ❓ will be resolved into match/drift/contradiction and the score recomputed.
+**Cycle 90 AB-residual:** 18/18 verifiable (100%). Match rate = **10/18 = 55.6%** (drifts remain — spec is incomplete vs. consumer usage but not contradictory).
 
 ---
 
