@@ -59,6 +59,7 @@ var (
 		PanelRoles:           "PanelRoles",
 		CacheReset:           "CacheReset",
 		ReloadSettings:       "ReloadSettings",
+		ResetSettings:        "ResetSettings",
 		DefaultKnownSettings: "DefaultKnownSettings",
 		DbUser:               "DbUser",
 		List:                 "List",
