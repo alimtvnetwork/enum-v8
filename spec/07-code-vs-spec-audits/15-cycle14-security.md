@@ -108,3 +108,31 @@ Total ❓ in `spec/01-app/`: 17 §07 + 18 §08 + 23 §09 + 15 §10 + 11 §11 + 6
 - Header line: §16 100.0 added; closed-section count 11 → 12; baseline-only stays 2.
 - ❓ tally: 135 → 148 (+13 from §16).
 - New milestone callout: `spec/01-app/` directory audit complete.
+
+---
+
+## 7. Cycle 85 (2026-05-07) — AB-residual re-audit against `core-v9 v1.5.8`
+
+Re-probed the upstream clone at `/tmp/core-v9-upstream` (tag `v1.5.8`) for every ❓ row.
+
+| # | Old | New | Evidence | Score |
+|---|-----|-----|----------|------|
+| 1  | ❓ | ❓ | Feature-tracker provenance still out-of-band. | ⚠️ |
+| 4  | ❓ | ⚠️ | `errcore/VarTwo.go:29` `func VarTwo(...)`, `errcore/MessageVarMap.go:27`, `coredata/corejson` `PrettyJsonString` all confirmed verbatim-emit. **`coredynamic.AllFields` NOT FOUND** in `coredata/coredynamic/` — filed as **D-CVS-57 (HIGH — broken symbol citation §2 row 4 + §4 rule 4 + §5)**. | ⚠️ |
+| 11 | ❓ | ⚠️ | `00-llm-integration-guide.md` Pattern 7 not located this cycle. Filed as **D-CVS-58 (LOW — verify cross-ref location)**. | ⚠️ |
+| 14 | ❓ | ⚠️ | `coredata/coregeneric/{Pair,Triple}.Clear()` confirmed (`Pair.go:136`, `Triple.go:145`). **`corestr.StringBuilder` NOT FOUND** in `coredata/corestr/` — filed as **D-CVS-59 (HIGH — broken symbol citation §4 table)**. | ⚠️ |
+| 15 | ❓ | ❌ | **`corevalidator.New.Slice.MaxLength(N)` does not exist.** Upstream `corevalidator/` exposes `SliceValidator`, `LineValidator`, `TextValidator` types directly with `SetActual*`, `IsValid*`, `VerifyError` methods — no fluent `New.Slice.MaxLength` builder. Filed as **D-CVS-60 (CRITICAL — fabricated API in §4 rule 1 + §6 example + §6 rule 2)**. | ❌ |
+| 17 | ❓ | ✅ | `Clear()` confirmed on `coregeneric.Pair`/`Triple`; pattern is real for the cited container family. | ✅ |
+| 18 | ❓ | ⚠️ | Hot-path-cost claim is behavioural, but `coredynamic.AllFields` symbol absence (D-CVS-57) means rule wording needs to point at a real reflection-walking helper. | ⚠️ |
+| 19 | ❓ | ⚠️ | Same as 18 — claim depends on `coredynamic` symbols that do not all exist. | ⚠️ |
+| 21 | ❓ | ❌ | **`coredynamic.SetField` NOT FOUND** in upstream `coredata/coredynamic/`. Filed as **D-CVS-61 (HIGH — fabricated API in §5 rule 2)**. | ❌ |
+| 22 | ❓ | ❌ | **`coredynamic.InvokeMethod` NOT FOUND** in upstream `coredata/coredynamic/`. Filed as **D-CVS-62 (HIGH — fabricated API in §5 rule 3)**. | ❌ |
+| 24 | ❓ | ❌ | `corevalidator.New.Line.NotEmpty().MaxLength(255).Matches(...)` builder chain does not exist (see D-CVS-60). Spec §6 example is non-compilable. Filed under **D-CVS-60**. | ❌ |
+| 27 | ❓ | ❌ | **`corestr.IsValidUTF8` NOT FOUND** in `coredata/corestr/`. Filed as **D-CVS-63 (HIGH — fabricated API in §6 rule 3)**. | ❌ |
+
+**Score:** 12 of 13 ❓ rows promoted; verifiable score moves from 17/17 (100%) to **18 / 28 = 64.3%** — the security spec section is the **lowest-scoring** AB-residual cycle to date because the spec cites a large fluent-builder validator surface and several `coredynamic` reflection helpers that do not exist in upstream `core-v9 v1.5.8`.
+
+**Severity summary added this cycle:** 1 CRITICAL (D-CVS-60), 5 HIGH (D-CVS-57, 59, 61, 62, 63), 1 LOW (D-CVS-58).
+
+**Recommendation:** Treat §16 as **rewrite-required** (not just patch-required) — the §6 validator example needs to be replaced with the real `SliceValidator`/`LineValidator`/`TextValidator` constructor pattern, and §5 needs `coredynamic` symbol names corrected (or the rules struck if no equivalent exists).
+
