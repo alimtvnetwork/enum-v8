@@ -205,11 +205,13 @@ func (it *Architecture) AsBasicEnumContractsBinder() enuminf.BasicEnumContractsB
 }
 
 func (it Architecture) MaxByte() byte {
-	return BasicEnumImpl.Max()
+	// Invalid is the trailing sentinel; BasicEnumImpl.Max() would return it.
+	// Return the highest real architecture (X64) instead. Mirrors Max().
+	return byte(X64)
 }
 
 func (it Architecture) MinByte() byte {
-	return BasicEnumImpl.Min()
+	return byte(X32)
 }
 
 func (it Architecture) RangesByte() []byte {
