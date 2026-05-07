@@ -10,6 +10,34 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.44.0] — 2026-05-07 — Cycle 73 — AL2-05 Batch E coverage suites
+
+### Added
+- `eventtype/EventType_Coverage_test.go` — `New`/`NewMust` round-trip across
+  all 6 named variants, `IsFailure`/`IsCustom`/`IsFile` predicates, accessor
+  sweep, JSON round-trip, `OnlySupportedErr*`, `HasPattern` panic guard.
+- `instructiontype/InstructionType_Coverage_test.go` — `New`/`NewMust` for
+  representative variants (`Scoping`, `Nginx`, `Apache`, `Verify`, …),
+  `IsUninitialized`, accessor sweep, JSON round-trip.
+- `leveltype/LevelType_Coverage_test.go` — `New`/`NewMust` across `Level1`/
+  `Level5`/`Level10`, accessor sweep, JSON round-trip.
+- `licensetype/LicenseType_Coverage_test.go` — exhaustive variant sweep,
+  `RangesMap` lookup parity, accessor sweep, JSON round-trip.
+- `linescomparetype/LinesCompareType_Coverage_test.go` — exhaustive variant
+  sweep, `RangesMap` lookup parity, accessor sweep, JSON round-trip.
+- `logtype/LogType_Coverage_test.go` — `New`/`NewMust` across all named
+  variants, `TraceMap`/`ErrorMap` parity, `IsCustom`/`IsFile`, accessor
+  sweep, JSON round-trip, `HasPattern` panic guard.
+- `revokereason/RevokeReason_Coverage_test.go` — `New`/`NewMust` across
+  RFC-5280 reason codes (skipping `_Unused` slot 7), `RangesMap` parity,
+  accessor sweep, JSON round-trip.
+
+### Notes
+- Pure additive coverage; no production code touched. Targets the
+  AL2-05 Batch E gap from the coverage report.
+
+---
+
 ## [v0.43.1] — 2026-05-07 — Cycle 72 — Fix two test failures (PI-005/PI-006 cluster)
 
 ### Fixed
