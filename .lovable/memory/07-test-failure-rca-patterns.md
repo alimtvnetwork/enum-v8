@@ -167,3 +167,27 @@ When `./run.ps1 -tc` reports failing tests, walk this checklist FIRST before rea
 **Root cause:** Upstream `enumimpl.AllNameValues` formats each entry with `constants.EnumNameValueFormat` == `"%s(%v)"`. Bare names go to the `Hashmap`, but `"Name(value)"` strings do not.
 
 **Fix recipe:** In the package's `New()`, after `BasicEnumImpl.GetValueByName` fails, strip a trailing `(...)` suffix and retry the lookup. Real example: `pathpatterntype/New.go` (Cycle 84). Pattern is generic — apply to any package whose coverage test round-trips `AllNameValues`.
+
+---
+
+## Pattern 8 — `MaxByte()` / `MinByte()` delegate to `BasicEnumImpl` on trailing-`Invalid` packages
+
+**Symptom:** `TestOsArchs_Accessors` (or similar) fails: `MaxByte mismatch` — because `v.MaxByte() != byte(Max())`. Test expects custom `Max()` return value, but `MaxByte()` still calls `BasicEnumImpl.Max()` which returns the sentinel.
+
+**Root cause:** Pattern 6 fixes `Max()` (top-level) but forgets the byte-typed accessors `MaxByte()`/`MinByte()` on the Variant. They independently call `BasicEnumImpl.Max()/Min()` which still returns `Invalid` byte.
+
+**Fix recipe:** When applying Pattern 6, also rewrite `MaxByte()` / `MinByte()` in `Variant.go` to return `byte(<last real value>)` / `byte(<first real value>)` directly. Real example: `osarchs/Architecture.go:207-215` (Cycle 87).
+
+**Prevention:** When you write a custom `Max()`/`Min()` for trailing-`Invalid` packages, immediately grep `MaxByte\|MinByte\|MaxInt\|MinInt` in the same package and update each to skip BasicEnumImpl.
+
+---
+
+## Pattern 9 — Open-ended numeric enums (`inttype`-style) fail `RangesDynamicMap > 0` check
+
+**Symptom:** `Test_AllEnums_NumericRange` line 86 fails: `Expected '0' to be greater than '0'` — `len(rangesMap) == 0`.
+
+**Root cause:** Some "enum" types are not actually enumerable — they wrap an entire numeric range (`inttype.Variant` covers `MinInt..MaxInt`). Their `RangesDynamicMap()` correctly returns `map[string]interface{}{}` because there are no discrete members. The general suite assertion that the map is non-empty doesn't apply.
+
+**Fix recipe:** Add the type's `TypeName()` (e.g. `"inttype.Variant"`) to `numericRangeSuiteSkipRangesDynamicMap` in `tests/creationtests/AllEnums_NumericRange_test.go` with an explanatory comment. Same skip set already used for `compresslevels`, `sqliteconnpathtype`, `strtype`. Real example: Cycle 87.
+
+**Prevention:** Whenever you add an open-ended numeric Variant (anything where `MinInt() == constants.MinInt` and `MaxInt() == constants.MaxInt`), pre-register it in the skip map at creation time.
