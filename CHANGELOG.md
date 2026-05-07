@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The release pipeline extracts the matching `## [vX.Y.Z]` section as the
 GitHub Release body — keep entries small, sectioned, and human-readable.
 
+## [v1.14.0] - 2026-05-07
+### Fixed — Real bugs in 4 packages previously masked by tooling false-positive guard
+- **`licensetype`** — `LicenseType_Uplift_test.go` referenced `Variant.IsAnyOf`, which did not exist. Added `licensetype/IsAnyOf.go` providing the standard variadic `IsAnyOf(...Variant) bool` (matches every other enum in the repo).
+- **`cmdenumtypes/rootcmdnames`** — `RootCmdNames_Uplift_test.go` referenced top-level `RangesInvalidErr()`, which did not exist. Added `cmdenumtypes/rootcmdnames/RangesInvalidErr.go` matching the pattern used by `licensetype`, `onofftype`, etc.
+- **`onofftype`** — `OnOffType_Uplift_test.go` referenced `issetter.Empty`, which is not defined in upstream `core-v9 v1.5.8` (only `Uninitialized`, `True`, `False`, `Unset`, `Set`, `Wildcard` exist). Removed the bogus value from the constructor sweep.
+- **`brackets`** — `Pair.String()` and `BothBrackets.String()` called `converters.AnyTo.ValueString(it)`, whose final fallback is `fmt.Sprintf("%v", it)`. `%v` re-invokes `String()` → infinite recursion → stack overflow. Replaced with explicit field-by-field `fmt.Sprintf` (RCA pattern 9).
+
+### Notes
+- The v1.13.0 tooling guard correctly flagged these as suspect noise locally, but they were genuine source-level defects. Both layers are now correct: tooling no longer reports false positives, and source no longer hides real bugs behind warnings.
+
+---
+
 ## [v1.13.0] - 2026-05-07
 ### Fixed
 - **Coverage tooling false-positives.** `licensetype`, `onofftype`, `rootcmdnames` were intermittently reported as `Blocked` and `brackets` as `RUNTIME FAILURE` when the only diagnostic was harmless `warning: no packages being tested depend on matches for pattern …` lines emitted by `-coverpkg=`. Added `Test-IsCoverpkgWarningOnlyOutput` (Utilities.psm1) and applied it as a guard in `CoverageCompileCheck.psm1` (parallel runspace + post-pass) and `CoverageRunner.psm1` (sync + parallel coverage classifier). Packages whose only output is coverpkg warnings are now correctly treated as compiling cleanly.
