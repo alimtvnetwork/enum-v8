@@ -10,6 +10,13 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.39.0] — 2026-05-07 — Cycle 67 — Bulk rename enum-v6 → enum-v7
+
+### Changed
+- Repository renamed from `enum-v6` to `enum-v7` per upstream rename. Bulk substitution applied across `go.mod`, Go source imports, all `spec/`, `.lovable/` memory files, workflows, and `cross-repo/core-v8/README.md` (one-time exception). `.release/`, `.git/`, and the `cross-repo/core-v8/` directory name preserved.
+
+---
+
 ## [v0.38.0] — 2026-05-06 — Cycle 66 — Batch A test fix-up
 
 ### Fixed
