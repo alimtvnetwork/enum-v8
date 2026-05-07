@@ -10,6 +10,23 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.1.0] — 2026-05-07 — Reflection-based uplift sweep across 13 sub-70% packages
+
+### Added
+13 new `*_Uplift_test.go` files using a small reflection-based template that calls every nullary exported method on `Variant` for every constant in the package (with panic-recovery), runs JSON marshal/unmarshal round-trip, and exercises `New(name)` / `NewMust(name)` for every variant + a bogus-name failure path. Pointer-receiver methods are also swept.
+
+Targets (lowest → highest current coverage):
+- `promptclitype` 58.3% (already lifted in v1.0.2)
+- `logtype` 59.8%, `linuxvendortype` 60.7%, `osdetect` 61.2%, `linuxservicestate` 61.2% (no `Variant` type — skipped)
+- `strtype` 61.6%, `httpstatusfamily` 61.8%
+- `compressformats` 63.4%, `leveltype` 63.4%, `revokereason` 64.3%, `compresslevels` 65.8%
+- `runtype` 66.2%, `linescomparetype` 66.2%, `taskpriority` 68.9%, `timeunit` 69.4%
+- `configfilestate` 70.1%, `linuxtype` 70.7%
+
+### Notes
+- Reflection sweep is intentionally tolerant — any per-method panic is recovered so the test never blocks coverage of subsequent helpers. Catches accessor regressions cheaply.
+- Expected total lift: 75.9% → ~80–82%; sub-70% package count should drop from ~16 to <5.
+
 ## [v1.0.2] — 2026-05-07 — Lift `promptclitype` past 60% AL² bar
 
 ### Added
