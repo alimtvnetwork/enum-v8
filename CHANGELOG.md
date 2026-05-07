@@ -10,6 +10,19 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.64.0] — 2026-05-07 — Pattern-6/8 audit sweep: trailing-Invalid Min/Max fixes
+
+### Fixed
+- Pattern-6/8 audit identified 4 packages where `Invalid` is the **trailing** const in the `iota` block, causing `BasicEnumImpl.Min()/Max()` (and consequently `Variant.MinByte()/MaxByte()`) to return the `Invalid` sentinel rather than a real member. Same defect class previously fixed in `osarchs` (Pattern 8 RCA).
+- `compresslevels/`: added `Min.go`+`Max.go` (`Default`/`NoCompression`); fixed `Variant.MinByte()/MaxByte()` to return `int8(Default)`/`int8(NoCompression)`.
+- `logtype/`: added `Min.go`+`Max.go` (`Silent`/`Pattern`); fixed `Variant.MinByte()/MaxByte()` to return `byte(Silent)`/`byte(Pattern)`.
+- `taskpriority/`: added `Min.go`+`Max.go` (`Default`/`LowerPriority`); fixed `Variant.MinByte()/MaxByte()` to return `byte(Default)`/`byte(LowerPriority)`.
+- `compressformats/`: rewrote `Min.go` (was incorrectly returning `Invalid`) to return `Zip`; rewrote `Max.go` to return `TarBz2` directly; fixed `Variant.MinByte()/MaxByte()` analogously.
+
+### Notes
+- `revokereason` was reviewed and skipped — has no `Invalid` const at all (uses `_Unused` placeholder for index 7) and its `Min.go`/`Max.go` already explicitly return `Unspecified`/`AaCompromise`.
+- All four fixes carry a `Pattern-8 fix:` doc comment for future grep-ability.
+
 ## [v0.63.0] — 2026-05-07 — Fix: parallel-mode false-positive Blocked packages
 
 ### Fixed
