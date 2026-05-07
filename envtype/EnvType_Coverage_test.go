@@ -119,10 +119,13 @@ func Test_EnvType_Coverage(t *testing.T) {
 		So(Is("__nope__", Development), ShouldBeFalse)
 		So(Is("Test", Production), ShouldBeFalse)
 
+		// OnlySupportedErr returns non-nil whenever any variant outside the
+		// supported list exists; here all 10 envtype variants exist, so the
+		// "Development"-only call must report the rest as unsupported.
 		err := Development.OnlySupportedErr("Development", "Test")
-		So(err, ShouldBeNil)
+		So(err, ShouldNotBeNil)
 		err = Development.OnlySupportedMsgErr("ctx", "Development")
-		So(err, ShouldBeNil)
+		So(err, ShouldNotBeNil)
 	})
 
 	Convey("envtype — pointer-receiver bindings", t, func() {
