@@ -10,6 +10,31 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.50.0] — 2026-05-07 — Cycle 79 — AC: re-audit §07 / §09 against upstream `core-v9 v1.5.8`
+
+### Changed
+- `spec/07-code-vs-spec-audits/07-cycle6-validators.md`: appended §6 AC re-audit
+  promoting 16 of 18 ❓ rows; verifiable score moves from baseline (0/1) to
+  **6 / 16 = 37.5 %**. Six new findings filed: **D-CVS-27** (LOW),
+  **D-CVS-28** (HIGH), **D-CVS-29** (CRITICAL — fluent builder API fictitious),
+  **D-CVS-30** (LOW), **D-CVS-31** (LOW), **D-CVS-32** (MEDIUM).
+- `spec/07-code-vs-spec-audits/09-cycle8-reflection-and-dynamic.md`: appended
+  §6 AC re-audit promoting 13 of 15 ❓ rows; verifiable score moves from
+  100 % (4/4) baseline to **6 / 17 = 35.3 %** under wider verifiable subset.
+  Four new findings filed: **D-CVS-33** (HIGH — wrong import path
+  `core-v9/coredynamic` vs real `core-v9/coredata/coredynamic`),
+  **D-CVS-34** (CRITICAL — flat function surface fictitious; real API is
+  value-method-based on `Dynamic`/`MethodProcessor`/`FieldProcessor`),
+  **D-CVS-35** (HIGH — `reflectcore` predicate names wrong; real API is
+  `reflectcore.Is.<X>` value-receiver methods), **D-CVS-36** (MEDIUM).
+
+### Notes
+- Re-audit basis: upstream `core-v9` clone at `/tmp/core-v9-upstream` tag `v1.5.8`.
+- Closes task AC. Per-finding spec fixes deferred to a future implementation
+  task (no spec body rewrites in this cycle — only audit reports updated).
+
+---
+
 ## [v0.49.0] — 2026-05-07 — Cycle 78 — AN: CoverageCompileCheck false-positive guard
 
 ### Fixed
