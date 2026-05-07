@@ -10,6 +10,31 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.48.0] — 2026-05-07 — Cycle 77 — AL2-09 cmdenumtypes coverage sweep
+
+### Added
+- 26 new uniform coverage tests under `cmdenumtypes/<pkg>/<Pkg>_Coverage_test.go`
+  for: `compresscmdnames`, `configcmdnames`, `crontabscmdnames`,
+  `decompresscmdnames`, `dnscmdnames`, `dockercmdnames`, `downloadcmdnames`,
+  `envpathcmdnames`, `envvarscmdnames`, `ethernetcmdnames`,
+  `fail2bancmdnames`, `firewallcmdnames`, `ftpcmdnames`,
+  `hostingplancmdnames`, `macrocmdnames`, `operatingsystemcmdnames`,
+  `packagecmdnames`, `servicescmdnames`, `snapshotcmdnames`,
+  `sshcmdnames`, `sslcmdnames`, `sysgroupcmdnames`, `toolingcmdnames`,
+  `usercmdnames`, `userrolecmdnames`, `webservercmdnames`.
+- Each suite drives `New`/`NewMust` for the `Help` variant (present in
+  every cmd-name enum), `New(__bogus__)` negative path,
+  `Min`/`Max` boundary, accessor sweep (`AllNameValues`,
+  `IntegerEnumRanges`, `MinMaxAny`, `MinValueString`, `MaxValueString`),
+  JSON round-trip, and `OnlySupportedErr*`.
+
+### Notes
+- Pure additive, generator-style coverage. Closes the AL2-09
+  cmdenumtypes gap from the coverage report. Together with AL2-01..08
+  this concludes the AL2 coverage program.
+
+---
+
 ## [v0.47.0] — 2026-05-07 — Cycle 76 — AL2-08 osdetect bespoke coverage
 
 ### Added
