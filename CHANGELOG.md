@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.66.0] — 2026-05-07 — Tracker reconciliation: AI / PI-002 / PI-004 closed
+
+### Changed
+- `.lovable/plan.md`: Task **AI** ("Mark `spec/01-app/` as frozen") flipped from ⏳ Pending → ✅ Done. Freeze entry was actually authored 2026-05-06 in `spec/CHANGELOG.md` `spec-v0.53.0` (Cycle 61); plan was stale.
+- `.lovable/memory/pending-issues/01-all-pending-issues.md`: PI-002 (cross-spec stale `integratedtests/` paths) and PI-004 (`spec/06-testing-guidelines/` never audited) marked ✅ RESOLVED inline. PI-003 down-graded LOW (sweep complete; no active blocker).
+
+### Notes
+- No code changes; tracker hygiene only.
+
 ## [v0.65.0] — 2026-05-07 — Pattern-7 audit: AllNameValues round-trip coverage
 
 ### Added
