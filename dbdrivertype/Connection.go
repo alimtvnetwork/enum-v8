@@ -43,7 +43,7 @@ func (it Connection) CreateMap() map[string]string {
 		"{ip}":       it.Host,
 		"{port}":     it.Port,
 		"{user}":     it.User,
-		"{password}": it.User,
+		"{password}": it.Password,
 		"{?options}": it.Options,
 	}
 }
