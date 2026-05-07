@@ -89,3 +89,47 @@ Repository reality: `tests/integratedtests/` does not exist; tests live under `t
 1. Apply **D-CVS-26** as a one-line spec fix (closes §08's only verifiable drift).
 2. Update the scoreboard (`01-scoreboard.md`) with the Cycle 6 baseline + closed rows.
 3. Defer the remaining 17 ❓ to **AB** alongside Cycle 5's 17 ❓ — both cycles share the same blocker (no upstream `corevalidator` / `conditional` / `isany` / `regexnew` source on disk).
+
+---
+
+## 6. AC re-audit (Cycle 79, 2026-05-07) — upstream verification against `core-v9 v1.5.8`
+
+> **Method**: cloned upstream at `/tmp/core-v9-upstream` (tag `v1.5.8`), inspected `corevalidator/`, `errcore/`, `regexnew/`, `coretests/` directly. Promoted ❓ rows.
+
+| #  | Original verdict | New verdict | Evidence |
+|----|------------------|-------------|----------|
+| 1  | ❓ | ⚠️ | `corevalidator/` exposes `LineValidator`, `TextValidator`, `SliceValidator` and `RangeSegmentsValidator`; **no `RangeValidator`** by that name (upstream uses `RangeSegmentsValidator`). Filed as **D-CVS-27**. |
+| 2  | ❓ | ❌ | Upstream `LineValidator` exposes `IsMatch/IsMatchMany/VerifyError/VerifyMany/VerifyFirstError/AllVerifyError` — **no `IsValid`/`IsSuccess`/`IsFailed`/`Message`/`Error` contract**. Filed as **D-CVS-28**. |
+| 3  | ❓ | ❌ | **No `corevalidator.New.Line.NotEmpty().MaxLength(N).Matches(re).Build()` fluent builder exists** in upstream. Constructors are top-level funcs (`NewSliceValidatorUsingErr`, etc.) and validators are constructed as plain structs (`TextValidator{Search, SearchAs, Condition}`). Filed as **D-CVS-29** (entire fluent-API surface fictitious). |
+| 4  | ❓ | ❌ | No `Build()` method exists; F-V14-01 rule cannot apply. Subsumed by D-CVS-29. |
+| 5  | ❓ | ❌ | No `New.Slice.MinLength.MaxLength.EachItem(v).Build()` builder. Subsumed by D-CVS-29. |
+| 6  | ❓ | ✅ | `TextValidator` exists and supports multi-line via `verifyDetailErrorUsingLineProcessing`. |
+| 7  | ❓ | ❌ | No `New.Range.Int.Min(N).MaxExclusive(N).Build()`. Upstream provides `RangeSegmentsValidator` with a different surface. Subsumed by D-CVS-29. |
+| 8  | ❓ | ✅ | `stringcompareas` enum exists (imported by `corevalidator/vars.go`). |
+| 9  | ❓ | ✅ | `errcore.MergeErrors(errs ...error) error` exists at `errcore/MergeErrors.go:32`. |
+| 10 | ❓ | ❓ | Pattern still not exercised in `enum-v7`; no upstream change required. |
+| 11 | ❓ | ✅ | `conditional/` package exists with `ErrorFunc`, `Functions`, etc. |
+| 12 | ❓ | ✅ | `regexnew/CreateLock.go` + `LazyRegex.go` provide the lazy regex surface. |
+| 13 | ❓ | ✅ | `errcore.ValidationFailedType` exists at `errcore/RawErrorType.go:121` and is used by `corevalidator/LinesValidators.go:188,221`. |
+| 14 | ❓ | ⚠️ | `coretests/` (note: **`coretests`**, not `coretestcases`) provides `BaseTestCase` family. Spec's `CaseV1` / `CaseNilSafe` symbol names not found upstream. Filed as **D-CVS-30**. |
+| 15 | ❓ | ⚠️ | Diagnostic format `<Label>: field=<n> value=<v> reason=<short>` not emitted verbatim by upstream `VarTwoNoType`. Filed as **D-CVS-31**. |
+| 16 | ❓ | ✅ | `errcore.VarTwoNoType(n1, v1, n2, v2)` exists at `errcore/VarTwoNoType.go:25`. |
+| 17 | ❓ | ❓ | Behavioural; no validator tests in `enum-v7` to verify against. |
+| 18 | ⚠️ | ⚠️ | (D-CVS-26 already filed) — unchanged. |
+| 19 | ❓ | ⚠️ | All rows depend on §1–§4 surface; with D-CVS-29 confirming the fluent API is fictitious, table needs ground-up rewrite. Filed as **D-CVS-32**. |
+
+### Updated score row
+
+| Date       | Cycle | Spec audited                      | Claims | ✅ | ⚠️ | ❌ | ❓ | Score (verifiable) |
+|------------|-------|-----------------------------------|--------|----|-----|----|----|--------------------|
+| 2026-05-07 | 79 (AC re-audit) | `01-app/08-validators.md` | 19 | 6  | 5   | 5  | 3  | **6 / 16 = 37.5%** |
+
+### New findings opened (Cycle 79)
+
+- **D-CVS-27 (LOW)** — Spec claims `RangeValidator`; upstream provides `RangeSegmentsValidator`.
+- **D-CVS-28 (HIGH)** — Validator contract surface (`IsValid`/`IsSuccess`/`IsFailed`/`Message`/`Error`) does not exist upstream. Real surface is `IsMatch*`/`Verify*Error`.
+- **D-CVS-29 (CRITICAL)** — Entire `corevalidator.New.<X>.…Build()` fluent builder API in §2.x is fictitious. Upstream uses `NewSliceValidatorUsingErr`/`NewSliceValidatorUsingAny` and plain struct construction.
+- **D-CVS-30 (LOW)** — Spec uses `coretestcases.CaseV1`/`CaseNilSafe`; upstream package is `coretests` with a `BaseTestCase` family — neither symbol exists by name.
+- **D-CVS-31 (LOW)** — §5 diagnostic format string is aspirational; not the literal output of `VarTwoNoType`.
+- **D-CVS-32 (MEDIUM)** — §7 common-mistakes table assumes the fictitious fluent API; needs rewrite once §2.x is reworked against real upstream surface.
+
