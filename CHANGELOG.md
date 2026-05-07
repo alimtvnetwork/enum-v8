@@ -10,6 +10,19 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.76.0] — 2026-05-07 — Recipe pass-2: `httpstatusfamily/` enum
+
+### Added
+- **`httpstatusfamily/`** — new byte-backed enum representing the five HTTP status-code families (`Informational` 1xx, `Successful` 2xx, `Redirection` 3xx, `ClientError` 4xx, `ServerError` 5xx, `Invalid`). Created end-to-end as second pass through the recipe in `spec/00-llm-integration-guide.md` §10.
+  - 11 files: `Variant.go`, `vars.go`, `New.go`, `NewMust.go`, `Min.go`, `Max.go`, `Ranges.go`, `RangesInvalidErr.go`, `all-is-checkers.go`, `all-validation-checking-err.go`, `HttpStatusFamily_Constructor_test.go`.
+  - Domain helpers: `FromStatusCode(int)`, `IsError()` (4xx∪5xx), `IsRetryable()` (5xx only — RFC 9110 §9.2.2 guidance).
+  - Pattern-8 fix applied to `Min`/`Max`/`MinByte`/`MaxByte` to skip the trailing `Invalid` sentinel.
+- **Registration**: `tests/creationtests/allBasicEnumsCollection.go` now includes `httpstatusfamily.Invalid` so the new enum participates in every shared-loop suite (Format, JSON, NumericRange, Predicates, BytePredicates, PointerReceiverBindings, RangeEdges).
+
+### Notes
+- Validates the recipe is repeatable end-to-end without further refinement after the AK pass.
+- Run `./run.ps1 -tc` to confirm the global suites pass with the new package registered.
+
 ## [v0.75.0] — 2026-05-07 — AL²-08: Range-edge fuzz on MinByte/MaxByte/RangesByte
 
 ### Added
