@@ -10,6 +10,18 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.42.0] — 2026-05-07 — Cycle 70 — AL2-03 Batch C coverage uplift (networking / IP)
+
+### Added
+- New coverage suites for networking/IP family:
+  - `inputiptype/InputIpType_Coverage_test.go` — New/NewMust round-trip for all variants, every Is* predicate, full numeric/string accessor sweep, JSON round-trip, and binder surface.
+  - `protocoltype/ProtocolType_Coverage_test.go` — Min/Max, accessor sweep across `Https`/`Tcp`/`Custom`, JSON round-trip, IsAny* equality, binder surface.
+  - `nginxlogtype/NginxLogType_Coverage_test.go` — `NewType` exhaustively walked over `RangesMap`, every Is* predicate (incl. `IsAnyKindOfError`/`IsNotError`), level comparisons (`IsEqual`/`IsAboveOrEqual`/`IsLowerOrEqual`), JSON round-trip, full binder surface.
+  - `verifiertriggertype/VerifierTriggerType_Coverage_test.go` — New/NewMust, accessor sweep, JSON round-trip, binder surface.
+  - `pathpatterntype/PathPatternType_Coverage_test.go` — New round-trip across `AllNameValues`, accessor sweep on `App`, smoke for `HasExpandAssoc`/`IsExpandPossible`/`IsSingleType`/`ExpandedAssociatedVariants`/`CurlyPathFullName`/`PathFullName`/`CompileCurlyTemplate`/`CompileTemplate`/`Clone`, and binder surface.
+
+---
+
 ## [v0.41.0] — 2026-05-07 — Cycle 69 — AL2-02 Batch B coverage uplift (untested DB packages)
 
 ### Added
