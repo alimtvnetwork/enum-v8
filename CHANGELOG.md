@@ -10,6 +10,27 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.43.1] — 2026-05-07 — Cycle 72 — Fix two test failures (PI-005/PI-006 cluster)
+
+### Fixed
+- `sqliteconnpathtype.TestSqliteConn_VariantPtrAndBinders`: replaced the
+  `JsonParseSelfInject(&jr)` and `UnmarshallEnumToValue([]byte(`"All"`))`
+  calls with the local `MarshalJSON` → `UnmarshalJSON` round-trip path.
+  Both removed calls funnel through upstream `corejson.Result.Unmarshal` /
+  `BasicEnumImpl.UnmarshallToValue`, which look the *quoted* JSON bytes up
+  in `jsonDoubleQuoteNameToValueHashMap` (built from raw names). Only our
+  local `Variant.UnmarshalJSON` (which `strconv.Unquote`s before lookup)
+  successfully round-trips spread-constructed string variants. Documented
+  inline as PI-005 reference.
+- `creationtests.Test_AllEnums_NumericRange` (line 85): added
+  `sqliteconnpathtype.Variant` to `numericRangeSuiteSkipRangesDynamicMap`.
+  Same upstream defect cluster as PI-006 — `BasicString.AllNameValues()` /
+  `RangesDynamicMap()` are empty for `CreateUsingStringersSpread`-built
+  string enums because the lazy maps are never populated. The skip key
+  also gates the matching `AllNameValues` length assertion.
+
+---
+
 ## [v0.43.0] — 2026-05-07 — Cycle 71 — AL2-04 Batch D coverage uplift (Linux / OS)
 
 ### Added
