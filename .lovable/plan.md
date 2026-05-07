@@ -260,8 +260,10 @@
 - AL²-06 ✅ (pointer-receiver binding wrappers via reflect, v0.74.0)
 - AL²-08 ✅ (range-edge fuzz on MinByte/MaxByte/RangesByte via reflect, v0.75.0)
 
-**Recipe-validation pass-2 ✅:**
-- `httpstatusfamily/` package created end-to-end (v0.76.0) — second confirmation that the §10 recipe is repeatable without refinement.
+**Recipe-validation passes ✅:**
+- pass-1 (AK) `httpmethodtype/` (v0.71.0)
+- pass-2 `httpstatusfamily/` (v0.76.0)
+- pass-3 `mimetype/` (v0.77.0) — recipe confirmed repeatable three times without refinement.
 
 ---
 

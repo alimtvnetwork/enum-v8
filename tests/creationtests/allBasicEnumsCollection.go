@@ -45,6 +45,7 @@ import (
 	dbuserprivilegetype "github.com/alimtvnetwork/enum-v7/dbuserprivillegetype"
 	"github.com/alimtvnetwork/enum-v7/httpmethodtype"
 	"github.com/alimtvnetwork/enum-v7/httpstatusfamily"
+	"github.com/alimtvnetwork/enum-v7/mimetype"
 	"github.com/alimtvnetwork/enum-v7/eventtype"
 	"github.com/alimtvnetwork/enum-v7/instructiontype"
 	"github.com/alimtvnetwork/enum-v7/inttype"
@@ -107,6 +108,7 @@ var allBasicEnumsCollection = [...]enuminf.BasicEnumer{
 	eventtype.Invalid.AsBasicByteEnumContractsBinder(),
 	httpmethodtype.Invalid.AsBasicByteEnumContractsBinder(),
 	httpstatusfamily.Invalid.AsBasicByteEnumContractsBinder(),
+	mimetype.Invalid.AsBasicByteEnumContractsBinder(),
 	
 	instructiontype.Invalid.AsBasicByteEnumContractsBinder(),
 	inttype.Variant(0).AsBasicEnumer(),
