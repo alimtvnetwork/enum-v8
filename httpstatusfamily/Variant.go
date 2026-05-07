@@ -82,8 +82,8 @@ func (it Variant) IsEqual(other Variant) bool       { return it == other }
 func (it Variant) IsValueEqual(value byte) bool     { return it.ValueByte() == value }
 func (it Variant) IsByteValueEqual(value byte) bool { return it.ValueByte() == value }
 func (it Variant) IsNameEqual(name string) bool     { return it.Name() == name }
-func (it Variant) IsAboveOrEqual(o Variant) bool    { return o.ValueByte() >= it.ValueByte() }
-func (it Variant) IsLowerOrEqual(o Variant) bool    { return o.ValueByte() <= it.ValueByte() }
+func (it Variant) IsAboveOrEqual(o Variant) bool    { return it.ValueByte() >= o.ValueByte() }
+func (it Variant) IsLowerOrEqual(o Variant) bool    { return it.ValueByte() <= o.ValueByte() }
 func (it Variant) IsAnyOf(items ...Variant) bool {
 	for _, x := range items {
 		if x == it {
