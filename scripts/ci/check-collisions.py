@@ -100,6 +100,7 @@ def parse_decls(path: Path):
     in_raw = False        # inside `...` (Go raw string)
     in_block_comment = False
     block_kind: str | None = None  # "const" or "var" if inside ( ... )
+    brace_depth = 0       # only top-level (depth==0) decls count
 
     try:
         text = path.read_text(encoding="utf-8", errors="replace")
@@ -142,27 +143,37 @@ def parse_decls(path: Path):
         if not line.strip():
             continue
 
+        # Determine if this line begins at top level (depth 0) BEFORE updating depth.
+        at_top = (brace_depth == 0)
+        # Update brace depth from this line's net braces (string/comment-stripped).
+        opens = line.count("{")
+        closes = line.count("}")
+
         if block_kind:
             if BLOCK_CLOSE_RE.match(line):
                 block_kind = None
+                brace_depth += opens - closes
                 continue
             m = BLOCK_DECL_RE.match(line)
-            if m:
+            if m and at_top:
                 yield (block_kind, m.group("name"), lineno)
+            brace_depth += opens - closes
             continue
 
-        if BLOCK_OPEN_RE.match(line):
+        if BLOCK_OPEN_RE.match(line) and at_top:
             block_kind = BLOCK_OPEN_RE.match(line).group(1)
+            brace_depth += opens - closes
             continue
 
-        m = DECL_RE.match(line)
-        if not m:
-            continue
-        for kind in ("func", "type", "var", "const"):
-            name = m.group(kind)
-            if name:
-                yield (kind, name, lineno)
-                break
+        if at_top:
+            m = DECL_RE.match(line)
+            if m:
+                for kind in ("func", "type", "var", "const"):
+                    name = m.group(kind)
+                    if name:
+                        yield (kind, name, lineno)
+                        break
+        brace_depth += opens - closes
 
 
 def main(argv: list[str]) -> int:

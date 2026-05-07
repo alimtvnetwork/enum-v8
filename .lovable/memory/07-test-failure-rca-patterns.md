@@ -1,5 +1,19 @@
 # Test Failure RCA Patterns
 
+## Pattern 10 — Brace-unaware Go declaration scanner (added 2026-05-07)
+
+**Symptom:** `scripts/ci/check-collisions.py` (or any similar tooling) reports cross-file "var collisions" for symbols like `got`, `n`, `data`, `sink` across `*_Coverage_test.go` and `*_Uplift_test.go` pairs in many packages, plus intra-file dupes for the same identifier appearing in multiple test functions.
+
+**Root cause:** The scanner matched `^\s*var\s+NAME` line-by-line without tracking `{`/`}` brace depth. Function-local `var got Variant` declarations inside `t.Run` bodies were classified as package-level vars, colliding with identically-named locals in sibling test files.
+
+**Fix:** Maintain a `brace_depth` counter; compute `at_top = (brace_depth == 0)` at the START of each line; only emit a declaration when `at_top` is true. Then `brace_depth += line.count("{") - line.count("}")`. String/comment stripping must happen first so braces inside `"..."` or `// ...` don't shift depth.
+
+**Detection sweep:** Run the collision checker against a known-clean tree; any hit on a common local name (`got`, `err`, `n`, `data`, `sink`, `v`) is almost certainly a brace-tracking bug, not a real collision.
+
+**Manifested as:** 16 cross-file false positives + 1 intra-file false positive across the test suite (v1.15.0 fix).
+
+---
+
 ## Pattern 9 — `Stringer` infinite recursion via `converters.AnyTo.ValueString(self)` (added 2026-05-07)
 
 **Symptom:** A package's tests crash with `fatal error: stack overflow`, the trace alternating between `runtime/fmt/print.go` frames and one specific source line, e.g. `brackets/Pair.go:114` or `brackets/BothBrackets.go:100`. Go test runner reports it as a runtime failure for the package even though no `t.Error` was called.
