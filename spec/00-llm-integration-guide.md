@@ -630,8 +630,28 @@ func (it Status) IsFailed() bool  { return it == Failed }
 | `DefaultWithAliasMap(firstItem, names[], aliasMap)` | Contiguous + aliases |
 | `CreateUsingMap(typeName, map[T]string)` | Non-contiguous explicit values |
 | `CreateUsingMapPlusAliasMap(typeName, map[T]string, aliasMap)` | Explicit + aliases |
+| `BasicByte.UsingFirstItemSliceAllCases(firstItem, names[])` | Contiguous + auto-discovers all cases (used by `httpmethodtype`, `httpstatusfamily`, `mimetype` recipe passes) |
+
+### Lessons from Recipe Passes 1–3 (informative)
+
+The recipe in §10 was validated end-to-end three times by adding `httpmethodtype/` (AK / v0.71.0), `httpstatusfamily/` (v0.76.0), and `mimetype/` (v0.77.0). Each pass surfaced the same conventions, which the recipe step-by-step omits but every real package follows. Treat this section as the **as-built layout** the AI should use when scaffolding a new enum:
+
+1. **`Invalid` is the LAST iota member, not the first.** The minimal recipe places `Invalid Status = iota` at the top, but every shipped package puts `Invalid` last so the valid members occupy `[0, MaxByte]` contiguously and the sentinel sits one past the real maximum. Place domain members first; close with `Invalid`.
+
+2. **Pattern-8 fix is mandatory for `Min` / `Max` / `MinByte` / `MaxByte`.** With `Invalid` last, `BasicEnumImpl.Max()` returns the sentinel. Override the four accessors to return the real first / last domain member directly.
+
+3. **Type is named `Variant`, not the enum-specific name.** All shipped packages use `type Variant byte`. Disambiguation is by package path (`httpmethodtype.Variant`, `mimetype.Variant`).
+
+4. **Per-file split, not single-file.** The real layout is one concept per file: `Variant.go`, `vars.go`, `New.go`, `NewMust.go`, `Min.go`, `Max.go`, `Ranges.go`, `RangesInvalidErr.go`, `all-is-checkers.go`, `all-validation-checking-err.go`, `<EnumName>_Constructor_test.go`.
+
+5. **Required pointer-receiver binding wrappers.** Every package exposes `AsJsoner()`, `AsJsonContractsBinder()`, `AsJsonMarshaller()`, `AsBasicByteEnumContractsBinder()`, `AsBasicEnumContractsBinder()`, `ToPtr()`, plus value-returning `Json()` / `JsonPtr()` and `JsonParseSelfInject(*corejson.Result)`. Suite `AllEnums_PointerReceiverBindings_test.go` exercises these via reflection.
+
+6. **Domain-helper convention.** Add 1–2 small classifier / constructor helpers beyond boilerplate (e.g. `httpstatusfamily.FromStatusCode(int)`, `mimetype.FromContentType(string)`, `httpmethodtype.IsSafe()`/`IsIdempotent()`/`IsBodyAllowed()`). Cover them in the per-package constructor test.
+
+7. **Registration is a single-line append.** Add the import in `tests/creationtests/allBasicEnumsCollection.go` and append `<pkg>.Invalid.AsBasicByteEnumContractsBinder(),` — the package then participates in every shared-loop suite automatically.
 
 ---
+
 
 ## coredata — Data Structures & JSON
 
