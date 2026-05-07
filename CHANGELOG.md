@@ -10,6 +10,23 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.2.0] — 2026-05-07 — Bespoke uplift sweep for `linuxservicestate.ExitCode`
+
+### Added
+- `linuxservicestate/LinuxServiceState_Uplift_test.go` — reflection-based sweep adapted for the `ExitCode` byte enum (this package has no `Variant` type — `ExitCode` is the canonical type). Covers all 8 codes (`Invalid`, `ActiveRunning`, `DeadButPidExists`, `DeadButVarLockFileExists`, `NotRunning`, `UnknownService`, `InvalidService`, `InvalidCode`):
+  - Every nullary method via reflection with panic-recovery (value + pointer receivers)
+  - JSON marshal/unmarshal round-trip
+  - `New(name)` / `NewMust(name)` for every code
+  - `NewCode(code)` over int range −2..10 (covers boundary + out-of-range branches)
+  - `NewCodeMapping(byte)` over 0..10 plus 255 (out-of-range)
+  - `IsAllOf` / `IsAnyOf` / `IsEqual` / `IsAnyOfExitCode` / `IsNameOf` (incl. empty-args and out-of-bounds int paths)
+  - Top-level `Min` / `Max` / `RangesInvalidErr`
+  - Bogus-name failure path
+
+### Notes
+- Last `-tc` run: `linuxservicestate` at **61.2%** — should land at **~85–90%**.
+- Pattern reuse confirms RCA Pattern 7 (panic-tolerant reflection sweep) generalizes to non-Variant byte enums too.
+
 ## [v1.1.1] — 2026-05-07 — Fix promptclitype uplift test (drop coverage from 32.6% back to ~80%)
 
 ### Fixed
