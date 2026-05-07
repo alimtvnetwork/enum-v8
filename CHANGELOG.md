@@ -10,6 +10,14 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.88.0] — 2026-05-07 — envtype coverage uplift (9.7% → ≥60% target)
+
+### Added
+- **`envtype/EnvType_Coverage_test.go`** — comprehensive coverage suite for `envtype`, the lowest-coverage package in the repo (9.7% per last `-tc` run). Exercises: every value/name accessor (`ValueByte`, `ValueInt`, `ValueInt8/16/32`, `ValueUInt16`, `Value`, `IsByteValueEqual`, `IsValueEqual`, `IsAnyValuesEqual`, `IsNameEqual`, `IsAnyOf`, `IsNameOf`); env-class predicates (`IsDevelopment`/`IsTest`/`IsProduction` family + `IsAny*`, `Is*EnvLogically`/`IsNot*EnvLogically`, `IsUninitialized`/`IsInitialized`/`IsInvalid`/`IsValid`); mapping helpers (`KeyName`, `CurlyKeyName`, `VersionNumber`); `IsAnyNamesOf`; JSON `Marshal`/`Unmarshal` round-trip; range/format/type surface (`RangesByte`, `RangeNamesCsv`, `TypeName`, `AllNameValues`, `Min/MaxByte`, `Min/MaxInt`, `Min/MaxValueString`, `RangesDynamicMap`, `IntegerEnumRanges`, `MinMaxAny`, `EnumType`, `NameValue`, `String`, `ValueString`, `Format`); `Is` package helper + `OnlySupportedErr`/`OnlySupportedMsgErr`; pointer-receiver `As*` bindings.
+
+### Notes
+- Picks off the largest single uplift opportunity from `.lovable/plan.md` AL2 phase. `envtype` has 10 enumerated members and the richest predicate surface in the repo, so the existing 9.7% was outsized for the package's footprint.
+
 ## [v0.87.0] — 2026-05-07 — Level-comparison receiver inversion fix + Pattern 5 lint
 
 ### Fixed (real defect — found during lint authoring)
