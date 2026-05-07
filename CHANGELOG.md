@@ -10,6 +10,23 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.69.0] — 2026-05-07 — Revert v0.67.0 triple-gate + fix 8 cascade test failures it masked
+
+### Fixed
+- **`scripts/CoverageCompileCheck.psm1` `Test-PackageActuallyCompiles`** — REVERTED v0.67.0's triple-gate (`go test -c` → `go vet` → `go build`). The `go vet` / `go build` fall-backs only check **production** code and were silently classifying packages with genuine `*_test.go` compile errors as "compiles fine", letting them slip through the Blocked report and only surface during the coverage run as runtime/build failures. Restored to a single `go test -c` probe.
+- **`sitestatetype/SiteStateType_Coverage_test.go` `TestSiteStateType_AllNameValuesRoundTrip`** — bug from v0.65.0: I round-tripped through `AllNameValues()`, but that returns the upstream `"Name(value)"` format (e.g. `"Invalid(0)"`) which `New()` does not accept. Switched to iterating `Ranges` (raw names); still calls `AllNameValues()` once for coverage.
+- **`configfilestate/ConfigFileState_Coverage_test.go` `TestConfigFileState_AllNameValuesCoverage`** — same v0.65.0 bug. Switched from "membership check" to a count-equals-non-blank-Ranges-entries assertion.
+- **`osdetect/OsDetect_Coverage_test.go` `TestOsDetect_AllNameValuesRoundTrip`** — same v0.65.0 bug. Switched to iterating `osdetect.Ranges`, skipping `Invalid` and blanks.
+- **`osdetect/OsDetect_Coverage_test.go`** line 59: `_ = d.Serialize()` → `_, _ = d.Serialize()` (`OperatingSystemDetail.Serialize()` returns `([]byte, error)`).
+- **`osdetect/OsDetect_Coverage_test.go`** line 192: `o.Json().HasError()` → `jr := o.Json(); jr.HasError()` (`HasError` is a pointer-receiver method on `corejson.Result`, can't be called on a non-addressable value-return).
+- **`dbexposetype/`, `dbuserprivillegetype/`, `osgroupexecution/`, `resauthtype/`, `sqljointype/` *_Coverage_test.go** — same `corejson.Result` pointer-receiver bug. Replaced `v.Json().HasError()` / `v.Json().Error` → `v.JsonPtr().HasError()` / `v.JsonPtr().Error` across all 5 files.
+- **`protocoltype/ProtocolType_Coverage_test.go`** — `Tcp.IsAnyOf(Tcp, Udp)` undefined on `protocoltype.Variant` (which has `IsAnyValuesEqual` / `IsAnyNamesOf` instead). Switched to `Tcp.IsAnyValuesEqual(byte(Tcp), byte(Udp))`.
+
+### Notes
+- All 8 failures (2 logic + 6 build) trace to two earlier bugs of mine (v0.65.0 Pattern-7 tests + v0.67.0 triple-gate masking). Both are now corrected with explicit doc-comments warning future cycles not to repeat them.
+- Updated `Test-PackageActuallyCompiles` doc-comment to flag the v0.67.0 mistake explicitly.
+- Expected next `./run.ps1 -tc` outcome: 12/12 ✓ PASS, zero Blocked, zero failing tests.
+
 ## [v0.68.0] — 2026-05-07 — Cycle 19 audit: `spec/05-failing-tests/` walk-through (Task AA)
 
 ### Added
