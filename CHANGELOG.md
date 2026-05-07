@@ -10,6 +10,32 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.46.0] — 2026-05-07 — Cycle 75 — AL2-07 dbdrivertype connection-string suite
+
+### Added
+- `dbdrivertype/DbDriverType_Coverage_test.go` — bespoke coverage for the
+  driver/connection-string surface:
+  - `New`/`NewMust` round-trip across 11 driver names (sql + nosql + flat).
+  - `Min`/`Max` boundary, `RangesInvalidErr`, accessor sweep, JSON round-trip,
+    `OnlySupportedErr*`, `Is(...)` helper.
+  - `IsSqlDb`/`IsNoSql`/`IsMongoDb`/`IsOracle` predicate parity.
+  - `DefaultPort` / `DefaultPortStatus` for MySql (3306), PostgreSql (5432),
+    MongoDb (27017); negative case for Sqlite.
+  - `Connection.Compile`, `CompileUsingParams`, `CompileUsingParamsNoOptions`,
+    `CompileUsingConnectionFormat`, `ConnectionStringFormat` /
+    `ConnectionStringAllDbFormat` for MySql; error path for Oracle (no entry
+    in `connectionStringFormatMap`).
+  - `Variant.Connection()` compiler shim — `Format`, `AllDbFormat`,
+    `CompileUsingConnection`; positive (MySql) and negative (Oracle) paths.
+  - `ConnectionOptions.CreateMap` / `CreateMapUsingParams` /
+    `CreateMapUsingParamsNoOptions` / `CompileUsingConnectionFormat` parity.
+
+### Notes
+- Pure additive coverage; no production code touched. Closes the AL2-07
+  bespoke gap from the coverage report.
+
+---
+
 ## [v0.45.0] — 2026-05-07 — Cycle 74 — AL2-06 Batch F coverage suites
 
 ### Added
