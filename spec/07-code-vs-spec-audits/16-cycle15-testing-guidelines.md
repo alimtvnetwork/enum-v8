@@ -119,3 +119,34 @@ With Cycle 15, `spec/06-testing-guidelines/` is **baselined and closed at 100% v
 - **AB** — fetch upstream `core-v9` source to verify the 10 ❓ behavioural claims about `args.Map` / `CaseV1` / `ShouldBeEqualMap` / `InvokeWithPanicRecovery` / `BaseTestCase` / diagnostic-output formats.
 - **AH** — cross-`spec/` stale-ref sweep still owes the same `tests/integratedtests/` audit for `spec/03-powershell-test-run/` (4 files), `spec/04-tooling/04-bootstrap-into-new-repo.md`, and `spec/02-app-issues/02-internal-package-coverage-policy.md`. The README/01- callout pattern from this cycle is the template.
 - README TOC omits `04-results-reference.md` and `07-diagnostics-output-standards.md` — low-priority polish, not blocking; track in suggestions.
+
+---
+
+## 7. AB-residual re-audit (Cycle 82, 2026-05-07) — upstream verification against `core-v9 v1.5.8`
+
+> **Method**: cloned upstream at `/tmp/core-v9-upstream` (tag `v1.5.8`); inspected `coretests/`, `coretests/coretestcases/`, `coretests/args/`, `coretests/results/` directly. Promoted the 10 ❓ rows from §2.
+
+| #  | Original | New | Evidence |
+|----|----------|-----|----------|
+| 12 | ❓ | ✅ | `coretests/coretestcases/`: `CaseV1.go` (l47 `type CaseV1 coretests.BaseTestCase`), `CaseNilSafe.go` (l55 `type CaseNilSafe struct {…}`), `GenericGherkins.go` — all three case types confirmed. |
+| 13 | ❓ | ⚠️ | `CaseV1` is a type alias of `coretests.BaseTestCase` (not a struct with its own field declarations). Field shape inherited from `BaseTestCase` (`Name`, `ArrangeInput`, `ActualInput`, `ExpectedInput` per `coretestcases/readme.md:59`). Spec's `ExpectedResult` field name is wrong — actual is `ExpectedInput`. Filed as **D-CVS-52 (LOW)**. |
+| 14 | ❓ | ✅ | `coretests/coretestcases/CaseNilSafe.go:55` defines `CaseNilSafe`; `:117` defines `ShouldBeSafe(t, caseIndex)`; `:135` defines `ShouldBeSafeFirst`. |
+| 15 | ❓ | ✅ | `coretests/args/` provides `Map.go`, `One.go`–`Six.go`, `Dynamic.go`, `Holder.go`, `LeftRight.go`, plus `*Func.go` variants and `MapCompile.go`/`MapGoLiteral.go`/`MapShouldBeEqual.go`. Full symbol set confirmed. |
+| 18 | ❓ | ✅ | `coretests/results/`: `Result.go:43` `type Result[T any] struct{…}`; `aliases.go:28` `type ResultAny = Result[any]`; `ResultAssert.go:41` `var ExpectAnyError = fmt.Errorf("expect-any-error")`; `Invoke.go:46` `func InvokeWithPanicRecovery(...)`. |
+| 19 | ❓ | ⚠️ | `ShouldBeEqual` confirmed (`coretests/SimpleTestCase.go:145` and `ShouldAsserter.go:46`). `ShouldBeEqualMap` is a method on `coretestcases/GenericGherkinsMapAssertions.go` (not on `coretests` directly). `ShouldBeSafe` lives only on `CaseNilSafe` (`coretestcases/CaseNilSafe.go:117`). Spec lumps three differently-located methods under one bucket. Filed as **D-CVS-53 (LOW — assertion-method namespace clarification)**. |
+| 20 | ❓ | ✅ | Diff-based assertion pattern realised by `MapShouldBeEqual.go` + `Compare.go` + `getAssert.go` (`GetAssert = getAssert{}` at `vars.go:26`). |
+| 26 | ❓ | ❓ | Diagnostic output standards (`07-diagnostics-output-standards.md`) — file-format claims are documentation; not audited symbol-by-symbol this cycle. Defer to a future targeted cycle. |
+| 27 | ❓ | ✅ | "Good vs bad" examples use `args.Map`/`CaseV1` — both APIs now ✅. Examples are spec-internally consistent. |
+| 28 | ❓ | ✅ | `BaseTestCase` extension pattern confirmed via `BaseTestCase.go` + `BaseTestCaseAssertions.go` + `BaseTestCaseGetters.go` + `BaseTestCaseValidation.go` + `BaseTestCaseWrapper.go` (full 5-file extension surface). `CaseV1` itself uses this pattern (type alias of `BaseTestCase`). |
+
+### Updated score row
+
+| Date       | Cycle | Spec audited                           | Claims | ✅ | ⚠️ | ❌ | ❓ | Score (verifiable) |
+|------------|-------|----------------------------------------|--------|----|-----|----|----|--------------------|
+| 2026-05-07 | 82 (AB-residual) | `spec/06-testing-guidelines/` | 32 | 28 | 3   | 0  | 1  | **28 / 31 = 90.3%** |
+
+### New findings opened (Cycle 82)
+
+- **D-CVS-52 (LOW)** — Spec uses `ExpectedResult` field name in §02 example for `CaseV1`; upstream `BaseTestCase` uses `ExpectedInput`. Quick rewrite needed.
+- **D-CVS-53 (LOW)** — Assertion-method namespacing in §05 should distinguish `coretests.SimpleTestCase.ShouldBeEqual`, `coretestcases.GenericGherkins.ShouldBeEqualMap`, and `coretestcases.CaseNilSafe.ShouldBeSafe` (each lives on a different type).
+

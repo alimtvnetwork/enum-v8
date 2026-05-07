@@ -10,6 +10,27 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.53.0] — 2026-05-07 — Cycle 82 — AB-residual: re-audit §06 testing-guidelines
+
+### Changed
+- `spec/07-code-vs-spec-audits/16-cycle15-testing-guidelines.md`: appended §7
+  AB-residual re-audit verified against upstream `core-v9 v1.5.8`. Promoted
+  9 of 10 ❓ rows; verifiable score moves from 22/22 (100 %) to
+  **28 / 31 = 90.3 %** under the wider verifiable subset. Two new findings
+  filed (both LOW): **D-CVS-52** (spec uses `ExpectedResult` field name;
+  upstream `BaseTestCase` uses `ExpectedInput`) and **D-CVS-53** (assertion
+  methods live on three different types — needs namespace clarification).
+
+### Notes
+- Re-audit basis: upstream `core-v9` clone at `/tmp/core-v9-upstream` tag
+  `v1.5.8`. Audit-report-only update — no spec body rewrites this cycle.
+- All §06 framework symbol claims (`CaseV1`/`CaseNilSafe`/`GenericGherkins`,
+  `args.Map/One..Six/Dynamic/Holder/LeftRight`, `results.Result/ResultAny/
+  ExpectAnyError/InvokeWithPanicRecovery`, `BaseTestCase` extension family)
+  verified ✅ against upstream.
+
+---
+
 ## [v0.52.0] — 2026-05-07 — Cycle 81 — AB-residual: re-audit §07 conditional + utilities
 
 ### Changed
