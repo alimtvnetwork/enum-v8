@@ -10,6 +10,14 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.80.0] — 2026-05-07 — Pattern-8 codegen guard (Invalid-sentinel suite)
+
+### Added
+- **`tests/creationtests/AllEnums_InvalidSentinelGuard_test.go`** — new shared-loop suite `Test_AllEnums_InvalidSentinelGuard` that asserts, across every registered enum, that `Min()` / `Max()` / `MinByte()` / `MaxByte()` never return the `Invalid` sentinel. Catches RCA Pattern 6 (trailing-`Invalid` Min/Max delegation forgotten) and Pattern 8 (`MinByte`/`MaxByte` forgotten when `Min/Max` are overridden) automatically — no per-package boilerplate required. Skip map covers `strtype.Variant` (string-backed; byte accessors panic) and `inttype.Variant` (open-ended numeric; no enumerated members).
+
+### Notes
+- Suite uses pure reflection: `MinByte`/`MaxByte` results are round-tripped through `New(byte)` to derive a name; the assertion is name-based (`!= "Invalid"`) so it works uniformly for byte-backed and Variant-typed accessors.
+
 ## [v0.79.1] — 2026-05-07 — Sibling typo sweep + RCA Pattern 11
 
 ### Audited
