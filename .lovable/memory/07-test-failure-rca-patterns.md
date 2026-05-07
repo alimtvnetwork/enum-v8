@@ -1,10 +1,10 @@
 ---
-name: Test failure RCA patterns (enum-v6)
+name: Test failure RCA patterns (enum-v7)
 description: Recurring root-cause patterns when `./run.ps1 -tc` reports test failures, with reusable fixes — fixture drift, sparse array maps, upstream BasicString defects, Goconvey log conflation
 type: feature
 ---
 
-# Test Failure Root Cause Analysis — enum-v6
+# Test Failure Root Cause Analysis — enum-v7
 
 When `./run.ps1 -tc` reports failing tests, walk this checklist FIRST before reading test code. Most failures fall into one of 4 recurring patterns documented below. Each pattern lists: root cause, how to recognise it, reusable fix.
 

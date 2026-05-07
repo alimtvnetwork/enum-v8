@@ -1,4 +1,4 @@
-module github.com/alimtvnetwork/enum-v6
+module github.com/alimtvnetwork/enum-v7
 
 go 1.25.0
 
