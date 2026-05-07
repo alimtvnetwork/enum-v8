@@ -10,6 +10,21 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.10.0] — 2026-05-07 — `licensetype` reflection uplift sweep
+
+### Added
+- `licensetype/LicenseType_Uplift_test.go` — sweep over all 8 Variants (`Invalid`, `PublicDomain`, `ByCc`, `BySa`, `ByNc`, `ByNcSa`, `ByNd`, `ByNcNd`):
+  - Nullary method sweep with `recover()` (value + pointer receivers).
+  - Cross-variant comparators: `IsAnyOf`, `IsByteValueEqual`, `IsValueEqual`, `IsAnyValuesEqual`, `IsNameEqual`, `IsAnyNamesOf`.
+  - JSON marshal/unmarshal round-trip per Variant.
+  - Constructor matrix: `New` / `NewMust` over 8 known names + bogus, empty, lower-case, upper-case.
+  - Top-level helpers: `Min`, `Max`, `RangesInvalidErr`.
+
+### Notes
+- Last `-tc` run: `licensetype` at **72.6%**. Expected lift: **~88%+**.
+- Heads-up: 2026-05-07 user `-tc` run was on a stale checkout (remote unreachable). v1.4.0–v1.10.0 must be synced before re-running. Once synced the `TestPromptCliType_Uplift_AllVariants` panic is resolved by the v1.4.0 `Review: false` fix in `promptclitype/vars.go`.
+
+
 ## [v1.9.0] — 2026-05-07 — `certaction` reflection uplift sweep
 
 ### Added
