@@ -131,7 +131,7 @@ func Test_StrType_Coverage(t *testing.T) {
 		So(v.ToPtr(), ShouldNotBeNil)
 		_ = v.RangesDynamicMap()
 		_ = v.AllNameValues()
-		_ = v.MinMaxAny()
+		_, _ = v.MinMaxAny()
 		_ = v.MinInt()
 		_ = v.MaxInt()
 		_ = v.MinValueString()
