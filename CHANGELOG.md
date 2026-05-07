@@ -10,6 +10,16 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.78.0] — 2026-05-07 — Recipe distillation: §10 lessons-learned subsection
+
+### Changed
+- **`spec/00-llm-integration-guide.md` §10** — added "Lessons from Recipe Passes 1–3 (informative)" subsection that documents the as-built conventions all three recipe-pass packages converged on (Invalid-last, Pattern-8 fix, `Variant` type name, 11-file split, pointer-receiver binding wrappers, domain-helper convention, single-line registration). Also added `BasicByte.UsingFirstItemSliceAllCases` to the Factory Method Reference table.
+- **`spec/CHANGELOG.md`** → spec-v0.56.0 entry mirroring the above.
+
+### Notes
+- Outside the `spec/01-app/` freeze scope; `00-llm-integration-guide.md` lives at the spec root and is editable.
+- Future scaffolding via `next` should follow these seven points; the AK-style minimal recipe stays in place but readers are now pointed to the lessons-learned section for the real layout.
+
 ## [v0.77.0] — 2026-05-07 — Recipe pass-3: `mimetype/` enum
 
 ### Added

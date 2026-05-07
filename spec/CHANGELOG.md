@@ -9,6 +9,23 @@
 
 ---
 
+## [spec-v0.56.0] — 2026-05-07 (Recipe-distillation pass — `00-llm-integration-guide.md` §10 lessons-learned)
+
+### Added
+- **`spec/00-llm-integration-guide.md` §10** — added "Lessons from Recipe Passes 1–3 (informative)" subsection capturing as-built conventions distilled from three end-to-end validations (`httpmethodtype`, `httpstatusfamily`, `mimetype`):
+  1. `Invalid` is the LAST iota member (not first).
+  2. Pattern-8 fix is mandatory for `Min`/`Max`/`MinByte`/`MaxByte` overrides.
+  3. Type is named `Variant` (disambiguated by package path).
+  4. Per-file split (11 files per package) — not single-file.
+  5. Required pointer-receiver binding wrappers (`AsJsoner`/`AsJsonContractsBinder`/`AsJsonMarshaller`/`AsBasicByteEnumContractsBinder`/`AsBasicEnumContractsBinder`/`ToPtr`/`Json`/`JsonPtr`/`JsonParseSelfInject`).
+  6. Domain-helper convention (1–2 small classifiers/constructors per package).
+  7. Single-line registration in `tests/creationtests/allBasicEnumsCollection.go`.
+- Added `BasicByte.UsingFirstItemSliceAllCases` to the Factory Method Reference table — the actual factory used by all three recipe-pass packages.
+
+### Notes
+- This entry edits `spec/00-llm-integration-guide.md` only. `spec/01-app/` remains frozen per spec-v0.53.0; this guide lives outside the freeze scope.
+- Reverse-engineered from real packages, not new design.
+
 ## [spec-v0.55.0] — 2026-05-07 (Cycle 20 — Task **AA**: walk-through audit of `spec/00-llm-integration-guide.md` — **AA CLOSED**)
 
 ### Added
