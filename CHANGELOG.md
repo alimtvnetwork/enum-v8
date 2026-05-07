@@ -10,6 +10,20 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.9.0] — 2026-05-07 — `certaction` reflection uplift sweep
+
+### Added
+- `certaction/CertAction_Uplift_test.go` — sweep over all 4 Variants (`Invalid`, `Create`, `Renew`, `Revoke`):
+  - Nullary method sweep with `recover()` (value + pointer receivers).
+  - Cross-variant predicates: `IsCreate/Renew/Revoke`, `IsUninitialized`, `IsInvalid/Valid`, `IsEqual`, `IsAboveOrEqual`, `IsLowerOrEqual`, `IsAnyOf`, `IsByteValueEqual`, `IsValueEqual`, `IsAnyValuesEqual`, `IsNameEqual`, `IsAnyNamesOf`.
+  - JSON marshal/unmarshal round-trip per Variant + `Json` / `JsonPtr`.
+  - Constructor matrix: `New` / `NewMust` over known names + bogus, empty, lower-case, upper-case.
+  - Top-level helpers: `Min`, `Max`, `RangesInvalidErr`.
+
+### Notes
+- Last `-tc` run: `certaction` at **71.2%**. Expected lift: **~88%+**.
+
+
 ## [v1.8.0] — 2026-05-07 — `brackets` reflection uplift sweep
 
 ### Added
