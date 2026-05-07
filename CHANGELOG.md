@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.99.0] — 2026-05-07 — AL2-08 osdetect coverage uplift
+
+### Added
+- **`osdetect/OsDetect_Uplift_test.go`** — pure-`testing` (no Convey) sweep covering: every `Variant` accessor / predicate / JSON / contract-binder method across all 14 known variants; `OperatingSystemDetail` populated + empty + nil-receiver paths including `ReleaseVersion` cached/empty/nil branches, `IsTypePlusMajorAtLeast` / `Is*AtLeast` family, `Serialize` / `Deserialize` / `PrettyJsonString` round-trip; `WindowsSystemDetail` client + server + nil-receiver paths including `IsWindowsSever*` / `IsWindowsServerGreaterEqual` / `WinVer` for both flavors; `OsDetailWithErr` populated + nil + `JsonParseSelfInject` round-trip + `AsJsonContractsBinder`; host-smoke calls for `IsWindows` / `IsRunningInDockerContainer` / `CurrentOsType` / `CurrentOsMixTypes` / `CurrentOsTypesMap` / `CurrentOsTypesNotContainsError` / `GetCurrentOsDetail` (no host-specific assertions — values are merely touched to mark coverage).
+
+### Notes
+- Closes Task **AL2-08** (osdetect cross-platform branch coverage). Together with v0.95.0 / v0.96.0 lifts, the project now has comfortable headroom for a 70% → 75% gate bump in a follow-up step.
+- Pure `testing` package keeps the new tests isolated from Goconvey log structure (RCA pattern in `.lovable/memory/07-test-failure-rca-patterns.md`).
+
 ## [v0.98.0] — 2026-05-07 — Close Task AH (cross-spec stale-path sweep)
 
 ### Changed
