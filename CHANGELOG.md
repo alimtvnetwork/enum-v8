@@ -10,6 +10,22 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.8.0] — 2026-05-07 — `brackets` reflection uplift sweep
+
+### Added
+- `brackets/Brackets_Uplift_test.go` — comprehensive sweep over both `Bracket` (7 constants) and `Category` (4 constants) enums:
+  - Nullary method sweep with `recover()` (value + pointer receivers).
+  - Predicate matrix: `IsStart/IsEnd`, per-shape `Is{Parenthesis,Curly,Square}{Start,End}`, `IsValid/IsInvalid`.
+  - Cross-bracket comparators: `IsAnyOf`, `IsByteValueEqual`, `IsValueEqual`, `IsAnyValuesEqual`, `IsNameEqual`, `IsNameOf`, `IsAnyNamesOf`, `IsEqual`.
+  - Wrap/Unwrap matrix across 9 sample strings × all 7 brackets and all 4 categories: `WrapAny`, `WrapString`, `WrapFmtString`, `IsWrapped`, `UnWrap`, `WrapWithOptions(true/false)`, `WrapSkipOnExist`, `WrapRegardless`.
+  - `Pair` and `BothBrackets` struct surfaces fully exercised (`Wrap`, `WrapAny(nil)`, `WrapString`, `WrapFmtString`, `IsWrapped`, `UnWrap`, `WrapWithOptions`, `WrapSkipOnExist`, `String`, `IsValid`, `IsSafeInvalid`).
+  - `WhichBracket` over all 6 bracket chars + 2 non-bracket chars × `isLeft={true,false}`; `EmptyBracketStatus`.
+  - JSON round-trip per `Bracket` constant.
+
+### Notes
+- Last `-tc` run: `brackets` at **71.0%**. Expected lift: **~88%+**.
+
+
 ## [v1.7.0] — 2026-05-07 — `onofftype` uplift + defensive sparse-array patches
 
 ### Fixed (preventive)
