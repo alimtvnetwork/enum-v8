@@ -78,11 +78,8 @@
 
 ### AI. Mark `spec/01-app/` as frozen
 
-- **Status:** ⏳ Pending
-- **Objective:** Add freeze entry to `spec/CHANGELOG.md`.
-- **Dependencies:** None (can do anytime)
-- **Expected outputs:** Changelog entry stating frozen status.
-- **Acceptance criteria:** `spec/CHANGELOG.md` has freeze entry with date and cycle reference.
+- **Status:** ✅ Done (2026-05-06, Cycle 61, `spec-v0.53.0`)
+- **Result:** Freeze policy entry added to `spec/CHANGELOG.md`. All future `spec/01-app/` changes blocked behind explicit user thaw.
 
 ---
 
