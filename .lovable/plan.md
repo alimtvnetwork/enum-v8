@@ -91,11 +91,8 @@
 
 ### AK. New enum package creation (template validation)
 
-- **Status:** 📋 Planned
-- **Objective:** Create 1 new enum package end-to-end following spec §05 recipe, validating the spec is complete.
-- **Dependencies:** AG (clean Go build)
-- **Expected outputs:** New enum package with full method set, registered in `tests/creationtests/`.
-- **Acceptance criteria:** `go build ./newpkg/...` and `go test ./tests/creationtests/...` pass.
+- **Status:** ✅ DONE (2026-05-07, v0.71.0)
+- **Result:** Created `httpmethodtype/` package end-to-end (11 files) following `spec/00-llm-integration-guide.md` §10. Registered in `tests/creationtests/allBasicEnumsCollection.go`. `go build`, `go test`, and creationtests build all pass with go1.25.7 + `core-v9 v1.5.8`. Recipe verified complete; zero spec gaps encountered.
 
 ### AL. Test coverage expansion (umbrella)
 
