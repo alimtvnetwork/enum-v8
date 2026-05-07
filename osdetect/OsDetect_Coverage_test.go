@@ -189,7 +189,7 @@ func TestOsDetect_OsDetailWithErr_JsonAndString(t *testing.T) {
 	if o.PrettyJsonString() == "" {
 		t.Error("PrettyJsonString empty")
 	}
-	if o.Json().HasError() {
+	if jr := o.Json(); jr.HasError() {
 		t.Error("Json should not have error")
 	}
 	if o.JsonPtr() == nil {
