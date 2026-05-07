@@ -2695,7 +2695,7 @@ var allEnumGeneralTestCases = []*EnumTestWrapper{
 			 "PanelRoles": 50 ,
 			 "CacheReset": 51 ,
 			 "ReloadSettings": 52 ,
-			 "": 53 ,
+			 "ResetSettings": 53 ,
 			 "DefaultKnownSettings": 54 ,
 			 "DbUser": 55 ,
 			 "List": 56 ,
@@ -2705,7 +2705,7 @@ var allEnumGeneralTestCases = []*EnumTestWrapper{
 		 },
 		 ExpectedInvalidName:"Invalid",
 		 ExpectedInvalidValueString:"0",
-		 ExpectedRangesNamesCsv: "Invalid(0), Help(1), Compress(2), Cron(3), Decompress(4), Dns(5), Download(6), EnvPath(7), EnvVars(8), Ethernet(9), Fail2ban(10), Firewall(11), Ftp(12), HostingPlan(13), Macro(14), Package(15), Packages(16), Pkg(17), Snapshot(18), Ssh(19), Ssl(20), User(21), UserRole(22), WebServer(23), Tooling(24), Docker(25), System(26), Os(27), Update(28), AutoFix(29), MySql(30), PostgreSql(31), DbServer(32), Sync(33), SyncNow(34), SyncDryRun(35), Nginx(36), Apache(37), Paths(38), SysPaths(39), Env(40), Services(41), Restart(42), Reboot(43), Shutdown(44), SysGroup(45), SysUser(46), FtpUser(47), PanelUser(48), CashBin(49), PanelRoles(50), CacheReset(51), ReloadSettings(52), (53), DefaultKnownSettings(54), DbUser(55), List(56), ListJson(57), Backup(58), Import(59)",
+		 ExpectedRangesNamesCsv: "Invalid(0), Help(1), Compress(2), Cron(3), Decompress(4), Dns(5), Download(6), EnvPath(7), EnvVars(8), Ethernet(9), Fail2ban(10), Firewall(11), Ftp(12), HostingPlan(13), Macro(14), Package(15), Packages(16), Pkg(17), Snapshot(18), Ssh(19), Ssl(20), User(21), UserRole(22), WebServer(23), Tooling(24), Docker(25), System(26), Os(27), Update(28), AutoFix(29), MySql(30), PostgreSql(31), DbServer(32), Sync(33), SyncNow(34), SyncDryRun(35), Nginx(36), Apache(37), Paths(38), SysPaths(39), Env(40), Services(41), Restart(42), Reboot(43), Shutdown(44), SysGroup(45), SysUser(46), FtpUser(47), PanelUser(48), CashBin(49), PanelRoles(50), CacheReset(51), ReloadSettings(52), ResetSettings(53), DefaultKnownSettings(54), DbUser(55), List(56), ListJson(57), Backup(58), Import(59)",
 		 IntegerMinMax: corerange.MinMaxInt {
  			Min:0,
  			Max:59,
