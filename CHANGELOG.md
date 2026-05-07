@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.71.1] — 2026-05-07 — Fix `osdetect.Variant.IsWindows11` SIGSEGV on non-Windows hosts
+
+### Fixed
+- **`osdetect/Variant.go` `IsWindows11()`** — SIGSEGV nil-pointer dereference at line 426 when called on a non-Windows host (reported on macOS via `TestOsDetect_PlatformWrappers_DoNotPanic`). `GetCurrentOsDetail()` returns a non-nil `OperatingSystemDetail` whose `WindowsDetail` is unpopulated; the bare `osDetail.WindowsDetail.IsWindows11()` then crashes. Added the same nil-guard already present in `IsWindows10`/`IsWindows8`/`IsWindowsServer*` package-level wrappers: `if err != nil || osDetail == nil || osDetail.IsEmptyWindowsDetail() { return false }`, plus an `osDetail.IsWindows() &&` short-circuit before the deref.
+
+### Notes
+- Root cause: copy-paste drift — every other `IsWindowsXxx` path uses the empty-detail guard; only `Variant.IsWindows11` skipped it.
+- Recipe-validation work (Task **AK** / v0.71.0) and coverage suites unaffected.
+
 ## [v0.71.0] — 2026-05-07 — Task **AK** complete: new `httpmethodtype/` enum (recipe end-to-end validation)
 
 ### Added

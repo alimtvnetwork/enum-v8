@@ -419,9 +419,16 @@ func (it Variant) IsMajorAtLeast(majorVersion int) bool {
 func (it Variant) IsWindows11() bool {
 	osDetail, err := GetCurrentOsDetail()
 	
-	if err != nil {
+	// Nil-guard: GetCurrentOsDetail may return (non-nil, nil) on a non-Windows
+	// host where WindowsDetail is unpopulated. Without this guard the receiver
+	// dereference panics with SIGSEGV (regression caught 2026-05-07).
+	if err != nil ||
+		osDetail == nil ||
+		osDetail.IsEmptyWindowsDetail() {
 		return false
 	}
 	
-	return osDetail.WindowsDetail.IsWindows11()
+	return osDetail.IsWindows() &&
+		osDetail.WindowsDetail.IsWindows11()
 }
+
