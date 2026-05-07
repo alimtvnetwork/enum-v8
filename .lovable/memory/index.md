@@ -1,7 +1,7 @@
 # Project Memory
 
 ## Core
-This is a Go enum library (**enum-v7**, module path `github.com/alimtvnetwork/enum-v7` — renamed from `enum-v3`, previously `enum-v2`, originally `enum-v1`). The frontend React/Vite shell is incidental — work happens in Go packages and PowerShell/Python tooling.
+This is a Go enum library (**enum-v7**, module path `github.com/alimtvnetwork/enum-v7` — renamed from `enum-v6`, previously `enum-v5`, `enum-v4`, `enum-v3`, `enum-v2`, originally `enum-v1`). The frontend React/Vite shell is incidental — work happens in Go packages and PowerShell/Python tooling.
 Core dependency import path is `github.com/alimtvnetwork/core-v9` (was renamed from `core-v8`). All source imports use `core-v9` — never reintroduce `core-v8` outside `cross-repo/core-v8/`.
 **`go.mod` bridge RESOLVED:** upstream `core-v9` now declares `module github.com/alimtvnetwork/core-v9` (tag `v1.5.8`). The `replace` directive has been removed. `go.mod` pins `require core-v9 v1.5.8` cleanly.
 **API migration patched:** `core-v9` refactored converters to struct namespaces (`AnyTo`, `StringTo`); obsolete `TypeName`/package-level converter calls were rewritten. Await local `./run.ps1 -tc` validation.
