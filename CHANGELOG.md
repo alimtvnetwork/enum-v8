@@ -10,6 +10,30 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.60.0] — 2026-05-07 — Cycle 89 — AB-residual: §10 cmd-entrypoints
+
+### Changed
+- `spec/07-code-vs-spec-audits/11-cycle10-cmd-entrypoints.md`: promoted all 6 ❓ rows against upstream `core-v9 v1.5.8`. Verifiable score 16/16 → **21/22 (95.5 %)**, only #20 (`04-bootstrap-into-new-repo.md` cross-ref, D-CVS-35) deferred.
+- Reverted claims #11/#12 to ✅ (per D-CVS-64 from Cycle 86): `tests/integratedtests/coregenerictests/` IS canonical upstream; the original spec was correct, prior D-CVS-32/33 fixes are wrong direction.
+
+### Discovered (3 new D-CVS findings)
+- **D-CVS-70 — LOW**: `coregeneric` import path drift. Real path is `coredata/coregeneric` (same pattern as D-CVS-54).
+- **D-CVS-71 — HIGH**: `errcore.FailedType` is fabricated. Only specific variants exist (`MarshallingFailedType`, `ParsingFailedType`, `ValidationFailedType`, `PathRemoveFailedType`, …). `.Fmt()` lives on `RawErrorType` itself.
+- **D-CVS-72 — MEDIUM**: `args.IsEmpty()`/`args.First()` references a non-existent top-level `args` package. Only `coretests/args` (test holders with `HasFirst()`) exists. Real CLI smoke-test pattern uses `os.Args` + `corestr.Collection`.
+
+### Remaining Tasks
+- **AB residual** ⭐ Next pick: §11 testing-patterns (10 ❓), §02 error-system (6 ❓)
+- **AJ-NEW HIGH+CRITICAL** — apply spec fixes from D-CVS-26..72 (**6 CRITICAL**, **16 HIGH**, plus LOW/MEDIUM); §16 + §09 + §10 rewrite-required
+- **Pattern-6/8 audit** — sweep packages where `Invalid` isn't first const → custom `Min/Max` + `MinByte/MaxByte`
+- **Pattern-7 audit** — sweep `*_Coverage_test.go` round-tripping `AllNameValues`
+- **Tooling** — investigate `CoverageCompileCheck.psm1` parallel false-positive
+- AA / Cycles 16–20 — audit remaining spec dirs
+- AI — mark `spec/01-app/` frozen
+- AK — new enum recipe validation
+- A — manual `cross-repo/core-v8/` push
+
+---
+
 ## [v0.59.0] — 2026-05-07 — Cycle 88 — AB-residual: §09 versioning (4 fabricated APIs uncovered)
 
 ### Changed
