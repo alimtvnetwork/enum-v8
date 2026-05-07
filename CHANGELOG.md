@@ -10,6 +10,20 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.73.0] — 2026-05-07 — AL-07: Concrete-Variant byte-predicate cluster sweep
+
+### Added
+- **`tests/creationtests/AllEnums_BytePredicates_test.go`** — reflection-based shared-loop test that exercises three concrete `Variant`-only methods (not on the `BasicEnumer` interface) across every registered enum:
+  1. `IsValueEqual(byte) bool`
+  2. `IsByteValueEqual(byte) bool`
+  3. `IsAnyValuesEqual(...byte) bool` (incl. empty-input no-match assertion)
+- Uses `reflect.MethodByName` so packages that don't expose a given method are silently skipped per-method instead of failing the suite.
+- Skip map `bytePredicateSuiteSkip` for `strtype.Variant` (string-backed; byte accessors panic) and `inttype.Variant` (panicking stub).
+
+### Notes
+- Each predicate × 73 packages adds 3–5 functions of coverage per package across the byte-predicate cluster — primary AL-07 leverage.
+- Run `./run.ps1 -tc` to capture the coverage delta.
+
 ## [v0.72.0] — 2026-05-07 — AL-05: Format / OnlySupportedErr / MarshalJSON-dispatch sweep
 
 ### Added
