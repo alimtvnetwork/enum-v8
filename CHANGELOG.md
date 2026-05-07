@@ -10,6 +10,19 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v1.5.0] — 2026-05-07 — `osdetect` internal-package uplift sweep
+
+### Added
+- `osdetect/OsDetect_Generate_Internal_test.go` — white-box test in `package osdetect` (existing uplift was `osdetect_test`, locked out of unexported symbols). Targets the previously-uncovered surface in `generate.go`, `readTrimmedFile.go`, `getWinSysDetail.go`, and the cross-platform `NewWindowsSystemDetailGetter_*` stubs.
+  - Direct calls into `generate{}`: `currentOsMixTypes`, `currentOsMixTypesMap`, `keyValuesColonLinesToMap` (nil + empty + populated), `ProcessMacOsOutputLines` (empty + happy + all-blank error), `macOsOperatingSystemDetail`, `linuxOperatingSystemDetail`, `unixOperatingSystemDetail`, `OperatingSystemDetail`, `windowsOperatingSystemDetail`.
+  - File-system cache helpers: `createTempDirOnRequired`, `getOperatingSystemDetailUsingFs`, `saveOperatingSystemDetailUsingFs`, `operatingSystemDetailGenerateSave`, `OperatingSystemDetailLazy` — driven via `t.TempDir()` so they're hermetic.
+  - `readTrimmedFile` happy + missing-file branches.
+  - `getWinSysDetail` non-windows error branch + `NewWindowsSystemDetailGetter` cross-platform stub.
+
+### Notes
+- Last `-tc` run: `osdetect` at **61.2%**. Expected lift: **~78–85%** (most of the deficit was in `generate.go`, which is the largest source file in the package and was 0% covered before this).
+- Pattern: white-box internal-package tests are the **only** way to reach unexported helpers — important reminder for future uplifts when an `_test` package suite plateaus.
+
 ## [v1.4.0] — 2026-05-07 — Fix sparse-array panic in `promptclitype.undefinedItems` (real source bug)
 
 ### Fixed
