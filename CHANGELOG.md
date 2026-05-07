@@ -10,6 +10,19 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.77.0] — 2026-05-07 — Recipe pass-3: `mimetype/` enum
+
+### Added
+- **`mimetype/`** — new byte-backed enum representing the nine top-level MIME type categories from RFC 6838 §4.2 (`Application`, `Audio`, `Font`, `Image`, `Message`, `Model`, `Multipart`, `Text`, `Video`, `Invalid`). Created end-to-end as third pass through the recipe.
+  - 11 files mirroring the recipe layout.
+  - Domain helpers: `FromContentType(string)` (parses Content-Type headers, handles charset suffixes + whitespace), `IsMedia()` (audio∪image∪video), `IsTextual()`, `IsBinary()`.
+  - Pattern-8 fix applied to `Min`/`Max`/`MinByte`/`MaxByte`.
+- **Registration**: `tests/creationtests/allBasicEnumsCollection.go` registers `mimetype.Invalid` for inclusion in every shared-loop suite.
+
+### Notes
+- Triple confirmation: the §10 recipe is now repeatable end-to-end three times without refinement (AK → httpmethodtype, pass-2 → httpstatusfamily, pass-3 → mimetype).
+- Run `./run.ps1 -tc` to confirm the global suites pass with the new package registered.
+
 ## [v0.76.0] — 2026-05-07 — Recipe pass-2: `httpstatusfamily/` enum
 
 ### Added
