@@ -10,6 +10,15 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.91.0] — 2026-05-07 — Coverage uplift sweep: mimetype, completionstate
+
+### Added
+- **`mimetype/MimeType_Coverage_test.go`** — covers all 10 Variants × every category predicate (`IsApplication/Audio/Font/Image/Message/Model/Multipart/Text/Video/Media/Textual/Binary`), all value/name accessors, comparison (`IsEqual/IsAboveOrEqual/IsLowerOrEqual`), JSON round-trip, full `As*` surface, and the `FromContentType` helper across all 9 top-level categories plus garbage/empty.
+- **`completionstate/CompletionState_Coverage_test.go`** — covers all 7 Variants × every state predicate (`IsStartState/Initiate/Running/SuccessWithWarning/FailedMiddleWithError/CompleteWithError/EndState/CompletedSuccess/CompletedWithIssues/Success/CompletedLogically/SuccessLogically/CompletedWithErrorLogically/HasErrorLogically/Invalid/Valid`), all value/name accessors, JSON round-trip, and `AsCompletionStateTyper`/`AsBasicEnumContractsBinder`.
+
+### Notes
+- These were the last two enum packages in the repo without a `*_Coverage_test.go` companion. After this, every enum package has a coverage suite — future uplift work shifts to widening accessor coverage rather than discovering uncovered packages.
+
 ## [v0.90.0] — 2026-05-07 — Coverage uplift sweep: iptype, dbaction, accesstype, overwritetype, protocoltype
 
 ### Added
