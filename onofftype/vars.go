@@ -18,6 +18,8 @@ var (
 	undefinedItems = [...]bool{
 		Invalid: true,
 		Ask:     true,
+		On:      false,
+		Off:     false,
 	}
 
 	lowerCaseNames = map[Variant]string{
