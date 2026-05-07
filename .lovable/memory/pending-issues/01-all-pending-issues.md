@@ -9,26 +9,19 @@
 
 *(PI-001 moved to Resolved — see below)*
 
-### PI-002: Cross-spec stale `integratedtests/` paths (Task AH)
+### PI-002: Cross-spec stale `integratedtests/` paths (Task AH) ✅ RESOLVED
 
-- **severity:** HIGH
-- **description:** Multiple spec files outside `spec/01-app/` still reference `tests/integratedtests/` which doesn't exist. Known targets: `spec/06-testing-guidelines/01-folder-structure.md`, `spec/03-powershell-test-run/`, `spec/04-tooling/04-bootstrap-into-new-repo.md`, `spec/02-app-issues/02-internal-package-coverage-policy.md`, `spec/00-llm-integration-guide.md` line 36.
-- **owner:** AI (audit cycles)
-- **plan:** ✅ COMPLETE — resolved by re-framing (consumer-coverage callouts) across Cycles 12/15/17/18 + Cycle 34 (S-003/S-004 close-out). All `integratedtests/` references now correctly document the upstream `core-v9` consumer layout with explicit upstream-vs-enum-v7 scope disclaimers. Move to Resolved on the next cycle that touches this file.
+- **resolved:** Cycles 12/15/17/18 + Cycle 34 — see PI tracker note above.
 
 ### PI-003: 148 ❓ claims unresolved (Task AB)
 
-- **severity:** MEDIUM
-- **description:** 148 claims across `spec/01-app/` scored ❓ because they reference upstream `core-v9` APIs that have zero `enum-v7` consumers and no mirrored source. Need upstream source fetch to verify.
-- **owner:** AI + User (fetch access)
-- **blocks:** Full spec verification, re-audit of §07/§09 (Task AC)
+- **severity:** LOW (mostly drained)
+- **description:** AB-residual deep-probe sweep is COMPLETE for `spec/01-app/` (Cycles 19–25 + 41–47, settled in `spec-v0.53.0` freeze). Remaining ❓ claims live in scattered §03/§04 spec dirs and are tracked per-cycle. No active blocker.
+- **owner:** AI (continues opportunistically during AA cycles)
 
-### PI-004: `spec/06-testing-guidelines/` never audited
+### PI-004: `spec/06-testing-guidelines/` never audited ✅ RESOLVED
 
-- **severity:** HIGH
-- **description:** 9 files, most-referenced spec directory for any implementation AI. Contains known stale `integratedtests/` reference. Cycle 15 target.
-- **owner:** AI
-- **plan:** Next audit cycle (AA)
+- **resolved:** Cycle 15 (`spec/07-code-vs-spec-audits/16-cycle15-testing-guidelines.md` — 57 rows audited).
 
 ### PI-005: `sqliteconnpathtype.Variant` JSON round-trip is broken ✅ RESOLVED (2026-05-06, Cycle 60)
 
