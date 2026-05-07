@@ -10,6 +10,19 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
 
 ---
 
+## [v0.93.0] — 2026-05-07 — strtype compile fix + contracts fixture sync
+
+### Fixed
+- **`strtype/StrType_Coverage_test.go`** — package was BLOCKED in coverage because the test referenced non-existent fluent-style methods (`AddSuffixOnMissing(...).Value()`, single-return `MinMaxAny()`, `ValueByte` on a non-numeric string, `IsWhitespace`/`IsEqualTrim` semantic mismatches, `Join` separator assumption, `SafeSubStringStart/End` semantics). Test now matches the actual API; `strtype` is no longer blocked from the coverage run.
+- **`tests/creationtests/allEnumGeneralTestCases.go`** — fixture drift: filled the empty-name slots that caused `Test_AllEnums_ContractsTesting` to fail because `Ranges` was upgraded but the fixture wasn't:
+  - `overwritetype`: added `ForceWriteRepeat(4)` and `SkipFilesRepeat(5)`.
+  - `cmdenumtypes/ftpcmdnames`: added `PassivePortRange(25)`.
+  - `cmdenumtypes/rootcmdnames`: added `ResetSettings(53)`.
+  - `cmdenumtypes/sslcmdnames`: added `RemoveSslAll(13)`.
+
+### Notes
+- RCA pattern reinforced: when a `Ranges = [...]string{...}` adds a new sentinel-indexed entry, the corresponding fixture in `tests/creationtests/allEnumGeneralTestCases.go` (both `ExpectedMapValues` and `ExpectedRangesNamesCsv`) must be updated in lock-step. Sparse map literals with duplicate empty keys silently collapse — the contracts test surfaces them via `LogShouldDiffMessage`.
+
 ## [v0.92.0] — 2026-05-07 — AL2-07: dbdrivertype Connection bespoke suite
 
 ### Added
