@@ -253,12 +253,12 @@
 - AL-07 ✅ (Cycle 56, strtype + inttype)
 - AL-08 ✅ (Cycle 58, osdetect)
 
-**Phase AL² — second-pass coverage push (post-AK):**
+**Phase AL² — second-pass coverage push (post-AK) ✅ COMPLETE:**
 - AL²-04 ✅ (NumericRange / Format / JSON shared-loop suites)
 - AL²-05 ✅ (Format / OnlySupportedErr / MarshalJSON-dispatch sweep, v0.72.0)
 - AL²-07 ✅ (concrete-Variant byte-predicate cluster: IsValueEqual / IsByteValueEqual / IsAnyValuesEqual via reflect, v0.73.0)
-- AL²-06 ✅ (pointer-receiver binding wrappers: AsJsoner / AsJsonContractsBinder / AsJsonMarshaller / AsBasicByteEnumContractsBinder / AsBasicEnumContractsBinder / ToSimple / ToPtr via reflect, v0.74.0)
-- AL²-08 ⏳ range-edge fuzz on `BasicEnumImpl.Min/Max/Ranges`
+- AL²-06 ✅ (pointer-receiver binding wrappers via reflect, v0.74.0)
+- AL²-08 ✅ (range-edge fuzz on MinByte/MaxByte/RangesByte via reflect, v0.75.0)
 
 ---
 
