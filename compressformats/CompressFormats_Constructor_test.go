@@ -37,8 +37,8 @@ func Test_CompressFormats_Constructors(t *testing.T) {
 	})
 
 	Convey("compressformats.Max / Min / RangesInvalidErr", t, func() {
-		So(Min(), ShouldEqual, Invalid)
-		So(Max().IsValid() || Max() == Invalid, ShouldBeTrue)
+		So(Min(), ShouldEqual, Zip)
+		So(Max(), ShouldEqual, TarBz2)
 		So(RangesInvalidErr(), ShouldNotBeNil)
 	})
 }
