@@ -59,7 +59,7 @@ jobs:
         if: needs.sha-check.outputs.already-built != 'true'
         with:
           version: v1.64.8
-          args: --timeout=5m
+          args: --timeout=5m --go=1.24
 
   # -----------------------------------------------------------------------------
   # Vulnerability scan (in-CI). Third-party = fail; stdlib-only = warn.
