@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The release pipeline extracts the matching `## [vX.Y.Z]` section as the
 GitHub Release body — keep entries small, sectioned, and human-readable.
 
+## [v1.19.1] - 2026-05-10
+### Fixed — `golangci-lint-action@v6` rejects v2.x versions
+- **Symptom:** `Error: invalid version string 'v2.5.0', golangci-lint v2 is
+  not supported by golangci-lint-action v6, you must update to
+  golangci-lint-action v7.` Lint job failed in `prepare environment`.
+- **Root cause:** v1.19.0 bumped the `golangci-lint` binary to `v2.5.0` but
+  left the GitHub Action pinned at `@v6`, which only supports v1.x binaries.
+- **Fix:** `.github/workflows/ci.yml` — bumped
+  `golangci/golangci-lint-action@v6` → `@v7`. The standalone install in
+  `ci-guards.yml` was already version-agnostic (curl + install.sh) so it
+  needs no change.
+
 ## [v1.19.0] - 2026-05-10
 ### Fixed — CI lint failing with "package requires newer Go version go1.25"
 - **Symptom:** every package in the lint output showed

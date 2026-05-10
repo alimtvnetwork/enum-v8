@@ -59,7 +59,7 @@ jobs:
       # golangci-lint v2.x — required because go.mod declares `go 1.25.0`.
       # v1.64.8 (last v1) was compiled with Go 1.24 and its type-checker
       # rejects Go 1.25 packages outright. v2 ships a Go 1.25 toolchain.
-      - uses: golangci/golangci-lint-action@v6
+      - uses: golangci/golangci-lint-action@v7
         if: needs.sha-check.outputs.already-built != 'true'
         with:
           version: v2.5.0
