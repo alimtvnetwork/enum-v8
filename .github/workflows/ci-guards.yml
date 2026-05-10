@@ -125,7 +125,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: .ci-cache/lint-baseline.json
-          key: lint-baseline-v1.64.8-refs/heads/main
+          key: lint-baseline-v2.5.0-refs/heads/main
 
   spec-api-lint:
     # S-106 fabrication lint — verifies every `package.Symbol` reference in
