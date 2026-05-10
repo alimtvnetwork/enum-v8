@@ -8,6 +8,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The release pipeline extracts the matching `## [vX.Y.Z]` section as the
 GitHub Release body — keep entries small, sectioned, and human-readable.
 
+## [v1.19.0] - 2026-05-10
+### Fixed — CI lint failing with "package requires newer Go version go1.25"
+- **Symptom:** every package in the lint output showed
+  `package requires newer Go version go1.25 (application built with go1.24) (typecheck)`,
+  including stdlib-adjacent ones in the upstream `core-v9` module. The
+  job exited in ~28s with `Error: issues found`.
+- **Root cause:** `golangci-lint v1.64.8` (last v1.x) is **compiled with
+  Go 1.24**. Its embedded `go/types` loader refuses to load any package
+  whose module declares `go 1.25.0` (which `enum-v8/go.mod` and the
+  `core-v9` v1.5.8 dependency both do). The `--go=1.24` flag added in
+  v1.18.0 only retargets *analysis*, not the underlying type-checker
+  toolchain — the loader still bails before any linter runs.
+- **Fix:** upgrade to **golangci-lint v2.5.0**, which is built with
+  Go 1.25 and natively understands the `go 1.25.0` directive.
+  - `.golangci.yml` migrated to the v2 config schema (`version: "2"`,
+    `linters.default: none`, `linters.exclusions.paths`, settings moved
+    under `linters.settings`). SSA-heavy linters (`staticcheck`,
+    `unused`) re-enabled now that the loader works.
+  - `.github/workflows/ci.yml` — pinned `golangci/golangci-lint-action@v6`
+    to `version: v2.5.0`; dropped the obsolete `--go=1.24` workaround.
+  - `.github/workflows/ci-guards.yml` — `lint-baseline-diff` installs
+    v2.5.0 via the v2 install script, switched the JSON output flag from
+    `--out-format json` (v1) to `--output.json.path=stdout` (v2), and
+    bumped the cache key to `lint-baseline-v2.5.0-...`.
+- **Notes:** the upstream `core-v9 v1.5.8` `LeftMiddleRight` /
+  `LeftRight` "undefined field" errors that appeared in the v1.18.0 log
+  were also a side-effect of the broken loader — once v2 loads the
+  module correctly, the real struct definitions are visible and those
+  reports disappear. Genuine in-repo `missing return` findings
+  (`eventtype/Variant.go:42`, `inttype/Variant.go:344`,
+  `logtype/Variant.go:37`, etc.) will now be reported as real lint
+  failures and tracked separately.
+
 ## [v1.18.0] - 2026-05-10
 ### Fixed — CI lint job hanging 33+ minutes (root cause)
 - **Symptom:** the `lint` job in `.github/workflows/ci.yml` (and the

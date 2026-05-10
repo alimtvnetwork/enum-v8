@@ -78,9 +78,11 @@ jobs:
           python-version: "3.12"
 
       - name: Install golangci-lint
+        # v2.x is required: go.mod declares `go 1.25.0` and v1.64.8 was
+        # compiled with Go 1.24, so its type-checker can't load any package.
         run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v1.64.8/install.sh \
-            | sh -s -- -b "$(go env GOPATH)/bin" v1.64.8
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v2.5.0/install.sh \
+            | sh -s -- -b "$(go env GOPATH)/bin" v2.5.0
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Restore lint baseline
@@ -88,7 +90,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: .ci-cache/lint-baseline.json
-          key: lint-baseline-v1.64.8-refs/heads/main
+          key: lint-baseline-v2.5.0-refs/heads/main
 
       - name: Seed baseline from committed snapshot (cache miss)
         if: steps.baseline-cache.outputs.cache-hit != 'true'
@@ -101,7 +103,8 @@ jobs:
         run: |
           set +e
           mkdir -p .ci-cache
-          golangci-lint run --timeout=5m --go=1.24 --out-format json ./... > .ci-cache/lint-current.json
+          # v2 flag: --output.json.path=stdout (was --out-format json in v1).
+          golangci-lint run --timeout=5m --output.json.path=stdout ./... > .ci-cache/lint-current.json
           echo "rc=$?"
           # Always continue — the diff script is the actual gate.
           exit 0
@@ -122,7 +125,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: .ci-cache/lint-baseline.json
-          key: lint-baseline-v1.64.8-refs/heads/main
+          key: lint-baseline-v2.5.0-refs/heads/main
 
   spec-api-lint:
     # S-106 fabrication lint — verifies every `package.Symbol` reference in
