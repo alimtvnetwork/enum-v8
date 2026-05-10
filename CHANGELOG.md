@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The release pipeline extracts the matching `## [vX.Y.Z]` section as the
 GitHub Release body — keep entries small, sectioned, and human-readable.
 
+## [v1.16.0] - 2026-05-10
+### Fixed — CI pipeline robustness
+- `.github/workflows/ci.yml` `test-summary` no longer hard-fails when the
+  upstream `test` job is `skipped` (e.g. cascading skip from a failed
+  `lint`/`vulncheck`). The actual failing job will already be red; the
+  summary should not produce a duplicate confusing red check.
+- golangci-lint job now passes `--go=1.24` so v1.64.8 (which only knows
+  Go versions up to 1.24) can analyse a `go.mod` declaring `go 1.25.0`.
+- `.golangci.yml` `run.go` bumped from `1.17` to `1.24` to match the
+  language semantics actually used by the codebase.
+
 ## [v1.15.0] - 2026-05-07
 ### Fixed — CI collision-check false positives across 16 packages
 - `scripts/ci/check-collisions.py` now tracks `{`/`}` brace depth and only
