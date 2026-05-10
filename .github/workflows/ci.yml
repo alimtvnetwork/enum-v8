@@ -188,7 +188,7 @@ jobs:
           pattern: test-results
 
       - name: Coverage gate (75%)
-        if: needs.sha-check.outputs.already-built != 'true'
+        if: needs.sha-check.outputs.already-built != 'true' && needs.test.result == 'success'
         run: |
           set -euo pipefail
           cov=test-artifacts/test-results/coverage.out

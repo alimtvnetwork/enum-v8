@@ -100,7 +100,7 @@ jobs:
         run: |
           set +e
           mkdir -p .ci-cache
-          golangci-lint run --timeout=5m --out-format json ./... > .ci-cache/lint-current.json
+          golangci-lint run --timeout=5m --go=1.24 --out-format json ./... > .ci-cache/lint-current.json
           echo "rc=$?"
           # Always continue — the diff script is the actual gate.
           exit 0
