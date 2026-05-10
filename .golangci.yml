@@ -1,57 +1,61 @@
-# golangci-lint configuration for enum-v8
-# Pinned to v1.64.8 in CI (see .github/workflows/ci.yml).
+# golangci-lint v2 configuration for enum-v8.
+# Pinned to v2.x in CI (see .github/workflows/ci.yml).
+# v2 is required because go.mod declares `go 1.25.0` and v1.64.8
+# (the last v1.x release) was compiled with Go 1.24, so its embedded
+# type-checker rejects every Go 1.25 package with
+# "package requires newer Go version go1.25 (application built with go1.24)".
+#
 # Local: `golangci-lint run --timeout=5m`
+
+version: "2"
 
 run:
   timeout: 5m
-  go: "1.24"
   tests: true
   modules-download-mode: readonly
 
 linters:
-  disable-all: true
-  # NOTE: SSA-based linters (staticcheck, unused, gosimple, gosec) are
-  # intentionally disabled. golangci-lint v1.64.8 (the last v1.x release)
-  # does not understand Go 1.25 syntax — its internal type-loader hangs
-  # indefinitely on 1.25-only constructs even when --go=1.24 is passed.
-  # Re-enable once we migrate the workflow to golangci-lint v2.x.
+  default: none
   enable:
     - errcheck
     - govet
     - ineffassign
+    - staticcheck
     - typecheck
     - misspell
     - revive
-
-linters-settings:
-  revive:
+    - unused
+  settings:
+    revive:
+      rules:
+        - name: var-naming
+        - name: exported
+          disabled: true
+        - name: package-comments
+          disabled: true
+    staticcheck:
+      checks:
+        - all
+        - -ST1000
+        - -ST1003
+        - -ST1020
+        - -ST1021
+        - -ST1022
+  exclusions:
+    generated: lax
+    paths:
+      - data
+      - scripts
+      - spec
+      - src
+      - public
+      - tests/creationtests/testdata
+      - cross-repo
     rules:
-      - name: var-naming
-      - name: exported
-        disabled: true
-      - name: package-comments
-        disabled: true
-  gosec:
-    excludes:
-      - G104 # audited via errcheck
-      - G304 # file paths from enum tests are not user-supplied
-  staticcheck:
-    checks: ["all", "-ST1000", "-ST1003", "-ST1020", "-ST1021", "-ST1022"]
+      # Generated/legacy enum scaffolding tolerates noisy lint findings
+      - path: "_test\\.go$"
+        linters: [errcheck]
 
 issues:
-  exclude-dirs:
-    - data
-    - scripts
-    - spec
-    - src
-    - public
-    - tests/creationtests/testdata
-  exclude-rules:
-    # Generated/legacy enum scaffolding tolerates noisy lint findings
-    - path: "_test\\.go$"
-      linters: [gosec, errcheck]
-    - path: "vars\\.go$"
-      linters: [gochecknoglobals]
   max-issues-per-linter: 0
   max-same-issues: 0
-  new: false
