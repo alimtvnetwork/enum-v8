@@ -43,7 +43,7 @@ jobs:
             echo "::warning::Only stdlib vulnerabilities found (no fix available in current Go version)"
           fi
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: vulncheck-report
