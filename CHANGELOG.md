@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The release pipeline extracts the matching `## [vX.Y.Z]` section as the
 GitHub Release body — keep entries small, sectioned, and human-readable.
 
+## [v1.19.2] - 2026-05-10
+### Fixed — `typecheck is not a linter` config error under golangci-lint v2
+- **Symptom:** `can't load config: typecheck is not a linter, it cannot be
+  enabled or disabled` — golangci-lint v2 exited with code 3 in 99 ms.
+- **Root cause:** in v2, `typecheck` is no longer a configurable linter; it
+  always runs as part of the loader. Listing it under `linters.enable` is a
+  hard config error.
+- **Fix:** removed `- typecheck` from `linters.enable` in `.golangci.yml`.
+  Type-check errors are still reported (they're built into the loader).
+
 ## [v1.19.1] - 2026-05-10
 ### Fixed — `golangci-lint-action@v6` rejects v2.x versions
 - **Symptom:** `Error: invalid version string 'v2.5.0', golangci-lint v2 is
