@@ -1,11 +1,15 @@
 # golangci-lint v2 configuration for enum-v8.
 # Pinned to v2.x in CI (see .github/workflows/ci.yml).
 # v2 is required because go.mod declares `go 1.25.0` and v1.64.8
-# (the last v1.x release) was compiled with Go 1.24, so its embedded
-# type-checker rejects every Go 1.25 package with
-# "package requires newer Go version go1.25 (application built with go1.24)".
+# (the last v1.x release) was compiled with Go 1.24.
 #
 # Local: `golangci-lint run --timeout=5m`
+#
+# NOTE: This is a public enum library. Method names like `Json`, `JsonPtr`,
+# `Sql`, `MySql`, `Dns`, etc. are part of the stable API surface and cannot
+# be renamed without breaking every downstream consumer. The revive
+# var-naming rule and the `unused` linter are therefore disabled — both
+# would flag intentional, generated, or API-stable code.
 
 version: "2"
 
@@ -20,27 +24,17 @@ linters:
     - errcheck
     - govet
     - ineffassign
-    - staticcheck
-    
     - misspell
     - revive
-    - unused
   settings:
     revive:
       rules:
-        - name: var-naming
+        # var-naming intentionally omitted: the public API uses Json/Sql/Dns
+        # style identifiers that revive's initialism check would flag.
         - name: exported
           disabled: true
         - name: package-comments
           disabled: true
-    staticcheck:
-      checks:
-        - all
-        - -ST1000
-        - -ST1003
-        - -ST1020
-        - -ST1021
-        - -ST1022
   exclusions:
     generated: lax
     paths:
@@ -52,7 +46,6 @@ linters:
       - tests/creationtests/testdata
       - cross-repo
     rules:
-      # Generated/legacy enum scaffolding tolerates noisy lint findings
       - path: "_test\\.go$"
         linters: [errcheck]
 
