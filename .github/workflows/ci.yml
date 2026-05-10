@@ -56,11 +56,14 @@ jobs:
         if: needs.sha-check.outputs.already-built != 'true'
         run: go vet ./...
 
+      # golangci-lint v2.x — required because go.mod declares `go 1.25.0`.
+      # v1.64.8 (last v1) was compiled with Go 1.24 and its type-checker
+      # rejects Go 1.25 packages outright. v2 ships a Go 1.25 toolchain.
       - uses: golangci/golangci-lint-action@v6
         if: needs.sha-check.outputs.already-built != 'true'
         with:
-          version: v1.64.8
-          args: --timeout=5m --go=1.24
+          version: v2.5.0
+          args: --timeout=5m
 
   # -----------------------------------------------------------------------------
   # Vulnerability scan (in-CI). Third-party = fail; stdlib-only = warn.
