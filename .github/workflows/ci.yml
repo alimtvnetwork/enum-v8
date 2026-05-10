@@ -37,6 +37,7 @@ jobs:
   lint:
     needs: sha-check
     runs-on: ubuntu-latest
+    timeout-minutes: 8
     steps:
       - name: Already validated
         if: needs.sha-check.outputs.already-built == 'true'
