@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The release pipeline extracts the matching `## [vX.Y.Z]` section as the
 GitHub Release body — keep entries small, sectioned, and human-readable.
 
+## [v1.17.0] - 2026-05-10
+### Fixed — CI pipeline (lint timeout + coverage gate cascade)
+- `.github/workflows/ci-guards.yml` `lint-baseline-diff` job: added
+  `--go=1.24` to the `golangci-lint run` invocation. Without it, v1.64.8
+  attempted to parse the `go 1.25.0` toolchain directive in `go.mod`,
+  hung past the 5-minute timeout, and the GitHub Actions runner cancelled
+  the entire workflow ("The operation was canceled."). Mirrors the same
+  flag already applied to the main `ci.yml` lint job in v1.16.0.
+- `.github/workflows/ci.yml` `test-summary` Coverage gate now requires
+  `needs.test.result == 'success'` in addition to the cache-hit guard.
+  Previously, when an upstream job was cancelled (e.g. lint-baseline-diff
+  timeout above), the `test` job got cancelled too, no coverage artifact
+  was produced, and `test-summary` failed with the misleading
+  "No coverage profile produced" — masking the true root cause. The gate
+  now cleanly skips when there is nothing to grade.
+
 ## [v1.16.0] - 2026-05-10
 ### Fixed — CI pipeline robustness
 - `.github/workflows/ci.yml` `test-summary` no longer hard-fails when the
